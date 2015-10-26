@@ -20,6 +20,10 @@
       "Microsoft.AspNet.Authentication.Cookies": "1.0.0-beta8",
       "Microsoft.AspNet.Authentication.OpenIdConnect": "1.0.0-beta8",
       "Microsoft.Owin": "3.0.1",
+      "mongocsharpdriver": "2.0.1",
+      "MongoDB.Bson": "2.0.1",
+      "MongoDB.Driver": "2.0.1",
+      "MongoDB.Driver.Core":  "2.0.1",
       "Serilog": "1.5.12",
       "System.IdentityModel.Tokens.Jwt": "5.0.0-beta8-210131116",
       "System.Net.Http": "4.0.1-beta-23409"
@@ -32,9 +36,6 @@
 
     "frameworks": {
       "dnx451": {
-        "dependencies": {
-          "AuthCentral.MongoDb": "1.0.0-*"
-        }
       }
     },
 

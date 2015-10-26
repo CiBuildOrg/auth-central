@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>AuthCentral</id>
+    <version>0.0.1</version>
+    <authors>FSW</authors>
+    <description>FSW AuthCentral API</description>
+    <language>en-US</language>
+    <projectUrl>http://gitlab.fsw.com/architecture/auth-central</projectUrl>
+  </metadata>
+  <files>
+    <file src="site.7z" target="site" />
+    <file src="ChocolateyInstall.ps1" target="tools" />
+    <file src="ChocolateyUninstall.ps1" target="tools" />
+    <file src="7za.exe" target="tools" />
+    <file src="nssm.exe" target="tools" />
+  </files>
+</package>

@@ -42,7 +42,7 @@ dnvm use 1.0.0-beta8 -arch x64
 "========================================================================="
 " Restoring Dependencies "
 "========================================================================="
-"# dnu restore $projectDir --no-cache --source https://www.nuget.org/api/v2/ --source http://proget.fsw.com/nuget/Default"
+"# dnu restore $projectDir --no-cache --source https://www.nuget.org/api/v2/ --source http://proget.fsw.com/nuget/Default --source https://www.myget.org/F/identity/"
 dnu restore $projectDir --no-cache --source https://www.nuget.org/api/v2/ --source http://proget.fsw.com/nuget/Default --source https://www.myget.org/F/identity/
 If(!$?) { Exit 1 } 
 
@@ -160,4 +160,4 @@ If($createPackage) {
 
 If(!$?) {
     Exit 1
-}    
+}

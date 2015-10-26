@@ -6,8 +6,6 @@
       "AntiXSS": "4.3.0",
       "BrockAllen.MembershipReboot": "8.4.0",
       "FluentScheduler": "3.1.46",
-      "IdentityManager": "1.0.0-beta5-5",
-      "IdentityManager.MembershipReboot": "1.0.0-fsw6-1",
       "IdentityServer3": "2.0.2",
       "IdentityServer3.MembershipReboot": "2.0.0",
       "IdentityServer3.MongoDb": "2.0.0",

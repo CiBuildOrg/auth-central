@@ -47,7 +47,11 @@ namespace Fsw.Enterprise.AuthCentral.MongoDb
         {
             var databaseName = MongoUrl.Create(_connectionString).DatabaseName;
             var client = new MongoClient(_connectionString);
+            // "GetServer(MongoClient) is obsolete: 'Use the new API instead.'"
+            // The new API appears to be stricly asynchronous, 
+            // which is not supported by upstream dependencies
             var server = client.GetServer();
+            
             var database = server.GetDatabase(databaseName);
             return database.GetCollection<T>(name);
         }

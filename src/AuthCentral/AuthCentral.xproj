@@ -16,9 +16,5 @@
     <DevelopmentServerPort>1441</DevelopmentServerPort>
     <SSLPort>44300</SSLPort>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AuthCentral.MongoDb\AuthCentral.MongoDb.csproj" />
-    <ProjectReference Include="..\IdentityManager\Core\Core.csproj" />
-  </ItemGroup>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>

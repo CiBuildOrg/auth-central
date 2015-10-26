@@ -1,5 +1,4 @@
 ## used for local debugging but we don't want to check it in
-IdentityManager/
 IdentityServer3/
 BrockAllen.MembershipReboot/
 
@@ -10,7 +9,6 @@ BrockAllen.MembershipReboot/
 .vagrant/
 
 # User-specific files
-*.suo
 *.user
 *.sln.docstates
 *.userprefs

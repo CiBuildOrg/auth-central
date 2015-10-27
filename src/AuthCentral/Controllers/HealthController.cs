@@ -15,7 +15,16 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
         public HealthController(ILoggerFactory factory)
         {
             _logger = factory.CreateLogger("Fsw.Enterprise.AuthCentral.Controllers.HealthController");
-            _project = JsonConvert.DeserializeObject<ProjectInfo>(System.IO.File.ReadAllText("project.json"));
+            try
+            {
+                // Deployed
+                _project = JsonConvert.DeserializeObject<ProjectInfo>(System.IO.File.ReadAllText("src/AuthCentral/project.json"));
+            }
+            catch (Exception e) when (e is System.IO.DirectoryNotFoundException || e is System.IO.FileNotFoundException)
+            {
+                // Local
+                _project = JsonConvert.DeserializeObject<ProjectInfo>(System.IO.File.ReadAllText("project.json"));
+            }
         }
 
         [HttpGet]

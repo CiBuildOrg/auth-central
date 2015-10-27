@@ -19,6 +19,7 @@ namespace Fsw.Enterprise.AuthCentral
             public static string UriServiceRoot = "AUTHCENTRAL_URI_SERVICEROOT";
             public static string CertStoreName = "AUTHCENTRAL_CERT_STORENAME";
             public static string CertThumbprint = "AUTHCENTRAL_CERT_THUMBPRINT";
+            public static string DebugMode = "AUTHCENTRAL_DEBUG_MODE";
         }
 
         public EnvConfig(IConfigurationRoot root) {
@@ -36,8 +37,14 @@ namespace Fsw.Enterprise.AuthCentral
             get { return this._db; }
         }
 
-        public UriConfig Uri {
+        public UriConfig Uri
+        {
             get { return this._uri; }
+        }
+
+        public bool IsDebug
+        {
+            get { return _root.Get<bool>(EnvVars.DebugMode); }
         }
 
         internal class DatabaseConfig
@@ -139,26 +146,6 @@ namespace Fsw.Enterprise.AuthCentral
                 {
                     return _root.Get<string>(EnvVars.CertThumbprint);
                 } 
-            }
-        }
-           
-        private static string GetEnvironmentVariable(string name, string valueDefault)
-        {
-            try
-            {
-                var result = System.Environment.GetEnvironmentVariable(name);
-                if (result == null)
-                {
-                    return valueDefault;
-                }
-                else
-                {
-                    return result;
-                }
-            }
-            catch (System.ArgumentNullException)
-            {
-                return valueDefault;
             }
         }
     }

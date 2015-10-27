@@ -1,11 +1,12 @@
-﻿using Fsw.Enterprise.AuthCentral.IdSvr;
+﻿using Fsw.Enterprise.AuthCentral.Health;
+using Fsw.Enterprise.AuthCentral.IdSvr;
 using IdentityServer3.Core.Configuration;
-using IdentityServer3.Core.Logging;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Dnx.Runtime;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
+using Microsoft.Framework.Logging;
 using Owin;
 using Serilog;
 using System;
@@ -14,7 +15,7 @@ namespace Fsw.Enterprise.AuthCentral
 {
     public class Startup
     {
-
+        private EnvConfig _config;
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
             var builder = new ConfigurationBuilder()
@@ -22,39 +23,66 @@ namespace Fsw.Enterprise.AuthCentral
                 .AddJsonFile("appsettings.json", optional: true);
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+            _config = new EnvConfig(Configuration);
         }
 
         public IConfigurationRoot Configuration { get; set; }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var loggerConfig = new LoggerConfiguration()
+               .WriteTo.Trace()
+               .WriteTo.Console();
+
+            if (_config.IsDebug)
+            {
+                loggerConfig.MinimumLevel.Verbose();
+            } else
+            {
+                loggerConfig.MinimumLevel.Error();
+            }
+
+            Log.Logger = loggerConfig.CreateLogger();
+            
             services.AddDataProtection();
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, IApplicationEnvironment env)
+        public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
         {
-            var config = new EnvConfig(Configuration);
-
             app.UseIISPlatformHandler();
             app.UseDeveloperExceptionPage();
-                        
+            
+            if(_config.IsDebug)
+            {
+                logFactory.MinimumLevel = LogLevel.Verbose;
+            } else
+            {
+                logFactory.MinimumLevel = LogLevel.Error;
+            }
+
+            logFactory.AddSerilog();
+            HealthChecker.ScheduleHealthCheck(_config, logFactory);
+            
             app.Map("/ids", ids =>
             {
-                Log.Logger = new LoggerConfiguration()
-                                .MinimumLevel.Verbose()
-                                .WriteTo.Trace()
-                                .CreateLogger();
 
-                var idSvrFactory = Factory.Configure(config.DB.IdentityServer3);
-                idSvrFactory.ConfigureCustomUserService(app, config.DB.MembershipReboot);
+                var idSvrFactory = Factory.Configure(_config.DB.IdentityServer3);
+                idSvrFactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
 
                 var idsOptions = new IdentityServerOptions
                 {
                     SiteName = "FSW Identity Server",
-                    SigningCertificate = Certificate.Get(config.Cert.StoreName, config.Cert.Thumbprint),
-                    IssuerUri = config.Uri.IssuerUri,
+                    SigningCertificate = Certificate.Get(_config.Cert.StoreName, _config.Cert.Thumbprint),
+                    IssuerUri = _config.Uri.IssuerUri,
                     RequireSsl = true,
+                    LoggingOptions = new LoggingOptions()
+                    {
+                        EnableHttpLogging = true,
+                        EnableKatanaLogging = _config.IsDebug,
+                        EnableWebApiDiagnostics = _config.IsDebug,
+                        WebApiDiagnosticsIsVerbose = _config.IsDebug
+                    },
                     Endpoints = new EndpointOptions()
                     {
                         EnableCspReportEndpoint = true
@@ -86,10 +114,9 @@ namespace Fsw.Enterprise.AuthCentral
 
                 ids.UseIdentityServer(idsOptions);
             });
-            
+
             app.UseMvc();
 
         }
     }
 }
- 

@@ -10,31 +10,33 @@ using FluentScheduler.Model;
 using BrockAllen.MembershipReboot.Hierarchical;
 
 using Fsw.Enterprise.AuthCentral.MongoDb;
+using Microsoft.Framework.Logging;
 
 namespace Fsw.Enterprise.AuthCentral.Health
 {
     internal static class HealthChecker
     {
-        public static void ScheduleHealthCheck(EnvConfig config)
+        public static void ScheduleHealthCheck(EnvConfig config, ILoggerFactory logFactory)
         {
+            ILogger logger = logFactory.CreateLogger("Fsw.Enterprise.AuthCentral.Health.HealthChecker");
             var r = new Registry();
             r.Schedule(() =>
             {
-                CheckHealth(config);
+                CheckHealth(config, logger);
             }).ToRunNow().AndEvery(30).Seconds();
 
             TaskManager.UnobservedTaskException += TaskManager_UnobservedTaskException;
             TaskManager.Initialize(r);
         }
 
-        private static void CheckHealth(EnvConfig config)
+        private static void CheckHealth(EnvConfig config, ILogger logger)
         {
             // TODO: trace log correctly
-            Console.Write("Checking Health... ");
+            logger.LogInformation("Checking Health... ");
 
             HealthContext.CurrentStatus = CheckUserDatabaseStatus(config);
 
-            Console.Write(HealthContext.CurrentStatus + Environment.NewLine);
+            logger.LogInformation(HealthContext.CurrentStatus + Environment.NewLine);
         }
 
         static void TaskManager_UnobservedTaskException(TaskExceptionInformation info, UnhandledExceptionEventArgs e)

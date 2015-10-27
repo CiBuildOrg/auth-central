@@ -15,15 +15,22 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
 
         static HealthController()
         {
-            try
+            if (System.IO.File.Exists("src/AuthCentral/project.json"))
             {
-                // Deployed
                 _project = JsonConvert.DeserializeObject<ProjectInfo>(System.IO.File.ReadAllText("src/AuthCentral/project.json"));
             }
-            catch (Exception e) when (e is DirectoryNotFoundException || e is FileNotFoundException)
+            else if (System.IO.File.Exists("project.json"))
             {
-                // Local
                 _project = JsonConvert.DeserializeObject<ProjectInfo>(System.IO.File.ReadAllText("project.json"));
+            }
+            else
+            {
+                _project = new ProjectInfo()
+                {
+                    Name = "AuthCentral",
+                    Version = "unknown",
+                    Commit = "unknown"
+                };
             }
         }
 
@@ -51,6 +58,11 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
             public string Commit { get; set; }
         }
 
-
+        internal class ProjectInfo
+        {
+            public string Name;
+            public string Commit;
+            public string Version;
+        }
     }
 }

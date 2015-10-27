@@ -31,8 +31,9 @@
     },
 
     "commands": {
-      "host": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls https://+:44333;http://+:8080",
-      "kestrel": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.Kestrel --server.urls https://+:44333;http://+:8080"
+      "web": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls https://+:44333;http://+:8080",
+      "host": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls https://+:443;http://+:8080",
+      "kestrel": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.Kestrel --server.urls http://+:8080"
     },
 
     "frameworks": {

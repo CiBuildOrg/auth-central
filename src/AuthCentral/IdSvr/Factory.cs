@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using System.Text.RegularExpressions;
 
 using IdentityServer3.Core.Configuration;
@@ -39,8 +38,10 @@ namespace Fsw.Enterprise.AuthCentral.IdSvr
             settings.Database = getDbNameFromMongoConnectionString(connectionString);
 
             var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
-            var factory = new ServiceFactory(usrSrv, settings);
-            // factory.ViewService = new Registration<IViewService>(typeof(CustomViewService));
+            var factory = new ServiceFactory(usrSrv, settings)
+            {
+                ViewService = new Registration<IViewService>(typeof (CustomViewService))
+            };
 
             return factory;
         }

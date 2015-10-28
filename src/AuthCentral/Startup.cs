@@ -69,6 +69,7 @@ namespace Fsw.Enterprise.AuthCentral
             {
                 var idSvrFactory = Factory.Configure(_config.DB.IdentityServer3);
                 idSvrFactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
+                idSvrFactory.Register(new Registration<IApplicationEnvironment>(env));
 
                 var idsOptions = new IdentityServerOptions
                 {

@@ -52,7 +52,8 @@ namespace Fsw.Enterprise.AuthCentral
         {
             app.UseIISPlatformHandler();
             app.UseDeveloperExceptionPage();
-            
+            app.UseStaticFiles();
+
             if(_config.IsDebug)
             {
                 logFactory.MinimumLevel = LogLevel.Verbose;
@@ -66,7 +67,6 @@ namespace Fsw.Enterprise.AuthCentral
             
             app.Map("/ids", ids =>
             {
-
                 var idSvrFactory = Factory.Configure(_config.DB.IdentityServer3);
                 idSvrFactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
 

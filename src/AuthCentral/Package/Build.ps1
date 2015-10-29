@@ -56,6 +56,7 @@ $project = Get-Content $packageFilePath | Out-String | ConvertFrom-Json
 " "
 "Setting build number to $buildNumber"
 $version = $project.version -replace "\*", $buildNumber
+$project.version = $version
 
 " "
 "Determining the current commit hash"

@@ -1,0 +1,23 @@
+{
+    "_id" : "idmgr",
+    "_version" : 1,
+    "description" : "Authorization for IdentityManager",
+    "emphasize" : true,
+    "enabled" : true,
+    "includeAllClaimsForUser" : false,
+    "required" : false,
+    "showInDiscoveryDocument" : true,
+    "type" : "Identity",
+    "claims" : [ 
+        {
+            "name" : "name",
+            "alwaysIncludeInIdToken" : true,
+            "description" : "Name"
+        }, 
+        {
+            "name" : "role",
+            "alwaysIncludeInIdToken" : true,
+            "description" : "Role"
+        }
+    ]
+}

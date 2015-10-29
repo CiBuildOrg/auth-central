@@ -1,0 +1,43 @@
+{
+    "_id" : "idmgr_client",
+    "_version" : 1,
+    "absoluteRefreshTokenLifetime" : 2592000,
+    "accessTokenLifetime" : 3600,
+    "accessTokenType" : "Reference",
+    "enableLocalLogin" : true,
+    "allowRememberConsent" : true,
+    "authorizationCodeLifetime" : 300,
+    "clientName" : "Identity Manager Client (dev & local)",
+    "clientSecrets" : [],
+    "clientUri" : "https://auth1.dev-fsw.com/admin",
+    "enabled" : true,
+    "flow" : "Implicit",
+    "identityProviderRestrictions" : [],
+    "identityTokenLifetime" : 300,
+    "redirectUris" : [ 
+        "https://auth1.dev-fsw.com/", 
+        "https://auth1.local-fsw.com/", 
+        "https://localhost:44333/"
+    ],
+    "postLogoutRedirectUris" : [ 
+        "https://auth1.dev-fsw.com:44312/idm", 
+        "https://auth1.local-fsw.com/idm", 
+        "https://localhost:4433/idm"
+    ],
+    "refreshTokenExpiration" : "Absolute",
+    "refreshTokenUsage" : "OneTimeOnly",
+    "requireConsent" : false,
+    "scopeRestrictions" : [ 
+        "openid", 
+        "idmgr"
+    ],
+    "slidingRefreshTokenLifetime" : 1296000,
+    "includeJwtId" : true,
+    "claims" : [],
+    "alwaysSendClientClaims" : false,
+    "PrefixClientClaims" : true,
+    "customGrantRestrictions" : [],
+    "allowClientCredentialsOnly" : false,
+    "updateAccessTokenClaimsOnRefresh" : false,
+    "allowedCorsOrigins" : []
+}

@@ -1,0 +1,45 @@
+{
+    "_id" : LUUID("ef5f4a46-0ca4-4a46-b7e2-0462ed7f281b"),
+    "Tenant" : "default",
+    "Username" : "test",
+    "Created" : ISODate("2015-09-01T19:56:56.796Z"),
+    "LastUpdated" : ISODate("2015-09-02T04:18:41.060Z"),
+    "IsAccountClosed" : false,
+    "AccountClosed" : null,
+    "IsLoginAllowed" : true,
+    "LastLogin" : ISODate("2015-09-03T16:10:02.918Z"),
+    "LastFailedLogin" : ISODate("2015-09-01T20:01:46.966Z"),
+    "FailedLoginCount" : 0,
+    "PasswordChanged" : ISODate("2015-09-01T19:56:56.796Z"),
+    "RequiresPasswordReset" : false,
+    "Email" : "test@fsw.com",
+    "IsAccountVerified" : true,
+    "LastFailedPasswordReset" : null,
+    "FailedPasswordResetCount" : 0,
+    "MobileCode" : null,
+    "MobileCodeSent" : null,
+    "MobilePhoneNumber" : null,
+    "MobilePhoneNumberChanged" : null,
+    "AccountTwoFactorAuthMode" : 0,
+    "CurrentTwoFactorAuthStatus" : 0,
+    "VerificationKey" : "DCC68A5AA7D0C3230A0C657632180938183F6E915064958A080FC571174A4A6F",
+    "VerificationPurpose" : 3,
+    "VerificationKeySent" : ISODate("2015-09-01T19:56:58.194Z"),
+    "VerificationStorage" : "test@fsw.com",
+    "HashedPassword" : "1F400.ACB3V+wOgcde/RVYsjZwHKcRCa3Clvq906loud++RBHrMCooMMfzxG+A8LBi1XuX7A==",
+    "ClaimCollection" : [ 
+        {
+            "Type" : "name",
+            "Value" : "AdminTest"
+        }, 
+        {
+            "Type" : "role",
+            "Value" : "IdentityManagerAdministrator"
+        }
+    ],
+    "LinkedAccountCollection" : [],
+    "LinkedAccountClaimCollection" : [],
+    "UserCertificateCollection" : [],
+    "TwoFactorAuthTokenCollection" : [],
+    "PasswordResetSecretCollection" : []
+}

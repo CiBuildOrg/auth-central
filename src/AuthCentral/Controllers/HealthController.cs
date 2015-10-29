@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Reflection;
+using System.IO;
 using Fsw.Enterprise.AuthCentral.Health;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Framework.Logging;
@@ -11,11 +11,32 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
     public class HealthController : Controller
     {
         private ILogger _logger;
-        private ProjectInfo _project;
+        private static ProjectInfo _project;
+
+        static HealthController()
+        {
+            if (System.IO.File.Exists("src/AuthCentral/project.json"))
+            {
+                _project = JsonConvert.DeserializeObject<ProjectInfo>(System.IO.File.ReadAllText("src/AuthCentral/project.json"));
+            }
+            else if (System.IO.File.Exists("project.json"))
+            {
+                _project = JsonConvert.DeserializeObject<ProjectInfo>(System.IO.File.ReadAllText("project.json"));
+            }
+            else
+            {
+                _project = new ProjectInfo()
+                {
+                    Name = "AuthCentral",
+                    Version = "unknown",
+                    Commit = "unknown"
+                };
+            }
+        }
+
         public HealthController(ILoggerFactory factory)
         {
             _logger = factory.CreateLogger("Fsw.Enterprise.AuthCentral.Controllers.HealthController");
-            _project = JsonConvert.DeserializeObject<ProjectInfo>(System.IO.File.ReadAllText("project.json"));
         }
 
         [HttpGet]

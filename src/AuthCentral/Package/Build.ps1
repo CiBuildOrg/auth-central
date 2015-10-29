@@ -46,6 +46,36 @@ dnvm use 1.0.0-beta8 -arch x64
 dnu restore $projectDir --no-cache --source https://www.myget.org/F/identity/ --source https://www.nuget.org/api/v2/ --source http://proget.fsw.com/nuget/Default
 If(!$?) { Exit 1 } 
 
+
+# fix up the package.json file to have a specific version number
+# and commit hash for reference by out app health routes
+" "
+"Reading our version number and append the build number to it"
+$project = Get-Content $packageFilePath | Out-String | ConvertFrom-Json
+
+" "
+"Setting build number to $buildNumber"
+$version = $project.version -replace "\*", $buildNumber
+
+" "
+"Determining the current commit hash"
+$gitCommit = [String](git rev-parse HEAD)
+If(!$?) {
+    "Warning: Unable to determine current commit hash.  Continuing with value 'unknown'."
+    $gitCommit = "unknown"
+}
+
+# add the git commit to the project.json file
+if (Get-Member -InputObject $project -Name commit -MemberType Properties) {
+	# property exists so set it
+	$project.commit = $gitCommit
+}
+else {
+	# property does not exist so create it and set it
+	Add-Member -InputObject $project -MemberType NoteProperty -Name "commit" -Value $gitCommit
+}
+
+
 # build as sanity check
 " "
 "========================================================================="
@@ -72,31 +102,6 @@ If(!$?) { Exit 1 }
 "# $sevenZip a $(Join-Path -Path $scriptDir -ChildPath 'site.7z') $publishDir\*"
 Invoke-Expression "$sevenZip a $(Join-Path -Path $scriptDir -ChildPath 'site.7z') $publishDir\*"
 
-" "
-"Reading our version number and append the build number to it"
-$project = Get-Content $packageFilePath | Out-String | ConvertFrom-Json
-
-" "
-"Setting build number to $buildNumber"
-$version = $project.version -replace "\*", $buildNumber
-
-" "
-"Determining the current commit hash"
-$gitCommit = [String](git rev-parse HEAD)
-If(!$?) {
-    "Warning: Unable to determine current commit hash.  Continuing with value 'unknown'."
-    $gitCommit = "unknown"
-}
-
-# add the git commit to the project.json file
-if (Get-Member -InputObject $project -Name commit -MemberType Properties) {
-	# property exists so set it
-	$project.commit = $gitCommit
-}
-else {
-	# property does not exist so create it and set it
-	Add-Member -InputObject $project -MemberType NoteProperty -Name "commit" -Value $gitCommit
-}
 
 If($createPackage) {
 	"Adding git commit to project.json file"

@@ -76,6 +76,10 @@ else {
 	Add-Member -InputObject $project -MemberType NoteProperty -Name "commit" -Value $gitCommit
 }
 
+If($createPackage) {
+	"Adding git commit and version change back to project.json file"
+	$project | ConvertTo-Json | Out-File $packageFilePath -Encoding ASCII
+}
 
 # build as sanity check
 " "
@@ -105,9 +109,6 @@ Invoke-Expression "$sevenZip a $(Join-Path -Path $scriptDir -ChildPath 'site.7z'
 
 
 If($createPackage) {
-	"Adding git commit to project.json file"
-	$project | ConvertTo-Json | Out-File $packageFilePath -Encoding ASCII
-
 #    "Setting the <element> w/in the app.nuspec file"
 #    [xml]$nuspecXML = Get-Content $nuspecFile
 #

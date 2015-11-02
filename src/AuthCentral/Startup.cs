@@ -10,6 +10,8 @@ using Microsoft.Framework.Logging;
 using Owin;
 using Serilog;
 using System;
+using Microsoft.AspNet.Authentication.Cookies;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace Fsw.Enterprise.AuthCentral
 {
@@ -46,6 +48,8 @@ namespace Fsw.Enterprise.AuthCentral
             
             services.AddDataProtection();
             services.AddMvc();
+            services.AddAuthentication(
+                sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
@@ -53,6 +57,18 @@ namespace Fsw.Enterprise.AuthCentral
             app.UseIISPlatformHandler();
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
+
+            app.UseOpenIdConnectAuthentication(options =>
+            {
+                options.AutomaticAuthentication = true;
+                options.ClientId = "sample_webapp_client";
+                options.ClientSecret = "K7gNU3sdo+OL0wNhqoVWhr3g6s1xYv72ol/pe/Unols=";
+                options.Authority = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "ids").Uri.AbsoluteUri;
+                options.RedirectUri = "https://auth1.local-fsw.com:44333/Login/Test";
+                options.ResponseType = "code id_token";
+                //options.GetClaimsFromUserInfoEndpoint = true;
+                //options.Scope.Add("idmgr");
+            });
 
             if(_config.IsDebug)
             {

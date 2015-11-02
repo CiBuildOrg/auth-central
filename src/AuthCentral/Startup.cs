@@ -7,11 +7,9 @@ using Microsoft.Dnx.Runtime;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
-using Owin;
 using Serilog;
 using System;
 using Microsoft.AspNet.Authentication.Cookies;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace Fsw.Enterprise.AuthCentral
 {
@@ -133,7 +131,6 @@ namespace Fsw.Enterprise.AuthCentral
             });
 
             app.UseMvc();
-
         }
     }
 }

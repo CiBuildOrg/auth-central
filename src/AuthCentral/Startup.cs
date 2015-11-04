@@ -82,6 +82,9 @@ namespace Fsw.Enterprise.AuthCentral
                 options.ResponseType = OpenIdConnectResponseTypes.Code;
                 options.DefaultToCurrentUriOnRedirect = true;
                 options.Scope.Add("fsw_platform");
+                options.Scope.Add("openid");
+                options.Scope.Add("email");
+                options.Scope.Add("profile");
 
                 options.Events = new OpenIdConnectEvents
                 {
@@ -91,6 +94,10 @@ namespace Fsw.Enterprise.AuthCentral
                         var id = new ClaimsIdentity("application", "given_name", "role");
 
                         id.AddClaim(incoming.FindFirst("sub"));
+                        id.AddClaim(incoming.FindFirst("email"));
+                        id.AddClaim(incoming.FindFirst("email_verified"));
+                        id.AddClaim(incoming.FindFirst("given_name"));
+                        id.AddClaim(incoming.FindFirst("family_name"));
                         id.AddClaim(new Claim("access_token", data.TokenEndpointResponse.ProtocolMessage.AccessToken));
                         id.AddClaim(new Claim("id_token", data.TokenEndpointResponse.ProtocolMessage.IdToken));
                         id.AddClaim(new Claim("expires_at",

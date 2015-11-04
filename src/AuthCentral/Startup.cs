@@ -52,20 +52,25 @@ namespace Fsw.Enterprise.AuthCentral
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
         {
-            app.UseIISPlatformHandler();
-            app.UseDeveloperExceptionPage();
-            app.UseStaticFiles();
+            app.UseCookieAuthentication(options =>
+            {
+                options.AutomaticAuthentication = true;
+                options.AuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+            });
 
             app.UseOpenIdConnectAuthentication(options =>
             {
                 options.AutomaticAuthentication = true;
-                options.ClientId = "sample_webapp_client";
-                options.ClientSecret = "K7gNU3sdo+OL0wNhqoVWhr3g6s1xYv72ol/pe/Unols=";
+                options.AuthenticationScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.ClientId = "auth_central_client";
+                options.ClientSecret = "secret";
                 options.Authority = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "ids").Uri.AbsoluteUri;
-                options.RedirectUri = "https://auth1.local-fsw.com:44333/Login/Test";
-                options.ResponseType = "code id_token";
-                //options.GetClaimsFromUserInfoEndpoint = true;
-                //options.Scope.Add("idmgr");
+                options.RedirectUri = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "account").Uri.AbsoluteUri;
+                options.ResponseType = OpenIdConnectResponseTypes.Code;
+                options.DefaultToCurrentUriOnRedirect = true;
+                options.Scope.Add("fsw_platform");
             });
 
             if(_config.IsDebug)
@@ -75,6 +80,9 @@ namespace Fsw.Enterprise.AuthCentral
             {
                 logFactory.MinimumLevel = LogLevel.Error;
             }
+            app.UseIISPlatformHandler();
+            app.UseDeveloperExceptionPage();
+            app.UseStaticFiles();
 
             logFactory.AddSerilog();
             HealthChecker.ScheduleHealthCheck(_config, logFactory);

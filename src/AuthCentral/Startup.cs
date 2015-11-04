@@ -11,13 +11,8 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using IdentityModel.Client;
-using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
-using Microsoft.AspNet.Http.Authentication;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
 
@@ -84,46 +79,7 @@ namespace Fsw.Enterprise.AuthCentral
 
                 options.Events = new OpenIdConnectEvents
                 {
-                    OnAuthorizationCodeReceived = async recv =>
-                    {
-                        // get access and refresh token
-                        var tokenClient = new TokenClient("https://auth1.local-fsw.com:44333/ids/connect/token",
-                            options.ClientId, options.ClientSecret);
-                        var response = await tokenClient.RequestAuthorizationCodeAsync(recv.Code, recv.RedirectUri);
 
-                        var jwtParts = response.AccessToken.Split('.');
-                        var jwt = JwtPayload.Base64UrlDeserialize(jwtParts[1]);
-
-                        // filter "protocol" claims
-                        var claims =
-                            jwt.Claims.Where(c => c.Type != "iss" &&
-                                                  c.Type != "aud" &&
-                                                  c.Type != "nbf" &&
-                                                  c.Type != "exp" &&
-                                                  c.Type != "iat" &&
-                                                  c.Type != "nonce" &&
-                                                  c.Type != "c_hash" &&
-                                                  c.Type != "at_hash").ToList();
-
-                        claims.Add(new Claim("access_token", response.AccessToken));
-                        claims.Add(new Claim("expires_at",
-                            DateTimeOffset.UtcNow.AddSeconds(response.ExpiresIn).ToString()));
-                        claims.Add(new Claim("id_token", response.IdentityToken));
-
-                        var identity = new ClaimsIdentity(claims);
-                        var principal = new ClaimsPrincipal(identity);
-
-                        recv.AuthenticationTicket = new AuthenticationTicket(
-                            principal,
-                            new AuthenticationProperties
-                            {
-                                RedirectUri = recv.RedirectUri,
-                                AllowRefresh = false,
-                                IsPersistent = false
-                            }, 
-                            OpenIdConnectDefaults.AuthenticationScheme);
-                        recv.JwtSecurityToken = new JwtSecurityToken(response.AccessToken);
-                    }
                 };
             });
 

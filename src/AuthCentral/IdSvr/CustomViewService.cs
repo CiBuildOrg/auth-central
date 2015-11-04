@@ -7,15 +7,19 @@ using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
 using IdentityServer3.Core.Validation;
 using IdentityServer3.Core.ViewModels;
+using Microsoft.Dnx.Runtime;
 
 namespace Fsw.Enterprise.AuthCentral.IdSvr
 {
     public class CustomViewService : IViewService
     {
         readonly IClientStore _clientStore;
-        public CustomViewService(IClientStore clientStore)
+        private readonly IApplicationEnvironment _appEnvironment;
+
+        public CustomViewService(IClientStore clientStore, IApplicationEnvironment appEnvironment)
         {
             _clientStore = clientStore;
+            _appEnvironment = appEnvironment;
         }
 
         public virtual async Task<System.IO.Stream> Login(LoginViewModel model, SignInMessage message)
@@ -66,7 +70,7 @@ namespace Fsw.Enterprise.AuthCentral.IdSvr
 
         private string LoadHtml(string name)
         {
-            var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"wwwroot/app");
+            var file = Path.Combine(_appEnvironment.ApplicationBasePath, @"wwwroot/app");
             file = Path.Combine(file, name + ".html");
             return File.ReadAllText(file);
         }

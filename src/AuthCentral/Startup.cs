@@ -10,7 +10,11 @@ using Microsoft.Framework.Logging;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -57,6 +61,8 @@ namespace Fsw.Enterprise.AuthCentral
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
         {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap = new Dictionary<string, string>();
+
             app.UseCookieAuthentication(options =>
             {
                 options.AutomaticAuthentication = true;
@@ -79,7 +85,25 @@ namespace Fsw.Enterprise.AuthCentral
 
                 options.Events = new OpenIdConnectEvents
                 {
+                    OnAuthenticationValidated = data =>
+                    {
+                        var incoming = data.AuthenticationTicket.Principal;
+                        var id = new ClaimsIdentity("application", "given_name", "role");
 
+                        id.AddClaim(incoming.FindFirst("sub"));
+                        id.AddClaim(new Claim("access_token", data.TokenEndpointResponse.ProtocolMessage.AccessToken));
+                        id.AddClaim(new Claim("id_token", data.TokenEndpointResponse.ProtocolMessage.IdToken));
+                        id.AddClaim(new Claim("expires_at",
+                            DateTime.Now.AddSeconds(double.Parse(data.TokenEndpointResponse.ProtocolMessage.ExpiresIn))
+                                .ToString(CultureInfo.InvariantCulture)));
+
+                        data.AuthenticationTicket = new AuthenticationTicket(
+                            new ClaimsPrincipal(id),
+                            data.AuthenticationTicket.Properties,
+                            data.AuthenticationTicket.AuthenticationScheme);
+
+                        return Task.FromResult(0);
+                    }
                 };
             });
 

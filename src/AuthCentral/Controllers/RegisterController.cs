@@ -5,7 +5,7 @@ using Microsoft.AspNet.Mvc;
 
 namespace Fsw.Enterprise.AuthCentral.Controllers
 {
-    [AllowAnonymous]
+    [AllowAnonymous, Route("[controller]")]
     public class RegisterController : Controller
     {
         UserAccountService userAccountService;
@@ -22,8 +22,8 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
             return View(new RegisterInputModel());
         }
 
-        [ValidateAntiForgeryToken]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index(RegisterInputModel model)
         {
             if (ModelState.IsValid)
@@ -42,12 +42,13 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
             return View(model);
         }
 
+        [Route("Verify")]
         public ActionResult Verify()
         {
             return View();
         }
 
-        [HttpPost]
+        [HttpPost, Route("Verify")]
         [ValidateAntiForgeryToken]
         public ActionResult Verify(string foo)
         {
@@ -63,6 +64,7 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
             return View();
         }
 
+        [Route("Cancel")]
         public ActionResult Cancel(string id)
         {
             try

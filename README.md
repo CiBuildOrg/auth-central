@@ -22,6 +22,27 @@ A bigger picture:
 * support for additional Katana authentication middleware (e.g. Google, Twitter, Facebook etc)
 * support for WS-Federation
 
+## Dev Environment Setup ##
+
+In order to run the application, some setup is required...
+
+1. First you need the web certificate store.  The easiest way to get it is to install IIS through the `Turn Windows Features On or Off`.  
+   It can be found by typing `turn windows features` after first pressing the windows key.  Once on the Windows Features screen scroll
+   to `Internet Information Services`, then `World Wide Web Services` and check the box.  Expand `World Wide Web Services`, then expand
+   `Security` and make sure `Centrialized SSL Certificate Support` is checked.  Save the settings.
+2. Using the Certificates snapin in the mmc, import the ssl certificate found here:  [local-fsw.com.pfx](http://gitlab.fsw.com/ansible/fsw.cert/raw/master/files/local-fsw.com.pfx)
+   The password for the certificate is found in the [local.yml file](http://gitlab.fsw.com/ansible/fsw.cert/blob/master/vars/local.yml#L5)
+3. In order to avoid the need to run visual studio as administrator, run the following commands in an administrator command prompt:
+
+```
+PS C:\Windows\system32> netsh http add urlacl url="https://+:44333/" user =Everyone
+URL reservation successfully added
+
+PS C:\Windows\system32> netsh http add urlacl url="http://+:8080/" user =Everyone
+URL reservation successfully added
+```
+At this point, you should be all set to run the app from visual studio.  Be sure to selcted the `web` command from the dropdown (not `iisexpress`)
+
 ## Related repositories ##
 * [Identity Server](https://github.com/identityserver/IdentityServer3)
 * [Access Token Validation](https://github.com/identityserver/IdentityServer3.AccessTokenValidation)

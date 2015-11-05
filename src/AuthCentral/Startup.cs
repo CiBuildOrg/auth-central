@@ -101,10 +101,12 @@ namespace Fsw.Enterprise.AuthCentral
                                                                             c.Type != "c_hash" &&
                                                                             c.Type != "at_hash");
 
+                        string expiration = token.Claims.First(c => c.Type == "exp").Value;
+
                         id.AddClaims(claims);
                         id.AddClaim(new Claim("expires_at",
-                            DateTime.Now.AddSeconds(double.Parse(data.TokenEndpointResponse.ProtocolMessage.ExpiresIn))
-                                .ToString(CultureInfo.InvariantCulture)));
+                            new DateTime(1970, 1, 1).AddSeconds(Convert.ToDouble(expiration))
+                                .ToString(CultureInfo.CurrentCulture)));
 
                         data.AuthenticationTicket = new AuthenticationTicket(
                             new ClaimsPrincipal(id),

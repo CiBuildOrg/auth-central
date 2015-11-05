@@ -1,5 +1,5 @@
 ﻿@using Fsw.Enterprise.AuthCentral.Models
-@model Fsw.Enterprise.AuthCentral.Models.RegisterInputModel
+@model RegisterInputModel
 
 @if (!BrockAllen.MembershipReboot.SecuritySettings.Instance.EmailIsUsername)
 {
@@ -10,8 +10,6 @@
     </div>
 }
 @{
-    var thisPath = Path.GetDirectoryName(this.VirtualPath);
-    var partial = "Object.cshtml";
-    var path = Path.Combine(thisPath, partial);
+    var path = "EditorTemplates/Object";
 }
 @Html.Partial(path, Model)

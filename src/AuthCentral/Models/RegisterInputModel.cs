@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BrockAllen.MembershipReboot.Mvc.Areas.UserAccount.Models
+namespace Fsw.Enterprise.AuthCentral.Models
 {
     public class RegisterInputModel
     {

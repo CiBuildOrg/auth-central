@@ -1,8 +1,9 @@
-﻿using BrockAllen.MembershipReboot.Mvc.Areas.UserAccount.Models;
-using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
+﻿using System.ComponentModel.DataAnnotations;
+using BrockAllen.MembershipReboot;
+using Fsw.Enterprise.AuthCentral.Models;
+using Microsoft.AspNet.Mvc;
 
-namespace BrockAllen.MembershipReboot.Mvc.Areas.UserAccount.Controllers
+namespace Fsw.Enterprise.AuthCentral.Controllers
 {
     [AllowAnonymous]
     public class RegisterController : Controller

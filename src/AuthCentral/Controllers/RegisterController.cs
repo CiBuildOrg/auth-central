@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BrockAllen.MembershipReboot;
+using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.Models;
 using Microsoft.AspNet.Mvc;
 
@@ -8,13 +9,11 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
     [AllowAnonymous, Route("[controller]")]
     public class RegisterController : Controller
     {
-        UserAccountService userAccountService;
-        AuthenticationService authSvc;
+        readonly UserAccountService<HierarchicalUserAccount> _userAccountService;
 
-        public RegisterController(AuthenticationService authSvc)
+        public RegisterController(UserAccountService<HierarchicalUserAccount> authSvc)
         {
-            this.authSvc = authSvc;
-            this.userAccountService = authSvc.UserAccountService;
+            _userAccountService = authSvc;
         }
 
         public ActionResult Index()
@@ -30,8 +29,8 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
             {
                 try
                 {
-                    var account = this.userAccountService.CreateAccount(model.Username, model.Password, model.Email);
-                    ViewData["RequireAccountVerification"] = this.userAccountService.Configuration.RequireAccountVerification;
+                    var account = this._userAccountService.CreateAccount(model.Username, model.Password, model.Email);
+                    ViewData["RequireAccountVerification"] = this._userAccountService.Configuration.RequireAccountVerification;
                     return View("Success", model);
                 }
                 catch (ValidationException ex)
@@ -54,7 +53,7 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
         {
             try
             {
-                this.userAccountService.RequestAccountVerification(User.GetUserID());
+                this._userAccountService.RequestAccountVerification(User.GetUserID());
                 return View("Success");
             }
             catch (ValidationException ex)
@@ -70,7 +69,7 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
             try
             {
                 bool closed;
-                this.userAccountService.CancelVerification(id, out closed);
+                this._userAccountService.CancelVerification(id, out closed);
                 if (closed)
                 {
                     return View("Closed");

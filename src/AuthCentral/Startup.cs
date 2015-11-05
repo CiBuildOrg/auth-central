@@ -15,6 +15,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BrockAllen.MembershipReboot;
+using BrockAllen.MembershipReboot.Hierarchical;
+using Fsw.Enterprise.AuthCentral.IdMgr;
+using Fsw.Enterprise.AuthCentral.MongoDb;
 using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
@@ -58,7 +61,11 @@ namespace Fsw.Enterprise.AuthCentral
             services.AddMvc();
             services.AddAuthentication(
                 sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
-            services.AddScoped<AuthenticationService>();
+            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>()));
+            services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
+            services.AddScoped(typeof (IUserAccountRepository<HierarchicalUserAccount>),
+                typeof (MongoUserAccountRepository<HierarchicalUserAccount>));
+            services.AddScoped(provider => new MongoDatabase(_config.DB.MembershipReboot));
         }
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
@@ -123,6 +130,7 @@ namespace Fsw.Enterprise.AuthCentral
             {
                 logFactory.MinimumLevel = LogLevel.Error;
             }
+
             app.UseIISPlatformHandler();
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();

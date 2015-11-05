@@ -4,15 +4,20 @@ using Fsw.Enterprise.AuthCentral.Health;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Framework.Logging;
 using Newtonsoft.Json;
+using Microsoft.AspNet.Authorization;
+using Fsw.Enterprise.AuthCentral.ResourceServer.Attributes;
 
 namespace Fsw.Enterprise.AuthCentral.Controllers
 {
+    [Authorize]
+    [RequiredScopes("fsw_platform")]
     [Route("[controller]")]
     public class HealthController : Controller
     {
         private ILogger _logger;
         private static ProjectInfo _project;
 
+        
         static HealthController()
         {
             if (System.IO.File.Exists("src/AuthCentral/project.json"))
@@ -38,7 +43,7 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
         {
             _logger = factory.CreateLogger("Fsw.Enterprise.AuthCentral.Controllers.HealthController");
         }
-
+        
         [HttpGet]
         public StatusResource Health()
         {

@@ -84,14 +84,11 @@ namespace Fsw.Enterprise.AuthCentral
                 options.DefaultToCurrentUriOnRedirect = true;
                 options.Scope.Add("fsw_platform");
                 options.Scope.Add("openid");
-                options.Scope.Add("email");
-                options.Scope.Add("profile");
 
                 options.Events = new OpenIdConnectEvents
                 {
                     OnAuthenticationValidated = data =>
                     {
-                        var incoming = data.AuthenticationTicket.Principal;
                         var id = new ClaimsIdentity("application", "given_name", "role");
 
                         var token = new JwtSecurityToken(data.TokenEndpointResponse.ProtocolMessage.AccessToken);

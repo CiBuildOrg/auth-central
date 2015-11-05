@@ -7,9 +7,18 @@ using Microsoft.Dnx.Runtime;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
-using Owin;
 using Serilog;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Authentication;
+using Microsoft.AspNet.Authentication.Cookies;
+using Microsoft.AspNet.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
 
 namespace Fsw.Enterprise.AuthCentral
 {
@@ -46,13 +55,64 @@ namespace Fsw.Enterprise.AuthCentral
             
             services.AddDataProtection();
             services.AddMvc();
+            services.AddAuthentication(
+                sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
         {
-            app.UseIISPlatformHandler();
-            app.UseDeveloperExceptionPage();
-            app.UseStaticFiles();
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap = new Dictionary<string, string>();
+
+            app.UseCookieAuthentication(options =>
+            {
+                options.AutomaticAuthentication = true;
+                options.AuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+            });
+
+            app.UseOpenIdConnectAuthentication(options =>
+            {
+                options.AutomaticAuthentication = true;
+                options.AuthenticationScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.ClientId = "auth_central_client";
+                options.ClientSecret = "secret";
+                options.Authority = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "ids").Uri.AbsoluteUri;
+                options.RedirectUri = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "account").Uri.AbsoluteUri;
+                options.ResponseType = OpenIdConnectResponseTypes.Code;
+                options.DefaultToCurrentUriOnRedirect = true;
+                options.Scope.Add("fsw_platform");
+                options.Scope.Add("openid");
+                options.Scope.Add("email");
+                options.Scope.Add("profile");
+
+                options.Events = new OpenIdConnectEvents
+                {
+                    OnAuthenticationValidated = data =>
+                    {
+                        var incoming = data.AuthenticationTicket.Principal;
+                        var id = new ClaimsIdentity("application", "given_name", "role");
+
+                        id.AddClaim(incoming.FindFirst("sub"));
+                        //id.AddClaim(incoming.FindFirst("email"));
+                        //id.AddClaim(incoming.FindFirst("email_verified"));
+                        //id.AddClaim(incoming.FindFirst("given_name"));
+                        //id.AddClaim(incoming.FindFirst("family_name"));
+                        id.AddClaim(new Claim("access_token", data.TokenEndpointResponse.ProtocolMessage.AccessToken));
+                        id.AddClaim(new Claim("id_token", data.TokenEndpointResponse.ProtocolMessage.IdToken));
+                        id.AddClaim(new Claim("expires_at",
+                            DateTime.Now.AddSeconds(double.Parse(data.TokenEndpointResponse.ProtocolMessage.ExpiresIn))
+                                .ToString(CultureInfo.InvariantCulture)));
+
+                        data.AuthenticationTicket = new AuthenticationTicket(
+                            new ClaimsPrincipal(id),
+                            data.AuthenticationTicket.Properties,
+                            data.AuthenticationTicket.AuthenticationScheme);
+
+                        return Task.FromResult(0);
+                    }
+                };
+            });
 
             if(_config.IsDebug)
             {
@@ -61,6 +121,9 @@ namespace Fsw.Enterprise.AuthCentral
             {
                 logFactory.MinimumLevel = LogLevel.Error;
             }
+            app.UseIISPlatformHandler();
+            app.UseDeveloperExceptionPage();
+            app.UseStaticFiles();
 
             logFactory.AddSerilog();
             HealthChecker.ScheduleHealthCheck(_config, logFactory);
@@ -117,7 +180,6 @@ namespace Fsw.Enterprise.AuthCentral
             });
 
             app.UseMvc();
-
         }
     }
 }

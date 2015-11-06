@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BrockAllen.MembershipReboot;
+using BrockAllen.MembershipReboot.Hierarchical;
+using Fsw.Enterprise.AuthCentral.IdMgr;
 using Fsw.Enterprise.AuthCentral.Models;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
@@ -9,13 +11,13 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
     [Authorize]
     public class ChangeEmailController : Controller
     {
-        readonly UserAccountService _userAccountService;
-        readonly AuthenticationService _authSvc;
+        readonly UserAccountService<HierarchicalUserAccount> _userAccountService;
+        readonly MongoAuthenticationService _authSvc;
 
-        public ChangeEmailController(AuthenticationService authSvc)
+        public ChangeEmailController(MongoAuthenticationService authSvc)
         {
-            _userAccountService = authSvc.UserAccountService;
             _authSvc = authSvc;
+            _userAccountService = authSvc.UserAccountService;
         }
 
         public ActionResult Index()
@@ -51,7 +53,8 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
         [AllowAnonymous]
         public ActionResult Confirm(string id)
         {
-            var account = _userAccountService.GetByVerificationKey(id);
+            HierarchicalUserAccount account = _userAccountService.GetByVerificationKey(id);
+
             if (account == null)
             {
                 ModelState.AddModelError("", BrockAllen.MembershipReboot.Resources.ValidationMessages.InvalidKey);

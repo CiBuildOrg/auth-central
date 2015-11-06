@@ -56,8 +56,8 @@ namespace Fsw.Enterprise.AuthCentral
             
             services.AddDataProtection();
             services.AddMvc();
-            services.AddAuthentication(
-                sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+            services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+            services.AddInstance<EnvConfig>(_config);
         }
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
@@ -121,12 +121,13 @@ namespace Fsw.Enterprise.AuthCentral
             if(_config.IsDebug)
             {
                 logFactory.MinimumLevel = LogLevel.Verbose;
+                app.UseDeveloperExceptionPage();
             } else
             {
                 logFactory.MinimumLevel = LogLevel.Error;
             }
+
             app.UseIISPlatformHandler();
-            app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
 
             logFactory.AddSerilog();
@@ -183,7 +184,18 @@ namespace Fsw.Enterprise.AuthCentral
                 ids.UseIdentityServer(idsOptions);
             });
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "areaRoute",
+                    template: "{area:exists}/{controller=Client}/{action=Index}" 
+                );
+
+                routes.MapRoute( 
+                    name: "default",
+                    template: "{controller=Health}/{action=Index}" 
+                );
+            });
         }
     }
 }

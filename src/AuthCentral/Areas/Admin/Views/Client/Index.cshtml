@@ -1,0 +1,25 @@
+﻿@model Fsw.Enterprise.AuthCentral.ViewModels.AuthCentralClientViewModel
+@{
+    Layout = null;
+}
+
+
+@{
+    ViewBag.Title = "Auth Central Client Adminstration";
+}
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Create a new Auth Central Client</title>
+    </head>
+    <body>
+        <div><em>@ViewData["Message"]</em></div>
+        <form action="Client" method="post">
+            <div>
+                @Html.EditorForModel()
+            </div>
+            <div><button type="submit" name="Submit" >Submit</button></div>
+        </form>
+    </body>
+</html

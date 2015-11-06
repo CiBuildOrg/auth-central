@@ -4,13 +4,9 @@ using Fsw.Enterprise.AuthCentral.Health;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Framework.Logging;
 using Newtonsoft.Json;
-using Microsoft.AspNet.Authorization;
-using Fsw.Enterprise.AuthCentral.ResourceServer.Attributes;
 
 namespace Fsw.Enterprise.AuthCentral.Controllers
 {
-    [Authorize]
-    [RequiredScopes("fsw_platform")]
     [Route("[controller]")]
     public class HealthController : Controller
     {

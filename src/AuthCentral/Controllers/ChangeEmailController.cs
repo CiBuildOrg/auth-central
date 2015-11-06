@@ -8,7 +8,7 @@ using Microsoft.AspNet.Mvc;
 
 namespace Fsw.Enterprise.AuthCentral.Controllers
 {
-    [Authorize]
+    [Authorize, Route("[controller]")]
     public class ChangeEmailController : Controller
     {
         readonly UserAccountService<HierarchicalUserAccount> _userAccountService;
@@ -50,7 +50,7 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
             return View("Index", model);
         }
 
-        [AllowAnonymous]
+        [AllowAnonymous, Route("[action]")]
         public ActionResult Confirm(string id)
         {
             HierarchicalUserAccount account = _userAccountService.GetByVerificationKey(id);
@@ -84,7 +84,7 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost, Route("[action]")]
         [ValidateAntiForgeryToken]
         public ActionResult Confirm(ChangeEmailFromKeyInputModel model)
         {
@@ -111,6 +111,7 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
             return View("Confirm", model);
         }
 
+        [Route("[action]")]
         public ActionResult Success()
         {
             return View();

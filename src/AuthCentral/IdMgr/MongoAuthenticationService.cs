@@ -11,14 +11,14 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
     {
         readonly HttpContext _context;
 
-        public MongoAuthenticationService(UserAccountService<HierarchicalUserAccount> userService, HttpContext context) : base(userService)
+        public MongoAuthenticationService(UserAccountService<HierarchicalUserAccount> userService, IHttpContextAccessor ctxAccessor) : base(userService)
         {
-            _context = context;
+            _context = ctxAccessor.HttpContext;
         }
 
-        public MongoAuthenticationService(UserAccountService<HierarchicalUserAccount> userService, ClaimsAuthenticationManager claimsAuthenticationManager, HttpContext context) : base(userService, claimsAuthenticationManager)
+        public MongoAuthenticationService(UserAccountService<HierarchicalUserAccount> userService, ClaimsAuthenticationManager claimsAuthenticationManager, IHttpContextAccessor ctxAccessor) : base(userService, claimsAuthenticationManager)
         {
-            _context = context;
+            _context = ctxAccessor.HttpContext;
         }
 
         protected override ClaimsPrincipal GetCurentPrincipal()

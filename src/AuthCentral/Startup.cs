@@ -66,6 +66,7 @@ namespace Fsw.Enterprise.AuthCentral
             services.AddScoped(typeof (IUserAccountRepository<HierarchicalUserAccount>),
                 typeof (MongoUserAccountRepository<HierarchicalUserAccount>));
             services.AddScoped(provider => new MongoDatabase(_config.DB.MembershipReboot));
+            services.AddScoped<MongoAuthenticationService>();
         }
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)

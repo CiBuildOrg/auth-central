@@ -1,31 +1,40 @@
-﻿using Fsw.Enterprise.AuthCentral.Health;
-using Fsw.Enterprise.AuthCentral.IdSvr;
-using IdentityServer3.Core.Configuration;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
-using Microsoft.Dnx.Runtime;
-using Microsoft.Framework.Configuration;
-using Microsoft.Framework.DependencyInjection;
-using Microsoft.Framework.Logging;
-using Serilog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+
+using Microsoft.Dnx.Runtime;
+using Microsoft.Framework.Configuration;
+using Microsoft.Framework.DependencyInjection;
+using Microsoft.Framework.Logging;
+using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+
+using IdentityServer3.Core.Services;
+using IdentityServer3.Core.Configuration;
 using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
+
+using Serilog;
+
+using AuthCentral.MongoStore.Admin;
+using Fsw.Enterprise.AuthCentral.Health;
+using Fsw.Enterprise.AuthCentral.IdSvr;
+
 
 namespace Fsw.Enterprise.AuthCentral
 {
     public class Startup
     {
         private EnvConfig _config;
+        private IdentityServerServiceFactory _idSvrFactory;
+
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
             var builder = new ConfigurationBuilder()
@@ -34,6 +43,11 @@ namespace Fsw.Enterprise.AuthCentral
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
             _config = new EnvConfig(Configuration);
+
+            IdentityServerServiceFactory idSvrFactory = Factory.Configure(_config.DB.IdentityServer3);
+            _idSvrFactory = idSvrFactory;
+
+
         }
 
         public IConfigurationRoot Configuration { get; set; }
@@ -57,7 +71,10 @@ namespace Fsw.Enterprise.AuthCentral
             services.AddDataProtection();
             services.AddMvc();
             services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+
             services.AddInstance<EnvConfig>(_config);
+            services.AddInstance<IClientService>(Factory.GetClientService(_config.DB.IdentityServer3));
+            services.AddInstance<IScopeService>(Factory.GetScopeService(_config.DB.IdentityServer3));
         }
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
@@ -135,7 +152,7 @@ namespace Fsw.Enterprise.AuthCentral
             
             app.Map("/ids", ids =>
             {
-                var idSvrFactory = Factory.Configure(_config.DB.IdentityServer3);
+                IdentityServerServiceFactory idSvrFactory = _idSvrFactory;
                 idSvrFactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
                 idSvrFactory.Register(new Registration<IApplicationEnvironment>(env));
 
@@ -188,7 +205,7 @@ namespace Fsw.Enterprise.AuthCentral
             {
                 routes.MapRoute(
                     name: "areaRoute",
-                    template: "{area:exists}/{controller=Client}/{action=Index}" 
+                    template: "{area:exists}/{controller=Home}/{action=Index}" 
                 );
 
                 routes.MapRoute( 

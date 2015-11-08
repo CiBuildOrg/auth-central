@@ -16,11 +16,15 @@
 
 using System.Text.RegularExpressions;
 
-using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Services;
-using IdentityServer3.MongoDb;
-using IdentityServer3.MembershipReboot;
+using IdentityServer3.Core.Configuration;
 
+// IdentityServer3 Store implementation
+using AuthCentral.MongoStore;
+using AuthCentral.MongoStore.Admin;
+
+// IdentityServer3 User Service implementation
+using IdentityServer3.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 
 namespace Fsw.Enterprise.AuthCentral.IdSvr
@@ -45,6 +49,24 @@ namespace Fsw.Enterprise.AuthCentral.IdSvr
 
             return factory;
         }
+
+        public static IClientService GetClientService(string connectionString)
+        {
+            var settings = StoreSettings.DefaultSettings();
+            settings.ConnectionString = connectionString;
+            settings.Database = getDbNameFromMongoConnectionString(settings.ConnectionString);
+
+            return (IClientService)AdminServiceFactory.CreateClientService(settings);
+        }
+        public static IScopeService GetScopeService(string connectionString)
+        {
+            var settings = StoreSettings.DefaultSettings();
+            settings.ConnectionString = connectionString;
+            settings.Database = getDbNameFromMongoConnectionString(settings.ConnectionString);
+
+            return (IScopeService)AdminServiceFactory.CreateScopeService(settings);
+        }
+
 
         private static string getDbNameFromMongoConnectionString(string connectionString)
         {

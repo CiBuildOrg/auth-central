@@ -6,10 +6,10 @@ using System.Text.RegularExpressions;
 
 using Microsoft.AspNet.Mvc;
 
-using IdentityServer3.Admin.MongoDb;
-using IdentityServer3.MongoDb;
 using IdentityServer3.Core.Models;
+using IdentityServer3.Core.Services;
 
+using AuthCentral.MongoStore.Admin;
 using Fsw.Enterprise.AuthCentral.ViewModels;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,48 +21,72 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
     {
         private const string pattern = @"^mongodb://.+?/(.+?)(?:\?(.+=.+)+$|$)";
         private static readonly Regex r = new Regex(pattern);
-        EnvConfig _cfg;
 
-        public ClientController(EnvConfig cfg)
+        private EnvConfig _cfg;
+        private IClientService _clientService;
+        private IScopeService _scopeService;
+
+        //public ClientController(EnvConfig cfg, IAdminService adminService, IClientStore clientStore)
+        public ClientController(EnvConfig cfg, IClientService clientService, IScopeService scopeService)
         {
-            this._cfg = cfg; 
+            this._cfg = cfg;
+            this._clientService = clientService;
+            this._scopeService = scopeService;
         }
 
-        // GET: /<controller>/
-        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Index(AuthCentralClientViewModel model)
+        // GET: /<controller>/
+        [HttpGet]
+        public IActionResult Create()
         {
-            var settings = StoreSettings.DefaultSettings();
-            settings.ConnectionString = _cfg.DB.IdentityServer3;
-            settings.Database = getDbNameFromMongoConnectionString(settings.ConnectionString);
+            var client = new Client() {
+                UpdateAccessTokenClaimsOnRefresh = true,
+                PrefixClientClaims = false,
+                AlwaysSendClientClaims = true,
+                RequireConsent = false,
+                LogoUri = "https://img3.foodservicewarehouse.com/Img/fsw15.svg",
+                Flow = Flows.AuthorizationCode
+            };
 
-            IAdminService adminSvc = AdminServiceFactory.Create(settings);
-
-            var idsrvrClient = new Client();
-
-            await adminSvc.Save(idsrvrClient);
-
-            ViewBag.Message = "The Auth Central Client " + model.Name + " was successfully saved!.";
-            return View("Index", model);
+            return View("Manage", client);
         }
-        private static string getDbNameFromMongoConnectionString(string connectionString)
+
+        // GET: /<controller>/
+        [HttpGet]
+        public async Task<IActionResult> Manage(string clientId)
         {
-            string result = "identityserver";
+            Client client = await _clientService.Find(clientId);
 
-            Match match = r.Match(connectionString);
+            //TODO: why is this method getting hit twice?
+            //TODO: why is clientId always null?
 
-            if(match.Success)
+            if(client != null)
             {
-                result = match.Groups[1].Value;
+                return View(client);
             }
+            else
+            {
+                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
+                return View("Index");
+            }
+        }
 
-            return result;
+
+        [HttpPost]
+        public async Task<IActionResult> Manage(Client client)
+        {
+            var s = new Secret("blah blah blah");
+            client.ClientSecrets.Add(s);
+
+            //TODO: Validation of some kind
+            await _clientService.Save(client);
+
+            ViewBag.Message = "The Auth Central Client " + client.ClientName + " was successfully saved!.";
+            return View(client);
         }
 
     }

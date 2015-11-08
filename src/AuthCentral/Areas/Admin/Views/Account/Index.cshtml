@@ -1,0 +1,17 @@
+﻿@model Fsw.Enterprise.AuthCentral.ViewModels.AuthCentralUserAccountViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{
+    ViewBag.Title = "Auth Central User Account Adminstration";
+}
+
+<div><em>@ViewData["Message"]</em></div>
+@using (Html.BeginForm()) {
+    <div>
+        @Html.EditorForModel()
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+}

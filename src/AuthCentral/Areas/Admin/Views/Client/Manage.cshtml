@@ -1,0 +1,18 @@
+﻿<!-- model Fsw.Enterprise.AuthCentral.ViewModels.AuthCentralClientViewModel -->
+@model IdentityServer3.Core.Models.Client
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{
+    ViewBag.Title = "Auth Central Client Adminstration";
+}
+
+@Html.ValidationSummary()
+<div><em>@ViewData["Message"]</em></div>
+
+@using (Html.BeginForm("Manage", "Client", new {area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
+    @Html.EditorForModel()
+}

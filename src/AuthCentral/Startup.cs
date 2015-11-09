@@ -15,18 +15,21 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BrockAllen.MembershipReboot;
 using Microsoft.AspNet.Authentication;
+using BrockAllen.MembershipReboot.Hierarchical;
+using Fsw.Enterprise.AuthCentral.IdMgr;
+using Fsw.Enterprise.AuthCentral.MongoDb;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
-using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Http;
 using IdentityServer3.MongoDb;
 using MongoDB.Driver;
 using IdentityServer3.Core.Services;
 using IdentityServer3.MembershipReboot;
-using BrockAllen.MembershipReboot.Hierarchical;
+using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
 
 namespace Fsw.Enterprise.AuthCentral
 {
@@ -65,7 +68,14 @@ namespace Fsw.Enterprise.AuthCentral
             
             services.AddDataProtection();
             services.AddMvc();
-            services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+            services.AddAuthentication(
+                sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>()));
+            services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
+            services.AddScoped(typeof (IUserAccountRepository<HierarchicalUserAccount>),
+                typeof (MongoUserAccountRepository<HierarchicalUserAccount>));
+            services.AddScoped(provider => new MongoDatabase(_config.DB.MembershipReboot));
+            services.AddScoped<MongoAuthenticationService>();
 
             services.AddAuthorization(options =>
             {

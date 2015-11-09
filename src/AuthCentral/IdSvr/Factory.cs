@@ -18,10 +18,11 @@ using System.Text.RegularExpressions;
 
 using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Services;
-using IdentityServer3.MongoDb;
 using IdentityServer3.MembershipReboot;
 
 using BrockAllen.MembershipReboot.Hierarchical;
+
+using Fsw.Enterprise.AuthCentral.MongoStore;
 
 namespace Fsw.Enterprise.AuthCentral.IdSvr
 {

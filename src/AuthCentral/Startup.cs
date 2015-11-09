@@ -22,12 +22,19 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Http;
+using IdentityServer3.MongoDb;
+using MongoDB.Driver;
+using IdentityServer3.Core.Services;
+using IdentityServer3.MembershipReboot;
+using BrockAllen.MembershipReboot.Hierarchical;
 
 namespace Fsw.Enterprise.AuthCentral
 {
     public class Startup
     {
         private EnvConfig _config;
+        private IdentityServerServiceFactory _idSvcfactory;
+
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
             var builder = new ConfigurationBuilder()
@@ -74,10 +81,22 @@ namespace Fsw.Enterprise.AuthCentral
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
         {
-            app.UseExceptionHandler(ex =>
+            // TODO: This whole method should be refactored
+            var settings = StoreSettings.DefaultSettings();
+
+            settings.ConnectionString = _config.DB.IdentityServer3;
+            settings.Database = MongoUrl.Create(settings.ConnectionString).DatabaseName;
+
+            var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
+            _idSvcfactory = new ServiceFactory(usrSrv, settings)
             {
-                ex.UseDeveloperExceptionPage();
-            });
+                ViewService = new Registration<IViewService>(typeof(CustomViewService))
+            };
+
+            _idSvcfactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
+            _idSvcfactory.Register(new Registration<IApplicationEnvironment>(env));
+            
+            app.UseDeveloperExceptionPage();
 
             app.UseCookieAuthentication(options =>
             {
@@ -144,13 +163,9 @@ namespace Fsw.Enterprise.AuthCentral
 
             logFactory.AddSerilog();
             HealthChecker.ScheduleHealthCheck(_config, logFactory);
-            
+
             app.Map("/ids", ids =>
             {
-                var idSvrFactory = Factory.Configure(_config.DB.IdentityServer3);
-                idSvrFactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
-                idSvrFactory.Register(new Registration<IApplicationEnvironment>(env));
-
                 var idsOptions = new IdentityServerOptions
                 {
                     SiteName = "FSW Identity Server",
@@ -168,7 +183,7 @@ namespace Fsw.Enterprise.AuthCentral
                     {
                         EnableCspReportEndpoint = true
                     },
-                    Factory = idSvrFactory,
+                    Factory = _idSvcfactory,
                     AuthenticationOptions = new AuthenticationOptions()
                     {
                         EnableLocalLogin = true,

@@ -24,7 +24,6 @@ using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
-using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Http;
 
 namespace Fsw.Enterprise.AuthCentral

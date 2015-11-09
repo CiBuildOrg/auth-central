@@ -52,6 +52,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 Flow = Flows.AuthorizationCode
             };
 
+            //return RedirectToAction("Manage", client);
             return View("Manage", client);
         }
 
@@ -71,15 +72,14 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             else
             {
                 ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
-                return View("Index");
+                return RedirectToAction("Index");
             }
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Manage(Client client)
         {
-            var s = new Secret("blah blah blah");
+            var s = new Secret("blah blah blah".Sha256());
             client.ClientSecrets.Add(s);
 
             //TODO: Validation of some kind

@@ -22,6 +22,7 @@ using Fsw.Enterprise.AuthCentral.IdMgr;
 using Fsw.Enterprise.AuthCentral.MongoDb;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
+using Microsoft.AspNet.Mvc.Razor;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
 using Microsoft.AspNet.Http;
@@ -68,6 +69,7 @@ namespace Fsw.Enterprise.AuthCentral
             
             services.AddDataProtection();
             services.AddMvc();
+            services.Configure<RazorViewEngineOptions>(o => o.ViewLocationExpanders.Add(new AreaViewLocationExpander()));
             services.AddAuthentication(
                 sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
             services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>()));

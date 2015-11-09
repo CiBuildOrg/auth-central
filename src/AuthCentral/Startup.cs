@@ -33,7 +33,7 @@ namespace Fsw.Enterprise.AuthCentral
     public class Startup
     {
         private EnvConfig _config;
-        private IdentityServerServiceFactory _factory;
+        private IdentityServerServiceFactory _idSvcfactory;
 
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
@@ -88,13 +88,13 @@ namespace Fsw.Enterprise.AuthCentral
             settings.Database = MongoUrl.Create(settings.ConnectionString).DatabaseName;
 
             var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
-            _factory = new ServiceFactory(usrSrv, settings)
+            _idSvcfactory = new ServiceFactory(usrSrv, settings)
             {
                 ViewService = new Registration<IViewService>(typeof(CustomViewService))
             };
 
-            _factory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
-            _factory.Register(new Registration<IApplicationEnvironment>(env));
+            _idSvcfactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
+            _idSvcfactory.Register(new Registration<IApplicationEnvironment>(env));
             
             app.UseDeveloperExceptionPage();
 
@@ -183,7 +183,7 @@ namespace Fsw.Enterprise.AuthCentral
                     {
                         EnableCspReportEndpoint = true
                     },
-                    Factory = _factory,
+                    Factory = _idSvcfactory,
                     AuthenticationOptions = new AuthenticationOptions()
                     {
                         EnableLocalLogin = true,

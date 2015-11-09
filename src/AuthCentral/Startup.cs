@@ -158,7 +158,7 @@ namespace Fsw.Enterprise.AuthCentral
             {
                 logFactory.MinimumLevel = LogLevel.Error;
             }
-            // app.UseIISPlatformHandler();
+            app.UseIISPlatformHandler();
             app.UseStaticFiles();
 
             logFactory.AddSerilog();

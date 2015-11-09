@@ -1,13 +1,13 @@
 {
-    "name": "AuthCentral",
-    "webroot": "wwwroot",
-    "version": "1.0.0-*",
+  "name": "AuthCentral",
+  "webroot": "wwwroot",
+  "version": "1.0.0-*",
 
   "dependencies": {
     "AntiXSS": "4.3.0",
     "BrockAllen.MembershipReboot": "8.4.0",
     "FluentScheduler": "3.1.46",
-    "IdentityServer3": "2.0.2",
+    "IdentityServer3": "2.1.1",
     "IdentityServer3.MembershipReboot": "2.0.0",
     "IdentityServer3.MongoDb": "2.0.0",
     "IdentityServer3.MongoDb.Admin": "3.0.1",
@@ -25,7 +25,7 @@
     "mongocsharpdriver": "2.0.1",
     "MongoDB.Bson": "2.0.1",
     "MongoDB.Driver": "2.0.1",
-    "MongoDB.Driver.Core": "2.0.1",
+    "MongoDB.Driver.Core":  "2.0.1",
     "Serilog": "1.5.12",
     "Serilog.Framework.Logging": "1.0.0-beta8-10065",
     "System.IdentityModel.Tokens.Jwt": "5.0.0-beta8-210131116",
@@ -33,27 +33,27 @@
     "Microsoft.AspNet.StaticFiles": "1.0.0-beta8"
   },
 
-    "commands": {
-      "web": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls https://+:44333;http://+:8080",
-      "host": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls https://+:443;http://+:8080",
-      "kestrel": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.Kestrel --server.urls http://+:8080"
-    },
+  "commands": {
+    "web": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls https://+:44333;http://+:8080",
+    "host": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls https://+:443;http://+:8080",
+    "kestrel": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.Kestrel --server.urls http://+:8080"
+  },
 
-    "frameworks": {
-      "dnx451": {
-      }
-    },
+  "frameworks": {
+    "dnx451": {
+    }
+  },
 
-    "publishExclude": [
-        "node_modules",
-        "bower_components",
-        "**.xproj",
-        "**.user",
-        "**.vspscc"
-    ],
-    "exclude": [
-        "wwwroot",
-        "node_modules",
-        "bower_components"
-    ]
+  "publishExclude": [
+    "node_modules",
+    "bower_components",
+    "**.xproj",
+    "**.user",
+    "**.vspscc"
+  ],
+  "exclude": [
+    "wwwroot",
+    "node_modules",
+    "bower_components"
+  ]
 }

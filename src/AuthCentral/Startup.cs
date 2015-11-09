@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BrockAllen.MembershipReboot;
@@ -23,6 +24,8 @@ using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
+using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Http;
 
 namespace Fsw.Enterprise.AuthCentral
 {
@@ -49,7 +52,7 @@ namespace Fsw.Enterprise.AuthCentral
 
             if (_config.IsDebug)
             {
-                loggerConfig.MinimumLevel.Verbose();
+                loggerConfig.MinimumLevel.Information();
             } else
             {
                 loggerConfig.MinimumLevel.Error();
@@ -67,22 +70,35 @@ namespace Fsw.Enterprise.AuthCentral
                 typeof (MongoUserAccountRepository<HierarchicalUserAccount>));
             services.AddScoped(provider => new MongoDatabase(_config.DB.MembershipReboot));
             services.AddScoped<MongoAuthenticationService>();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("FswPlatform", policy => {
+
+                    policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+                    policy.RequireClaim("scope", "fsw_platform");
+                });
+                
+                options.DefaultPolicy = options.GetPolicy("FswPlatform");
+            });
         }
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
         {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap = new Dictionary<string, string>();
+            app.UseExceptionHandler(ex =>
+            {
+                ex.UseDeveloperExceptionPage();
+            });
 
             app.UseCookieAuthentication(options =>
             {
-                options.AutomaticAuthentication = true;
+                options.LoginPath = new PathString("/ids/login");
                 options.AuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
             });
 
             app.UseOpenIdConnectAuthentication(options =>
             {
-                options.AutomaticAuthentication = true;
                 options.AuthenticationScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.ClientId = "auth_central_client";
@@ -93,26 +109,29 @@ namespace Fsw.Enterprise.AuthCentral
                 options.DefaultToCurrentUriOnRedirect = true;
                 options.Scope.Add("fsw_platform");
                 options.Scope.Add("openid");
-                options.Scope.Add("email");
-                options.Scope.Add("profile");
 
                 options.Events = new OpenIdConnectEvents
                 {
                     OnAuthenticationValidated = data =>
                     {
-                        var incoming = data.AuthenticationTicket.Principal;
                         var id = new ClaimsIdentity("application", "given_name", "role");
 
-                        id.AddClaim(incoming.FindFirst("sub"));
-                        //id.AddClaim(incoming.FindFirst("email"));
-                        //id.AddClaim(incoming.FindFirst("email_verified"));
-                        //id.AddClaim(incoming.FindFirst("given_name"));
-                        //id.AddClaim(incoming.FindFirst("family_name"));
-                        id.AddClaim(new Claim("access_token", data.TokenEndpointResponse.ProtocolMessage.AccessToken));
-                        id.AddClaim(new Claim("id_token", data.TokenEndpointResponse.ProtocolMessage.IdToken));
+                        var token = new JwtSecurityToken(data.TokenEndpointResponse.ProtocolMessage.AccessToken);
+                        IEnumerable<Claim> claims = token.Claims.Where(c => c.Type != "iss" &&
+                                                                            c.Type != "aud" &&
+                                                                            c.Type != "nbf" &&
+                                                                            c.Type != "exp" &&
+                                                                            c.Type != "iat" &&
+                                                                            c.Type != "nonce" &&
+                                                                            c.Type != "c_hash" &&
+                                                                            c.Type != "at_hash");
+
+                        string expiration = token.Claims.First(c => c.Type == "exp").Value;
+
+                        id.AddClaims(claims);
                         id.AddClaim(new Claim("expires_at",
-                            DateTime.Now.AddSeconds(double.Parse(data.TokenEndpointResponse.ProtocolMessage.ExpiresIn))
-                                .ToString(CultureInfo.InvariantCulture)));
+                            new DateTime(1970, 1, 1).AddSeconds(Convert.ToDouble(expiration))
+                                .ToString(CultureInfo.CurrentCulture)));
 
                         data.AuthenticationTicket = new AuthenticationTicket(
                             new ClaimsPrincipal(id),
@@ -131,9 +150,7 @@ namespace Fsw.Enterprise.AuthCentral
             {
                 logFactory.MinimumLevel = LogLevel.Error;
             }
-
             app.UseIISPlatformHandler();
-            app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
 
             logFactory.AddSerilog();
@@ -168,7 +185,7 @@ namespace Fsw.Enterprise.AuthCentral
                         EnableLocalLogin = true,
                         EnableLoginHint = true,
                         RememberLastUsername = false,
-                        CookieOptions = new CookieOptions()
+                        CookieOptions = new IdentityServer3.Core.Configuration.CookieOptions()
                         {
                             ExpireTimeSpan = new TimeSpan(10, 0, 0),
                             IsPersistent = false,
@@ -178,19 +195,20 @@ namespace Fsw.Enterprise.AuthCentral
                         },
                         EnableSignOutPrompt = true,
                         EnablePostSignOutAutoRedirect = true,
-                        SignInMessageThreshold = 5
-                    },
+                        SignInMessageThreshold = 5                        
+                    },                    
                     CspOptions = new CspOptions()
                     {
                         Enabled = true
                     },
-                    EnableWelcomePage = true
+                    EnableWelcomePage = true                    
                 };
 
                 ids.UseIdentityServer(idsOptions);
             });
 
             app.UseMvc();
+            
         }
     }
 }

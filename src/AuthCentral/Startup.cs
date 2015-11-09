@@ -29,6 +29,7 @@ using IdentityServer3.MongoDb;
 using MongoDB.Driver;
 using IdentityServer3.Core.Services;
 using IdentityServer3.MembershipReboot;
+using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
 
 namespace Fsw.Enterprise.AuthCentral
 {

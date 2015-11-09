@@ -20,6 +20,8 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using IdentityServer3.Core.Services;
 using IdentityServer3.Core.Configuration;
 using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
+using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Http;
 
 using Serilog;
 
@@ -60,7 +62,7 @@ namespace Fsw.Enterprise.AuthCentral
 
             if (_config.IsDebug)
             {
-                loggerConfig.MinimumLevel.Verbose();
+                loggerConfig.MinimumLevel.Information();
             } else
             {
                 loggerConfig.MinimumLevel.Error();
@@ -72,6 +74,16 @@ namespace Fsw.Enterprise.AuthCentral
             services.AddMvc();
             services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("FswPlatform", policy => {
+
+                    policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+                    policy.RequireClaim("scope", "fsw_platform");
+                });
+                
+                options.DefaultPolicy = options.GetPolicy("FswPlatform");
+            });
             services.AddInstance<EnvConfig>(_config);
             services.AddInstance<IClientService>(Factory.GetClientService(_config.DB.IdentityServer3));
             services.AddInstance<IScopeService>(Factory.GetScopeService(_config.DB.IdentityServer3));
@@ -79,18 +91,20 @@ namespace Fsw.Enterprise.AuthCentral
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
         {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap = new Dictionary<string, string>();
+            app.UseExceptionHandler(ex =>
+            {
+                ex.UseDeveloperExceptionPage();
+            });
 
             app.UseCookieAuthentication(options =>
             {
-                options.AutomaticAuthentication = true;
+                options.LoginPath = new PathString("/ids/login");
                 options.AuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
             });
 
             app.UseOpenIdConnectAuthentication(options =>
             {
-                options.AutomaticAuthentication = true;
                 options.AuthenticationScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.ClientId = "auth_central_client";
@@ -179,7 +193,7 @@ namespace Fsw.Enterprise.AuthCentral
                         EnableLocalLogin = true,
                         EnableLoginHint = true,
                         RememberLastUsername = false,
-                        CookieOptions = new CookieOptions()
+                        CookieOptions = new IdentityServer3.Core.Configuration.CookieOptions()
                         {
                             ExpireTimeSpan = new TimeSpan(10, 0, 0),
                             IsPersistent = false,
@@ -189,13 +203,13 @@ namespace Fsw.Enterprise.AuthCentral
                         },
                         EnableSignOutPrompt = true,
                         EnablePostSignOutAutoRedirect = true,
-                        SignInMessageThreshold = 5
-                    },
+                        SignInMessageThreshold = 5                        
+                    },                    
                     CspOptions = new CspOptions()
                     {
                         Enabled = true
                     },
-                    EnableWelcomePage = true
+                    EnableWelcomePage = true                    
                 };
 
                 ids.UseIdentityServer(idsOptions);

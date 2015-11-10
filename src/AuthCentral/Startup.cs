@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BrockAllen.MembershipReboot;
 
 using Microsoft.Dnx.Runtime;
 using Microsoft.Framework.Configuration;
@@ -14,8 +15,12 @@ using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Authentication;
+using BrockAllen.MembershipReboot.Hierarchical;
+using Fsw.Enterprise.AuthCentral.IdMgr;
+using Fsw.Enterprise.AuthCentral.MongoDb;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
+using Microsoft.AspNet.Mvc.Razor;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 using IdentityServer3.Core.Services;
@@ -24,7 +29,7 @@ using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationO
 
 using MongoDB.Driver;
 using IdentityServer3.MembershipReboot;
-using BrockAllen.MembershipReboot.Hierarchical;
+using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
 
 using Serilog;
 
@@ -75,7 +80,15 @@ namespace Fsw.Enterprise.AuthCentral
             
             services.AddDataProtection();
             services.AddMvc();
-            services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+//            services.Configure<RazorViewEngineOptions>(o => o.ViewLocationExpanders.Add(new AreaViewLocationExpander()));
+            services.AddAuthentication(
+                sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>()));
+            services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
+            services.AddScoped(typeof (IUserAccountRepository<HierarchicalUserAccount>),
+                typeof (MongoUserAccountRepository<HierarchicalUserAccount>));
+            services.AddScoped(provider => new MongoDatabase(_config.DB.MembershipReboot));
+            services.AddScoped<MongoAuthenticationService>();
 
             services.AddAuthorization(options =>
             {

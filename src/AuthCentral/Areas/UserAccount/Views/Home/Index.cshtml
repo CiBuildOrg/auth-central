@@ -1,0 +1,30 @@
+﻿@{
+    Layout = "~/Areas/UserAccount/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewBag.Title = "Auth Central Adminstration";
+}
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>Auth Central User Account</h1>
+        <p>
+            Manage your user account here!
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-lg-2">
+            <h2>Register</h2>
+            <p>
+                Need an account?  <a href="/Admin/Client" class="btn btn-success">Register Now &raquo;</a>
+            </p>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-2">
+            <h2>ChangeEmail</h2>
+            <p>
+                Or, you can change your email address.  <a href="/Admin/Account" class="btn btn-success">Get Started &raquo;</a>
+            </p>
+        </div>
+    </div>
+</div>

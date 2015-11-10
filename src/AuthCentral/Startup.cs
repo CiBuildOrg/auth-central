@@ -70,7 +70,7 @@ namespace Fsw.Enterprise.AuthCentral
 
             if (_config.IsDebug)
             {
-                loggerConfig.MinimumLevel.Information();
+                loggerConfig.MinimumLevel.Verbose();
             } else
             {
                 loggerConfig.MinimumLevel.Error();
@@ -241,10 +241,10 @@ namespace Fsw.Enterprise.AuthCentral
                     template: "{area:exists}/{controller=Home}/{action=Index}" 
                 );
 
-                routes.MapRoute( 
-                    name: "default",
-                    template: "{controller=Health}/{action=Index}" 
-                );
+//                routes.MapRoute( 
+//                    name: "default",
+//                    template: "{controller=Health}/{action=Index}" 
+//                );
             });
         }
     }

@@ -9,8 +9,8 @@ using Microsoft.AspNet.Mvc;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
 
-using AuthCentral.MongoStore.Admin;
 using Fsw.Enterprise.AuthCentral.ViewModels;
+using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -79,8 +79,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         [HttpPost]
         public async Task<IActionResult> Manage(Client client)
         {
-            var s = new Secret("blah blah blah".Sha256());
-            client.ClientSecrets.Add(s);
+            //var s = new Secret("blah blah blah".Sha256());
+            //client.ClientSecrets.Add(s);
 
             //TODO: Validation of some kind
             await _clientService.Save(client);

@@ -10,6 +10,7 @@ using Microsoft.Dnx.Runtime;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
+using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Authentication;
@@ -20,22 +21,25 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using IdentityServer3.Core.Services;
 using IdentityServer3.Core.Configuration;
 using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Http;
+
+using MongoDB.Driver;
+using IdentityServer3.MembershipReboot;
+using BrockAllen.MembershipReboot.Hierarchical;
 
 using Serilog;
 
-using AuthCentral.MongoStore.Admin;
+using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 using Fsw.Enterprise.AuthCentral.Health;
 using Fsw.Enterprise.AuthCentral.IdSvr;
-
+using Fsw.Enterprise.AuthCentral.MongoStore;
 
 namespace Fsw.Enterprise.AuthCentral
 {
     public class Startup
     {
         private EnvConfig _config;
-        private IdentityServerServiceFactory _idSvrFactory;
+        private IdentityServerServiceFactory _idSvcfactory;
+        private StoreSettings _idSvrStoreSettings = StoreSettings.DefaultSettings();
 
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
@@ -46,9 +50,8 @@ namespace Fsw.Enterprise.AuthCentral
             Configuration = builder.Build();
             _config = new EnvConfig(Configuration);
 
-            IdentityServerServiceFactory idSvrFactory = Factory.Configure(_config.DB.IdentityServer3);
-            _idSvrFactory = idSvrFactory;
-
+            _idSvrStoreSettings.ConnectionString = _config.DB.IdentityServer3;
+            _idSvrStoreSettings.Database = MongoUrl.Create(_idSvrStoreSettings.ConnectionString).DatabaseName;
 
         }
 
@@ -85,16 +88,23 @@ namespace Fsw.Enterprise.AuthCentral
                 options.DefaultPolicy = options.GetPolicy("FswPlatform");
             });
             services.AddInstance<EnvConfig>(_config);
-            services.AddInstance<IClientService>(Factory.GetClientService(_config.DB.IdentityServer3));
-            services.AddInstance<IScopeService>(Factory.GetScopeService(_config.DB.IdentityServer3));
+            services.AddInstance<IClientService>(AdminServiceFactory.CreateClientService(_idSvrStoreSettings));
+            services.AddInstance<IScopeService>(AdminServiceFactory.CreateScopeService(_idSvrStoreSettings));
         }
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
         {
-            app.UseExceptionHandler(ex =>
+            // TODO: This whole method should be refactored
+            var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
+            _idSvcfactory = new ServiceFactory(usrSrv, _idSvrStoreSettings)
             {
-                ex.UseDeveloperExceptionPage();
-            });
+                ViewService = new Registration<IViewService>(typeof(CustomViewService))
+            };
+
+            _idSvcfactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
+            _idSvcfactory.Register(new Registration<IApplicationEnvironment>(env));
+            
+            app.UseDeveloperExceptionPage();
 
             app.UseCookieAuthentication(options =>
             {
@@ -163,13 +173,9 @@ namespace Fsw.Enterprise.AuthCentral
 
             logFactory.AddSerilog();
             HealthChecker.ScheduleHealthCheck(_config, logFactory);
-            
+
             app.Map("/ids", ids =>
             {
-                IdentityServerServiceFactory idSvrFactory = _idSvrFactory;
-                idSvrFactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
-                idSvrFactory.Register(new Registration<IApplicationEnvironment>(env));
-
                 var idsOptions = new IdentityServerOptions
                 {
                     SiteName = "FSW Identity Server",
@@ -187,7 +193,7 @@ namespace Fsw.Enterprise.AuthCentral
                     {
                         EnableCspReportEndpoint = true
                     },
-                    Factory = idSvrFactory,
+                    Factory = _idSvcfactory,
                     AuthenticationOptions = new AuthenticationOptions()
                     {
                         EnableLocalLogin = true,

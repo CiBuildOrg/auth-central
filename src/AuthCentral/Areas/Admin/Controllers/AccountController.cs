@@ -7,9 +7,9 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNet.Mvc;
 
 using IdentityServer3.Core.Models;
-using AuthCentral.MongoStore;
 
 using Fsw.Enterprise.AuthCentral.ViewModels;
+using Fsw.Enterprise.AuthCentral.MongoStore;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -33,7 +33,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(AuthCentralClientViewModel model)
+        public IActionResult Index(AuthCentralClientViewModel model)
         {
            return View("Index", model);
         }

@@ -9,7 +9,7 @@ var concat = require('gulp-concat');
 
 var paths = {
     bower: "./bower_components/",
-    lib: "./wwwroot/lib/"
+    lib: "./wwwroot/libs/"
 };
 
 gulp.task('clean', function (callback) {
@@ -20,8 +20,8 @@ gulp.task('default', ['clean'], function () {
     var bower = {
         "bootstrap": "bootstrap/dist/**/*.{js,map,css,ttf,svg,woff,eot}",
         "jquery": "jquery/jquery*.{js,map}",
-        "jquery-validation": "jquery-validation/jquery.validate.js",
-        "jquery-validation-unobtrusive": "jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"
+        "jquery-validation": "jquery-validation/jquery.validate*.js",
+        "jquery-validation-unobtrusive": "jquery-validation-unobtrusive/jquery.validate.unobtrusive*.js"
     };
 
     for (var destinationDir in bower) {
@@ -30,8 +30,12 @@ gulp.task('default', ['clean'], function () {
 });
 
 gulp.task( 'concat' , function () {
-    gulp.src([paths.lib + 'bootstrap/js/bootstrap.min.js' ,
-        paths.lib + 'jquery/jquery.min.js' ])
+    gulp.src([
+        paths.lib + 'bootstrap/js/bootstrap.min.js',
+        paths.lib + 'jquery/jquery.min.js',
+        paths.lib + 'jquery-validation/jquery.validate.min.js',
+        paths.lib + 'jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js'
+    ])
         .pipe(concat( "bundle.js"))
         .pipe(gulp.dest(paths.lib));
 });

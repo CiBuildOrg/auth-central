@@ -1,4 +1,4 @@
-﻿using Fsw.Enterprise.AuthCentral.Health;
+using Fsw.Enterprise.AuthCentral.Health;
 using Fsw.Enterprise.AuthCentral.IdSvr;
 using IdentityServer3.Core.Configuration;
 using Microsoft.AspNet.Builder;
@@ -15,19 +15,31 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BrockAllen.MembershipReboot;
 using Microsoft.AspNet.Authentication;
+using BrockAllen.MembershipReboot.Hierarchical;
+using Fsw.Enterprise.AuthCentral.IdMgr;
+using Fsw.Enterprise.AuthCentral.MongoDb;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
+using Microsoft.AspNet.Mvc.Razor;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
-using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Http;
+using MongoDB.Driver;
+using IdentityServer3.Core.Services;
+using IdentityServer3.MembershipReboot;
+using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
+
+using Fsw.Enterprise.AuthCentral.MongoStore;
 
 namespace Fsw.Enterprise.AuthCentral
 {
     public class Startup
     {
         private EnvConfig _config;
+        private IdentityServerServiceFactory _idSvcfactory;
+
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
             var builder = new ConfigurationBuilder()
@@ -58,7 +70,15 @@ namespace Fsw.Enterprise.AuthCentral
             
             services.AddDataProtection();
             services.AddMvc();
-            services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+            services.Configure<RazorViewEngineOptions>(o => o.ViewLocationExpanders.Add(new AreaViewLocationExpander()));
+            services.AddAuthentication(
+                sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>()));
+            services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
+            services.AddScoped(typeof (IUserAccountRepository<HierarchicalUserAccount>),
+                typeof (MongoUserAccountRepository<HierarchicalUserAccount>));
+            services.AddScoped(provider => new MongoDatabase(_config.DB.MembershipReboot));
+            services.AddScoped<MongoAuthenticationService>();
 
             services.AddAuthorization(options =>
             {
@@ -74,10 +94,22 @@ namespace Fsw.Enterprise.AuthCentral
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
         {
-            app.UseExceptionHandler(ex =>
+            // TODO: This whole method should be refactored
+            var settings = StoreSettings.DefaultSettings();
+
+            settings.ConnectionString = _config.DB.IdentityServer3;
+            settings.Database = MongoUrl.Create(settings.ConnectionString).DatabaseName;
+
+            var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
+            _idSvcfactory = new ServiceFactory(usrSrv, settings)
             {
-                ex.UseDeveloperExceptionPage();
-            });
+                ViewService = new Registration<IViewService>(typeof(CustomViewService))
+            };
+
+            _idSvcfactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
+            _idSvcfactory.Register(new Registration<IApplicationEnvironment>(env));
+            
+            app.UseDeveloperExceptionPage();
 
             app.UseCookieAuthentication(options =>
             {
@@ -144,13 +176,9 @@ namespace Fsw.Enterprise.AuthCentral
 
             logFactory.AddSerilog();
             HealthChecker.ScheduleHealthCheck(_config, logFactory);
-            
+
             app.Map("/ids", ids =>
             {
-                var idSvrFactory = Factory.Configure(_config.DB.IdentityServer3);
-                idSvrFactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
-                idSvrFactory.Register(new Registration<IApplicationEnvironment>(env));
-
                 var idsOptions = new IdentityServerOptions
                 {
                     SiteName = "FSW Identity Server",
@@ -168,7 +196,7 @@ namespace Fsw.Enterprise.AuthCentral
                     {
                         EnableCspReportEndpoint = true
                     },
-                    Factory = idSvrFactory,
+                    Factory = _idSvcfactory,
                     AuthenticationOptions = new AuthenticationOptions()
                     {
                         EnableLocalLogin = true,

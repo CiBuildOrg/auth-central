@@ -10,7 +10,7 @@ using Microsoft.AspNet.Authorization;
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize("FswAdmin")]
     public class AccountController : Controller
     {
         EnvConfig _cfg;

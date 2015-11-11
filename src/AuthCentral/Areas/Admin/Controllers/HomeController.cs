@@ -31,11 +31,5 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Index(AuthCentralClientViewModel model)
-        {
-           return View("Index", model);
-        }
-
     }
 }

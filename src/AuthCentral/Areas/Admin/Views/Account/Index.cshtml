@@ -5,7 +5,11 @@
 }
 
 <div><em>@ViewData["Message"]</em></div>
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary("Please correct the following errors")
+    @Html.AntiForgeryToken()
+
     <div>
         @Html.EditorForModel()
     </div>

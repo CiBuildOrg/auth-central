@@ -43,6 +43,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 catch (ValidationException ex)
                 {
                     // TODO: Make this error a little smarter.
+                    // associating it with email for now, since it'll contain
+                    // (among other things) an 'Email already in use' error
                     ModelState.AddModelError("Email", ex.Message);
                 }
             }

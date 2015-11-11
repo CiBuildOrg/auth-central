@@ -1,19 +1,19 @@
 ﻿@using Fsw.Enterprise.AuthCentral.Models
 @model CreateAccountInputModel
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "New user account";
 }
 
-<h2>Registration Success</h2>
+<h2>User Created</h2>
 @if(true.Equals(ViewData["RequireAccountVerification"])) { 
 <p>
-    You should recieve an email shortly
+    The new user should recieve an email shortly
     @if(Model != null)
     {
         @: at @Model.Email
     }.
-    It will contain instructions to verify your account
-    so that you can login.
+    It will contain instructions to verify their account
+    so that they can login.
 </p>
 }
 else

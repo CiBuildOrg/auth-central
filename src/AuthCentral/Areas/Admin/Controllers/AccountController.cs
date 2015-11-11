@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
-
 using Microsoft.AspNet.Mvc;
-
-using IdentityServer3.Core.Models;
-
-using Fsw.Enterprise.AuthCentral.ViewModels;
-using Fsw.Enterprise.AuthCentral.MongoStore;
+using Fsw.Enterprise.AuthCentral.Models;
+using BrockAllen.MembershipReboot.Hierarchical;
+using BrockAllen.MembershipReboot;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNet.Mvc.ModelBinding;
+using System.Collections.Generic;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,10 +16,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
     public class AccountController : Controller
     {
         EnvConfig _cfg;
+        UserAccountService<HierarchicalUserAccount> _userAccountService;
 
-        public AccountController(EnvConfig cfg)
+        public AccountController(EnvConfig cfg, UserAccountService<HierarchicalUserAccount> userSvc)
         {
-            this._cfg = cfg; 
+            this._cfg = cfg;
+            this._userAccountService = userSvc;
         }
 
         // GET: /<controller>/
@@ -33,9 +32,24 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost]
-        public IActionResult Index(AuthCentralClientViewModel model)
+        public IActionResult Index(CreateAccountInputModel model)
         {
-           return View("Index", model);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var account = this._userAccountService.CreateAccount(model.Username, model.Password, model.Email);
+                    ViewData["RequireAccountVerification"] = this._userAccountService.Configuration.RequireAccountVerification;
+                    return View("Success", model);
+                }
+                catch (ValidationException ex)
+                {
+                    // TODO: Make this error a little smarter.
+                    ModelState.AddModelError("Email", ex.Message);
+                }
+            }
+
+            return View("Index", model);
         }
 
     }

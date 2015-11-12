@@ -94,6 +94,7 @@ namespace Fsw.Enterprise.AuthCentral
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
         {
             // TODO: This whole method should be refactored
+            MembershipRebootSetup.GetConfig(app); // Create the singleton to get around MVC DI container limitations
             var settings = StoreSettings.DefaultSettings();
 
             settings.ConnectionString = _config.DB.IdentityServer3;

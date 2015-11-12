@@ -98,9 +98,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             }
         }
 
-        // GET: /Client/{id}/EditClientSecrets
+        // GET: /Admin/Client/ViewClientSecrets/{clientId}
         [HttpGet]
-        public async Task<IActionResult> EditClientSecrets(string id)
+        public async Task<IActionResult> ViewClientSecrets(string id)
         {
             Client client = await _clientService.Find(id);
 
@@ -112,6 +112,87 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
             return View(client);
         }
+
+        // GET: /Admin/Client/CreateClientSecrets/{clientId}
+        [HttpGet]
+        public async Task<IActionResult> CreateClientSecret(string id)
+        {
+            Client client = await _clientService.Find(id);
+
+            if(client == null)
+            {
+                ViewBag.Message = "The Auth Central Client with ClientId " + id + " could not be found.";
+                return RedirectToAction("Index");
+            }
+
+            client.ClientSecrets.Add(new Secret());
+            return View(client);
+        }
+
+
+        // POST: /Admin/Client/DeleteClientSecret
+        [HttpPost]
+        public async Task<IActionResult> DeleteClientSecret(string clientId, Secret clientSecret)
+        {
+            Client client = await _clientService.Find(clientId);
+
+            if(client == null)
+            {
+                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
+                return RedirectToAction("Index");
+            }
+
+            bool saveRequired = false;
+            for(int i = (client.ClientSecrets.Count-1); i >= 0; i--)
+            {
+                var secret = client.ClientSecrets[i];
+
+                if( secret.Value       == clientSecret.Value &&
+                    secret.Description == clientSecret.Description &&
+                    secret.Expiration  == clientSecret.Expiration &&
+                    secret.Type        == clientSecret.Type )
+                {
+                    client.ClientSecrets.Remove(secret);
+                    saveRequired = true;
+                }
+            }
+
+            if(saveRequired)
+            {
+                _clientService.Save(client);
+            }
+
+            //            return RedirectToView("Edit", client);
+            return RedirectToAction("Edit", new { id = client.ClientId } );
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveClientSecret(string clientId, List<Secret> clientSecrets)
+        {
+            //TODO: validate??
+
+            Client client = await _clientService.Find(clientId);
+
+            if(client == null)
+            {
+                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
+                return RedirectToAction("Index");
+            }
+
+            foreach(var secret in clientSecrets)
+            {
+                // The value must be hashed to work with IdentityServer3
+                secret.Value = secret.Value.Sha256();
+                client.ClientSecrets.Add(secret);
+
+            }
+
+            await _clientService.Save(client);
+
+            return RedirectToAction("Edit", new { id = client.ClientId } );
+        }
+
+
 
         [HttpPost]
         public async Task<IActionResult> Save(Client client)

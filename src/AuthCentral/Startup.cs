@@ -72,7 +72,7 @@ namespace Fsw.Enterprise.AuthCentral
             services.Configure<RazorViewEngineOptions>(o => o.ViewLocationExpanders.Add(new AreaViewLocationExpander()));
             services.AddAuthentication(
                 sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
-            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>()));
+            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null));
             services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
             services.AddScoped(typeof (IUserAccountRepository<HierarchicalUserAccount>),
                 typeof (MongoUserAccountRepository<HierarchicalUserAccount>));

@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNet.Mvc;
-using Fsw.Enterprise.AuthCentral.Models;
-using BrockAllen.MembershipReboot.Hierarchical;
-using BrockAllen.MembershipReboot;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+
+using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Authorization;
 
+using BrockAllen.MembershipReboot.Hierarchical;
+using BrockAllen.MembershipReboot;
+
+using Fsw.Enterprise.AuthCentral.Models;
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin

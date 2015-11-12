@@ -97,11 +97,12 @@ namespace Fsw.Enterprise.AuthCentral
                     policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
                     policy.RequireClaim("scope", "fsw_platform");
                 });
-                // TODO: Define this
+
                 options.AddPolicy("FswAdmin", policy => {
 
                     policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
                     policy.RequireClaim("scope", "fsw_platform");
+                    policy.RequireClaim("fsw:authcentral:admin", "true");
                 });
 
                 options.DefaultPolicy = options.GetPolicy("FswPlatform");

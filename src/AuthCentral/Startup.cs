@@ -1,4 +1,4 @@
-﻿using Fsw.Enterprise.AuthCentral.Health;
+using Fsw.Enterprise.AuthCentral.Health;
 using Fsw.Enterprise.AuthCentral.IdSvr;
 using IdentityServer3.Core.Configuration;
 using Microsoft.AspNet.Builder;
@@ -26,11 +26,12 @@ using Microsoft.AspNet.Mvc.Razor;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
 using Microsoft.AspNet.Http;
-using IdentityServer3.MongoDb;
 using MongoDB.Driver;
 using IdentityServer3.Core.Services;
 using IdentityServer3.MembershipReboot;
 using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
+
+using Fsw.Enterprise.AuthCentral.MongoStore;
 
 namespace Fsw.Enterprise.AuthCentral
 {

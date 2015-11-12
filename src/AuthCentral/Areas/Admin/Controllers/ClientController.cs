@@ -19,6 +19,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
     [Area("Admin")]
     public class ClientController : Controller
     {
+        
         private const string pattern = @"^mongodb://.+?/(.+?)(?:\?(.+=.+)+$|$)";
         private static readonly Regex r = new Regex(pattern);
 
@@ -58,9 +59,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
         // GET: /<controller>/
         [HttpGet]
-        public async Task<IActionResult> Manage(string clientId)
+        public async Task<IActionResult> View(string id)
         {
-            Client client = await _clientService.Find(clientId);
+            Client client = await _clientService.Find(id);
 
             //TODO: why is this method getting hit twice?
             //TODO: why is clientId always null?
@@ -71,22 +72,55 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             }
             else
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
+                ViewBag.Message = "The Auth Central Client with ClientId " + id + " could not be found.";
                 return RedirectToAction("Index");
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Manage(Client client)
-        {
-            //var s = new Secret("blah blah blah".Sha256());
-            //client.ClientSecrets.Add(s);
 
+        // GET: /Client/{id}
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            Client client = await _clientService.Find(id);
+
+            //TODO: why is this method getting hit twice?
+            //TODO: why is clientId always null?
+
+            if(client != null)
+            {
+                return View(client);
+            }
+            else
+            {
+                ViewBag.Message = "The Auth Central Client with ClientId " + id + " could not be found.";
+                return RedirectToAction("Index");
+            }
+        }
+
+        // GET: /Client/{id}/EditClientSecrets
+        [HttpGet]
+        public async Task<IActionResult> EditClientSecrets(string id)
+        {
+            Client client = await _clientService.Find(id);
+
+            if(client == null)
+            {
+                ViewBag.Message = "The Auth Central Client with ClientId " + id + " could not be found.";
+                return RedirectToAction("Index");
+            }
+
+            return View(client);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Save(Client client)
+        {
             //TODO: Validation of some kind
             await _clientService.Save(client);
 
-            ViewBag.Message = "The Auth Central Client " + client.ClientName + " was successfully saved!.";
-            return View(client);
+            ViewBag.Message = "The Auth Central Client '" + client.ClientName + "' was successfully saved!.";
+            return View("Edit", client);
         }
 
     }

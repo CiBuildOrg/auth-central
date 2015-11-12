@@ -10,7 +10,8 @@
     <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>Find a Client by ClientId</h3>
-            @using (Html.BeginForm("Manage", "Client", new {area = "Admin" }, FormMethod.Get, new { @class = "form-horizontal"} )) {
+            @using (Html.BeginForm("Edit", "Client", new {area = "Admin" }, FormMethod.Post, new {@id = "search-form", @class = "form-horizontal",  @onsubmit = "javascript: location.href='/Admin/Client/Edit/'+document.forms['search-form'].clientId.value; return false;" } )) 
+            {
                 <div class="form-group">
                     <div  class="control-label col-sm-2 col-md-2 col-lg-2" >
                         <label for="clientId">ClientId</label>
@@ -19,7 +20,7 @@
                         <input type="text" class="form-control" id="clientId" name="clientId" placeholder="ClientId">
                     </div>
                     <div  class="control-control col-sm-5 col-md-5 col-lg-5" >
-                        <button type="submit" class="btn btn-primary">Search &raquo;</button>
+                        <button type="button" class="btn btn-primary">Search &raquo;</button>
                     </div>
                 </div>
             }

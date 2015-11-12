@@ -1,23 +1,24 @@
 ﻿@model IdentityServer3.Core.Models.Client
 @{
-    ViewBag.Title = "Auth Central Client Adminstration";
+    Layout = "~/Areas/Admin/Views/Shared/_ClientAdminLayout.cshtml";
+    ViewBag.Title = "Edit Client";
 }
-
-<h3>@Model.ClientName</h3>
-
-<ul class="nav nav-pills">
-    <li class="active"><a href="../Edit/@Model.ClientId">Client</a></li>
-    <li><a href="../ViewClientSecrets/@Model.ClientId">Client Secrets</a></li>
-    <li><a href="EditClientClaims">Client Cliams</a></li>
-    <li><a href="EditClientRedirectUris">Redirect Uri's</a></li>
-    <li><a href="EditClientLogoutUris">Logout Uri's</a></li>
-</ul>
-
-@Html.ValidationSummary()
-<div><em>@ViewData["Message"]</em></div>
 
 @using (Html.BeginForm("Save", "Client", new {area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) 
 {   
+    <div class="row">
+        <div class="col-md-offset-1 col-md-2" >Client Edit</div>
+        <div class="col-sm-3" >
+           <input type="submit" value="Save" class="btn btn-success" />
+        </div>
+        <div class="col-sm-3" >
+           <input type="submit" value="Delete" class="btn btn-warning" />
+        </div>
+        <div class="col-sm-3" >
+            <a class="btn btn-default" href="/Admin/Client/Create">New Client</a>
+        </div>
+    </div>
+
     @Html.HiddenFor(model => model.ClientId)
 
    <div class="form-group">
@@ -210,7 +211,7 @@
 
    <div class="form-group">
        <div class="col-md-offset-2 col-md-10">
-           <input type="submit" value="Save" class="btn btn-default" />
+           <input type="submit" value="Save" class="btn btn-success" />
        </div>
    </div>
 }

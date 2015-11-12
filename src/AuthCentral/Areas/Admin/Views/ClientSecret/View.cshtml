@@ -1,0 +1,30 @@
+﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models
+@model ClientSecretContainer
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_ClientAdminLayout.cshtml";
+    ViewBag.Title = "View Client Secret";
+}
+
+<div class="row">
+    <div class="col-md-offset-1 col-md-2" >Client Secrets</div>
+    <div class="col-sm-9" >
+        <a class="btn btn-default" href="/Admin/ClientSecret/Create/@Model.ClientId">Create Secret</a>
+    </div>
+</div>
+
+@foreach(var clientSecret in Model.ClientSecrets)
+{
+    <hr />
+    @using (Html.BeginForm("Delete", "ClientSecret", new {area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
+        @Html.HiddenFor(model => Model.ClientId)
+        @Html.DisplayFor(model => clientSecret)
+
+        <div class="form-group">
+           <div class="col-md-offset-2 col-md-10">
+               <input type="submit" value="Delete" class="btn btn-warning" />
+           </div>
+        </div>
+    }
+}
+

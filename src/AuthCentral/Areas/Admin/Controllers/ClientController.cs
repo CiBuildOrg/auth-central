@@ -19,20 +19,14 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
     [Area("Admin")]
     public class ClientController : Controller
     {
-        
-        private const string pattern = @"^mongodb://.+?/(.+?)(?:\?(.+=.+)+$|$)";
-        private static readonly Regex r = new Regex(pattern);
-
         private EnvConfig _cfg;
         private IClientService _clientService;
-        private IScopeService _scopeService;
 
         //public ClientController(EnvConfig cfg, IAdminService adminService, IClientStore clientStore)
-        public ClientController(EnvConfig cfg, IClientService clientService, IScopeService scopeService)
+        public ClientController(EnvConfig cfg, IClientService clientService)
         {
             this._cfg = cfg;
             this._clientService = clientService;
-            this._scopeService = scopeService;
         }
 
         public IActionResult Index()
@@ -54,14 +48,14 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             };
 
             //return RedirectToAction("Manage", client);
-            return View("Manage", client);
+            return View("Edit", client);
         }
 
         // GET: /<controller>/
         [HttpGet]
-        public async Task<IActionResult> View(string id)
+        public async Task<IActionResult> View(string clientId)
         {
-            Client client = await _clientService.Find(id);
+            Client client = await _clientService.Find(clientId);
 
             //TODO: why is this method getting hit twice?
             //TODO: why is clientId always null?
@@ -72,7 +66,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             }
             else
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + id + " could not be found.";
+                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
                 return RedirectToAction("Index");
             }
         }
@@ -80,9 +74,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
         // GET: /Client/{id}
         [HttpGet]
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(string clientId)
         {
-            Client client = await _clientService.Find(id);
+            Client client = await _clientService.Find(clientId);
 
             //TODO: why is this method getting hit twice?
             //TODO: why is clientId always null?
@@ -93,111 +87,34 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             }
             else
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + id + " could not be found.";
-                return RedirectToAction("Index");
-            }
-        }
-
-        // GET: /Admin/Client/ViewClientSecrets/{clientId}
-        [HttpGet]
-        public async Task<IActionResult> ViewClientSecrets(string id)
-        {
-            Client client = await _clientService.Find(id);
-
-            if(client == null)
-            {
-                ViewBag.Message = "The Auth Central Client with ClientId " + id + " could not be found.";
-                return RedirectToAction("Index");
-            }
-
-            return View(client);
-        }
-
-        // GET: /Admin/Client/CreateClientSecrets/{clientId}
-        [HttpGet]
-        public async Task<IActionResult> CreateClientSecret(string id)
-        {
-            Client client = await _clientService.Find(id);
-
-            if(client == null)
-            {
-                ViewBag.Message = "The Auth Central Client with ClientId " + id + " could not be found.";
-                return RedirectToAction("Index");
-            }
-
-            client.ClientSecrets.Add(new Secret());
-            return View(client);
-        }
-
-
-        // POST: /Admin/Client/DeleteClientSecret
-        [HttpPost]
-        public async Task<IActionResult> DeleteClientSecret(string clientId, Secret clientSecret)
-        {
-            Client client = await _clientService.Find(clientId);
-
-            if(client == null)
-            {
                 ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
                 return RedirectToAction("Index");
             }
-
-            bool saveRequired = false;
-            for(int i = (client.ClientSecrets.Count-1); i >= 0; i--)
-            {
-                var secret = client.ClientSecrets[i];
-
-                if( secret.Value       == clientSecret.Value &&
-                    secret.Description == clientSecret.Description &&
-                    secret.Expiration  == clientSecret.Expiration &&
-                    secret.Type        == clientSecret.Type )
-                {
-                    client.ClientSecrets.Remove(secret);
-                    saveRequired = true;
-                }
-            }
-
-            if(saveRequired)
-            {
-                _clientService.Save(client);
-            }
-
-            //            return RedirectToView("Edit", client);
-            return RedirectToAction("Edit", new { id = client.ClientId } );
         }
-
-        [HttpPost]
-        public async Task<IActionResult> SaveClientSecret(string clientId, List<Secret> clientSecrets)
-        {
-            //TODO: validate??
-
-            Client client = await _clientService.Find(clientId);
-
-            if(client == null)
-            {
-                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
-                return RedirectToAction("Index");
-            }
-
-            foreach(var secret in clientSecrets)
-            {
-                // The value must be hashed to work with IdentityServer3
-                secret.Value = secret.Value.Sha256();
-                client.ClientSecrets.Add(secret);
-
-            }
-
-            await _clientService.Save(client);
-
-            return RedirectToAction("Edit", new { id = client.ClientId } );
-        }
-
-
 
         [HttpPost]
         public async Task<IActionResult> Save(Client client)
         {
             //TODO: Validation of some kind
+
+            var existingClient = await _clientService.Find(client.ClientId);
+            if(existingClient != null)
+            {
+                client.AllowedCorsOrigins = existingClient.AllowedCorsOrigins;
+                client.AllowedCustomGrantTypes = existingClient.AllowedCustomGrantTypes;
+                client.AllowedScopes = existingClient.AllowedScopes;
+                client.Claims = existingClient.Claims;
+                client.ClientSecrets = existingClient.ClientSecrets;
+                client.IdentityProviderRestrictions = existingClient.IdentityProviderRestrictions;
+                client.PostLogoutRedirectUris = existingClient.PostLogoutRedirectUris;
+                client.RedirectUris = existingClient.RedirectUris;
+            }
+
+            if (client.ClientId == null)
+            {
+                client.ClientId = client.ClientName;
+            } 
+
             await _clientService.Save(client);
 
             ViewBag.Message = "The Auth Central Client '" + client.ClientName + "' was successfully saved!.";

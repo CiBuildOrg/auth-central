@@ -236,10 +236,16 @@ namespace Fsw.Enterprise.AuthCentral
 
             app.UseMvc(routes =>
             {
+//                routes.MapRoute(
+//                    name: "areaRouteWithId",
+//                    template: "{area:exists}/{controller=Home}/{action=Index}/{id}"
+//                );
+
                 routes.MapRoute(
-                    name: "areaRouteWithId",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id}"
+                    name: "areaRouteWithClientId",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{clientId}"
                 );
+
 
                 routes.MapRoute(
                     name: "areaRouteDefault",

@@ -1,0 +1,21 @@
+﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models
+@model ClientSecretContainer
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_ClientAdminLayout.cshtml";
+    ViewBag.Title = "Create Client Secret";
+}
+
+@using (Html.BeginForm("Save", "ClientSecret", new {area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
+
+    <h5>Client Secrets</h5>
+    @Html.HiddenFor(model => model.ClientId)
+    @Html.EditorFor(model=> model.ClientSecrets)
+
+    <div class="form-group">
+       <div class="col-md-offset-2 col-md-10">
+           <input type="submit" value="Save" class="btn btn-success" />
+       </div>
+    </div>
+ }
+

@@ -96,7 +96,7 @@ If(!$?) { Exit 1 }
 " Prep for Zipping "
 "========================================================================="
 "#dnu publish $projectDir --out $publishDir --runtime dnx-clr-win-x64.1.0.0-beta8"
-dnu publish $projectDir --out $publishDir --runtime dnx-clr-win-x64.1.0.0-beta8 --wwwroot-out approot/src/wwwroot
+dnu publish $projectDir --out $publishDir --runtime dnx-clr-win-x64.1.0.0-beta8 --wwwroot-out approot/src/AuthCentral/wwwroot
 If(!$?) { Exit 1 }
 
 # 7-zip the publish directory

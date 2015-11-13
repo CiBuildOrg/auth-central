@@ -16,6 +16,7 @@ $srcRoot         = Join-Path -Path $scriptDir        -ChildPath "..\.." -Resolve
 $projectDir      = Join-Path -Path $srcRoot          -ChildPath "AuthCentral" -Resolve
 $publishParentDir= Join-Path -Path $projectDir       -ChildPath "..\..\" -Resolve
 $publishDir      = Join-Path -Path $publishParentDir -ChildPath "pubroot"
+$wwwrootDir      = Join-Path -Path $projectDir       -ChildPath "wwwroot"
 $packageFilePath = Join-Path -Path $projectDir       -ChildPath "project.json" -Resolve
 $nuspecFile      = Join-Path -Path $scriptDir        -ChildPath "AuthCentral.nuspec" -Resolve
 $sevenZip        = Join-Path -Path $scriptDir        -ChildPath "7za.exe" -Resolve
@@ -96,7 +97,7 @@ If(!$?) { Exit 1 }
 " Prep for Zipping "
 "========================================================================="
 "#dnu publish $projectDir --out $publishDir --runtime dnx-clr-win-x64.1.0.0-beta8"
-dnu publish $projectDir --out $publishDir --runtime dnx-clr-win-x64.1.0.0-beta8 --wwwroot-out approot/src/AuthCentral/wwwroot
+dnu publish $projectDir --out $publishDir --runtime dnx-clr-win-x64.1.0.0-beta8 --wwwroot-out $wwwrootDir
 If(!$?) { Exit 1 }
 
 # 7-zip the publish directory

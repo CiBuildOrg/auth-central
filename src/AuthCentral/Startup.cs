@@ -73,7 +73,7 @@ namespace Fsw.Enterprise.AuthCentral
             services.Configure<RazorViewEngineOptions>(o => o.ViewLocationExpanders.Add(new AreaViewLocationExpander()));
             services.AddAuthentication(
                 sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
-            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>()));
+            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null));
             services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
             services.AddScoped(typeof (IUserAccountRepository<HierarchicalUserAccount>),
                 typeof (MongoUserAccountRepository<HierarchicalUserAccount>));
@@ -95,6 +95,7 @@ namespace Fsw.Enterprise.AuthCentral
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
         {
             // TODO: This whole method should be refactored
+            MembershipRebootSetup.GetConfig(app); // Create the singleton to get around MVC DI container limitations
             var settings = StoreSettings.DefaultSettings();
 
             settings.ConnectionString = _config.DB.IdentityServer3;

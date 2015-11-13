@@ -80,7 +80,7 @@ namespace Fsw.Enterprise.AuthCentral
             services.AddDataProtection();
             services.AddMvc();
             services.AddAuthentication( sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
-            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>()));
+            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null));
             services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
             services.AddScoped(typeof (IUserAccountRepository<HierarchicalUserAccount>), typeof (MongoUserAccountRepository<HierarchicalUserAccount>));
             services.AddScoped(provider => new MongoDatabase(_config.DB.MembershipReboot));
@@ -109,6 +109,12 @@ namespace Fsw.Enterprise.AuthCentral
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
         {
             // TODO: This whole method should be refactored
+            MembershipRebootSetup.GetConfig(app); // Create the singleton to get around MVC DI container limitations
+            var settings = StoreSettings.DefaultSettings();
+
+            settings.ConnectionString = _config.DB.IdentityServer3;
+            settings.Database = MongoUrl.Create(settings.ConnectionString).DatabaseName;
+
             var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
             _idSvcfactory = new ServiceFactory(usrSrv, _idSvrStoreSettings)
             {
@@ -252,7 +258,7 @@ namespace Fsw.Enterprise.AuthCentral
                     name: "areaRouteDefault",
                     template: "{area:exists}/{controller=Home}/{action=Index}"
                 );
-
+            
 //                routes.MapRoute( 
 //                    name: "default",
 //                    template: "{controller=Health}/{action=Index}" 

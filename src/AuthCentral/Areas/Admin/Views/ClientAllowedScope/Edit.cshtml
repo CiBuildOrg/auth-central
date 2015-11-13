@@ -1,0 +1,25 @@
+﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models
+@model ClientChildListContainer<string>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_ClientAdminLayout.cshtml";
+    ViewBag.Title = "View Client Redirect Uri's";
+}
+
+@for(var i=0; i < Model.ChildList.Count; i++)
+{
+    <hr />
+    @using (Html.BeginForm("Save", "ClientAllowedScope", new { clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @id="edit-form-" + i, @class = "form-inline"} )) {
+        @Html.HiddenFor(model => Model.ClientId)
+
+        <div class="form-group">
+           <div>
+               <input type="text" class="form-control" id="redirectUri_@i" name="redirectUri" placeholder="openid" value="@Model.ChildList[i]">
+           </div>
+        </div>
+        <div class="form-group">
+            <input type="button" value="Save" class="btn btn-success" onclick="javascript: document.forms['edit-form-@i'].submit();" />
+            <input type="button" value="Delete" class="btn btn-warning" onclick="    javascript: document.forms['edit-form-@i'].action = '/Admin/ClientAllowedScope/Delete/@Model.ClientId'; document.forms['edit-form-@i'].submit();" />
+       </div>
+    }
+}

@@ -104,6 +104,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             var existingClient = await _clientService.Find(client.ClientId);
             if(existingClient != null)
             {
+                // don't overwrite existing child items not part of the passed in client
                 client.AllowedCorsOrigins = existingClient.AllowedCorsOrigins;
                 client.AllowedCustomGrantTypes = existingClient.AllowedCustomGrantTypes;
                 client.AllowedScopes = existingClient.AllowedScopes;
@@ -113,9 +114,20 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 client.PostLogoutRedirectUris = existingClient.PostLogoutRedirectUris;
                 client.RedirectUris = existingClient.RedirectUris;
             }
+            else
+            {
+                // set some FSW defaults for the new client
+                var defaultScopes = new List<string>();
+                defaultScopes.Add("openid");
+                defaultScopes.Add("profile");
+                defaultScopes.Add("offline_access");
+                defaultScopes.Add("fsw_platform");
+                client.AllowedScopes = defaultScopes;
+            }
 
             if (client.ClientId == null)
             {
+                // default to client name and ID being the same
                 client.ClientId = client.ClientName;
             } 
 

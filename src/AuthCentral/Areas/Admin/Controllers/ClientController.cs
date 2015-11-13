@@ -134,7 +134,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             await _clientService.Save(client);
 
             ViewBag.Message = "The Auth Central Client '" + client.ClientName + "' was successfully saved!.";
-            return View("Edit", client);
+            return RedirectToAction("Edit", new { clientId = client.ClientId });
+//            return View("Edit", client);
         }
 
     }

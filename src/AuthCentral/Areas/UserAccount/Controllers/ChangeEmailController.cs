@@ -50,7 +50,7 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
             return View("Index", model);
         }
 
-        [AllowAnonymous, Route("[action]")]
+        [AllowAnonymous, Route("[action]/{id}")]
         public ActionResult Confirm(string id)
         {
             HierarchicalUserAccount account = _userAccountService.GetByVerificationKey(id);

@@ -1,22 +1,70 @@
 ﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    string controller = ViewContext.RouteData.Values["controller"].ToString();
+    string action = ViewContext.RouteData.Values["action"].ToString();
+    object uClientId = ViewContext.RouteData.Values["clientId"];
+
+    string homeClass = "";
+    string editClass = "";
+    string secretsClass = "";
+    string redirectClass = "";
+    string postLogoutClass = "";
+    string scopesClass = "";
+
+    if( "Client".Equals(controller) )
+    { 
+        editClass = "active";
+    }
+    else if( "ClientSecret".Equals(controller) ) 
+    {
+        secretsClass = "active";
+    }
+    else if( "ClientRedirectUri".Equals(controller) ) 
+    {
+        redirectClass = "active";
+    }
+    else if( "ClientLogoutUri".Equals(controller) ) 
+    {
+        postLogoutClass = "active";
+    }
+    else if( "ClientAllowedScope".Equals(controller) ) 
+    {
+        scopesClass = "active";
+    }
+    else 
+    {   
+        homeClass = "active";
+    }
+
 }
 
+<!--
+    @controller
+    @action
+    @uClientId
+    ====================
+    @("ClientAllowedScope".Equals(ViewContext.RouteData.Values["controller"]) )
+    @ViewContext.RouteData.Values["action"]
+    @ViewContext.RouteData.Values["clientId"]
+-->
 <ul class="nav nav-tabs">
-    <li><a href="/Admin/Client/Edit/@Model.ClientId">Edit Client: @Model.ClientId</a></li>
-    <li><a href="/Admin/ClientSecret/View/@Model.ClientId">View Client Secrets</a></li>
+    <li class="@homeClass"><a href="/Admin/Client/Edit/">Client Admin Home</a></li>
+    <li class="@editClass"><a href="/Admin/Client/Edit/@Model.ClientId">Edit Client: @Model.ClientId</a></li>
+    <li class="@secretsClass"><a href="/Admin/ClientSecret/View/@Model.ClientId">View Client Secrets</a></li>
+    <li class="@redirectClass"><a href="/Admin/ClientRedirectUri/Edit/@Model.ClientId">Redirect Uri's</a></li>
+    <li class="@postLogoutClass"><a href="/Admin/ClientLogoutUri/Edit/@Model.ClientId">Logout Uri's</a></li>
+    <li class="@scopesClass"><a href="/Admin/ClientAllowedScope/Edit/@Model.ClientId">Allowed Scopes</a></li>
+    <!--
     <li class="dropdown">
         <a data-toggle="dropdown" class="dropdown-toggle" href="#">Advanced<b class="caret"></b></a>
         <ul role="menu" class="dropdown-menu">
-            <li><a href="/Admin/ClientRedirectUri/Edit/@Model.ClientId">Redirect Uri's</a></li>
-            <li><a href="/Admin/ClientLogoutUri/Edit/@Model.ClientId">Logout Uri's</a></li>
-            <li><a href="/Admin/ClientAllowedScope/Edit/@Model.ClientId">Allowed Scopes</a></li>
             <li><a href="/Admin/ClientClaim/Edit/@Model.ClientId">Client Cliams</a></li>
             <li><a href="/Admin/ClientAllowedCorsOrigin/Edit/@Model.ClientId">Allowed Cors Headers</a></li>
         </ul>
     </li>
-
+    -->
 </ul>
 
 @Html.ValidationSummary()

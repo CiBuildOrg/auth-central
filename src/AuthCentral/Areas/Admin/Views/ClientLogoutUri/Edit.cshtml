@@ -8,7 +8,6 @@
 
 @for(var i=0; i < Model.ChildList.Count; i++)
 {
-    <hr />
     @using (Html.BeginForm("Save", "ClientLogoutUri", new { clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @id="edit-form-" + i, @class = "form-inline"} )) {
         @Html.HiddenFor(model => Model.ClientId)
 
@@ -21,5 +20,6 @@
             <input type="button" value="Save" class="btn btn-success" onclick="javascript: document.forms['edit-form-@i'].submit();" />
             <input type="button" value="Delete" class="btn btn-warning" onclick="    javascript: document.forms['edit-form-@i'].action = '/Admin/ClientLogoutUri/Delete/@Model.ClientId'; document.forms['edit-form-@i'].submit();" />
        </div>
+       <hr />
     }
 }

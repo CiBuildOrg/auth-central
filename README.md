@@ -26,35 +26,25 @@ A bigger picture:
 
 In order to run the application, some setup is required...
 
-1. First you need the web certificate store.  The easiest way to get it is to install IIS through the `Turn Windows Features On or Off`.  
-   It can be found by typing `turn windows features` after first pressing the windows key.  Once on the Windows Features screen scroll
-   to `Internet Information Services`, then `World Wide Web Services` and check the box.  Expand `World Wide Web Services`, then expand
-   `Security` and make sure `Centrialized SSL Certificate Support` is checked.  Save the settings.
-2. Using the Certificates snapin in the mmc, import the ssl certificate found here:  [local-fsw.com.pfx](http://gitlab.fsw.com/ansible/fsw.cert/raw/master/files/local-fsw.com.pfx)
+
+1. Using the Certificates snapin in the mmc, import the ssl certificate found here:  [local-fsw.com.pfx](http://gitlab.fsw.com/ansible/fsw.cert/raw/master/files/local-fsw.com.pfx)
    The password for the certificate is found in the [local.yml file](http://gitlab.fsw.com/ansible/fsw.cert/blob/master/vars/local.yml#L5)
-3. Bind the installed fsw.com certificate to the dev port 44333 so this is the cert that is used when
-   running locally  The following must be run from a CMD prompt running as administrator.
+   **NOTE**: In order to avoid permissions problems install the certificate in the `Personal` store on the `Local Computer`.  If you fail to do this, much debugging and crypto errors are in your future.
+2. Bind the installed fsw.com certificate to the dev port 44333 so this is the cert that is used when running locally  The following must be run from a CMD prompt running as administrator.
 
-```bash
-netsh http delete sslcert ipport=0.0.0.0:44333
-netsh http add sslcert ipport=0.0.0.0:44333 appid={12345678-db90-4b66-8b01-88f7af2e36bf} certhash=656de34b45066d8fc9d88a3952082a6121f80c82 certstorename=webhosting
-```
+        netsh http delete sslcert ipport=0.0.0.0:44333
+        netsh http add sslcert ipport=0.0.0.0:44333 appid={12345678-db90-4b66-8b01-88f7af2e36bf} certhash=656de34b45066d8fc9d88a3952082a6121f80c82 certstorename=webhosting
+3. In order to avoid the need to run visual studio as administrator, run the following commands in an administrator command prompt:
 
-4. In order to avoid the need to run visual studio as administrator, run the following commands in an administrator command prompt:
+        PS C:\Windows\system32> netsh http add urlacl url="https://+:44333/" user =Everyone
+        URL reservation successfully added
 
-```
-PS C:\Windows\system32> netsh http add urlacl url="https://+:44333/" user =Everyone
-URL reservation successfully added
+        PS C:\Windows\system32> netsh http add urlacl url="http://+:8080/" user =Everyone
+        URL reservation successfully added
+4. At this point you will need an entry in your hosts file.  As an administrator, open notepad.exe.  The hosts file is located at `c:\Windows\System32\drivers\etc\hosts`. Add the following entry:
 
-PS C:\Windows\system32> netsh http add urlacl url="http://+:8080/" user =Everyone
-URL reservation successfully added
-```
+        127.0.0.1	localhost auth1.local-fsw.com
 
-5. At this point you will need an entry in your hosts file.  As an administrator, open notepad.exe.  The hosts file is located at `c:\Windows\System32\drivers\etc\hosts`. Add the following entry:
-
-```
-127.0.0.1	localhost auth1.local-fsw.com
-```
 At this point, you should be all set to run the app from visual studio.  Be sure to select the `web` command from the dropdown (not `iisexpress`)
 
 ## Related repositories ##

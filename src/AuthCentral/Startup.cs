@@ -20,7 +20,6 @@ using Fsw.Enterprise.AuthCentral.IdMgr;
 using Fsw.Enterprise.AuthCentral.MongoDb;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
-using Microsoft.AspNet.Mvc.Razor;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 using IdentityServer3.Core.Services;
@@ -80,22 +79,24 @@ namespace Fsw.Enterprise.AuthCentral
             
             services.AddDataProtection();
             services.AddMvc();
-//            services.Configure<RazorViewEngineOptions>(o => o.ViewLocationExpanders.Add(new AreaViewLocationExpander()));
-            services.AddAuthentication(
-                sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+            services.AddAuthentication( sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
             services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>()));
             services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
-            services.AddScoped(typeof (IUserAccountRepository<HierarchicalUserAccount>),
-                typeof (MongoUserAccountRepository<HierarchicalUserAccount>));
+            services.AddScoped(typeof (IUserAccountRepository<HierarchicalUserAccount>), typeof (MongoUserAccountRepository<HierarchicalUserAccount>));
             services.AddScoped(provider => new MongoDatabase(_config.DB.MembershipReboot));
             services.AddScoped<MongoAuthenticationService>();
 
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("FswPlatform", policy => {
-
                     policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
                     policy.RequireClaim("scope", "fsw_platform");
+                });
+
+                options.AddPolicy("FswAdmin", policy => {
+                    policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+                    policy.RequireClaim("scope", "fsw_platform");
+                    policy.RequireClaim("fsw:authcentral:admin", "true");
                 });
                 
                 options.DefaultPolicy = options.GetPolicy("FswPlatform");

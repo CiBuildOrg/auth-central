@@ -12,8 +12,8 @@ using Microsoft.AspNet.Authorization;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
-    [Authorize]
     [Area("Admin")]
+    [Authorize("FswAdmin")]
     public class HomeController : Controller
     {
         EnvConfig _cfg;

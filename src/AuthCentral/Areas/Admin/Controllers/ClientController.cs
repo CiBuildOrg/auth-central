@@ -11,12 +11,14 @@ using IdentityServer3.Core.Services;
 
 using Fsw.Enterprise.AuthCentral.ViewModels;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
+using Microsoft.AspNet.Authorization;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
     [Area("Admin")]
+    [Authorize("FswAdmin")]
     public class ClientController : Controller
     {
         private EnvConfig _cfg;

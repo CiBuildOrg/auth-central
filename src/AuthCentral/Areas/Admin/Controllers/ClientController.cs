@@ -57,9 +57,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         {
             Client client = await _clientService.Find(clientId);
 
-            //TODO: why is this method getting hit twice?
-            //TODO: why is clientId always null?
-
             if(client != null)
             {
                 return View(client);
@@ -101,41 +98,43 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         [HttpPost]
         public async Task<IActionResult> Save(Client client)
         {
-            var existingClient = await _clientService.Find(client.ClientId);
-            if(existingClient != null)
+            if(ModelState.IsValid)
             {
-                // don't overwrite existing child items not part of the passed in client
-                client.AllowedCorsOrigins = existingClient.AllowedCorsOrigins;
-                client.AllowedCustomGrantTypes = existingClient.AllowedCustomGrantTypes;
-                client.AllowedScopes = existingClient.AllowedScopes;
-                client.Claims = existingClient.Claims;
-                client.ClientSecrets = existingClient.ClientSecrets;
-                client.IdentityProviderRestrictions = existingClient.IdentityProviderRestrictions;
-                client.PostLogoutRedirectUris = existingClient.PostLogoutRedirectUris;
-                client.RedirectUris = existingClient.RedirectUris;
-            }
-            else
-            {
-                // set some FSW defaults for the new client
-                var defaultScopes = new List<string>();
-                defaultScopes.Add("openid");
-                defaultScopes.Add("profile");
-                defaultScopes.Add("offline_access");
-                defaultScopes.Add("fsw_platform");
-                client.AllowedScopes = defaultScopes;
-            }
+                var existingClient = await _clientService.Find(client.ClientId);
+                if(existingClient != null)
+                {
+                    // don't overwrite existing child items not part of the passed in client
+                    client.AllowedCorsOrigins = existingClient.AllowedCorsOrigins;
+                    client.AllowedCustomGrantTypes = existingClient.AllowedCustomGrantTypes;
+                    client.AllowedScopes = existingClient.AllowedScopes;
+                    client.Claims = existingClient.Claims;
+                    client.ClientSecrets = existingClient.ClientSecrets;
+                    client.IdentityProviderRestrictions = existingClient.IdentityProviderRestrictions;
+                    client.PostLogoutRedirectUris = existingClient.PostLogoutRedirectUris;
+                    client.RedirectUris = existingClient.RedirectUris;
+                }
+                else
+                {
+                    // set some FSW defaults for the new client
+                    var defaultScopes = new List<string>();
+                    defaultScopes.Add("openid");
+                    defaultScopes.Add("profile");
+                    defaultScopes.Add("offline_access");
+                    defaultScopes.Add("fsw_platform");
+                    client.AllowedScopes = defaultScopes;
+                }
 
-            if (client.ClientId == null)
-            {
-                // default to client name and ID being the same
-                client.ClientId = client.ClientName;
-            } 
+                if (client.ClientId == null)
+                {
+                    // default to client name and ID being the same
+                    client.ClientId = client.ClientName;
+                } 
 
-            await _clientService.Save(client);
+                await _clientService.Save(client);
+            }
 
             ViewBag.Message = "The Auth Central Client '" + client.ClientName + "' was successfully saved!.";
             return RedirectToAction("Edit", new { clientId = client.ClientId });
-//            return View("Edit", client);
         }
 
     }

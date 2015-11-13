@@ -5,15 +5,14 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Authorization;
 
-using IdentityServer3.Core.Models;
-
-using Fsw.Enterprise.AuthCentral.ViewModels;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
+    [Authorize]
     [Area("Admin")]
     public class HomeController : Controller
     {

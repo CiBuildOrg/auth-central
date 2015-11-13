@@ -40,15 +40,6 @@
 
 }
 
-<!--
-    @controller
-    @action
-    @uClientId
-    ====================
-    @("ClientAllowedScope".Equals(ViewContext.RouteData.Values["controller"]) )
-    @ViewContext.RouteData.Values["action"]
-    @ViewContext.RouteData.Values["clientId"]
--->
 <ul class="nav nav-tabs">
     <li class="@homeClass"><a href="/Admin/Client/Edit/">Client Admin Home</a></li>
     <li class="@editClass"><a href="/Admin/Client/Edit/@Model.ClientId">Edit Client: @Model.ClientId</a></li>

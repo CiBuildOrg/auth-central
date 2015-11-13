@@ -2,12 +2,15 @@
     ViewBag.Title = "Client Admin Home";
 }
 
-
-
 <div class="container">
     <div class="jumbotron">
         <h2>Manage Clients</h2>
         <p>You have two options.</p>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <em>@ViewBag.Message</em>
+        </div>
     </div>
     <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
@@ -22,7 +25,7 @@
                         <input type="text" class="form-control" id="clientId" name="clientId" placeholder="ClientId">
                     </div>
                     <div  class="control-control col-sm-5 col-md-5 col-lg-5" >
-                        <button type="button" class="btn btn-primary">Search &raquo;</button>
+                        <button type="submit" class="btn btn-primary">Search &raquo;</button>
                     </div>
                 </div>
             }

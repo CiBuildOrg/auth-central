@@ -3,17 +3,21 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h3>Client Name: @Model.ClientId</h3>
+<ul class="nav nav-tabs">
+    <li><a href="/Admin/Client/Edit/@Model.ClientId">Edit Client: @Model.ClientId</a></li>
+    <li><a href="/Admin/ClientSecret/View/@Model.ClientId">View Client Secrets</a></li>
+    <li class="dropdown">
+        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Advanced<b class="caret"></b></a>
+        <ul role="menu" class="dropdown-menu">
+            <li><a href="/Admin/ClientRedirectUri/Edit/@Model.ClientId">Redirect Uri's</a></li>
+            <li><a href="/Admin/ClientLogoutUri/Edit/@Model.ClientId">Logout Uri's</a></li>
+            <li><a href="/Admin/ClientAllowedScope/Edit/@Model.ClientId">Allowed Scopes</a></li>
+            <li><a href="/Admin/ClientClaim/Edit/@Model.ClientId">Client Cliams</a></li>
+            <li><a href="/Admin/ClientCorsHeader/Edit/@Model.ClientId">Allowed Cors Headers</a></li>
+            <li><a href="/Admin/ClientCustomGrant/Edit/@Model.ClientId">Allowed Custom Grants</a></li>
+        </ul>
+    </li>
 
-<ul class="nav nav-pills">
-    <li class=""><a href="/Admin/Client/Edit/@Model.ClientId">Client</a></li>
-    <li class=""><a href="/Admin/ClientSecret/View/@Model.ClientId">Client Secrets</a></li>
-    <li class=""><a href="/Admin/ClientRedireUris/Edit/@Model.ClientId">Redirect Uri's</a></li>
-    <li class=""><a href="/Admin/ClientLogoutUris/Edit/@Model.ClientId">Logout Uri's</a></li>
-    <li class=""><a href="/Admin/ClientAllowedScopes/Edit/@Model.ClientId">Allowed Scopes</a></li>
-    <li class=""><a href="/Admin/ClientClaims/Edit/@Model.ClientId">Client Cliams</a></li>
-    <li class=""><a href="/Admin/ClientCorsHeaders/Edit/@Model.ClientId">Allowed Cors Headers</a></li>
-    <li class=""><a href="/Admin/ClientCustomGrants/Edit/@Model.ClientId">Allowed Custom Grants</a></li>
 </ul>
 
 @Html.ValidationSummary()

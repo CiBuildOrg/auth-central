@@ -6,9 +6,7 @@
     ViewBag.Title = "Create Client Secret";
 }
 
-@using (Html.BeginForm("Save", "ClientSecret", new {area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
-
-    <h5>Client Secrets</h5>
+@using (Html.BeginForm("Save", "ClientSecret", new {clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
     @Html.HiddenFor(model => model.ClientId)
     @Html.EditorFor(model=> model.ClientSecrets)
 

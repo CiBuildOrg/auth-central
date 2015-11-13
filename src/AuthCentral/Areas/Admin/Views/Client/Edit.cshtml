@@ -4,22 +4,20 @@
     ViewBag.Title = "Edit Client";
 }
 
-@using (Html.BeginForm("Save", "Client", new {area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) 
+@using (Html.BeginForm("Save", "Client", new { clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @id="edit-form", @class = "form-horizontal"} )) 
 {   
-    <div class="row">
-        <div class="col-md-offset-1 col-md-2" >Client Edit</div>
-        <div class="col-sm-3" >
-           <input type="submit" value="Save" class="btn btn-success" />
-        </div>
-        <div class="col-sm-3" >
-           <input type="submit" value="Delete" class="btn btn-warning" />
-        </div>
-        <div class="col-sm-3" >
-            <a class="btn btn-default" href="/Admin/Client/Create">New Client</a>
-        </div>
-    </div>
+   @Html.HiddenFor(model => model.ClientId)
 
-    @Html.HiddenFor(model => model.ClientId)
+   <div class="form-group">
+       <div class="col-md-offset-2 col-md-2">
+           <input type="button" value="Save" class="btn btn-success" onclick="javascript: document.forms['edit-form'].submit();" />
+       </div>
+       <div class="col-md-6"></div>
+       <div class="col-md-2">
+           <input type="button" value="Delete" class="btn btn-warning" onclick="javascript: document.forms['edit-form'].action = '/Admin/Client/Delete/@Model.ClientId'; document.forms['edit-form'].submit();" />
+       </div>
+       <dev class="col-md-10"></dev>
+   </div>
 
    <div class="form-group">
        @Html.LabelFor(model => model.ClientName, new { @class = "control-label col-md-2" })
@@ -173,7 +171,6 @@
        </div>
    </div>
 
-
    <div class="form-group">
        @Html.LabelFor(model => model.IncludeJwtId, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
@@ -181,7 +178,6 @@
            @Html.ValidationMessageFor(model => model.IncludeJwtId)
        </div>
    </div>
-
 
    <div class="form-group">
        @Html.LabelFor(model => model.AlwaysSendClientClaims, new { @class = "control-label col-md-2" })
@@ -191,7 +187,6 @@
        </div>
    </div>
 
-
    <div class="form-group">
        @Html.LabelFor(model => model.PrefixClientClaims, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
@@ -199,7 +194,6 @@
            @Html.ValidationMessageFor(model => model.PrefixClientClaims)
        </div>
    </div>
-
 
    <div class="form-group">
        @Html.LabelFor(model => model.AllowAccessToAllCustomGrantTypes, new { @class = "control-label col-md-2" })
@@ -210,12 +204,13 @@
    </div>
 
    <div class="form-group">
-       <div class="col-md-offset-2 col-md-10">
-           <input type="submit" value="Save" class="btn btn-success" />
+       <div class="col-md-offset-2 col-md-2">
+           <input type="button" value="Save" class="btn btn-success" onclick="javascript: document.forms['edit-form'].submit();" />
+       </div>
+       <div class="col-md-6"></div>
+       <div class="col-md-2">
+           <input type="button" value="Delete" class="btn btn-warning" onclick="javascript: document.forms['edit-form'].action = '/Admin/Client/Delete'; document.forms['edit-form'].submit();" />
        </div>
    </div>
-}
 
-<div>
-   @Html.ActionLink("Back to List", "Index")
-</div>
+}

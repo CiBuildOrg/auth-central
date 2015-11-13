@@ -67,7 +67,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             else
             {
                 ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
-                return RedirectToAction("Index");
+                return View("Index", ViewBag);
             }
         }
 
@@ -78,9 +78,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         {
             Client client = await _clientService.Find(clientId);
 
-            //TODO: why is this method getting hit twice?
-            //TODO: why is clientId always null?
-
             if(client != null)
             {
                 return View(client);
@@ -88,15 +85,22 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             else
             {
                 ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
-                return RedirectToAction("Index");
+                return View("Index", ViewBag);
             }
         }
 
         [HttpPost]
+        public async Task<IActionResult> Delete(string clientId)
+        {
+            await _clientService.Delete(clientId);
+
+            return RedirectToAction("Index");
+        }
+
+
+        [HttpPost]
         public async Task<IActionResult> Save(Client client)
         {
-            //TODO: Validation of some kind
-
             var existingClient = await _clientService.Find(client.ClientId);
             if(existingClient != null)
             {

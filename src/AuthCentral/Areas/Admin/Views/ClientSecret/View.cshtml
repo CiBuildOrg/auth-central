@@ -7,8 +7,7 @@
 }
 
 <div class="row">
-    <div class="col-md-offset-1 col-md-2" >Client Secrets</div>
-    <div class="col-sm-9" >
+    <div class="col-md-12" >
         <a class="btn btn-default" href="/Admin/ClientSecret/Create/@Model.ClientId">Create Secret</a>
     </div>
 </div>
@@ -16,7 +15,7 @@
 @foreach(var clientSecret in Model.ClientSecrets)
 {
     <hr />
-    @using (Html.BeginForm("Delete", "ClientSecret", new {area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
+    @using (Html.BeginForm("Delete", "ClientSecret", new {clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
         @Html.HiddenFor(model => Model.ClientId)
         @Html.DisplayFor(model => clientSecret)
 

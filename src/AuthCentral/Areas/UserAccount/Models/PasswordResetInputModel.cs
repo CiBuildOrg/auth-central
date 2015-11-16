@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
-using System.Web.Mvc;
-using System.Web.Security;
+using Microsoft.AspNet.Mvc;
 
-namespace BrockAllen.MembershipReboot.Mvc.Areas.UserAccount.Models
+namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
 {
     public class PasswordResetInputModel
     {

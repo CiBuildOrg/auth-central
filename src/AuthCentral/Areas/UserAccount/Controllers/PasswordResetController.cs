@@ -1,9 +1,10 @@
-﻿using BrockAllen.MembershipReboot.Mvc.Areas.UserAccount.Models;
-using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using BrockAllen.MembershipReboot;
+using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
+using Microsoft.AspNet.Mvc;
 
-namespace BrockAllen.MembershipReboot.Mvc.Areas.UserAccount.Controllers
+namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
 {
     [AllowAnonymous]
     public class PasswordResetController : Controller

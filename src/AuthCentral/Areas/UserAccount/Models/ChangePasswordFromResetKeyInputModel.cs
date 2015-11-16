@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
+using Microsoft.AspNet.Mvc;
 
-namespace BrockAllen.MembershipReboot.Mvc.Areas.UserAccount.Models
+namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
 {
     public class ChangePasswordFromResetKeyInputModel
     {
@@ -10,7 +10,7 @@ namespace BrockAllen.MembershipReboot.Mvc.Areas.UserAccount.Models
         public string Password { get; set; }
         
         [Required]
-        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "Password confirmation must match password.")]
+        [Compare("Password", ErrorMessage = "Password confirmation must match password.")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
         

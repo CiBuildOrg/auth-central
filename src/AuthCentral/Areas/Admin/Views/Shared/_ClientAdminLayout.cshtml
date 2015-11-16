@@ -8,10 +8,12 @@
 
     string homeClass = "";
     string editClass = "";
+    string corsClass = "";
+    string scopesClass = "";
+    string claimsClass = "";
     string secretsClass = "";
     string redirectClass = "";
     string postLogoutClass = "";
-    string scopesClass = "";
 
     if( "Client".Equals(controller) )
     { 
@@ -33,7 +35,15 @@
     {
         scopesClass = "active";
     }
-    else 
+    else if( "ClientAllowedCorsOrigin".Equals(controller) ) 
+    {
+        corsClass = "active";
+    }
+     else if( "ClientClaim".Equals(controller) ) 
+    {
+        claimsClass = "active";
+    }
+     else 
     {   
         homeClass = "active";
     }
@@ -43,10 +53,19 @@
 <ul class="nav nav-tabs">
     <li class="@homeClass"><a href="/Admin/Client/Edit/">Client Admin Home</a></li>
     <li class="@editClass"><a href="/Admin/Client/Edit/@Model.ClientId">Edit Client: @Model.ClientId</a></li>
-    <li class="@secretsClass"><a href="/Admin/ClientSecret/View/@Model.ClientId">View Client Secrets</a></li>
-    <li class="@redirectClass"><a href="/Admin/ClientRedirectUri/Edit/@Model.ClientId">Redirect Uri's</a></li>
-    <li class="@postLogoutClass"><a href="/Admin/ClientLogoutUri/Edit/@Model.ClientId">Logout Uri's</a></li>
+    <li class="@secretsClass"><a href="/Admin/ClientSecret/Show/@Model.ClientId">Client Secrets</a></li>
+    <li class="@claimsClass"><a href="/Admin/ClientClaim/Show/@Model.ClientId">Claims</a></li>
     <li class="@scopesClass"><a href="/Admin/ClientAllowedScope/Edit/@Model.ClientId">Allowed Scopes</a></li>
+
+    <li class="dropdown">
+        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Uri's<b class="caret"></b></a>
+        <ul role="menu" class="dropdown-menu">
+            <li class="@redirectClass"><a href="/Admin/ClientRedirectUri/Edit/@Model.ClientId">Redirect Uri's</a></li>
+            <li class="@postLogoutClass"><a href="/Admin/ClientLogoutUri/Edit/@Model.ClientId">Logout Uri's</a></li>
+            <li class="@corsClass"><a href="/Admin/ClientAllowedCorsOrigin/Edit/@Model.ClientId">Allowed CORS Origins</a></li>
+        </ul>
+    </li>
+ 
     <!--
     <li class="dropdown">
         <a data-toggle="dropdown" class="dropdown-toggle" href="#">Advanced<b class="caret"></b></a>

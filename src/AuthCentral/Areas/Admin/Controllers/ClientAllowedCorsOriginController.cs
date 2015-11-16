@@ -18,7 +18,7 @@ using Microsoft.AspNet.Authorization;
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
     [Area("Admin")]
-    [Authorize("FswAdmin")]
+//    [Authorize("FswAdmin")]
     public class ClientAllowedCorsOriginController : Controller
     {
         

@@ -17,7 +17,7 @@ using Microsoft.AspNet.Authorization;
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
     [Area("Admin")]
-    [Authorize("FswAdmin")]
+//    [Authorize("FswAdmin")]
     public class ClientController : Controller
     {
         private EnvConfig _cfg;
@@ -48,23 +48,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
             return View("Edit", client);
         }
-
-        [HttpGet]
-        public async Task<IActionResult> View(string clientId)
-        {
-            Client client = await _clientService.Find(clientId);
-
-            if(client != null)
-            {
-                return View(client);
-            }
-            else
-            {
-                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
-                return View("Index", ViewBag);
-            }
-        }
-
 
         [HttpGet]
         public async Task<IActionResult> Edit(string clientId)

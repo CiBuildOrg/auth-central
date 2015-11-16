@@ -21,18 +21,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
     [Authorize("FswAdmin")]
     public class ClientSecretController : Controller
     {
-        
-        private EnvConfig _cfg;
         private IClientService _clientService;
 
-        //public ClientController(EnvConfig cfg, IAdminService adminService, IClientStore clientStore)
-        public ClientSecretController(EnvConfig cfg, IClientService clientService)
+        public ClientSecretController(IClientService clientService)
         {
-            this._cfg = cfg;
             this._clientService = clientService;
         }
 
-        // GET: /Admin/Client/ViewClientSecrets/{clientId}
         [HttpGet]
         public async Task<IActionResult> View(string clientId)
         {
@@ -40,7 +35,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
             if(client == null)
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
                 return RedirectToAction("Index");
             }
 
@@ -59,7 +54,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return View(model);
         }
 
-        // GET: /Admin/Client/CreateClientSecrets/{clientId}
         [HttpGet]
         public async Task<IActionResult> Create(string clientId)
         {
@@ -67,7 +61,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
             if(client == null)
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
                 return RedirectToAction("Index");
             }
 
@@ -84,7 +78,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
 
-        // POST: /Admin/Client/DeleteClientSecret
         [HttpPost]
         public async Task<IActionResult> Delete(string clientId, ClientSecret clientSecret)
         {
@@ -92,7 +85,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
             if(client == null)
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
                 return RedirectToAction("Index");
             }
 
@@ -129,7 +122,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
             if(client == null)
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + csc.ClientId + " could not be found.";
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", client.ClientId);
                 return RedirectToAction("Index");
             }
 

@@ -22,13 +22,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
     public class ClientAllowedScopeController : Controller
     {
         
-        private EnvConfig _cfg;
         private IClientService _clientService;
 
-        //public ClientController(EnvConfig cfg, IAdminService adminService, IClientStore clientStore)
-        public ClientAllowedScopeController(EnvConfig cfg, IClientService clientService)
+        public ClientAllowedScopeController(IClientService clientService)
         {
-            this._cfg = cfg;
             this._clientService = clientService;
         }
 
@@ -39,7 +36,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
             if(client == null)
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
                 return RedirectToAction("Edit");
             }
 
@@ -54,7 +51,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return View(model);
         }
 
-        // POST: /Admin/Client/DeleteClientSecret
         [HttpPost]
         public async Task<IActionResult> Delete(string clientId, string redirectUri)
         {
@@ -62,7 +58,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
             if(client == null)
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
                 return RedirectToAction("Edit");
             }
 
@@ -103,18 +99,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
             if(client == null)
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
             }
 
-            bool isSaveRequired = false;
             if(!client.AllowedScopes.Contains(redirectUri) && !String.IsNullOrWhiteSpace(redirectUri))
             {
-               client.AllowedScopes.Add(redirectUri);
-                isSaveRequired = true;
-            }
-
-            if(isSaveRequired)
-            {
+                client.AllowedScopes.Add(redirectUri);
                 await _clientService.Save(client);
             }
 

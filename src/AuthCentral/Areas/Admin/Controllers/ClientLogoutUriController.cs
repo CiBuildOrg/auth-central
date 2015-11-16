@@ -22,13 +22,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
     public class ClientLogoutUriController : Controller
     {
         
-        private EnvConfig _cfg;
         private IClientService _clientService;
 
-        //public ClientController(EnvConfig cfg, IAdminService adminService, IClientStore clientStore)
-        public ClientLogoutUriController(EnvConfig cfg, IClientService clientService)
+        public ClientLogoutUriController(IClientService clientService)
         {
-            this._cfg = cfg;
             this._clientService = clientService;
         }
 
@@ -39,7 +36,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
             if(client == null)
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
                 return RedirectToAction("Edit");
             }
 
@@ -62,7 +59,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
             if(client == null)
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
                 return RedirectToAction("Edit");
             }
 
@@ -103,7 +100,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
             if(client == null)
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
             }
 
             bool isSaveRequired = false;

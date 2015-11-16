@@ -9,7 +9,6 @@ using Microsoft.AspNet.Mvc;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
 
-using Fsw.Enterprise.AuthCentral.ViewModels;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 using Microsoft.AspNet.Authorization;
 
@@ -24,7 +23,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         private EnvConfig _cfg;
         private IClientService _clientService;
 
-        //public ClientController(EnvConfig cfg, IAdminService adminService, IClientStore clientStore)
         public ClientController(EnvConfig cfg, IClientService clientService)
         {
             this._cfg = cfg;
@@ -36,7 +34,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return View();
         }
 
-        // GET: /<controller>/
         [HttpGet]
         public IActionResult Create()
         {
@@ -49,11 +46,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 Flow = Flows.AuthorizationCode
             };
 
-            //return RedirectToAction("Manage", client);
             return View("Edit", client);
         }
 
-        // GET: /<controller>/
         [HttpGet]
         public async Task<IActionResult> View(string clientId)
         {
@@ -65,13 +60,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             }
             else
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
                 return View("Index", ViewBag);
             }
         }
 
 
-        // GET: /Client/{id}
         [HttpGet]
         public async Task<IActionResult> Edit(string clientId)
         {
@@ -83,7 +77,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             }
             else
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
                 return View("Index", ViewBag);
             }
         }
@@ -135,7 +129,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 await _clientService.Save(client);
             }
 
-            ViewBag.Message = "The Auth Central Client '" + client.ClientName + "' was successfully saved!.";
+            ViewBag.Message = string.Format("The Auth Central Client {0} was successfully saved!", client.ClientName);
             return RedirectToAction("Edit", new { clientId = client.ClientId });
         }
 

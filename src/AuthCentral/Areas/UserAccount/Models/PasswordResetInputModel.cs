@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Microsoft.AspNet.DataProtection;
 using Microsoft.AspNet.Mvc;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
@@ -14,14 +15,17 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
 
     public class PasswordResetWithSecretInputModel
     {
-        public PasswordResetWithSecretInputModel ()
-	    {
-	    }
+        private readonly IDataProtector _protector;
 
-        public PasswordResetWithSecretInputModel(Guid accountID)
+        public PasswordResetWithSecretInputModel (IDataProtector protector)
+        {
+            _protector = protector;
+        }
+
+        public PasswordResetWithSecretInputModel(IDataProtector protector, Guid accountID) : this(protector)
         {
             var bytes = Encoding.UTF8.GetBytes(accountID.ToString());
-            bytes = MachineKey.Protect(bytes, "PasswordResetWithSecretViewModel");
+            bytes = _protector.Protect(bytes);
             ProtectedAccountID = Convert.ToBase64String(bytes);
         }
 
@@ -35,10 +39,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
             {
                 try
                 {
-                    if (this.ProtectedAccountID != null)
+                    if (ProtectedAccountID != null)
                     {
-                        var bytes = Convert.FromBase64String(this.ProtectedAccountID);
-                        bytes = MachineKey.Unprotect(bytes, "PasswordResetWithSecretViewModel");
+                        var bytes = Convert.FromBase64String(ProtectedAccountID);
+                        bytes = _protector.Unprotect(bytes);
                         var val = Encoding.UTF8.GetString(bytes);
                         return Guid.Parse(val);
                     }

@@ -2,6 +2,7 @@
 using System.Linq;
 using BrockAllen.MembershipReboot;
 using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
+using Microsoft.AspNet.DataProtection;
 using Microsoft.AspNet.Mvc;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
@@ -11,9 +12,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
     {
         UserAccountService userAccountService;
         AuthenticationService authenticationService;
-        public PasswordResetController(AuthenticationService authenticationService)
+        private readonly IDataProtector _protector;
+
+        public PasswordResetController(AuthenticationService authenticationService, IDataProtector protector)
         {
             this.authenticationService = authenticationService;
+            _protector = protector;
             this.userAccountService = authenticationService.UserAccountService;
         }
 
@@ -39,7 +43,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
                             return View("ResetSuccess");
                         }
 
-                        var vm = new PasswordResetWithSecretInputModel(account.ID);
+                        var vm = new PasswordResetWithSecretInputModel(_protector, account.ID);
                         vm.Questions =
                             account.PasswordResetSecrets.Select(
                                 x => new PasswordResetSecretViewModel
@@ -89,7 +93,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
                 var account = this.userAccountService.GetByID(id.Value);
                 if (account != null)
                 {
-                    var vm = new PasswordResetWithSecretInputModel(account.ID);
+                    var vm = new PasswordResetWithSecretInputModel(_protector, account.ID);
                     vm.Questions =
                         account.PasswordResetSecrets.Select(
                             x => new PasswordResetSecretViewModel

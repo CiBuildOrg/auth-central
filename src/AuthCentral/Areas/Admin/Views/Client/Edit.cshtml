@@ -1,0 +1,225 @@
+﻿@model IdentityServer3.Core.Models.Client
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_ClientAdminLayout.cshtml";
+    ViewBag.Title = "Edit Client";
+}
+
+@using (Html.BeginForm("Save", "Client", new { clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @id="edit-form", @class = "form-horizontal"} )) 
+{   
+   @Html.HiddenFor(model => model.ClientId)
+
+   <div class="form-group">
+       <div class="col-md-offset-2 col-md-2">
+           <input type="button" value="Save" class="btn btn-success" onclick="javascript: document.forms['edit-form'].submit();" />
+       </div>
+       <div class="col-md-6"></div>
+       <div class="col-md-2">
+           <input type="button" value="Delete" class="btn btn-warning" onclick="javascript: document.forms['edit-form'].action = '/Admin/Client/Delete/@Model.ClientId'; document.forms['edit-form'].submit();" />
+       </div>
+       <dev class="col-md-10"></dev>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.ClientId, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.ClientId, new {@class="form-control", @disabled="disabled"})
+           @Html.ValidationMessageFor(model => model.ClientId)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.ClientName, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.ClientName, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ClientName)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.ClientUri, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.ClientUri, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ClientUri)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.LogoUri, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.LogoUri, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.LogoUri)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.RequireConsent, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.CheckBoxFor(model => model.RequireConsent, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.RequireConsent)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.AllowRememberConsent, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.CheckBoxFor(model => model.AllowRememberConsent, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.AllowRememberConsent)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.Flow, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.Flow, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.Flow)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.AllowClientCredentialsOnly, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.CheckBoxFor(model => model.AllowClientCredentialsOnly, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.AllowClientCredentialsOnly)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.AllowAccessToAllScopes, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.CheckBoxFor(model => model.AllowAccessToAllScopes, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.AllowAccessToAllScopes)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.IdentityTokenLifetime, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.IdentityTokenLifetime, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.IdentityTokenLifetime)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.AccessTokenLifetime, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.AccessTokenLifetime, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.AccessTokenLifetime)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.AuthorizationCodeLifetime, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.AuthorizationCodeLifetime, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.AuthorizationCodeLifetime)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.AbsoluteRefreshTokenLifetime, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.AbsoluteRefreshTokenLifetime, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.AbsoluteRefreshTokenLifetime)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.SlidingRefreshTokenLifetime, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.SlidingRefreshTokenLifetime, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.SlidingRefreshTokenLifetime)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.AllowAccessToAllScopes, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.CheckBoxFor(model => model.AllowAccessToAllScopes, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.AllowAccessToAllScopes)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.RefreshTokenUsage, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.RefreshTokenUsage, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.RefreshTokenUsage)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.UpdateAccessTokenClaimsOnRefresh, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.CheckBoxFor(model => model.UpdateAccessTokenClaimsOnRefresh, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.UpdateAccessTokenClaimsOnRefresh)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.RefreshTokenExpiration, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.RefreshTokenExpiration, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.RefreshTokenExpiration)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.AccessTokenType, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.AccessTokenType, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.AccessTokenType)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.EnableLocalLogin, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.CheckBoxFor(model => model.EnableLocalLogin, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.EnableLocalLogin)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.IncludeJwtId, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.CheckBoxFor(model => model.IncludeJwtId, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.IncludeJwtId)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.AlwaysSendClientClaims, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.CheckBoxFor(model => model.AlwaysSendClientClaims, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.AlwaysSendClientClaims)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.PrefixClientClaims, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.CheckBoxFor(model => model.PrefixClientClaims, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.PrefixClientClaims)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.AllowAccessToAllCustomGrantTypes, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.CheckBoxFor(model => model.AllowAccessToAllCustomGrantTypes, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.AllowAccessToAllCustomGrantTypes)
+       </div>
+   </div>
+
+   <div class="form-group">
+       <div class="col-md-offset-2 col-md-2">
+           <input type="button" value="Save" class="btn btn-success" onclick="javascript: document.forms['edit-form'].submit();" />
+       </div>
+       <div class="col-md-6"></div>
+       <div class="col-md-2">
+           <input type="button" value="Delete" class="btn btn-warning" onclick="javascript: document.forms['edit-form'].action = '/Admin/Client/Delete'; document.forms['edit-form'].submit();" />
+       </div>
+   </div>
+
+}
+<hr />

@@ -9,29 +9,24 @@ using Microsoft.AspNet.Mvc;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
 
-using Fsw.Enterprise.AuthCentral.ViewModels;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
+using Microsoft.AspNet.Authorization;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
     [Area("Admin")]
+    [Authorize("FswAdmin")]
     public class ClientController : Controller
     {
-        private const string pattern = @"^mongodb://.+?/(.+?)(?:\?(.+=.+)+$|$)";
-        private static readonly Regex r = new Regex(pattern);
-
         private EnvConfig _cfg;
         private IClientService _clientService;
-        private IScopeService _scopeService;
 
-        //public ClientController(EnvConfig cfg, IAdminService adminService, IClientStore clientStore)
-        public ClientController(EnvConfig cfg, IClientService clientService, IScopeService scopeService)
+        public ClientController(EnvConfig cfg, IClientService clientService)
         {
             this._cfg = cfg;
             this._clientService = clientService;
-            this._scopeService = scopeService;
         }
 
         public IActionResult Index()
@@ -39,7 +34,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return View();
         }
 
-        // GET: /<controller>/
         [HttpGet]
         public IActionResult Create()
         {
@@ -52,18 +46,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 Flow = Flows.AuthorizationCode
             };
 
-            //return RedirectToAction("Manage", client);
-            return View("Manage", client);
+            return View("Edit", client);
         }
 
-        // GET: /<controller>/
         [HttpGet]
-        public async Task<IActionResult> Manage(string clientId)
+        public async Task<IActionResult> View(string clientId)
         {
             Client client = await _clientService.Find(clientId);
-
-            //TODO: why is this method getting hit twice?
-            //TODO: why is clientId always null?
 
             if(client != null)
             {
@@ -71,22 +60,77 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             }
             else
             {
-                ViewBag.Message = "The Auth Central Client with ClientId " + clientId + " could not be found.";
-                return RedirectToAction("Index");
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
+                return View("Index", ViewBag);
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string clientId)
+        {
+            Client client = await _clientService.Find(clientId);
+
+            if(client != null)
+            {
+                return View(client);
+            }
+            else
+            {
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
+                return View("Index", ViewBag);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Manage(Client client)
+        public async Task<IActionResult> Delete(string clientId)
         {
-            //var s = new Secret("blah blah blah".Sha256());
-            //client.ClientSecrets.Add(s);
+            await _clientService.Delete(clientId);
 
-            //TODO: Validation of some kind
-            await _clientService.Save(client);
+            return RedirectToAction("Index");
+        }
 
-            ViewBag.Message = "The Auth Central Client " + client.ClientName + " was successfully saved!.";
-            return View(client);
+
+        [HttpPost]
+        public async Task<IActionResult> Save(Client client)
+        {
+            if(ModelState.IsValid)
+            {
+                var existingClient = await _clientService.Find(client.ClientId);
+                if(existingClient != null)
+                {
+                    // don't overwrite existing child items not part of the passed in client
+                    client.AllowedCorsOrigins = existingClient.AllowedCorsOrigins;
+                    client.AllowedCustomGrantTypes = existingClient.AllowedCustomGrantTypes;
+                    client.AllowedScopes = existingClient.AllowedScopes;
+                    client.Claims = existingClient.Claims;
+                    client.ClientSecrets = existingClient.ClientSecrets;
+                    client.IdentityProviderRestrictions = existingClient.IdentityProviderRestrictions;
+                    client.PostLogoutRedirectUris = existingClient.PostLogoutRedirectUris;
+                    client.RedirectUris = existingClient.RedirectUris;
+                }
+                else
+                {
+                    // set some FSW defaults for the new client
+                    var defaultScopes = new List<string>();
+                    defaultScopes.Add("openid");
+                    defaultScopes.Add("profile");
+                    defaultScopes.Add("offline_access");
+                    defaultScopes.Add("fsw_platform");
+                    client.AllowedScopes = defaultScopes;
+                }
+
+                if (client.ClientId == null)
+                {
+                    // default to client name and ID being the same
+                    client.ClientId = client.ClientName;
+                } 
+
+                await _clientService.Save(client);
+            }
+
+            ViewBag.Message = string.Format("The Auth Central Client {0} was successfully saved!", client.ClientName);
+            return RedirectToAction("Edit", new { clientId = client.ClientId });
         }
 
     }

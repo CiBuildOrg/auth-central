@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Auth Central User Account Adminstration";
+    ViewBag.Title = "Client Admin Home";
 }
 
 <div class="container">
@@ -8,9 +8,15 @@
         <p>You have two options.</p>
     </div>
     <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <em>@ViewBag.Message</em>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
             <h3>Find a Client by ClientId</h3>
-            @using (Html.BeginForm("Manage", "Client", new {area = "Admin" }, FormMethod.Get, new { @class = "form-horizontal"} )) {
+            @using (Html.BeginForm("Edit", "Client", new {area = "Admin" }, FormMethod.Post, new {@id = "search-form", @class = "form-horizontal",  @onsubmit = "javascript: location.href='/Admin/Client/Edit/'+document.forms['search-form'].clientId.value; return false;" } )) 
+            {
                 <div class="form-group">
                     <div  class="control-label col-sm-2 col-md-2 col-lg-2" >
                         <label for="clientId">ClientId</label>
@@ -30,3 +36,4 @@
         </div>
     </div>
 </div>
+<hr />

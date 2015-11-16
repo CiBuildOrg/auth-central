@@ -1,0 +1,25 @@
+﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models
+@model ClientChildListContainer<string>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_ClientAdminLayout.cshtml";
+    ViewBag.Title = "View Client Logout Uri's";
+}
+
+@for(var i=0; i < Model.ChildList.Count; i++)
+{
+    @using (Html.BeginForm("Save", "ClientLogoutUri", new { clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @id="edit-form-" + i, @class = "form-inline"} )) {
+        @Html.HiddenFor(model => Model.ClientId)
+
+        <div class="form-group">
+           <div>
+               <input type="text" class="form-control" id="redirectUri_@i" name="redirectUri" placeholder="http://new-app.fsw.com/" value="@Model.ChildList[i]">
+           </div>
+        </div>
+        <div class="form-group">
+            <input type="button" value="Save" class="btn btn-success" onclick="javascript: document.forms['edit-form-@i'].submit();" />
+            <input type="button" value="Delete" class="btn btn-warning" onclick="    javascript: document.forms['edit-form-@i'].action = '/Admin/ClientLogoutUri/Delete/@Model.ClientId'; document.forms['edit-form-@i'].submit();" />
+       </div>
+       <hr />
+    }
+}

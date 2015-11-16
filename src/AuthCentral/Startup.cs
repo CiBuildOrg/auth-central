@@ -1,14 +1,4 @@
-using Fsw.Enterprise.AuthCentral.Health;
-using Fsw.Enterprise.AuthCentral.IdSvr;
-using IdentityServer3.Core.Configuration;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
-using Microsoft.Dnx.Runtime;
-using Microsoft.Framework.Configuration;
-using Microsoft.Framework.DependencyInjection;
-using Microsoft.Framework.Logging;
-using Serilog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,21 +6,35 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BrockAllen.MembershipReboot;
+
+using Microsoft.Dnx.Runtime;
+using Microsoft.Framework.Configuration;
+using Microsoft.Framework.DependencyInjection;
+using Microsoft.Framework.Logging;
+using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Authentication;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.IdMgr;
 using Fsw.Enterprise.AuthCentral.MongoDb;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
-using Microsoft.AspNet.Mvc.Razor;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
-using Microsoft.AspNet.Http;
-using MongoDB.Driver;
+
 using IdentityServer3.Core.Services;
+using IdentityServer3.Core.Configuration;
+using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
+
+using MongoDB.Driver;
 using IdentityServer3.MembershipReboot;
 using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
 
+using Serilog;
+
+using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
+using Fsw.Enterprise.AuthCentral.Health;
+using Fsw.Enterprise.AuthCentral.IdSvr;
 using Fsw.Enterprise.AuthCentral.MongoStore;
 
 namespace Fsw.Enterprise.AuthCentral
@@ -39,6 +43,7 @@ namespace Fsw.Enterprise.AuthCentral
     {
         private EnvConfig _config;
         private IdentityServerServiceFactory _idSvcfactory;
+        private StoreSettings _idSvrStoreSettings = StoreSettings.DefaultSettings();
 
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
@@ -48,6 +53,10 @@ namespace Fsw.Enterprise.AuthCentral
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
             _config = new EnvConfig(Configuration);
+
+            _idSvrStoreSettings.ConnectionString = _config.DB.IdentityServer3;
+            _idSvrStoreSettings.Database = MongoUrl.Create(_idSvrStoreSettings.ConnectionString).DatabaseName;
+
         }
 
         public IConfigurationRoot Configuration { get; set; }
@@ -60,7 +69,7 @@ namespace Fsw.Enterprise.AuthCentral
 
             if (_config.IsDebug)
             {
-                loggerConfig.MinimumLevel.Information();
+                loggerConfig.MinimumLevel.Verbose();
             } else
             {
                 loggerConfig.MinimumLevel.Error();
@@ -70,26 +79,31 @@ namespace Fsw.Enterprise.AuthCentral
             
             services.AddDataProtection();
             services.AddMvc();
-            services.Configure<RazorViewEngineOptions>(o => o.ViewLocationExpanders.Add(new AreaViewLocationExpander()));
-            services.AddAuthentication(
-                sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+            services.AddAuthentication( sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
             services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null));
             services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
-            services.AddScoped(typeof (IUserAccountRepository<HierarchicalUserAccount>),
-                typeof (MongoUserAccountRepository<HierarchicalUserAccount>));
+            services.AddScoped(typeof (IUserAccountRepository<HierarchicalUserAccount>), typeof (MongoUserAccountRepository<HierarchicalUserAccount>));
             services.AddScoped(provider => new MongoDatabase(_config.DB.MembershipReboot));
             services.AddScoped<MongoAuthenticationService>();
 
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("FswPlatform", policy => {
-
                     policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
                     policy.RequireClaim("scope", "fsw_platform");
+                });
+
+                options.AddPolicy("FswAdmin", policy => {
+                    policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+                    policy.RequireClaim("scope", "fsw_platform");
+                    policy.RequireClaim("fsw:authcentral:admin", "true");
                 });
                 
                 options.DefaultPolicy = options.GetPolicy("FswPlatform");
             });
+            services.AddInstance<EnvConfig>(_config);
+            services.AddInstance<IClientService>(AdminServiceFactory.CreateClientService(_idSvrStoreSettings));
+            services.AddInstance<IScopeService>(AdminServiceFactory.CreateScopeService(_idSvrStoreSettings));
         }
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
@@ -102,7 +116,7 @@ namespace Fsw.Enterprise.AuthCentral
             settings.Database = MongoUrl.Create(settings.ConnectionString).DatabaseName;
 
             var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
-            _idSvcfactory = new ServiceFactory(usrSrv, settings)
+            _idSvcfactory = new ServiceFactory(usrSrv, _idSvrStoreSettings)
             {
                 ViewService = new Registration<IViewService>(typeof(CustomViewService))
             };
@@ -168,10 +182,12 @@ namespace Fsw.Enterprise.AuthCentral
             if(_config.IsDebug)
             {
                 logFactory.MinimumLevel = LogLevel.Verbose;
+                app.UseDeveloperExceptionPage();
             } else
             {
                 logFactory.MinimumLevel = LogLevel.Error;
             }
+
             app.UseIISPlatformHandler();
             app.UseStaticFiles();
 
@@ -225,8 +241,29 @@ namespace Fsw.Enterprise.AuthCentral
                 ids.UseIdentityServer(idsOptions);
             });
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+//                routes.MapRoute(
+//                    name: "areaRouteWithId",
+//                    template: "{area:exists}/{controller=Home}/{action=Index}/{id}"
+//                );
+
+                routes.MapRoute(
+                    name: "areaRouteWithClientId",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{clientId}"
+                );
+
+
+                routes.MapRoute(
+                    name: "areaRouteDefault",
+                    template: "{area:exists}/{controller=Home}/{action=Index}"
+                );
             
+//                routes.MapRoute( 
+//                    name: "default",
+//                    template: "{controller=Health}/{action=Index}" 
+//                );
+            });
         }
     }
 }

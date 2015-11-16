@@ -1,12 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
-using Fsw.Enterprise.AuthCentral.Models;
+
 using Microsoft.AspNet.Mvc;
 
-namespace Fsw.Enterprise.AuthCentral.Controllers
+using Fsw.Enterprise.AuthCentral.Models;
+
+namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
 {
-    [AllowAnonymous, Route("[controller]")]
+    [AllowAnonymous]
+    [Area("UserAccount")]
     public class RegisterController : Controller
     {
         readonly UserAccountService<HierarchicalUserAccount> _userAccountService;

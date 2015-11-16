@@ -3,7 +3,7 @@ using System;
 
 namespace Fsw.Enterprise.AuthCentral
 {
-    internal class EnvConfig
+    public class EnvConfig
     {
         private CertConfig _cert;
         private UriConfig _uri;
@@ -47,7 +47,7 @@ namespace Fsw.Enterprise.AuthCentral
             get { return _root.Get<bool>(EnvVars.DebugMode); }
         }
 
-        internal class DatabaseConfig
+        public class DatabaseConfig
         {
             private IConfigurationRoot _root;
             public DatabaseConfig(IConfigurationRoot root) {
@@ -73,7 +73,7 @@ namespace Fsw.Enterprise.AuthCentral
          }
 
 
-        internal class UriConfig
+        public class UriConfig
         {
             private IConfigurationRoot _root;
             public UriConfig(IConfigurationRoot root)
@@ -124,7 +124,7 @@ namespace Fsw.Enterprise.AuthCentral
         }
 
 
-        internal class CertConfig
+        public class CertConfig
         {
             private IConfigurationRoot _root;
             public CertConfig(IConfigurationRoot root)

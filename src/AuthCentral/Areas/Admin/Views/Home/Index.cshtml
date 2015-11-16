@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Auth Central Adminstration";
+}
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>Auth Central Admin</h1>
+        <p>
+            If you are an Auth Central Administrator, you have come to the right place.  This is where 
+            API Clients, Scopes, Claims, and User Accounts are managed.
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <h2>Server Admin</h2>
+            <p>
+                If it is related to an oAuth Server, it can be managed here.  If you are building a new 
+                application, you need an application-specific client.  If a user is involved, we recommend 
+                creating clients targeted at the OIDC Code flow.  If you need a client for server-to-server 
+                communication, you'll want to create a client targeting the OIDC client credentials flow.
+            </p>
+            <p> <a href="/Admin/Client" class="btn btn-success">Get Started &raquo;</a></p>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <h2>User Admin</h2>
+            <p>
+                Users can be edited, created and deleted in this section of the Auth Central admin tool.  
+                Special privileges can be granted by assiging the user specific resource claims.  Claims
+                are what applications and API's use to authorize users to perform restricted access.
+            </p>
+            <p> <a href="/Admin/Account" class="btn btn-success">Get Started &raquo;</a></p>
+        </div>
+    </div>
+</div>
+<hr />

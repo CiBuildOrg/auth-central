@@ -6,9 +6,10 @@ using Fsw.Enterprise.AuthCentral.Models;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 
-namespace Fsw.Enterprise.AuthCentral.Controllers
+namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
 {
-    [Authorize, Route("[controller]")]
+    [Authorize]
+    [Area("UserAccount")]
     public class ChangeEmailController : Controller
     {
         readonly UserAccountService<HierarchicalUserAccount> _userAccountService;
@@ -20,7 +21,7 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
             _userAccountService = authSvc.UserAccountService;
         }
 
-        public ActionResult Index()
+        public IActionResult Index()
         {
             return View("Index");
         }

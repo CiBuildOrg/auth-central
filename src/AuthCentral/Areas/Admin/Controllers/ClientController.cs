@@ -17,7 +17,7 @@ using Microsoft.AspNet.Authorization;
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
     [Area("Admin")]
-//    [Authorize("FswAdmin")]
+    [Authorize("FswAdmin")]
     public class ClientController : Controller
     {
         private EnvConfig _cfg;

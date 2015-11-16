@@ -19,7 +19,7 @@ using System.Security.Claims;
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
     [Area("Admin")]
-//    [Authorize("FswAdmin")]
+    [Authorize("FswAdmin")]
     public class ClientClaimController : Controller
     {
         private IClientService _clientService;

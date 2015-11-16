@@ -9,7 +9,7 @@ using Microsoft.AspNet.Mvc;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
 {
-    [AllowAnonymous, Area("Admin")]
+    [AllowAnonymous, Area("UserAccount")]
     public class PasswordResetController : Controller
     {
         readonly UserAccountService<HierarchicalUserAccount> _userAccountService;

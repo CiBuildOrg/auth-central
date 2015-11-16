@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using BrockAllen.MembershipReboot;
+using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
+using Fsw.Enterprise.AuthCentral.IdMgr;
 using Microsoft.AspNet.DataProtection;
 using Microsoft.AspNet.Mvc;
 
@@ -10,15 +12,15 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
     [AllowAnonymous, Area("Admin")]
     public class PasswordResetController : Controller
     {
-        UserAccountService userAccountService;
-        AuthenticationService authenticationService;
+        readonly UserAccountService<HierarchicalUserAccount> _userAccountService;
+        readonly MongoAuthenticationService _authenticationService;
         private readonly IDataProtector _protector;
 
-        public PasswordResetController(AuthenticationService authenticationService, IDataProtector protector)
+        public PasswordResetController(MongoAuthenticationService authenticationService, IDataProtector protector)
         {
-            this.authenticationService = authenticationService;
+            this._authenticationService = authenticationService;
             _protector = protector;
-            this.userAccountService = authenticationService.UserAccountService;
+            this._userAccountService = authenticationService.UserAccountService;
         }
 
         public ActionResult Index()
@@ -34,12 +36,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             {
                 try
                 {
-                    var account = this.userAccountService.GetByEmail(model.Email);
+                    var account = this._userAccountService.GetByEmail(model.Email);
                     if (account != null)
                     {
                         if (!account.PasswordResetSecrets.Any())
                         {
-                            this.userAccountService.ResetPassword(model.Email);
+                            this._userAccountService.ResetPassword(model.Email);
                             return View("ResetSuccess");
                         }
 
@@ -78,7 +80,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
                 {
                     var answers =
                         model.Questions.Select(x => new PasswordResetQuestionAnswer { QuestionID = x.QuestionID, Answer = x.Answer });
-                    this.userAccountService.ResetPasswordFromSecretQuestionAndAnswer(model.UnprotectedAccountID.Value, answers.ToArray());
+                    this._userAccountService.ResetPasswordFromSecretQuestionAndAnswer(model.UnprotectedAccountID.Value, answers.ToArray());
                     return View("ResetSuccess");
                 }
                 catch (ValidationException ex)
@@ -90,7 +92,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             var id = model.UnprotectedAccountID;
             if (id != null)
             {
-                var account = this.userAccountService.GetByID(id.Value);
+                var account = this._userAccountService.GetByID(id.Value);
                 if (account != null)
                 {
                     var vm = new PasswordResetWithSecretInputModel(_protector, account.ID);
@@ -125,12 +127,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             {
                 try
                 {
-                    BrockAllen.MembershipReboot.UserAccount account;
-                    if (this.userAccountService.ChangePasswordFromResetKey(model.Key, model.Password, out account))
+                    HierarchicalUserAccount account;
+                    if (this._userAccountService.ChangePasswordFromResetKey(model.Key, model.Password, out account))
                     {
                         if (account.IsLoginAllowed && !account.IsAccountClosed)
                         {
-                            this.authenticationService.SignIn(account);
+                            this._authenticationService.SignIn(account);
                             if (account.RequiresTwoFactorAuthCodeToSignIn())
                             {
                                 return RedirectToAction("TwoFactorAuthCodeLogin", "Login");

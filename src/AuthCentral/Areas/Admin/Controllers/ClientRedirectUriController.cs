@@ -62,20 +62,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 return RedirectToAction("Edit");
             }
 
-            bool saveRequired = false;
-            for(int i = (client.RedirectUris.Count-1); i >= 0; i--)
-            {
-                string existingRedirecUri = client.RedirectUris[i];
-
-                if(existingRedirecUri.Equals(redirectUri))
-                {
-                    client.RedirectUris.Remove(existingRedirecUri);
-                    saveRequired = true;
-                }
-           }
-
-            if(saveRequired)
-            {
+            int removed = client.RedirectUris.RemoveAll(uri => uri.Equals(redirectUri));
+            if (removed > 0) {
                 await _clientService.Save(client);
             }
 

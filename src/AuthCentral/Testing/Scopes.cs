@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 using System.Collections.Generic;
-using System.Linq;
-using IdentityServer3.Core;
 using IdentityServer3.Core.Models;
 
-namespace WebHost.IdSvr
+namespace Fsw.Enterprise.AuthCentral.Testing
 {
     public class Scopes
     {

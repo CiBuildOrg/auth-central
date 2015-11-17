@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using IdentityServer3.Core;
-using IdentityServer3.Core.Extensions;
 using IdentityServer3.Core.Models;
 
-namespace WebHost.IdSvr
+namespace Fsw.Enterprise.AuthCentral.Testing
 {
     public class Clients
     {

@@ -1,4 +1,6 @@
-﻿using WebHost.MR;
+﻿using IdentityServer3.Core.Configuration;
+using IdentityServer3.Core.Services;
+using IdentityServer3.MembershipReboot;
 /*
  * Copyright 2014 Dominick Baier, Brock Allen
  *
@@ -14,16 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IdentityServer3.Core.Configuration;
-using IdentityServer3.Core.Services;
-using IdentityServer3.MembershipReboot;
 
-namespace WebHost.IdSvr
+namespace Fsw.Enterprise.AuthCentral.Testing
 {
     public static class CustomUserServiceExtensions
     {

@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Services;
-using IdentityServer3.Core.Services.InMemory;
 using IdentityServer3.Core.Services.Default;
+using IdentityServer3.Core.Services.InMemory;
 
-namespace WebHost.IdSvr
+namespace Fsw.Enterprise.AuthCentral.Testing
 {
     class Factory
     {

@@ -51,9 +51,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return View(model);
         }
 
-        // POST: /Admin/Client/DeleteClientSecret
         [HttpPost]
-        public async Task<IActionResult> Delete(string clientId, string redirectUri)
+        public async Task<IActionResult> Delete(string clientId, string postLogoutUri)
         {
             Client client = await _clientService.Find(clientId);
 
@@ -63,20 +62,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 return RedirectToAction("Edit");
             }
 
-            bool saveRequired = false;
-            for(int i = (client.PostLogoutRedirectUris.Count-1); i >= 0; i--)
-            {
-                string existingRedirecUri = client.PostLogoutRedirectUris[i];
-
-                if(existingRedirecUri.Equals(redirectUri))
-                {
-                    client.PostLogoutRedirectUris.Remove(existingRedirecUri);
-                    saveRequired = true;
-                }
-           }
-
-            if(saveRequired)
-            {
+            int removed = client.PostLogoutRedirectUris.RemoveAll(uri => uri.Equals(postLogoutUri));
+            if (removed > 0) {
                 await _clientService.Save(client);
             }
 

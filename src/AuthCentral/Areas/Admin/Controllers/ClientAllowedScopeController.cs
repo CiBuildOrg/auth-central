@@ -52,7 +52,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(string clientId, string redirectUri)
+        public async Task<IActionResult> Delete(string clientId, string allowedScope)
         {
             Client client = await _clientService.Find(clientId);
 
@@ -62,20 +62,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 return RedirectToAction("Edit");
             }
 
-            bool saveRequired = false;
-            for(int i = (client.AllowedScopes.Count-1); i >= 0; i--)
-            {
-                string existingRedirecUri = client.AllowedScopes[i];
 
-                if(existingRedirecUri.Equals(redirectUri))
-                {
-                    client.AllowedScopes.Remove(existingRedirecUri);
-                    saveRequired = true;
-                }
-           }
 
-            if(saveRequired)
-            {
+            int removed = client.AllowedScopes.RemoveAll(uri => uri.Equals(allowedScope));
+            if (removed > 0) {
                 await _clientService.Save(client);
             }
 

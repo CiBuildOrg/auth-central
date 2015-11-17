@@ -30,6 +30,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpGet]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Edit(string clientId)
         {
             Client client = await _clientService.Find(clientId);
@@ -52,6 +53,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Delete(string clientId, string allowedScope)
         {
             Client client = await _clientService.Find(clientId);
@@ -81,6 +83,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Save(string clientId, string redirectUri)
         {
             //TODO: validate??

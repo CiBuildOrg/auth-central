@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
+using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Authentication;
 
@@ -28,7 +29,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
 
         protected override void RevokeToken()
         {
-            _context.Authentication.SignOutAsync(_context.User.Identity.AuthenticationType);
+            _context.Authentication.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         protected override void IssueToken(ClaimsPrincipal principal, TimeSpan? tokenLifetime = null, bool? persistentCookie = null)
@@ -41,7 +42,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             if (tokenLifetime.HasValue) props.ExpiresUtc = DateTime.UtcNow.Add(tokenLifetime.Value);
             if (persistentCookie.HasValue) props.IsPersistent = persistentCookie.Value;
 
-            _context.Authentication.SignInAsync(principal.Identity.AuthenticationType, principal, props);
+            _context.Authentication.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, props);
         }
     }
 }

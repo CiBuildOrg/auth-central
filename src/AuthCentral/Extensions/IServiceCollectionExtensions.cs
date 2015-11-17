@@ -5,6 +5,7 @@ using Fsw.Enterprise.AuthCentral.IdSvr;
 using Fsw.Enterprise.AuthCentral.MongoDb;
 using Fsw.Enterprise.AuthCentral.MongoStore;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
+using Fsw.Enterprise.AuthCentral.Testing;
 using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Services;
 using IdentityServer3.MembershipReboot;
@@ -59,15 +60,11 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
         {
             services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>()));
             services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
-            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null));
-            services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
-            services.AddScoped(typeof(IUserAccountRepository<HierarchicalUserAccount>), typeof(MongoUserAccountRepository<HierarchicalUserAccount>));
-            services.AddScoped(provider => new MongoDatabase(mrConnectionString));
+			DIContainerRegistrations.ConfigureIServiceCollection(services);
         }
 
         public static void AddAuthCentralDependencies(this IServiceCollection services, EnvConfig config)
         {
-            services.AddScoped<MongoAuthenticationService>();
             services.AddInstance<EnvConfig>(config);
         }
 

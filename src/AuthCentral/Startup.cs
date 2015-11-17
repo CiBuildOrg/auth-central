@@ -137,8 +137,8 @@ namespace Fsw.Enterprise.AuthCentral
             {
                 options.AuthenticationScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.ClientId = "auth_central_client";
-                options.ClientSecret = "secret";
+                options.ClientId = _config.Client.Id;
+                options.ClientSecret = _config.Client.Secret;
                 options.Authority = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "ids").Uri.AbsoluteUri;
                 options.RedirectUri = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "account").Uri.AbsoluteUri;
                 options.ResponseType = OpenIdConnectResponseTypes.Code;

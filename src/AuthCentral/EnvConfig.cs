@@ -7,6 +7,7 @@ namespace Fsw.Enterprise.AuthCentral
     {
         private CertConfig _cert;
         private UriConfig _uri;
+        private ClientConfig _client;
         private DatabaseConfig _db;
         private IConfigurationRoot _root;
 
@@ -20,6 +21,8 @@ namespace Fsw.Enterprise.AuthCentral
             public static string CertStoreName = "AUTHCENTRAL_CERT_STORENAME";
             public static string CertThumbprint = "AUTHCENTRAL_CERT_THUMBPRINT";
             public static string DebugMode = "AUTHCENTRAL_DEBUG_MODE";
+            public static string ClientId = "AUTHCENTRAL_CLIENT_ID";
+            public static string ClientSecret = "AUTHCENTRAL_CLIENT_SECRET";
         }
 
         public EnvConfig(IConfigurationRoot root) {
@@ -27,10 +30,15 @@ namespace Fsw.Enterprise.AuthCentral
             this._cert = new CertConfig(root);
             this._uri = new UriConfig(root);
             this._db = new DatabaseConfig(root);
+            this._client = new ClientConfig(root);
         }
 
         public CertConfig Cert {
             get { return this._cert; }
+        }
+
+        public ClientConfig Client {
+            get { return this._client; }
         }
 
         public DatabaseConfig DB {
@@ -148,5 +156,31 @@ namespace Fsw.Enterprise.AuthCentral
                 } 
             }
         }
+
+        public class ClientConfig
+        {
+            private IConfigurationRoot _root;
+            public ClientConfig(IConfigurationRoot root)
+            {
+                _root = root;
+            }
+
+            public string Id
+            {
+                get
+                {
+                    return _root.Get<string>(EnvVars.ClientId);
+                }
+            }
+
+            public string Secret 
+            { 
+                get 
+                {
+                    return _root.Get<string>(EnvVars.ClientSecret);
+                } 
+            }
+        }
+
     }
 }

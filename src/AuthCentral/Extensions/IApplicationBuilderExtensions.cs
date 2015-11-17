@@ -23,6 +23,7 @@ using Owin;
 
 using Fsw.Enterprise.AuthCentral.IdSvr;
 using Fsw.Enterprise.AuthCentral.MongoStore;
+using Fsw.Enterprise.AuthCentral.Testing;
 
 namespace Fsw.Enterprise.AuthCentral.Extensions
 {
@@ -35,12 +36,10 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
         public static void UseIdentityServer(this IApplicationBuilder app, IApplicationEnvironment env, EnvConfig config, StoreSettings idSvrStoreSettings)
         {
             var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
-            var idSvcFactory = new ServiceFactory(usrSrv, idSvrStoreSettings)
-            {
-                ViewService = new Registration<IViewService>(typeof(CustomViewService))
-            };
 
-            idSvcFactory.ConfigureCustomUserService(app, config.DB.MembershipReboot);
+			var idSvcFactory = Factory.Configure();
+            idSvcFactory.ViewService = new Registration<IViewService>(typeof (CustomViewService));
+            idSvcFactory.ConfigureTestUserService(app, config.DB.MembershipReboot);			
             idSvcFactory.Register(new Registration<IApplicationEnvironment>(env));
 
             var options = new IdentityServerOptions

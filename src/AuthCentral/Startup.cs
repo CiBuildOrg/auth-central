@@ -1,25 +1,24 @@
 using System;
-
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 
 using Fsw.Enterprise.AuthCentral.Extensions;
-using Fsw.Enterprise.AuthCentral.Health;
+using Microsoft.AspNet.Http;
 using Fsw.Enterprise.AuthCentral.IdMgr;
+using Fsw.Enterprise.AuthCentral.Health;
 using Fsw.Enterprise.AuthCentral.MongoStore;
+using Fsw.Enterprise.AuthCentral.Testing;
 
 namespace Fsw.Enterprise.AuthCentral
 {
     public class Startup
     {
         private EnvConfig _config;
-        public IConfigurationRoot Configuration { get; set; }
 
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
@@ -28,6 +27,8 @@ namespace Fsw.Enterprise.AuthCentral
             Configuration = builder.Build();
             _config = new EnvConfig(Configuration);
         }
+
+        public IConfigurationRoot Configuration { get; set; }
         
         public void ConfigureServices(IServiceCollection services)
         {

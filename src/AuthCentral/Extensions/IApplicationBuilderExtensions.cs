@@ -37,7 +37,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
         {
             var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
 
-			var idSvcFactory = Factory.Configure();
+			var idSvcFactory = Factory.Configure(usrSrv);
             idSvcFactory.ViewService = new Registration<IViewService>(typeof (CustomViewService));
             idSvcFactory.ConfigureTestUserService(app, config.DB.MembershipReboot);			
             idSvcFactory.Register(new Registration<IApplicationEnvironment>(env));

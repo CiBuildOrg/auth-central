@@ -82,7 +82,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
         [HttpPost]
         [Route("Admin/[controller]/[action]/{clientId}")]
-        public async Task<IActionResult> Save(string clientId, string redirectUri)
+        public async Task<IActionResult> Save(string clientId, string postLogoutUri)
         {
             //TODO: validate??
 
@@ -94,9 +94,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             }
 
             bool isSaveRequired = false;
-            if(!client.PostLogoutRedirectUris.Contains(redirectUri) && !String.IsNullOrWhiteSpace(redirectUri))
+            if(!client.PostLogoutRedirectUris.Contains(postLogoutUri) && !String.IsNullOrWhiteSpace(postLogoutUri))
             {
-               client.PostLogoutRedirectUris.Add(redirectUri);
+               client.PostLogoutRedirectUris.Add(postLogoutUri);
                 isSaveRequired = true;
             }
 

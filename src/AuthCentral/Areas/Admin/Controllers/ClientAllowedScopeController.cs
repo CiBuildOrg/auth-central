@@ -84,7 +84,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
         [HttpPost]
         [Route("Admin/[controller]/[action]/{clientId}")]
-        public async Task<IActionResult> Save(string clientId, string redirectUri)
+        public async Task<IActionResult> Save(string clientId, string allowedScope)
         {
             //TODO: validate??
 
@@ -95,9 +95,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
             }
 
-            if(!client.AllowedScopes.Contains(redirectUri) && !String.IsNullOrWhiteSpace(redirectUri))
+            if(!client.AllowedScopes.Contains(allowedScope) && !String.IsNullOrWhiteSpace(allowedScope))
             {
-                client.AllowedScopes.Add(redirectUri);
+                client.AllowedScopes.Add(allowedScope);
                 await _clientService.Save(client);
             }
 

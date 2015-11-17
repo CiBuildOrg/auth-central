@@ -8,7 +8,7 @@ namespace Fsw.Enterprise.AuthCentral.Testing
 {
     public class TestUserRepository : IUserAccountRepository<HierarchicalUserAccount>
     {
-        private Dictionary<Guid, HierarchicalUserAccount> _accounts;
+        private static Dictionary<Guid, HierarchicalUserAccount> _accounts;
 
         private Dictionary<Guid, HierarchicalUserAccount> Accounts
             => _accounts ?? (_accounts = new Dictionary<Guid, HierarchicalUserAccount>());
@@ -16,7 +16,6 @@ namespace Fsw.Enterprise.AuthCentral.Testing
         public HierarchicalUserAccount Create()
         {
             var account = new HierarchicalUserAccount();
-            Accounts.Add(account.ID, account);
 
             return account;
         }

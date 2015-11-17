@@ -245,7 +245,7 @@ namespace Fsw.Enterprise.AuthCentral
             {
                 routes.MapRoute(
                     name: "areaRouteWithClientId",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{clientId?}"
+                    template: "{area:exists}/{controller=Home}/{action=Index}"
                 );
             });
         }

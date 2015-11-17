@@ -30,6 +30,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpGet]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Show(string clientId)
         {
             Client client = await _clientService.Find(clientId);
@@ -56,6 +57,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpGet]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Create(string clientId)
         {
             Client client = await _clientService.Find(clientId);
@@ -79,6 +81,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
 
         [HttpPost]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Delete(string clientId, ClientClaim clientClaim)
         {
             Client client = await _clientService.Find(clientId);

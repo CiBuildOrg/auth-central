@@ -30,6 +30,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpGet]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Edit(string clientId)
         {
             Client client = await _clientService.Find(clientId);
@@ -52,6 +53,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Delete(string clientId, string postLogoutUri)
         {
             Client client = await _clientService.Find(clientId);
@@ -79,7 +81,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost]
-        public async Task<IActionResult> Save(string clientId, string redirectUri)
+        [Route("Admin/[controller]/[action]/{clientId}")]
+        public async Task<IActionResult> Save(string clientId, string postLogoutUri)
         {
             //TODO: validate??
 
@@ -91,9 +94,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             }
 
             bool isSaveRequired = false;
-            if(!client.PostLogoutRedirectUris.Contains(redirectUri) && !String.IsNullOrWhiteSpace(redirectUri))
+            if(!client.PostLogoutRedirectUris.Contains(postLogoutUri) && !String.IsNullOrWhiteSpace(postLogoutUri))
             {
-               client.PostLogoutRedirectUris.Add(redirectUri);
+               client.PostLogoutRedirectUris.Add(postLogoutUri);
                 isSaveRequired = true;
             }
 

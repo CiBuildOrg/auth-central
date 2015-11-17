@@ -50,6 +50,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpGet]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Edit(string clientId)
         {
             Client client = await _clientService.Find(clientId);
@@ -66,6 +67,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Delete(string clientId)
         {
             await _clientService.Delete(clientId);
@@ -75,6 +77,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
 
         [HttpPost]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Save(Client client)
         {
             if(ModelState.IsValid)

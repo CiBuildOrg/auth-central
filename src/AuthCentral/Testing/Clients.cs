@@ -135,6 +135,22 @@ namespace Fsw.Enterprise.AuthCentral.Testing
 
                     AccessTokenType = AccessTokenType.Jwt,
                     AccessTokenLifetime = 360,
+                },
+                new Client
+                {
+                    ClientName = "auth_central_client",
+                    Enabled = true,
+                    ClientId = "auth_central_client",
+                    ClientSecrets = new List<Secret> {new Secret("secret".Sha256())},
+                    Flow = Flows.AuthorizationCode,
+                    AllowedScopes = new List<string>
+                    {
+                        "openid",
+                        "profile",
+                        "fsw_platform"
+                    },
+                    AccessTokenType = AccessTokenType.Jwt,
+                    AccessTokenLifetime = 360
                 }
             };
         }

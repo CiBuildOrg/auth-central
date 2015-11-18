@@ -144,8 +144,8 @@ namespace Fsw.Enterprise.AuthCentral
             {
                 options.AuthenticationScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.ClientId = "auth_central_client";
-                options.ClientSecret = "secret";
+                options.ClientId = _config.Client.Id;
+                options.ClientSecret = _config.Client.Secret;
                 options.Authority = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "ids").Uri.AbsoluteUri;
                 options.RedirectUri = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "account").Uri.AbsoluteUri;
                 options.ResponseType = OpenIdConnectResponseTypes.Code;
@@ -250,26 +250,10 @@ namespace Fsw.Enterprise.AuthCentral
 
             app.UseMvc(routes =>
             {
-//                routes.MapRoute(
-//                    name: "areaRouteWithId",
-//                    template: "{area:exists}/{controller=Home}/{action=Index}/{id}"
-//                );
-
                 routes.MapRoute(
                     name: "areaRouteWithClientId",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{clientId}"
-                );
-
-
-                routes.MapRoute(
-                    name: "areaRouteDefault",
                     template: "{area:exists}/{controller=Home}/{action=Index}"
                 );
-            
-//                routes.MapRoute( 
-//                    name: "default",
-//                    template: "{controller=Health}/{action=Index}" 
-//                );
             });
         }
     }

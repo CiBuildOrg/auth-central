@@ -30,6 +30,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpGet]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Edit(string clientId)
         {
             Client client = await _clientService.Find(clientId);
@@ -52,7 +53,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(string clientId, string redirectUri)
+        [Route("Admin/[controller]/[action]/{clientId}")]
+        public async Task<IActionResult> Delete(string clientId, string allowedScope)
         {
             Client client = await _clientService.Find(clientId);
 
@@ -62,20 +64,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 return RedirectToAction("Edit");
             }
 
-            bool saveRequired = false;
-            for(int i = (client.AllowedScopes.Count-1); i >= 0; i--)
-            {
-                string existingRedirecUri = client.AllowedScopes[i];
 
-                if(existingRedirecUri.Equals(redirectUri))
-                {
-                    client.AllowedScopes.Remove(existingRedirecUri);
-                    saveRequired = true;
-                }
-           }
 
-            if(saveRequired)
-            {
+            int removed = client.AllowedScopes.RemoveAll(uri => uri.Equals(allowedScope));
+            if (removed > 0) {
                 await _clientService.Save(client);
             }
 
@@ -91,7 +83,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost]
-        public async Task<IActionResult> Save(string clientId, string redirectUri)
+        [Route("Admin/[controller]/[action]/{clientId}")]
+        public async Task<IActionResult> Save(string clientId, string allowedScope)
         {
             //TODO: validate??
 
@@ -102,9 +95,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
             }
 
-            if(!client.AllowedScopes.Contains(redirectUri) && !String.IsNullOrWhiteSpace(redirectUri))
+            if(!client.AllowedScopes.Contains(allowedScope) && !String.IsNullOrWhiteSpace(allowedScope))
             {
-                client.AllowedScopes.Add(redirectUri);
+                client.AllowedScopes.Add(allowedScope);
                 await _clientService.Save(client);
             }
 

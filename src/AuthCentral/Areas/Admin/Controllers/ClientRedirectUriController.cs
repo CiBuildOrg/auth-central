@@ -13,8 +13,6 @@ using Fsw.Enterprise.AuthCentral.Areas.Admin.Models;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 using Microsoft.AspNet.Authorization;
 
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
     [Area("Admin")]
@@ -31,6 +29,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpGet]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Edit(string clientId)
         {
             Client client = await _clientService.Find(clientId);
@@ -54,6 +53,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
         // POST: /Admin/Client/DeleteClientSecret
         [HttpPost]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Delete(string clientId, string redirectUri)
         {
             Client client = await _clientService.Find(clientId);
@@ -64,20 +64,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 return RedirectToAction("Edit");
             }
 
-            bool saveRequired = false;
-            for(int i = (client.RedirectUris.Count-1); i >= 0; i--)
-            {
-                string existingRedirecUri = client.RedirectUris[i];
-
-                if(existingRedirecUri.Equals(redirectUri))
-                {
-                    client.RedirectUris.Remove(existingRedirecUri);
-                    saveRequired = true;
-                }
-           }
-
-            if(saveRequired)
-            {
+            int removed = client.RedirectUris.RemoveAll(uri => uri.Equals(redirectUri));
+            if (removed > 0) {
                 await _clientService.Save(client);
             }
 
@@ -93,6 +81,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Save(string clientId, string redirectUri)
         {
             //TODO: validate??

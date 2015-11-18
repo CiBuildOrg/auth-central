@@ -50,23 +50,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpGet]
-        public async Task<IActionResult> View(string clientId)
-        {
-            Client client = await _clientService.Find(clientId);
-
-            if(client != null)
-            {
-                return View(client);
-            }
-            else
-            {
-                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
-                return View("Index", ViewBag);
-            }
-        }
-
-
-        [HttpGet]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Edit(string clientId)
         {
             Client client = await _clientService.Find(clientId);
@@ -83,6 +67,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Delete(string clientId)
         {
             await _clientService.Delete(clientId);
@@ -92,6 +77,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
 
         [HttpPost]
+        [Route("Admin/[controller]/[action]/{clientId}")]
         public async Task<IActionResult> Save(Client client)
         {
             if(ModelState.IsValid)

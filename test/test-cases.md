@@ -38,11 +38,13 @@ Individuals wishing to contribute to this document should first read [Introducin
 **When** the form is submitted,
 
 **Then**:
-- A new user should be created with the requested credentials, and
-- The user document should have the property IsAccountVerified set to `true`, and
 - An account created e-mail should be sent to the e-mail address that was entered, and
 - An Account Verified e-mail should be sent to the e-mail address that was entered, and
-- A password reset e-mail should be sent to the e-mail address that was entered
+- A password reset e-mail should be sent to the e-mail address that was entered.
+
+**Given** that a user has been created by an administrator
+**When** that user enters correct credentials into the login form,
+**Then** that user should be successfully redirected to a page with no errors or warnings.
 
 #### Delete a user account
 

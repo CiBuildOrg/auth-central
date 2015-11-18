@@ -11,9 +11,8 @@ using Fsw.Enterprise.AuthCentral.Models;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
-    [Area("Admin")]
     [Authorize("FswAdmin")]
-    [Route("Admin/[controller]")]
+    [Area("Admin"), Route("[area]/[controller]")]
     public class AccountController : Controller
     {
         EnvConfig _cfg;

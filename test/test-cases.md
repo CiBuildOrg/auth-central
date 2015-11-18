@@ -1,5 +1,7 @@
 ## Auth Central regression acceptance criteria (test cases)
 
+Individuals wishing to contribute to this document should first read [Introducing BDD](http://dannorth.net/introducing-bdd/), or at the very least, the section on acceptance criteria.
+
 ### Administrator actions
 
 

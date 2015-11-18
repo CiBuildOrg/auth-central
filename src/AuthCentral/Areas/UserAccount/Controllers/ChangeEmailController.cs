@@ -51,7 +51,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
             return View("Index", model);
         }
 
-        [AllowAnonymous, Route("[action]/{id}")]
+        [AllowAnonymous]
         public ActionResult Confirm(string id)
         {
             HierarchicalUserAccount account = _userAccountService.GetByVerificationKey(id);
@@ -85,7 +85,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
         }
 
         [AllowAnonymous]
-        [HttpPost, Route("[action]")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Confirm(ChangeEmailFromKeyInputModel model)
         {

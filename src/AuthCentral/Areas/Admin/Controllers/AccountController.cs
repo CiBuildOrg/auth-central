@@ -38,8 +38,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             {
                 try
                 {
-                    var account = this._userAccountService.CreateAccount(model.Username, model.Password, model.Email);
-                    ViewData["RequireAccountVerification"] = this._userAccountService.Configuration.RequireAccountVerification;
+                    HierarchicalUserAccount account = _userAccountService.CreateAccount(model.Username, model.Password, model.Email);
+                    _userAccountService.SetConfirmedEmail(account.ID, model.Email);
+                    _userAccountService.ResetPassword(account.ID);
+
                     return View("Success", model);
                 }
                 catch (ValidationException ex)

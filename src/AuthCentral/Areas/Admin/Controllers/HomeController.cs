@@ -12,18 +12,10 @@ using Microsoft.AspNet.Authorization;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
-    [Area("Admin")]
     [Authorize("FswAdmin")]
+    [Area("Admin"), Route("[area]")]
     public class HomeController : Controller
     {
-        EnvConfig _cfg;
-
-        public HomeController(EnvConfig cfg)
-        {
-            this._cfg = cfg; 
-        }
-
-        // GET: /<controller>/
         [HttpGet]
         public IActionResult Index()
         {

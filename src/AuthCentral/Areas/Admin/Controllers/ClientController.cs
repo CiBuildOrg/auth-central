@@ -16,25 +16,24 @@ using Microsoft.AspNet.Authorization;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
-    [Area("Admin")]
     [Authorize("FswAdmin")]
+    [Area("Admin"), Route("[area]/[controller]")]
     public class ClientController : Controller
     {
-        private EnvConfig _cfg;
         private IClientService _clientService;
 
-        public ClientController(EnvConfig cfg, IClientService clientService)
+        public ClientController(IClientService clientService)
         {
-            this._cfg = cfg;
             this._clientService = clientService;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public IActionResult Create()
         {
             var client = new Client() {
@@ -49,8 +48,25 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return View("Edit", client);
         }
 
-        [HttpGet]
-        [Route("Admin/[controller]/[action]/{clientId}")]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Create(Client client)
+        {
+            Client existingClient = await _clientService.Find(client.ClientId);
+
+            if(existingClient == null)
+            {
+                return await this.Save(client);
+            }
+            else
+            {
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} already exists.  Please use a different and unique clientId.", client.ClientId);
+                return View("Edit", client);
+            }
+ 
+        }
+
+
+        [HttpGet("[action]/{clientId?}")]
         public async Task<IActionResult> Edit(string clientId)
         {
             Client client = await _clientService.Find(clientId);
@@ -66,8 +82,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             }
         }
 
-        [HttpPost]
-        [Route("Admin/[controller]/[action]/{clientId}")]
+        [HttpPost("[action]/{clientId}")]
         public async Task<IActionResult> Delete(string clientId)
         {
             await _clientService.Delete(clientId);
@@ -76,8 +91,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
 
-        [HttpPost]
-        [Route("Admin/[controller]/[action]/{clientId}")]
+        [HttpPost("[action]/{clientId}")]
         public async Task<IActionResult> Save(Client client)
         {
             if(ModelState.IsValid)
@@ -116,7 +130,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             }
 
             ViewBag.Message = string.Format("The Auth Central Client {0} was successfully saved!", client.ClientName);
-            return RedirectToAction("Edit", new { clientId = client.ClientId });
+            return RedirectToAction("Edit", new { clientId = client.ClientId, ViewBag = ViewBag });
         }
 
     }

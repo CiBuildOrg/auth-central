@@ -17,8 +17,8 @@ using Microsoft.AspNet.Authorization;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
-    [Area("Admin")]
     [Authorize("FswAdmin")]
+    [Area("Admin"), Route("[area]/[controller]")]
     public class ClientSecretController : Controller
     {
         private IClientService _clientService;
@@ -28,8 +28,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             this._clientService = clientService;
         }
 
-        [HttpGet]
-        [Route("Admin/[controller]/[action]/{clientId}")]
+        [HttpGet("[action]/{clientId}")]
         public async Task<IActionResult> Show(string clientId)
         {
             Client client = await _clientService.Find(clientId);
@@ -55,8 +54,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return View(model);
         }
 
-        [HttpGet]
-        [Route("Admin/[controller]/[action]/{clientId}")]
+        [HttpGet("[action]/{clientId}")]
         public async Task<IActionResult> Create(string clientId)
         {
             Client client = await _clientService.Find(clientId);
@@ -80,8 +78,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
 
-        [HttpPost]
-        [Route("Admin/[controller]/[action]/{clientId}")]
+        [HttpPost("[action]/{clientId}")]
         public async Task<IActionResult> Delete(string clientId, ClientSecret clientSecret)
         {
             Client client = await _clientService.Find(clientId);
@@ -116,7 +113,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return RedirectToAction("Show", new { clientId = client.ClientId } );
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Save(ClientSecretContainer csc)
         {
             //TODO: validate??

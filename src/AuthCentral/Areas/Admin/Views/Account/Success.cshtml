@@ -1,24 +1,10 @@
 ﻿@using Fsw.Enterprise.AuthCentral.Models
 @model CreateAccountInputModel
 @{
-    ViewBag.Title = "New user account";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Auth Central User Account Adminstration";
 }
 
 <h2>User Created</h2>
-@if(true.Equals(ViewData["RequireAccountVerification"])) { 
-<p>
-    The new user should recieve an email shortly
-    @if(Model != null)
-    {
-        @: at @Model.Email
-    }.
-    It will contain instructions to verify their account
-    so that they can login.
-</p>
-}
-else
-{
-    <p>You can now login @Html.ActionLink("here", "Index", "Login").</p>
-}
+<p>The user has been created and e-mails have been sent to confirm registration. The user can now log in @Html.ActionLink("here", "Index", "Login"). </p>
 <p>Thanks!</p>
-    

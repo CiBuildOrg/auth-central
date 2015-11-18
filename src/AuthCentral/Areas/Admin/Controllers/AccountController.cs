@@ -13,6 +13,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
     [Area("Admin")]
     [Authorize("FswAdmin")]
+    [Route("Admin/[controller]")]
     public class AccountController : Controller
     {
         EnvConfig _cfg;

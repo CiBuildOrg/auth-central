@@ -16,10 +16,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
         readonly MongoAuthenticationService _authenticationService;
         private readonly IDataProtector _protector;
 
-        public PasswordResetController(MongoAuthenticationService authenticationService, IDataProtector protector)
+        public PasswordResetController(MongoAuthenticationService authenticationService, IDataProtectionProvider provider)
         {
             this._authenticationService = authenticationService;
-            _protector = protector;
+            _protector = provider.CreateProtector(GetType().FullName);
             this._userAccountService = authenticationService.UserAccountService;
         }
 

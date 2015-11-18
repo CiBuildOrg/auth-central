@@ -26,7 +26,7 @@ Individuals wishing to contribute to this document should first read [Introducin
 #### Edit a user account
 
 #### Create a new user account
-*Given* that:
+**Given** that:
 - The user:
   - is logged in, and
   - has the fsw_platform scope, and
@@ -34,8 +34,10 @@ Individuals wishing to contribute to this document should first read [Introducin
   - fills out the form (at /admin/account) with a username and email that is not already registered, and
   - selects a password with 3 of the 4 character groups, and
   - enters the same password twice
-*When* the form is submitted,
-*Then*:
+  
+**When** the form is submitted,
+
+**Then**:
 - A new user should be created with the requested credentials, and
 - The user document should have the property IsAccountVerified set to `true`, and
 - An account created e-mail should be sent to the e-mail address that was entered, and

@@ -42,9 +42,9 @@ Individuals wishing to contribute to this document should first read [Introducin
 - An Account Verified e-mail should be sent to the e-mail address that was entered, and
 - A password reset e-mail should be sent to the e-mail address that was entered.
 
-**Given** that a user has been created by an administrator
-**When** that user enters correct credentials into the login form,
-**Then** that user should be successfully redirected to a page with no errors or warnings.
+**Given** that a user has been created by an administrator  
+**When** that user enters correct credentials into the login form,  
+**Then** that user should be successfully redirected to a page with no errors or warnings.  
 
 #### Delete a user account
 

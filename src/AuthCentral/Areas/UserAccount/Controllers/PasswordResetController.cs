@@ -70,7 +70,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("[action]")]
         [ValidateAntiForgeryToken]
         public ActionResult ResetWithQuestions(PasswordResetWithSecretInputModel model)
         {
@@ -119,7 +119,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             return View("Confirm", vm);
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         [ValidateAntiForgeryToken]
         public ActionResult Confirm(ChangePasswordFromResetKeyInputModel model)
         {
@@ -158,6 +158,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             return View();
         }
 
+        [HttpGet("[action]")]
         public ActionResult Success()
         {
             return View();

@@ -149,6 +149,10 @@ namespace Fsw.Enterprise.AuthCentral.Testing
                         "profile",
                         "fsw_platform"
                     },
+                    RedirectUris = new List<string>
+                    {
+                      "https://auth1.local-fsw.com:44333/account"
+                    },
                     AccessTokenType = AccessTokenType.Jwt,
                     AccessTokenLifetime = 360
                 }

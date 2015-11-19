@@ -15,8 +15,8 @@ using Microsoft.AspNet.Authorization;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 {
-    [Area("Admin")]
     [Authorize("FswAdmin")]
+    [Area("Admin"), Route("[area]/[controller]")]
     public class ClientRedirectUriController : Controller
     {
         
@@ -28,8 +28,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             this._clientService = clientService;
         }
 
-        [HttpGet]
-        [Route("Admin/[controller]/[action]/{clientId}")]
+        [HttpGet("[action]/{clientId}")]
         public async Task<IActionResult> Edit(string clientId)
         {
             Client client = await _clientService.Find(clientId);
@@ -52,8 +51,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         // POST: /Admin/Client/DeleteClientSecret
-        [HttpPost]
-        [Route("Admin/[controller]/[action]/{clientId}")]
+        [HttpPost("[action]/{clientId}")]
         public async Task<IActionResult> Delete(string clientId, string redirectUri)
         {
             Client client = await _clientService.Find(clientId);
@@ -80,8 +78,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return View("Edit", model);
         }
 
-        [HttpPost]
-        [Route("Admin/[controller]/[action]/{clientId}")]
+        [HttpPost("[action]/{clientId}")]
         public async Task<IActionResult> Save(string clientId, string redirectUri)
         {
             //TODO: validate??

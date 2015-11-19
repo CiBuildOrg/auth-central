@@ -6,8 +6,6 @@
 
 @using (Html.BeginForm("Save", "Client", new { clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @id="edit-form", @class = "form-horizontal"} )) 
 {   
-   @Html.HiddenFor(model => model.ClientId)
-
    <div class="form-group">
        <div class="col-md-offset-2 col-md-2">
            <input type="button" value="Save" class="btn btn-success" onclick="javascript: document.forms['edit-form'].submit();" />
@@ -22,7 +20,7 @@
    <div class="form-group">
        @Html.LabelFor(model => model.ClientId, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.TextBoxFor(model => model.ClientId, new {@class="form-control", @disabled="disabled"})
+           @Html.TextBoxFor(model => model.ClientId, new {@class="form-control",  @placeholder="new_application_clientid"})
            @Html.ValidationMessageFor(model => model.ClientId)
        </div>
    </div>
@@ -30,7 +28,7 @@
    <div class="form-group">
        @Html.LabelFor(model => model.ClientName, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.TextBoxFor(model => model.ClientName, new {@class="form-control"})
+           @Html.TextBoxFor(model => model.ClientName, new {@class="form-control",  @placeholder="New Application"})
            @Html.ValidationMessageFor(model => model.ClientName)
        </div>
    </div>

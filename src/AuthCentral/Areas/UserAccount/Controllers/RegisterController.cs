@@ -9,7 +9,7 @@ using Fsw.Enterprise.AuthCentral.Models;
 namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
 {
     [AllowAnonymous]
-    [Area("UserAccount")]
+    [Area("UserAccount"), Route("[area]/[controller]")]
     public class RegisterController : Controller
     {
         readonly UserAccountService<HierarchicalUserAccount> _userAccountService;
@@ -44,13 +44,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
             return View(model);
         }
 
-        [Route("Verify")]
+        [HttpGet("[action]")]
         public ActionResult Verify()
         {
             return View();
         }
 
-        [HttpPost, Route("Verify")]
+        [HttpPost("[action]")]
         [ValidateAntiForgeryToken]
         public ActionResult Verify(string foo)
         {
@@ -66,7 +66,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
             return View();
         }
 
-        [Route("Cancel")]
+        [HttpGet("[action]/{id}")]
         public ActionResult Cancel(string id)
         {
             try

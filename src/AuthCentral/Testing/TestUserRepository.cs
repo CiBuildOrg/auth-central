@@ -8,10 +8,51 @@ namespace Fsw.Enterprise.AuthCentral.Testing
 {
     public class TestUserRepository : IUserAccountRepository<HierarchicalUserAccount>
     {
+        private class TestUser : HierarchicalUserAccount
+        {
+            private static TestUser _testUser;
+
+            public static TestUser PreloadUser
+            {
+                get
+                {
+                    if (_testUser != null)
+                    {
+                        return _testUser;
+                    }
+
+                    _testUser = new TestUser
+                    {
+                        Created = new DateTime(2015, 11, 19, 16, 18, 47),
+                        Email = "preload@fsw.com",
+                        HashedPassword = "C350.AJ7NrlBZI/dudTuQHZn3nQOKp1OXO7tIfBFcm3kKiq1Kx/BcV0VNTm5I8prgb2d9mQ==",
+                        ID = Guid.Parse("243dbc98-e273-43fc-a0d7-2976c939b1f0"),
+                        IsAccountClosed = false,
+                        IsAccountVerified = true,
+                        IsLoginAllowed = true,
+                        LastLogin = new DateTime(2015, 11, 19, 16, 20, 13),
+                        LastUpdated = new DateTime(2015, 11, 19, 16, 20, 13),
+                        PasswordChanged = new DateTime(2015, 11, 19, 16, 18, 47),
+                        RequiresPasswordReset = false,
+                        Tenant = "fsw",
+                        Username = "Preload"
+                    };
+
+                    return _testUser;
+                }
+            }
+        }
+
         private static Dictionary<Guid, HierarchicalUserAccount> _accounts;
 
         private Dictionary<Guid, HierarchicalUserAccount> Accounts
             => _accounts ?? (_accounts = new Dictionary<Guid, HierarchicalUserAccount>());
+
+        public TestUserRepository()
+        {
+            if (!Accounts.ContainsKey(TestUser.PreloadUser.ID))
+                Accounts.Add(TestUser.PreloadUser.ID, TestUser.PreloadUser);
+        }
 
         public HierarchicalUserAccount Create()
         {

@@ -35,6 +35,7 @@ using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 
 using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
 using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
+using ILogger = Microsoft.Framework.Logging.ILogger;
 
 namespace Fsw.Enterprise.AuthCentral
 {
@@ -199,7 +200,8 @@ namespace Fsw.Enterprise.AuthCentral
             app.UseStaticFiles();
 
             logFactory.AddSerilog();
-            HealthChecker.ScheduleHealthCheck(_config, logFactory);
+            ILogger healthCheckLogger = logFactory.CreateLogger(typeof(HealthChecker).ToString());
+            HealthChecker.ScheduleHealthCheck(_config, healthCheckLogger);
 
             app.Map("/ids", ids =>
             {

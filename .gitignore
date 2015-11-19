@@ -9,6 +9,9 @@ BrockAllen.MembershipReboot/
 .vagrant/
 src/AuthCentral/wwwroot/lib/
 bower_components/
+*.xproj
+*.sln
+src/global.json
 
 
 # User-specific files

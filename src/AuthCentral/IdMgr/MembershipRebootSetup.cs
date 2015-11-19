@@ -87,10 +87,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 this.app = app;
                 app.Use((ctx, next) =>
                 {
-                    if (!this.HasBaseUrl)
-                    {
-                        this.SetBaseUrl(GetApplicationBaseUrl(ctx));
-                    }
+                    this.SetBaseUrl(GetApplicationBaseUrl(ctx));
                     return next();
                 });
                 this.ApplicationName = appName;

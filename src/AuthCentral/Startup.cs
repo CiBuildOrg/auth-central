@@ -35,7 +35,6 @@ using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 
 using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
 using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
-using ILogger = Microsoft.Framework.Logging.ILogger;
 
 namespace Fsw.Enterprise.AuthCentral
 {

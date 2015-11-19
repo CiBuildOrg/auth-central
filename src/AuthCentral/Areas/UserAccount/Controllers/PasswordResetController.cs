@@ -111,6 +111,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet("[action]/{id}")]
         public ActionResult Confirm(string id)
         {
             var vm = new ChangePasswordFromResetKeyInputModel()

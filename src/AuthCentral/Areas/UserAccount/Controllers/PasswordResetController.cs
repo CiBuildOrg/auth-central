@@ -121,7 +121,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             return View("Confirm", vm);
         }
 
-        [HttpPost("[action]")]
+        [HttpPost("[action]/{id?}")]
         [ValidateAntiForgeryToken]
         public ActionResult Confirm(ChangePasswordFromResetKeyInputModel model)
         {

@@ -1,41 +1,40 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using BrockAllen.MembershipReboot;
 
+using Microsoft.AspNet.Authentication;
+using Microsoft.AspNet.Authentication.Cookies;
+using Microsoft.AspNet.Authentication.OpenIdConnect;
+using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
 using Microsoft.Dnx.Runtime;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Authentication;
-using BrockAllen.MembershipReboot.Hierarchical;
-using Fsw.Enterprise.AuthCentral.IdMgr;
-using Fsw.Enterprise.AuthCentral.MongoDb;
-using Microsoft.AspNet.Authentication.Cookies;
-using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
-using IdentityServer3.Core.Services;
+using BrockAllen.MembershipReboot;
+using BrockAllen.MembershipReboot.Hierarchical;
 using IdentityServer3.Core.Configuration;
-using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
-
-using MongoDB.Driver;
+using IdentityServer3.Core.Services;
 using IdentityServer3.MembershipReboot;
-using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
-
+using MongoDB.Driver;
 using Serilog;
 
-using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 using Fsw.Enterprise.AuthCentral.Health;
+using Fsw.Enterprise.AuthCentral.IdMgr;
 using Fsw.Enterprise.AuthCentral.IdSvr;
+using Fsw.Enterprise.AuthCentral.MongoDb;
 using Fsw.Enterprise.AuthCentral.MongoStore;
+using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
+
+using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
+using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
 
 namespace Fsw.Enterprise.AuthCentral
 {
@@ -79,6 +78,7 @@ namespace Fsw.Enterprise.AuthCentral
             
             services.AddDataProtection();
             services.AddMvc();
+            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>()));
             services.AddAuthentication( sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
             services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null));
             services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
@@ -98,7 +98,14 @@ namespace Fsw.Enterprise.AuthCentral
                     policy.RequireClaim("scope", "fsw_platform");
                     policy.RequireClaim("fsw:authcentral:admin", "true");
                 });
-                
+
+                options.AddPolicy("FswAdmin", policy => {
+
+                    policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+                    policy.RequireClaim("scope", "fsw_platform");
+                    policy.RequireClaim("fsw:authcentral:admin", "true");
+                });
+
                 options.DefaultPolicy = options.GetPolicy("FswPlatform");
             });
             services.AddInstance<EnvConfig>(_config);

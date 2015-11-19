@@ -87,3 +87,6 @@ body {
 .page-permissions .permissions .permission li:last-child:after {
   content: '';
 }
+.validation-summary-valid {
+  display: none;
+}

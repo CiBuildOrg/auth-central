@@ -16,9 +16,9 @@ namespace Fsw.Enterprise.AuthCentral.Health
 {
     internal static class HealthChecker
     {
-        public static void ScheduleHealthCheck(EnvConfig config, ILoggerFactory loggerFactory)
+        public static void ScheduleHealthCheck(EnvConfig config, ILoggerFactory logFactory)
         {
-            var logger = loggerFactory.CreateLogger(typeof(HealthChecker).ToString());
+            var logger = logFactory.CreateLogger(typeof(HealthChecker).ToString());
             var r = new Registry();
             r.Schedule(() =>
             {

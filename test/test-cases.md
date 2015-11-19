@@ -68,7 +68,7 @@ Individuals wishing to contribute to this document should first read [Introducin
   - has the fsw_platform scope, and
   - has the fsw:authcentral:admin scope, and
   - has filled out the form (at /admin/account) with valid values, and
-  
+
 **When** the form is submitted,
 
 **Then**:
@@ -109,6 +109,110 @@ Individuals wishing to contribute to this document should first read [Introducin
 ---
 
 ### Self-register
+
+**Given**
+* That a user with the given username does not already exist
+* That a user with the given email does not already exist
+* That the password meets all criteria
+* That the password and password confirmation match
+
+**When**
+* [ ] a user registers a new account
+
+**Then**
+* The user see a screen informing them to confirm their account
+* The user will receive and email with a link to confirm or cancel the new account.
+
+---
+
+**Given**
+* That a user has submitted a user registration request
+* That the user received the registration confirmation email
+* That the user goes to the confirm link in the confirmation email within 20 minutes of the registration
+
+**When**
+* [ ] The user enters their password into the confirmation page
+
+**Then**
+* The user will see a page informing them that their account is registered and confirmed.
+* The user will receive an email informing them that their email is verified.
+
+---
+
+**Given**
+* That a user with the given username already exists
+
+**When**
+* [ ] a user registers a new account
+
+**Then**
+* The user will see an error message stating that the username is already in use.
+
+---
+
+**Given**
+* That a user with the given username does not already exist
+* That a user with the given email address already exists
+
+**When**
+* [ ] a user registers a new account
+
+**Then**
+* The user will see an error message stating that the email address is already in use.
+
+---
+
+**Given**
+* That a user with the given username does not already exist
+* That a user with the given email address does not already exist
+* That the password and password confirmation match
+* That the entered password does not match password criteria
+
+**When**
+* [ ] a user registers a new account
+
+**Then**
+* The user will see an error message stating the password criteria
+
+---
+
+**Given**
+* That a user with the given username does not already exist
+* That a user with the given email address does not already exist
+* That the password and password confirmation do not match.
+
+**When**
+* [ ] a user registers a new account
+
+**Then**
+* The user will see an error message stating that the password and password confirmation must match.
+
+---
+
+**Given**
+* That a user has submitted a user registration request
+* That the user received the registration confirmation email
+* More than 20 minutes have passed since registration
+
+**When**
+* [ ] the user goes to the register confirmation link
+
+**Then**
+* The user will see a message stating that the token has expired
+
+---
+
+**Given**
+* That a user has submitted a user registration request
+* That the user received the registration confirmation email
+* That the user goes to the confirm link in the confirmation email within 20 minutes of the registration
+
+**When**
+* [ ] The user enters the wrong password
+
+**Then**
+* The user will see an error message stating that the password entered is invalid.
+
 ---
 
 ### Reset forgotten password

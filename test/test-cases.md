@@ -217,3 +217,75 @@ Individuals wishing to contribute to this document should first read [Introducin
 
 ### Reset forgotten password
 ---
+
+**Given**
+* that a user exists with a known email address
+
+**When**
+* [ ] the user enters the correct email address of the account
+
+**Then**
+* An email will be received at the entered email address with a link to confirm the password reset or cancel the password reset.
+
+---
+
+**Given**
+* that a user has submitted a password reset request
+* that the user received the password reset request email
+* that the user goes to the password reset confirm page within 20 minutes of the request
+
+**When**
+* [ ] the user enters a new password that meets password criteria
+* [ ] the user confirms their new password
+
+**Then**
+* the user should be able to log in using the new password
+* the user should receive an email informing of a password change
+
+---
+
+**Given**
+
+**When**
+* [ ] the user enters an email that is not associated to an account
+
+**Then**
+* The user will see an error message stating the email is invalid.
+
+---
+
+**Given**
+* that a user has submitted a password reset request
+* that the user received the password reset request email
+
+**When**
+* [ ] the user goes to the password reset confirm page more than 20 minutes after the request
+
+**Then**
+* the user should see a message stating that the token has expired.
+
+---
+
+**Given**
+* that a user has submitted a password reset request
+* that the user received the password reset request email
+* that the user goes to the password reset confirm page within 20 minutes of the request
+
+**When**
+* [ ] the user-entered password and confirm password fields do not match
+
+**Then**
+* the user should see a message stating that password and confirm password fields must match.
+
+---
+
+**Given**
+* that a user has submitted a password reset request
+* that the user received the password reset request email
+* that the user goes to the password reset confirm page within 20 minutes of the request
+
+**When**
+* [ ] the user enters a password that does not match password validation criteria
+
+**Then**
+* The user should see an error message stating the password criteria.

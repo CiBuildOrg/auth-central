@@ -6,6 +6,7 @@ using Microsoft.AspNet.Authorization;
 using BrockAllen.MembershipReboot.Hierarchical;
 using BrockAllen.MembershipReboot;
 
+using Fsw.Enterprise.AuthCentral.Crypto;
 using Fsw.Enterprise.AuthCentral.Models;
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -38,7 +39,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             {
                 try
                 {
-                    HierarchicalUserAccount account = _userAccountService.CreateAccount(model.Username, model.Password, model.Email);
+                    string password = PasswordGenerator.GeneratePasswordOfLength(16);
+                    HierarchicalUserAccount account = _userAccountService.CreateAccount(model.Username, password, model.Email);
                     _userAccountService.SetConfirmedEmail(account.ID, model.Email);
                     _userAccountService.ResetPassword(account.ID);
 

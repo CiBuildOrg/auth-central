@@ -67,12 +67,9 @@ Individuals wishing to contribute to this document should first read [Introducin
   - is logged in, and
   - has the fsw_platform scope, and
   - has the fsw:authcentral:admin scope, and
-  - has filled out the form (at /admin/account) with a username and email that is not already registered, and
-  - has entered a password with 3 of the 4 character groups, and
-  - entered the same password twice
+  - has filled out the form (at /admin/account) with valid values, and
   
-**When**
-- [ ] the form is submitted,
+**When** the form is submitted,
 
 **Then**:
 - An account created e-mail should be sent to the e-mail address that was entered, and

@@ -74,7 +74,8 @@ Individuals wishing to contribute to this document should first read [Introducin
 **Then**:
 - An account created e-mail should be sent to the e-mail address that was entered, and
 - An Account Verified e-mail should be sent to the e-mail address that was entered, and
-- A password reset e-mail should be sent to the e-mail address that was entered.
+- A password reset e-mail should be sent to the e-mail address that was entered, and
+- The links in all e-mails should begin with the same base URL as the service under test.
 
 ---
 

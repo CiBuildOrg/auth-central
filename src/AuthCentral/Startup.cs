@@ -131,8 +131,6 @@ namespace Fsw.Enterprise.AuthCentral
 
             _idSvcfactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
             _idSvcfactory.Register(new Registration<IApplicationEnvironment>(env));
-            
-            app.UseDeveloperExceptionPage();
 
             app.UseCookieAuthentication(options =>
             {
@@ -191,7 +189,8 @@ namespace Fsw.Enterprise.AuthCentral
             {
                 logFactory.MinimumLevel = LogLevel.Verbose;
                 app.UseDeveloperExceptionPage();
-            } else
+            }
+            else
             {
                 logFactory.MinimumLevel = LogLevel.Error;
             }
@@ -200,8 +199,7 @@ namespace Fsw.Enterprise.AuthCentral
             app.UseStaticFiles();
 
             logFactory.AddSerilog();
-            ILogger healthCheckLogger = logFactory.CreateLogger(typeof(HealthChecker).ToString());
-            HealthChecker.ScheduleHealthCheck(_config, healthCheckLogger);
+            HealthChecker.ScheduleHealthCheck(_config, logFactory);
 
             app.Map("/ids", ids =>
             {

@@ -206,6 +206,7 @@ namespace Fsw.Enterprise.AuthCentral
                 var idsOptions = new IdentityServerOptions
                 {
                     SiteName = "FSW Identity Server",
+                    PublicOrigin = _config.Uri.IssuerUri,
                     SigningCertificate = Certificate.Get(_config.Cert.StoreName, _config.Cert.Thumbprint),
                     IssuerUri = _config.Uri.IssuerUri,
                     RequireSsl = true,

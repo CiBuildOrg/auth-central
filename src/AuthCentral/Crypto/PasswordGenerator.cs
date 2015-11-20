@@ -41,17 +41,17 @@ namespace Fsw.Enterprise.AuthCentral.Crypto
                 result.Append(chars[data[i] % chars.Length]);
             }
 
-            // Fisher-Yates shuffle (with a really fancy string-builder technique)
-            for (int oldIndex = 0; oldIndex < length; oldIndex++)
+            // Fisher-Yates shuffle
+            for (int i = 0; i < length; i++)
             {
-                int newIndex = data[oldIndex + length] % length;
+                int oldIndex = data[i + length] % length;
                 char oldChar = result[oldIndex];
-                char newChar = result[newIndex];
-
                 result.Remove(oldIndex, 1);
+
+                char newChar = result[0];
+                result.Remove(0, 1);
+                result.Insert(0, oldChar);
                 result.Insert(oldIndex, newChar);
-                result.Remove(newIndex, 1);
-                result.Insert(newIndex, oldChar);
             }
             
             return result.ToString();

@@ -131,6 +131,7 @@ namespace Fsw.Enterprise.AuthCentral
             _idSvcfactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
             _idSvcfactory.Register(new Registration<IApplicationEnvironment>(env));
 
+            app.UseStatusCodePages();
             app.UseCookieAuthentication(options =>
             {
                 options.LoginPath = new PathString("/ids/login");
@@ -145,7 +146,7 @@ namespace Fsw.Enterprise.AuthCentral
                 options.ClientId = _config.Client.Id;
                 options.ClientSecret = _config.Client.Secret;
                 options.Authority = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "ids").Uri.AbsoluteUri;
-                options.RedirectUri = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "account").Uri.AbsoluteUri;
+                options.RedirectUri = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "useraccount").Uri.AbsoluteUri;
                 options.ResponseType = OpenIdConnectResponseTypes.Code;
                 options.DefaultToCurrentUriOnRedirect = true;
                 options.Scope.Add("fsw_platform");
@@ -248,13 +249,7 @@ namespace Fsw.Enterprise.AuthCentral
                 ids.UseIdentityServer(idsOptions);
             });
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "areaRouteWithClientId",
-                    template: "{area:exists}/{controller=Home}/{action=Index}"
-                );
-            });
+            app.UseMvc();
         }
     }
 }

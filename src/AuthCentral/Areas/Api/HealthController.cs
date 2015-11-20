@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 
 namespace Fsw.Enterprise.AuthCentral.Controllers
 {
+    [Area("Api"), Route("[area]/[controller]")]
     [Route("[controller]")]
     public class HealthController : Controller
     {

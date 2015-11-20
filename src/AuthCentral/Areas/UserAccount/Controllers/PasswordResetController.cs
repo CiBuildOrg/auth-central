@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
 using Fsw.Enterprise.AuthCentral.IdMgr;
-using Microsoft.AspNet.DataProtection;
 using Microsoft.AspNet.Mvc;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
@@ -15,13 +13,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
     {
         readonly UserAccountService<HierarchicalUserAccount> _userAccountService;
         readonly MongoAuthenticationService _authenticationService;
-        private readonly IDataProtector _protector;
 
-        public PasswordResetController(MongoAuthenticationService authenticationService, IDataProtectionProvider provider)
         {
-            this._authenticationService = authenticationService;
-            _protector = provider.CreateProtector(GetType().FullName);
-            this._userAccountService = authenticationService.UserAccountService;
+            _authenticationService = authenticationService;
+            _userAccountService = authenticationService.UserAccountService;
         }
 
         public ActionResult Index()
@@ -33,29 +28,28 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index(PasswordResetInputModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    var account = this._userAccountService.GetByEmail(model.Email);
-                    if (account != null)
-                    {
-                        if (!account.PasswordResetSecrets.Any())
-                        {
-                            this._userAccountService.ResetPassword(model.Email);
-                            return View("ResetSuccess");
-                        }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Invalid email");
-                    }
-                }
-                catch (ValidationException ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-                }
+                return View("Index");
             }
+
+            try
+            {
+                HierarchicalUserAccount account = _userAccountService.GetByEmail(model.Email);
+
+                if (account != null)
+                {
+                    _userAccountService.ResetPassword(model.Email);
+                    return View("ResetSuccess");
+                }
+
+                ModelState.AddModelError("", "Invalid email");
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
             return View("Index");
         }
 
@@ -66,6 +60,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             {
                 Key = id
             };
+
             return View("Confirm", vm);
         }
 
@@ -73,37 +68,42 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Confirm(ChangePasswordFromResetKeyInputModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    HierarchicalUserAccount account;
-                    if (this._userAccountService.ChangePasswordFromResetKey(model.Key, model.Password, out account))
-                    {
-                        if (account.IsLoginAllowed && !account.IsAccountClosed)
-                        {
-                            this._authenticationService.SignIn(account);
-                            if (account.RequiresTwoFactorAuthCodeToSignIn())
-                            {
-                                return RedirectToAction("TwoFactorAuthCodeLogin", "Login");
-                            }
-                            if (account.RequiresTwoFactorCertificateToSignIn())
-                            {
-                                return RedirectToAction("CertificateLogin", "Login");
-                            }
-                        }
+                return View();
+            }
 
+            try
+            {
+                HierarchicalUserAccount account;
+                if (_userAccountService.ChangePasswordFromResetKey(model.Key, model.Password, out account))
+                {
+                    if (!account.IsLoginAllowed || account.IsAccountClosed)
+                    {
                         return RedirectToAction("Success");
                     }
-                    else
-                    {
-                        ModelState.AddModelError("", "Error changing password. The key might be invalid.");
-                    }
+
+                    _authenticationService.SignIn(account);
+                        
+                    // TODO: Uncomment if we do two-factor or certificate auth.
+                    //if (account.RequiresTwoFactorAuthCodeToSignIn())
+                    //{
+                    //    return RedirectToAction("TwoFactorAuthCodeLogin", "Login");
+                    //}
+
+                    //if (account.RequiresTwoFactorCertificateToSignIn())
+                    //{
+                    //    return RedirectToAction("CertificateLogin", "Login");
+                    //}
+
+                    return RedirectToAction("Success");
                 }
-                catch (ValidationException ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-                }
+
+                ModelState.AddModelError("", "Error changing password. The key might be invalid.");
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
             }
             return View();
         }

@@ -130,8 +130,6 @@ namespace Fsw.Enterprise.AuthCentral
 
             _idSvcfactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
             _idSvcfactory.Register(new Registration<IApplicationEnvironment>(env));
-            
-            app.UseDeveloperExceptionPage();
 
             app.UseCookieAuthentication(options =>
             {
@@ -190,7 +188,8 @@ namespace Fsw.Enterprise.AuthCentral
             {
                 logFactory.MinimumLevel = LogLevel.Verbose;
                 app.UseDeveloperExceptionPage();
-            } else
+            }
+            else
             {
                 logFactory.MinimumLevel = LogLevel.Error;
             }

@@ -37,7 +37,7 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
 
         public HealthController(ILoggerFactory factory)
         {
-            _logger = factory.CreateLogger("Fsw.Enterprise.AuthCentral.Controllers.HealthController");
+            _logger = factory.CreateLogger(this.GetType().ToString());
         }
         
         [HttpGet]

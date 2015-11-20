@@ -1,0 +1,35 @@
+﻿@using System.Threading.Tasks
+@using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
+@model PasswordResetInputModel
+@{
+    ViewBag.Title = "Reset Password";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary("Please correct the following errors")
+    @Html.AntiForgeryToken()
+
+    <fieldset class="editor small">
+        <legend>@ViewBag.Title</legend>
+
+        @Html.EditorForModel()
+
+        <div class="buttons">
+            <button>Submit</button>
+        </div>
+
+    </fieldset>
+}
+
+@using (Html.BeginForm("Confirm", "PasswordReset", FormMethod.Get))
+{
+    <fieldset>
+        <legend>Confirm</legend>
+        <p>
+            <label for="id">Key</label>
+            <input id="id" name="id" />
+        </p>
+        <p class="buttons"><button>Submit</button></p>
+    </fieldset>
+}

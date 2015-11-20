@@ -101,6 +101,7 @@ Individuals wishing to contribute to this document should first read [Introducin
 - The user has filled out the form (at /Admin/Client/Create)
 
 **When** the form is submitted,
+
 **Then**:
 - The new client will be saved, 
 - A success message will be displayed
@@ -129,6 +130,7 @@ Individuals wishing to contribute to this document should first read [Introducin
 - The user has filled out the form (at /admin/client) with a nonexistent ClientId
 
 **When** the form is submitted,
+
 **Then** the client home screen should remain with a message informing the user that the client does not exist. 
 
 #### Edit an oauth client
@@ -139,6 +141,7 @@ Individuals wishing to contribute to this document should first read [Introducin
 - The user has searched for and loaded the client to be edited
 
 **When** the save button is clicked
+
 **Then** any changes to the client will be persisted to the client data store
 
 #### Delete an oauth client
@@ -149,7 +152,212 @@ Individuals wishing to contribute to this document should first read [Introducin
 - The user has searched for and loaded the client to be deleted
 
 **When** the delete button is clicked
+
 **Then** the loaded client will be deleted
+
+#### Create a Client Secret
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Secret Admin screen (at Admin/ClientSecret/Show/{clientid})
+- The user has clicke the "Create Secret" button and entred the required form fields
+
+**When** the save button is clicked
+
+**Then**: 
+- The new client secret value will be hashed
+- The new client secret with hashed value will be persisted to the client data store
+
+
+#### Delete a Client Secret
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Secret Admin screen (at Admin/ClientSecret/Show/{clientid})
+
+**When** the Delete button for the secret to delete is clicked
+
+**Then**: 
+- The client secret will be removed from the client data store
+
+
+#### Create a Client Claim
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Claim Admin screen (at Admin/ClientClaim/Show/{clientid})
+- The user has clicke the "Create Claim" button and entred the required form fields
+
+**When** the save button is clicked
+
+**Then** the new client claim will be persisted to the client data store
+
+
+#### Delete a Client Claim
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Claim Admin screen (at Admin/ClientClaim/Show/{clientid})
+
+**When** the Delete button for the secret to delete is clicked
+
+**Then**: the client claim will be removed from the client data store
+
+
+#### Create an Allowed Client Scope
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Allowed Client Scope Admin screen (at Admin/ClientAllowedScope/Edit/{clientid})
+- The user has entred the required form field (allowedScope)
+
+**When** the save button is clicked
+
+**Then** the new allowed client scope will be persisted to the client data store
+
+
+#### Update an Allowed Client Scope
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Allowed Client Scope Admin screen (at Admin/ClientAllowedScope/Edit/{clientid}), and  
+- The user has made the Allowed Scope updates
+
+**When** the save button is clicked
+
+**Then** the allowed scope updates will be persisted to the client data store
+
+
+#### Delete an Allowed Client Scope
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Allowed Client Scope Admin screen (at Admin/ClientAllowedScope/Edit/{clientid}), and  
+
+**When** the Delete button for the scope to delete is clicked
+
+**Then**: the allowed client scope will be removed from the client data store
+
+---
+
+#### Create an Allowed Client Redirect Uri
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Client Redirect Uri Admin screen (at Admin/ClientRedirectUri/Edit/{clientid})
+- The user has entred the required form field (redirectUri)
+
+**When** the save button is clicked
+
+**Then** the new client redirect uri will be persisted to the client data store
+
+
+#### Update an Allowed Client Redirect Uri
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Client Redirect Uri Admin screen (at Admin/ClientRedirectUri/Edit/{clientid})
+- The user has made the Allowed Redirect Uri updates
+
+**When** the save button is clicked
+
+**Then** the client redirect uri change will be persisted to the client data store
+
+
+#### Delete an Allowed Client Redirect Uri
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Client Redirect Uri Admin screen (at Admin/ClientRedirectUri/Edit/{clientid})
+
+**When** the Delete button for the redirect uri to delete is clicked
+
+**Then**: the redirect uri will be removed from the client data store
+
+
+#### Create an Allowed Client Post Logout Uri
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Client Post Logout Uri Admin screen (at Admin/ClientLogouttUri/Edit/{clientid})
+- The user has entred the required form field (logoutUri)
+
+**When** the save button is clicked
+
+**Then** the new client logout uri will be persisted to the client data store
+
+
+#### Update an Allowed Client Post Logout Uri
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Client Post Logout Uri Admin screen (at Admin/ClientLogouttUri/Edit/{clientid})
+- The user has made the Post Logout Uri updates
+
+**When** the save button is clicked
+
+**Then** the client logout uri change will be persisted to the client data store
+
+
+#### Delete an Allowed Client Post Logout Uri
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Client Post Logout Uri Admin screen (at Admin/ClientLogouttUri/Edit/{clientid})
+
+**When** the Delete button for the logout uri to delete is clicked
+
+**Then**: the logout uri will be removed from the client data store
+
+
+#### Create an Allowed Client CORS Origin
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Client Allowed CORS Origin Admin screen (at Admin/ClientAllowedCorsOrigin/Edit/{clientid})
+- The user has entred the required form field (allowedCorsOrigin)
+
+**When** the save button is clicked
+
+**Then** the new client allowed client CORS Origin will be persisted to the client data store
+
+
+#### Update an Allowed Client CORS Origin
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Client Allowed CORS Origin Admin screen (at Admin/ClientAllowedCorsOrigin/Edit/{clientid})
+- The user has made the Allowed CORS Origin Update 
+
+**When** the save button is clicked
+
+**Then** the allowed client CORS Origin change will be persisted to the client data store
+
+
+#### Delete an Allowed Client CORS Origin
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Client Allowed CORS Origin Admin screen (at Admin/ClientAllowedCorsOrigin/Edit/{clientid})
+
+**When** the Delete button for the CORS Origin to delete is clicked
+
+**Then**: the cors origin will be removed from the client data store
 
 
 ## User account actions

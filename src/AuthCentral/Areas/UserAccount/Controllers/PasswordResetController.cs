@@ -45,17 +45,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
                             this._userAccountService.ResetPassword(model.Email);
                             return View("ResetSuccess");
                         }
-
-                        var vm = new PasswordResetWithSecretInputModel(_protector, account.ID);
-                        vm.Questions =
-                            account.PasswordResetSecrets.Select(
-                                x => new PasswordResetSecretViewModel
-                                {
-                                    QuestionID = x.PasswordResetSecretID,
-                                    Question = x.Question
-                                }).ToArray();
-
-                        return View("ResetWithQuestions", vm);
                     }
                     else
                     {
@@ -68,47 +57,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
                 }
             }
             return View("Index");
-        }
-
-
-        [HttpPost("[action]")]
-        [ValidateAntiForgeryToken]
-        public ActionResult ResetWithQuestions(PasswordResetWithSecretInputModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var answers =
-                        model.Questions.Select(x => new PasswordResetQuestionAnswer { QuestionID = x.QuestionID, Answer = x.Answer });
-                    this._userAccountService.ResetPasswordFromSecretQuestionAndAnswer(model.UnprotectedAccountID.Value, answers.ToArray());
-                    return View("ResetSuccess");
-                }
-                catch (ValidationException ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-                }
-            }
-
-            var id = model.UnprotectedAccountID;
-            if (id != null)
-            {
-                var account = this._userAccountService.GetByID(id.Value);
-                if (account != null)
-                {
-                    var vm = new PasswordResetWithSecretInputModel(_protector, account.ID);
-                    vm.Questions =
-                        account.PasswordResetSecrets.Select(
-                            x => new PasswordResetSecretViewModel
-                            {
-                                QuestionID = x.PasswordResetSecretID,
-                                Question = x.Question
-                            }).ToArray();
-                    return View("ResetWithQuestions", vm);
-                }
-            }
-
-            return RedirectToAction("Index");
         }
 
         [HttpGet("[action]/{id}")]

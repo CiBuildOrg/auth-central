@@ -4,22 +4,24 @@ This file is an experiment by the architecture team to document test cases for A
 Individuals wishing to contribute to this document should first read [Introducing BDD](http://dannorth.net/introducing-bdd/), or at the very least, the section on acceptance criteria.
 
 **[Administrator actions](#administrator-actions)**
-- [Find a claim](#find-a-claim)
-- [Edit a claim](#edit-a-claim)
-- [Create a new claim](#create-a-new-claim)
-- [Delete a claim](#delete-a-claim)
-- [Find a scope](#find-a-scope)
-- [Edit a scope](#edit-a-scope)
-- [Create a new scope](#create-a-new-scope)
-- [Delete a scope](#delete-a-scope)
-- [Find a user account](#find-a-user-account)
-- [Edit a user account](#edit-a-user-account)
-- [Create a new user account](#create-a-new-user-account)
-- [Delete a user account](#delete-a-user-account)
-- [Find a client](#find-a-client)
-- [Edit a client](#edit-a-client)
-- [Create a new client](#create-a-new-client)
-- [Delete a client](#delete-a-client)
+- [User Admin](#client-admin)
+    - [Find a user account](#find-a-user-account)
+    - [Edit a user account](#edit-a-user-account)
+    - [Create a new user account](#create-a-new-user-account)
+    - [Delete a user account](#delete-a-user-account)
+    - [Find a user resource claim](#find-a-user-resource-claim)
+    - [Edit a user resource claim](#edit-a-user-resource-claim)
+    - [Create a new claim](#create-a-new-claim)
+    - [Delete a user resource claim](#delete-a-user-resource-claim)
+- [Server Admin](#client-admin)
+    - [Find an oauth client](#find-an-oauth-client)
+    - [Edit an oauth client](#edit-an-oauth-client)
+    - [Create a new client](#create-a-new-client)
+    - [Delete an oauth client](#delete-an-oauth-client)
+    - [Find an oauth scope](#find-an-oauth-scope)
+    - [Edit an oauth scope](#edit-an-oauth-scope)
+    - [Create an oauth scope](#create-an-oauth-scope)
+    - [Delete an oauth scope](#delete-an-oauth-scope)
 
 **[User account actions](#user-account-actions)**
 - [Log in](#log-in)
@@ -29,37 +31,26 @@ Individuals wishing to contribute to this document should first read [Introducin
 - [Reset forgotten password](#reset-forgotten-password)
 
 ## Administrator actions
-### Find a claim
+### User Admin
+#### Find a user resource claim
 ---
 
-### Edit a claim
+#### Edit a user resource claim
 ---
 
-### Create a new claim
+#### Create a new claim
 ---
 
-### Delete a claim
+#### Delete a user resource claim
 ---
 
-### Find a scope
+#### Find a user account
 ---
 
-### Edit a scope
+#### Edit a user account
 ---
 
-### Create a new scope
----
-
-### Delete a scope
----
-
-### Find a user account
----
-
-### Edit a user account
----
-
-### Create a new user account
+#### Create a new user account
 ---
 
 **Given** that:
@@ -83,20 +74,83 @@ Individuals wishing to contribute to this document should first read [Introducin
 **When** that user enters correct credentials into the login form,  
 **Then** that user should be successfully redirected to a page with no errors or warnings.  
 
-### Delete a user account
+#### Delete a user account
 ---
 
-### Find a client
+
+### Server Admin
+
+#### Find an oauth scope
 ---
 
-### Edit a client
+#### Edit an oauth scope
 ---
 
-### Create a new client
+#### Create an oauth scope
 ---
 
-### Delete a client
+#### Delete an oauth scope
 ---
+
+
+#### Create a new client
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has filled out the form (at /Admin/Client/Create)
+
+**When** the form is submitted,
+**Then**:
+- The new client will be saved, 
+- A success message will be displayed
+- The following Allowed Scopes will be created: 
+    - openid
+    - profile
+    - offline_access
+    - fsw_platform
+
+
+#### Find an oauth client
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has filled out the form (at /admin/client) with an existing ClientId
+
+**When** the form is submitted,
+
+**Then** the client admin screen should be populated with the specified client
+
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has filled out the form (at /admin/client) with a nonexistent ClientId
+
+**When** the form is submitted,
+**Then** the client home screen should remain with a message informing the user that the client does not exist. 
+
+#### Edit an oauth client
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has searched for and loaded the client to be edited
+
+**When** the save button is clicked
+**Then** any changes to the client will be persisted to the client data store
+
+#### Delete an oauth client
+---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has searched for and loaded the client to be deleted
+
+**When** the delete button is clicked
+**Then** the loaded client will be deleted
+
 
 ## User account actions
 ### Log in

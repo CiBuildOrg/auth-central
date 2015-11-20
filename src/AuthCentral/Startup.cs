@@ -146,7 +146,7 @@ namespace Fsw.Enterprise.AuthCentral
                 options.ClientId = _config.Client.Id;
                 options.ClientSecret = _config.Client.Secret;
                 options.Authority = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "ids").Uri.AbsoluteUri;
-                options.RedirectUri = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "useraccount").Uri.AbsoluteUri;
+                options.RedirectUri = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "account").Uri.AbsoluteUri;
                 options.ResponseType = OpenIdConnectResponseTypes.Code;
                 options.DefaultToCurrentUriOnRedirect = true;
                 options.Scope.Add("fsw_platform");

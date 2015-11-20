@@ -6,7 +6,6 @@ namespace Fsw.Enterprise.AuthCentral.Crypto
 {
     class PasswordGenerator
     {
-        // http://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
         internal static string GeneratePasswordOfLength(int length)
         {
             // Technically the minimum length for this algorithm is 3, 

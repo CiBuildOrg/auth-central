@@ -1,14 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
-using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authentication.Cookies;
-using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
@@ -16,33 +8,24 @@ using Microsoft.Dnx.Runtime;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
-using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Services;
 using IdentityServer3.MembershipReboot;
-using MongoDB.Driver;
-using Serilog;
 
 using Fsw.Enterprise.AuthCentral.Health;
 using Fsw.Enterprise.AuthCentral.IdMgr;
 using Fsw.Enterprise.AuthCentral.IdSvr;
-using Fsw.Enterprise.AuthCentral.MongoDb;
 using Fsw.Enterprise.AuthCentral.MongoStore;
-using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 
 using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
-using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
 
 namespace Fsw.Enterprise.AuthCentral
 {
     public class Startup
     {
         private EnvConfig _config;
-        private IdentityServerServiceFactory _idSvcfactory;
-        private StoreSettings _idSvrStoreSettings = StoreSettings.DefaultSettings();
 
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
@@ -52,85 +35,26 @@ namespace Fsw.Enterprise.AuthCentral
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
             _config = new EnvConfig(Configuration);
-
-            _idSvrStoreSettings.ConnectionString = _config.DB.IdentityServer3;
-            _idSvrStoreSettings.Database = MongoUrl.Create(_idSvrStoreSettings.ConnectionString).DatabaseName;
-
         }
 
         public IConfigurationRoot Configuration { get; set; }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var loggerConfig = new LoggerConfiguration()
-               .WriteTo.Trace()
-               .WriteTo.Console();
-
-            if (_config.IsDebug)
-            {
-                loggerConfig.MinimumLevel.Verbose();
-            } else
-            {
-                loggerConfig.MinimumLevel.Error();
-            }
-
-            Log.Logger = loggerConfig.CreateLogger();
-            
+            services.AddSerilog(_config.IsDebug);
             services.AddDataProtection();
             services.AddMvc();
-            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>()));
-            services.AddAuthentication( sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
-            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null));
-            services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
-            services.AddScoped(typeof (IUserAccountRepository<HierarchicalUserAccount>), typeof (MongoUserAccountRepository<HierarchicalUserAccount>));
-            services.AddScoped(provider => new MongoDatabase(_config.DB.MembershipReboot));
-            services.AddScoped<MongoAuthenticationService>();
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("FswPlatform", policy => {
-                    policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
-                    policy.RequireClaim("scope", "fsw_platform");
-                });
-
-                options.AddPolicy("FswAdmin", policy => {
-                    policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
-                    policy.RequireClaim("scope", "fsw_platform");
-                    policy.RequireClaim("fsw:authcentral:admin", "true");
-                });
-
-                options.AddPolicy("FswAdmin", policy => {
-
-                    policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
-                    policy.RequireClaim("scope", "fsw_platform");
-                    policy.RequireClaim("fsw:authcentral:admin", "true");
-                });
-
-                options.DefaultPolicy = options.GetPolicy("FswPlatform");
-            });
-            services.AddInstance<EnvConfig>(_config);
-            services.AddInstance<IClientService>(AdminServiceFactory.CreateClientService(_idSvrStoreSettings));
-            services.AddInstance<IScopeService>(AdminServiceFactory.CreateScopeService(_idSvrStoreSettings));
+            services.AddMembershipReboot(_config.DB.MembershipReboot);
+            services.AddAuthorizationPolicies();
+            services.AddAuthCentralDependencies(_config);
+            services.AddIdentityServer(_config.DB.IdentityServer3);
         }
 
-        public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory)
+        public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory, StoreSettings idSvrStoreSettings)
         {
             // TODO: This whole method should be refactored
             MembershipRebootSetup.GetConfig(app); // Create the singleton to get around MVC DI container limitations
-            var settings = StoreSettings.DefaultSettings();
-
-            settings.ConnectionString = _config.DB.IdentityServer3;
-            settings.Database = MongoUrl.Create(settings.ConnectionString).DatabaseName;
-
-            var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
-            _idSvcfactory = new ServiceFactory(usrSrv, _idSvrStoreSettings)
-            {
-                ViewService = new Registration<IViewService>(typeof(CustomViewService))
-            };
-
-            _idSvcfactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
-            _idSvcfactory.Register(new Registration<IApplicationEnvironment>(env));
-
+            
             app.UseStatusCodePages();
             app.UseCookieAuthentication(options =>
             {
@@ -139,70 +63,25 @@ namespace Fsw.Enterprise.AuthCentral
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
             });
 
-            app.UseOpenIdConnectAuthentication(options =>
-            {
-                options.AuthenticationScheme = OpenIdConnectDefaults.AuthenticationScheme;
-                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.ClientId = _config.Client.Id;
-                options.ClientSecret = _config.Client.Secret;
-                options.Authority = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "ids").Uri.AbsoluteUri;
-                options.RedirectUri = new UriBuilder(_config.Uri.Scheme, _config.Uri.Host, _config.Uri.Port, "account").Uri.AbsoluteUri;
-                options.ResponseType = OpenIdConnectResponseTypes.Code;
-                options.DefaultToCurrentUriOnRedirect = true;
-                options.Scope.Add("fsw_platform");
-                options.Scope.Add("openid");
-
-                options.Events = new OpenIdConnectEvents
-                {
-                    OnAuthenticationValidated = data =>
-                    {
-                        var id = new ClaimsIdentity("application", "given_name", "role");
-
-                        var token = new JwtSecurityToken(data.TokenEndpointResponse.ProtocolMessage.AccessToken);
-                        IEnumerable<Claim> claims = token.Claims.Where(c => c.Type != "iss" &&
-                                                                            c.Type != "aud" &&
-                                                                            c.Type != "nbf" &&
-                                                                            c.Type != "exp" &&
-                                                                            c.Type != "iat" &&
-                                                                            c.Type != "nonce" &&
-                                                                            c.Type != "c_hash" &&
-                                                                            c.Type != "at_hash");
-
-                        string expiration = token.Claims.First(c => c.Type == "exp").Value;
-
-                        id.AddClaims(claims);
-                        id.AddClaim(new Claim("expires_at",
-                            new DateTime(1970, 1, 1).AddSeconds(Convert.ToDouble(expiration))
-                                .ToString(CultureInfo.CurrentCulture)));
-
-                        data.AuthenticationTicket = new AuthenticationTicket(
-                            new ClaimsPrincipal(id),
-                            data.AuthenticationTicket.Properties,
-                            data.AuthenticationTicket.AuthenticationScheme);
-
-                        return Task.FromResult(0);
-                    }
-                };
-            });
-
-            if(_config.IsDebug)
-            {
-                logFactory.MinimumLevel = LogLevel.Verbose;
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                logFactory.MinimumLevel = LogLevel.Error;
-            }
-
+            app.UseOpenIdConnectAuthentication(_config);
+            app.ConfigureLoggers(logFactory, _config.IsDebug);
             app.UseIISPlatformHandler();
             app.UseStaticFiles();
-
             logFactory.AddSerilog();
             HealthChecker.ScheduleHealthCheck(_config, logFactory);
 
+            var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
+            var idSvcFactory = new ServiceFactory(usrSrv, idSvrStoreSettings)
+            {
+                ViewService = new Registration<IViewService>(typeof(CustomViewService))
+            };
+
+            idSvcFactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
+            idSvcFactory.Register(new Registration<IApplicationEnvironment>(env));
+
             app.Map("/ids", ids =>
             {
+
                 var idsOptions = new IdentityServerOptions
                 {
                     SiteName = "FSW Identity Server",
@@ -221,7 +100,7 @@ namespace Fsw.Enterprise.AuthCentral
                     {
                         EnableCspReportEndpoint = true
                     },
-                    Factory = _idSvcfactory,
+                    Factory = idSvcFactory,
                     AuthenticationOptions = new AuthenticationOptions()
                     {
                         EnableLocalLogin = true,
@@ -237,13 +116,13 @@ namespace Fsw.Enterprise.AuthCentral
                         },
                         EnableSignOutPrompt = true,
                         EnablePostSignOutAutoRedirect = true,
-                        SignInMessageThreshold = 5                        
-                    },                    
+                        SignInMessageThreshold = 5
+                    },
                     CspOptions = new CspOptions()
                     {
                         Enabled = true
                     },
-                    EnableWelcomePage = true                    
+                    EnableWelcomePage = true
                 };
 
                 ids.UseIdentityServer(idsOptions);

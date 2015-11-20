@@ -7,8 +7,8 @@ using Newtonsoft.Json;
 
 namespace Fsw.Enterprise.AuthCentral.Controllers
 {
-    [Area("Api"), Route("[area]/[controller]")]
-    [Route("[controller]")]
+    [Area("Api")]
+    [Route("[controller]"), Route("[area]/[controller]")]
     public class HealthController : Controller
     {
         private ILogger _logger;

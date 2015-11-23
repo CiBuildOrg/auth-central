@@ -4,19 +4,31 @@
     ViewBag.Title = "Reset Password";
 }
 
-@using (Html.BeginForm())
-{
-    @Html.ValidationSummary("Please correct the following errors")
-    @Html.AntiForgeryToken()
+<div class="container page-login">
+    <div class="row">
+        <div class="col-md-6 col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@ViewBag.Title</h3>
+                </div>
+                <div class="panel-body">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.ValidationSummary("Please correct the following errors")
+                        @Html.AntiForgeryToken()
 
-    <fieldset class="editor small">
-        <legend>@ViewBag.Title</legend>
+                        <fieldset>
 
-        @Html.EditorForModel()
+                            @Html.EditorForModel()
 
-        <div class="buttons">
-            <button>Submit</button>
+                            <div class="form-group">
+                                <button class="btn btn-primary">Submit</button>
+                            </div>
+
+                        </fieldset>
+                    }
+                </div>
+            </div>
         </div>
-
-    </fieldset>
-}
+    </div>
+</div>

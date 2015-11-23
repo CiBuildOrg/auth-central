@@ -10,6 +10,7 @@ using IdentityServer3.Core.Services;
 using IdentityServer3.MembershipReboot;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
+using Microsoft.AspNet.Builder;
 using Microsoft.Framework.DependencyInjection;
 using MongoDB.Driver;
 using Serilog;

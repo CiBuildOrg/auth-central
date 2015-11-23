@@ -56,9 +56,9 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
 
             var appinfo = new AuthCentralAppInfo(
                 app,
-                "FSW Auth Central", 
+                "FSW Account", 
                 "Copyright fsw.com 2015",
-                "UserAccount/Login", 
+                "UserAccount/", 
                 "UserAccount/ChangeEmail/Confirm/",
                 "UserAccount/Register/Cancel/",
                 "UserAccount/PasswordReset/Confirm/");

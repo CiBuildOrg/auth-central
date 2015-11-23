@@ -131,6 +131,7 @@ namespace Fsw.Enterprise.AuthCentral
             _idSvcfactory.ConfigureCustomUserService(app, _config.DB.MembershipReboot);
             _idSvcfactory.Register(new Registration<IApplicationEnvironment>(env));
 
+            app.UseStatusCodePages();
             app.UseCookieAuthentication(options =>
             {
                 options.LoginPath = new PathString("/ids/login");
@@ -248,13 +249,7 @@ namespace Fsw.Enterprise.AuthCentral
                 ids.UseIdentityServer(idsOptions);
             });
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "areaRouteWithClientId",
-                    template: "{area:exists}/{controller=Home}/{action=Index}"
-                );
-            });
+            app.UseMvc();
         }
     }
 }

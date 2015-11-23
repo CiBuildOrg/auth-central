@@ -18,6 +18,7 @@ namespace Fsw.Enterprise.AuthCentral
     public class Startup
     {
         private EnvConfig _config;
+        public IConfigurationRoot Configuration { get; set; }
 
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
@@ -28,9 +29,7 @@ namespace Fsw.Enterprise.AuthCentral
             Configuration = builder.Build();
             _config = new EnvConfig(Configuration);
         }
-
-        public IConfigurationRoot Configuration { get; set; }
-
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSerilog(_config.IsDebug);

@@ -13,12 +13,12 @@
 
         <div class="form-group">
            <div>
-               <input type="text" class="form-control" id="postLogoutUri_@i" name="postLogoutUri" placeholder="http://new-app.fsw.com/" value="@Model.ChildList[i]">
+               <input type="url" class="form-control" id="postLogoutUri_@i" name="postLogoutUri" placeholder="http://new-app.fsw.com/" value="@Model.ChildList[i]">
            </div>
         </div>
         <div class="form-group">
             <input type="button" value="Save" class="btn btn-success" onclick="javascript: document.forms['edit-form-@i'].submit();" />
-            <input type="button" value="Delete" class="btn btn-warning" onclick="    javascript: document.forms['edit-form-@i'].action = '/Admin/ClientLogoutUri/Delete/@Model.ClientId'; document.forms['edit-form-@i'].submit();" />
+            <input type="button" value="Delete" class="btn btn-warning" onclick="javascript: document.forms['edit-form-@i'].action = '/Admin/ClientLogoutUri/Delete/@Model.ClientId'; document.forms['edit-form-@i'].submit();" />
        </div>
        <hr />
     }

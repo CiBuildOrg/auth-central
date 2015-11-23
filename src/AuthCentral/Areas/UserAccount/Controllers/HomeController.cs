@@ -20,7 +20,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
             this._cfg = cfg; 
         }
 
-        // GET: /<controller>/
         [HttpGet]
         public IActionResult Index()
         {

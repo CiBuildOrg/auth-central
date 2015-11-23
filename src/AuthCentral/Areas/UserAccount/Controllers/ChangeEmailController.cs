@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
+using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
 using Fsw.Enterprise.AuthCentral.IdMgr;
 using Fsw.Enterprise.AuthCentral.Models;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 
-namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
+namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
 {
     /// <summary>
     /// Controller that handles user change-email and email verification requests.
@@ -58,7 +59,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
 
             try
             {
-                _userAccountService.ChangeEmailRequest(User.GetUserID(), model.NewEmail);
+                _userAccountService.ChangeEmailRequest(ClaimsPrincipalExtensions.GetUserID(User), model.NewEmail);
 
                 return _userAccountService.Configuration.RequireAccountVerification
                     ? View("ChangeRequestSuccess", model.NewEmail)

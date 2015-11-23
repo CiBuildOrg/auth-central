@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Fsw.Enterprise.AuthCentral.Models
+namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
 {
     /// <summary>
     /// Input model for the Register Index view form.

@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
-
-using Microsoft.AspNet.Mvc;
-
+using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
 using Fsw.Enterprise.AuthCentral.Models;
 using System;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Mvc;
 
-namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
+namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
 {
     /// <summary>
     /// Controller that handles user self-registration actions and flow.

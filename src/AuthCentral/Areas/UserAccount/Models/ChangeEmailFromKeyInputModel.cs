@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers;
 using Microsoft.AspNet.Mvc;
 
-namespace Fsw.Enterprise.AuthCentral.Models
+namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
 {
     /// <summary>
-    /// Model for the Confirm action of the <see cref="Areas.UserAccount.ChangeEmailController"/>
+    /// Model for the Confirm action of the <see cref="ChangeEmailController"/>
     /// </summary>
     public class ChangeEmailFromKeyInputModel
     {

@@ -1,20 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
-
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Authorization;
-using BrockAllen.MembershipReboot;
-using BrockAllen.MembershipReboot.Hierarchical;
-
-using Fsw.Enterprise.AuthCentral.IdMgr;
-using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
-
+﻿using Microsoft.AspNet.Mvc;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
+namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
 {
     [Authorize]
     [Area("UserAccount"), Route("[area]"), Route("account")]
@@ -58,3 +45,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
 
     }
 }
+using BrockAllen.MembershipReboot;
+using BrockAllen.MembershipReboot.Hierarchical;
+
+using Fsw.Enterprise.AuthCentral.IdMgr;
+using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
+using Microsoft.AspNet.Authorization;

@@ -14,8 +14,18 @@
                 <div class="panel-body">
                     @using (Html.BeginForm())
                     {
-                        @Html.ValidationSummary("Please correct the following errors")
                         @Html.AntiForgeryToken()
+
+                        if (!Html.ViewData.ModelState.IsValid)
+                        {
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="alert alert-danger">
+                                        @Html.ValidationSummary("Please correct the following errors")
+                                    </div>
+                                </div>
+                            </div>
+                        }
 
                         <fieldset>
 

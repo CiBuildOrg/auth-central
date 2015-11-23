@@ -13,14 +13,18 @@
                     @using (Html.BeginForm())
                     {
                         @Html.AntiForgeryToken()
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12">
-                                <div class="alert alert-danger">
-                                    @Html.ValidationSummary()
+
+                        if (!Html.ViewData.ModelState.IsValid)
+                        {
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="alert alert-danger">
+                                        @Html.ValidationSummary()
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        
+                        }
+
                         <fieldset>
                             <div class="form-group">
                                 <button class="btn btn-primary">Submit</button>

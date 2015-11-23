@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using System;
+using BrockAllen.MembershipReboot;
+using BrockAllen.MembershipReboot.Hierarchical;
+using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
+using Fsw.Enterprise.AuthCentral.IdMgr;
+using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Mvc;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
@@ -45,9 +51,3 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
 
     }
 }
-using BrockAllen.MembershipReboot;
-using BrockAllen.MembershipReboot.Hierarchical;
-
-using Fsw.Enterprise.AuthCentral.IdMgr;
-using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
-using Microsoft.AspNet.Authorization;

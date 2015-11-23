@@ -11,14 +11,17 @@
 
 <!DOCTYPE html>
 
-<html>
+<html ng-app="~/app/app" ng-controller="LayoutCtrl">
     <head>
         <meta charset="utf-8" />
         <title>@ViewBag.Title</title>
         <meta name="viewport" content="width=device-width, initial-scale-1.0" />
-        <link rel="stylesheet" href="~/app/app.css" />
+    <link href="~/app/Site.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"><!-- Optional Bootstrap theme -->
+    <script src="~/libs/angular/angular.1.2.13.min.js"></script>
+    <script src="~/libs/encoder/encoder.min.js"></script>
+    <script src="~/app/app.js"></script>
     </head>
     <body style="padding-top:70px">
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -29,7 +32,6 @@
                         <span class="icon-bar"> </span>
                         <span class="icon-bar"> </span>
                     </button>
-                    @Html.ActionLink("Auth Central", "Index", "Home", new {area = "UserAccount" }, new { @class = "navbar-brand" })
                </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">

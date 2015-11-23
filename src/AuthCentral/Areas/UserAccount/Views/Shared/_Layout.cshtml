@@ -11,7 +11,7 @@
 
 <!DOCTYPE html>
 
-<html ng-app="~/app/app" ng-controller="LayoutCtrl">
+<html ng-app="app" ng-controller="LayoutCtrl">
     <head>
         <meta charset="utf-8" />
         <title>@ViewBag.Title</title>
@@ -22,6 +22,9 @@
     <script src="~/libs/angular/angular.1.2.13.min.js"></script>
     <script src="~/libs/encoder/encoder.min.js"></script>
     <script src="~/app/app.js"></script>
+    <script id='modelJson' type='application/json'>
+        {model}
+    </script>
     </head>
     <body style="padding-top:70px">
         <div class="navbar navbar-inverse navbar-fixed-top">

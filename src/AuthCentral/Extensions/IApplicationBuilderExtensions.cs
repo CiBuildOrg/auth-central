@@ -9,52 +9,28 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
+using Microsoft.AspNet.Builder;
 using Microsoft.Dnx.Runtime;
 using Microsoft.Framework.DependencyInjection;
+using Microsoft.Framework.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 using BrockAllen.MembershipReboot.Hierarchical;
 using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Services;
 using IdentityServer3.MembershipReboot;
-using MongoDB.Driver;
 using Owin;
 
-using Fsw.Enterprise.AuthCentral;
 using Fsw.Enterprise.AuthCentral.IdSvr;
 using Fsw.Enterprise.AuthCentral.MongoStore;
 
-namespace Microsoft.AspNet.Builder
+namespace Fsw.Enterprise.AuthCentral.Extensions
 {
-    using Framework.Logging;
     using DataProtectionProviderDelegate = Func<string[], Tuple<Func<byte[], byte[]>, Func<byte[], byte[]>>>;
     using DataProtectionTuple = Tuple<Func<byte[], byte[]>, Func<byte[], byte[]>>;
 
     public static class IApplicationBuilderExtensions
     {
-        public static void UseIdentityServer(this IApplicationBuilder app, IdentityServerOptions options)
-        {
-            app.UseOwin(addToPipeline =>
-            {
-                addToPipeline(next =>
-                {
-                    var builder = new Microsoft.Owin.Builder.AppBuilder();
-                    var provider = app.ApplicationServices.GetService<Microsoft.AspNet.DataProtection.IDataProtectionProvider>();
-
-                    builder.Properties["security.DataProtectionProvider"] = new DataProtectionProviderDelegate(purposes =>
-                    {
-                        var dataProtection = provider.CreateProtector(String.Join(",", purposes));
-                        return new DataProtectionTuple(dataProtection.Protect, dataProtection.Unprotect);
-                    });
-
-                    builder.UseIdentityServer(options);
-
-                    var appFunc = builder.Build(typeof(Func<IDictionary<string, object>, Task>)) as Func<IDictionary<string, object>, Task>;
-                    return appFunc;
-                });
-            });
-        }
-
         public static void UseIdentityServer(this IApplicationBuilder app, IApplicationEnvironment env, EnvConfig config, StoreSettings idSvrStoreSettings)
         {
             var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();

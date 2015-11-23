@@ -1,6 +1,5 @@
 ﻿using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
-using Fsw.Enterprise.AuthCentral;
 using Fsw.Enterprise.AuthCentral.IdMgr;
 using Fsw.Enterprise.AuthCentral.IdSvr;
 using Fsw.Enterprise.AuthCentral.MongoDb;
@@ -14,14 +13,9 @@ using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.Framework.DependencyInjection;
 using MongoDB.Driver;
 using Serilog;
-// using IUserService = IdentityServer3.Core.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
 
-namespace Microsoft.AspNet.Builder
+namespace Fsw.Enterprise.AuthCentral.Extensions
 {
     public static class IServiceCollectionExtensions
     {

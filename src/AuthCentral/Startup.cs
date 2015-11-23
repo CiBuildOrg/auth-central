@@ -9,6 +9,7 @@ using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
 
+using Fsw.Enterprise.AuthCentral.Extensions;
 using Fsw.Enterprise.AuthCentral.Health;
 using Fsw.Enterprise.AuthCentral.IdMgr;
 using Fsw.Enterprise.AuthCentral.MongoStore;

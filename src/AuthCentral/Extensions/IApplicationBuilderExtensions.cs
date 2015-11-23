@@ -55,7 +55,7 @@ namespace Microsoft.AspNet.Builder
             });
         }
 
-        public static void UseIdentityServer(this IApplicationBuilder app, EnvConfig config, StoreSettings idSvrStoreSettings)
+        public static void UseIdentityServer(this IApplicationBuilder app, IApplicationEnvironment env, EnvConfig config, StoreSettings idSvrStoreSettings)
         {
             var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
             var idSvcFactory = new ServiceFactory(usrSrv, idSvrStoreSettings)
@@ -64,7 +64,7 @@ namespace Microsoft.AspNet.Builder
             };
 
             idSvcFactory.ConfigureCustomUserService(app, config.DB.MembershipReboot);
-            idSvcFactory.Register(new Registration<IApplicationEnvironment>(app.ApplicationServices.GetService<IApplicationEnvironment>()));
+            idSvcFactory.Register(new Registration<IApplicationEnvironment>(env));
 
             var options = new IdentityServerOptions
             {
@@ -108,27 +108,24 @@ namespace Microsoft.AspNet.Builder
                 },
                 EnableWelcomePage = true
             };
-
-            app.Map("/ids", ids =>
+            
+            app.UseOwin(addToPipeline =>
             {
-                app.UseOwin(addToPipeline =>
+                addToPipeline(next =>
                 {
-                    addToPipeline(next =>
+                    var builder = new Microsoft.Owin.Builder.AppBuilder();
+                    var provider = app.ApplicationServices.GetService<Microsoft.AspNet.DataProtection.IDataProtectionProvider>();
+
+                    builder.Properties["security.DataProtectionProvider"] = new DataProtectionProviderDelegate(purposes =>
                     {
-                        var builder = new Microsoft.Owin.Builder.AppBuilder();
-                        var provider = app.ApplicationServices.GetService<Microsoft.AspNet.DataProtection.IDataProtectionProvider>();
-
-                        builder.Properties["security.DataProtectionProvider"] = new DataProtectionProviderDelegate(purposes =>
-                        {
-                            var dataProtection = provider.CreateProtector(String.Join(",", purposes));
-                            return new DataProtectionTuple(dataProtection.Protect, dataProtection.Unprotect);
-                        });
-
-                        builder.UseIdentityServer(options);
-
-                        var appFunc = builder.Build(typeof(Func<IDictionary<string, object>, Task>)) as Func<IDictionary<string, object>, Task>;
-                        return appFunc;
+                        var dataProtection = provider.CreateProtector(String.Join(",", purposes));
+                        return new DataProtectionTuple(dataProtection.Protect, dataProtection.Unprotect);
                     });
+
+                    builder.UseIdentityServer(options);
+
+                    var appFunc = builder.Build(typeof(Func<IDictionary<string, object>, Task>)) as Func<IDictionary<string, object>, Task>;
+                    return appFunc;
                 });
             });
         }

@@ -11,6 +11,7 @@ namespace Fsw.Enterprise.AuthCentral.Testing
         private class TestUser : HierarchicalUserAccount
         {
             private static TestUser _testUser;
+            private static TestUser _testAdmin;
 
             public static TestUser PreloadUser
             {
@@ -43,6 +44,39 @@ namespace Fsw.Enterprise.AuthCentral.Testing
                     return _testUser;
                 }
             }
+
+            public static TestUser TestAdmin
+            {
+                get
+                {
+                    if (_testAdmin != null)
+                    {
+                        return _testAdmin;
+                    }
+
+                    _testAdmin = new TestUser
+                    {
+                        Created = new DateTime(2015, 11, 19, 16, 18, 47),
+                        Email = "admin@fsw.com",
+                        HashedPassword = "C350.AJ7NrlBZI/dudTuQHZn3nQOKp1OXO7tIfBFcm3kKiq1Kx/BcV0VNTm5I8prgb2d9mQ==",
+                        ID = new Guid(),
+                        IsAccountClosed = false,
+                        IsAccountVerified = true,
+                        IsLoginAllowed = true,
+                        LastLogin = new DateTime(2015, 11, 19, 16, 20, 13),
+                        LastUpdated = new DateTime(2015, 11, 19, 16, 20, 13),
+                        PasswordChanged = new DateTime(2015, 11, 19, 16, 18, 47),
+                        RequiresPasswordReset = false,
+                        Tenant = "fsw",
+                        Username = "Admin"
+                    };
+
+                    _testAdmin.AddClaim(new UserClaim("scope", "fsw_platform"));
+                    _testAdmin.AddClaim(new UserClaim("fsw:authcentral:admin", "true"));
+
+                    return _testAdmin;
+                }
+            }
         }
 
         private static Dictionary<Guid, HierarchicalUserAccount> _accounts;
@@ -54,6 +88,9 @@ namespace Fsw.Enterprise.AuthCentral.Testing
         {
             if (!Accounts.ContainsKey(TestUser.PreloadUser.ID))
                 Accounts.Add(TestUser.PreloadUser.ID, TestUser.PreloadUser);
+
+            if(!Accounts.ContainsKey(TestUser.TestAdmin.ID))
+                Accounts.Add(TestUser.TestAdmin.ID, TestUser.TestAdmin);
         }
 
         public HierarchicalUserAccount Create()

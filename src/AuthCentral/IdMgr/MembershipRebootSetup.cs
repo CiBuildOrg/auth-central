@@ -58,7 +58,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 app,
                 "FSW Auth Central", 
                 "Copyright fsw.com 2015",
-                "UserAccount/Show", 
+                "UserAccount/Details", 
                 "UserAccount/ChangeEmail/Confirm/",
                 "UserAccount/Register/Cancel/",
                 "UserAccount/PasswordReset/Confirm/");

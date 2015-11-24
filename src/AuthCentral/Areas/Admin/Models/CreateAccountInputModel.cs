@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Fsw.Enterprise.AuthCentral.Models
+namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
 {
     public class CreateAccountInputModel
     {

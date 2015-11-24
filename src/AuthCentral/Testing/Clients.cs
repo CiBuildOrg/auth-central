@@ -138,23 +138,37 @@ namespace Fsw.Enterprise.AuthCentral.Testing
                 },
                 new Client
                 {
-                    ClientName = "auth_central_client",
+                    ClientName = "Auth Central UI Client",
+                    EnableLocalLogin = true,
+                    AllowRememberConsent = true,
                     Enabled = true,
                     ClientId = "auth_central_client",
                     ClientSecrets = new List<Secret> {new Secret("secret".Sha256())},
                     Flow = Flows.AuthorizationCode,
+                    IdentityTokenLifetime = 3600,
                     AllowedScopes = new List<string>
                     {
-                        "openid",
-                        "profile",
+                        Constants.StandardScopes.OpenId,
+                        Constants.StandardScopes.Profile,
+                        Constants.StandardScopes.Email,
+                        Constants.StandardScopes.OfflineAccess,
+                        "read",
+                        "write",
                         "fsw_platform"
                     },
                     RedirectUris = new List<string>
                     {
-                      "https://auth1.local-fsw.com:44333/account"
+                      "https://auth1.local-fsw.com:44333/UserAccount"
                     },
+                    RefreshTokenExpiration = TokenExpiration.Absolute,
+                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                    RequireConsent = false,
+                    SlidingRefreshTokenLifetime = 1296000,
+                    IncludeJwtId = true,
                     AccessTokenType = AccessTokenType.Jwt,
-                    AccessTokenLifetime = 360
+                    AccessTokenLifetime = 360,
+                    AllowAccessToAllScopes = true,
+                    AllowAccessToAllCustomGrantTypes = true
                 }
             };
         }

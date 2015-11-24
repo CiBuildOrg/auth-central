@@ -1,0 +1,85 @@
+﻿@using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
+@model UserAccountViewModel
+
+<div>
+   <dl class="dl-horizontal">
+       <dt>
+           @Html.DisplayNameFor(model => model.Username)
+       </dt>
+       <dd>
+           @Html.HiddenFor(model => model.Username)
+           @Html.DisplayFor(model => model.Username)
+       </dd>
+
+       <dt>
+           @Html.DisplayNameFor(model => model.Email)
+       </dt>
+       <dd>
+           @Html.DisplayFor(model => model.Email)
+       </dd>
+
+       <dt>
+           @Html.DisplayNameFor(model => model.FirstName)
+       </dt>
+       <dd>
+           @Html.DisplayFor(model => model.FirstName)
+       </dd>
+
+       <dt>
+           @Html.DisplayNameFor(model => model.MiddleName)
+       </dt>
+       <dd>
+           @Html.DisplayFor(model => model.MiddleName)
+       </dd>
+
+       <dt>
+           @Html.DisplayNameFor(model => model.LastName)
+       </dt>
+       <dd>
+           @Html.DisplayFor(model => model.LastName)
+       </dd>
+ 
+       <dt>
+           @Html.DisplayNameFor(model => model.ProfilePhotoUrl)
+       </dt>
+       <dd>
+           @Html.DisplayFor(model => model.ProfilePhotoUrl)
+       </dd>
+ 
+       <dt>
+           @Html.DisplayNameFor(model => model.PhoneNumber)
+       </dt>
+       <dd>
+           @Html.DisplayFor(model => model.PhoneNumber)
+       </dd>
+ 
+       <dt>
+           @Html.DisplayNameFor(model => model.Timezone)
+       </dt>
+       <dd>
+           @Html.DisplayFor(model => model.Timezone)
+       </dd>
+ 
+       <dt>
+           @Html.DisplayNameFor(model => model.Locale)
+       </dt>
+       <dd>
+           @Html.DisplayFor(model => model.Locale)
+       </dd>
+ 
+       <dt>
+           @Html.DisplayNameFor(model => model.Created)
+       </dt>
+       <dd>
+           @Html.DisplayFor(model => model.Created)
+       </dd>
+ 
+       <dt>
+           @Html.DisplayNameFor(model => model.LastUpdated)
+       </dt>
+       <dd>
+           @Html.DisplayFor(model => model.LastUpdated)
+       </dd>
+    </dl>
+
+</div>

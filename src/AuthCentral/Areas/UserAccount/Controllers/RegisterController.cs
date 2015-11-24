@@ -5,6 +5,8 @@ using BrockAllen.MembershipReboot.Hierarchical;
 using Microsoft.AspNet.Mvc;
 
 using Fsw.Enterprise.AuthCentral.Models;
+using System;
+using Microsoft.AspNet.Authorization;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
 {
@@ -51,12 +53,15 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
         }
 
         [HttpPost("[action]")]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Verify(string foo)
         {
             try
             {
-                this._userAccountService.RequestAccountVerification(User.GetUserID());
+                Guid userId = Guid.Parse(User.Claims.GetValue("sub"));
+
+                this._userAccountService.RequestAccountVerification(userId);
                 return View("Success");
             }
             catch (ValidationException ex)

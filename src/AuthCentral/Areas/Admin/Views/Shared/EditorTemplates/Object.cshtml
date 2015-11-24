@@ -1,0 +1,30 @@
+﻿@{
+    foreach(var prop in this.ViewData.ModelMetadata.Properties)
+    {
+        if (prop.ShowForEdit)
+        {
+            <div class="form-group">
+                @if (prop.TemplateHint == "HiddenInput")
+                {
+                    @Html.Hidden(prop.PropertyName)
+                }
+                else
+                {
+                    @Html.Label(prop.PropertyName)
+                    @:
+                    if(prop.IsReadOnly)
+                    {
+                        @Html.Display(prop.PropertyName)
+                    }
+                    else
+                    {
+                        @Html.Editor(prop.PropertyName, new { htmlAttributes = new { @class = "form-control"} })
+                        @:
+                        @Html.ValidationMessage(prop.PropertyName)
+                        @:
+                    }
+                }
+            </div>
+        }
+    }
+}

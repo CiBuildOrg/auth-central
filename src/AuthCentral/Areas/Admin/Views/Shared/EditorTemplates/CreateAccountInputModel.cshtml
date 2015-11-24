@@ -1,0 +1,14 @@
+﻿@model Fsw.Enterprise.AuthCentral.Areas.Admin.Models.CreateAccountInputModel
+
+@if (!BrockAllen.MembershipReboot.SecuritySettings.Instance.EmailIsUsername)
+{
+    <div class="form-group">
+        @Html.LabelFor(x=>x.Username)
+        @Html.EditorFor(x=>x.Username, new { htmlAttributes = new { @class = "form-control" } })    
+        @Html.ValidationMessageFor(x=>x.Username)
+    </div>
+}
+@{
+    var path = "EditorTemplates/Object";
+}
+@Html.Partial(path, Model)

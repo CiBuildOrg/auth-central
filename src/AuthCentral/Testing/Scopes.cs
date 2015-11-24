@@ -49,6 +49,27 @@ namespace Fsw.Enterprise.AuthCentral.Testing
                     DisplayName = "Forbidden scope",
                     Type = ScopeType.Resource,
                     Emphasize = true
+                },
+                new Scope
+                {
+                    Name = "fsw_platform",
+                    DisplayName = "Fsw Platform",
+                    Claims = new List<ScopeClaim>
+                    {
+                        new ScopeClaim
+                        {
+                            Name = "fsw:authcentral:admin",
+                            AlwaysIncludeInIdToken = false,
+                            Description = "To administer Auth Central."
+                        }
+                    },
+                    Description = "Enables Auth-Central Administrator Permission",
+                    Required = false,
+                    Emphasize = true,
+                    Enabled = true,
+                    IncludeAllClaimsForUser = false,
+                    ShowInDiscoveryDocument = true,
+                    Type = ScopeType.Resource
                 }
              };
         }

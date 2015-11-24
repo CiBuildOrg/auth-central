@@ -59,6 +59,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
         {
             services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>()));
             services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null));
             services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
             services.AddScoped(typeof(IUserAccountRepository<HierarchicalUserAccount>), typeof(MongoUserAccountRepository<HierarchicalUserAccount>));
             services.AddScoped(provider => new MongoDatabase(mrConnectionString));

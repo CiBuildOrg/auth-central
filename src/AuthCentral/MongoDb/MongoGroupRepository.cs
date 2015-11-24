@@ -24,8 +24,6 @@ namespace Fsw.Enterprise.AuthCentral.MongoDb
             }
         }
 
-
-
         public override T Create()
         {
             return new T();

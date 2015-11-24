@@ -13,8 +13,6 @@ using Fsw.Enterprise.AuthCentral.Extensions;
 using Fsw.Enterprise.AuthCentral.Health;
 using Fsw.Enterprise.AuthCentral.IdMgr;
 using Fsw.Enterprise.AuthCentral.MongoStore;
-using BrockAllen.MembershipReboot.Hierarchical;
-using BrockAllen.MembershipReboot;
 
 namespace Fsw.Enterprise.AuthCentral
 {
@@ -38,7 +36,6 @@ namespace Fsw.Enterprise.AuthCentral
             services.AddSerilog(_config.IsDebug);
             services.AddDataProtection();
             services.AddMvc();
-            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null));
             services.AddMembershipReboot(_config.DB.MembershipReboot);
             services.AddAuthorizationPolicies();
             services.AddAuthCentralDependencies(_config);

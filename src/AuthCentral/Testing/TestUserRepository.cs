@@ -38,6 +38,8 @@ namespace Fsw.Enterprise.AuthCentral.Testing
                         Username = "Preload"
                     };
 
+                    _testUser.AddClaim(new UserClaim("scope", "fsw_platform"));
+
                     return _testUser;
                 }
             }

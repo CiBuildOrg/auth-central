@@ -29,7 +29,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            return View(new CreateAccountInputModel());
         }
 
         [HttpPost]

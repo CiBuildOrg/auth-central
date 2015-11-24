@@ -6,7 +6,7 @@ using IdentityServer3.Core.Configuration;
 using Fsw.Enterprise.AuthCentral.IdMgr;
 using Microsoft.AspNet.Builder;
 
-namespace Fsw.Enterprise.AuthCentral.IdSvr
+namespace Fsw.Enterprise.AuthCentral.Extensions
 {
     public static class UserServiceExtensions
     {

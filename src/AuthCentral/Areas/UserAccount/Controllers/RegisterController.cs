@@ -5,10 +5,12 @@ using BrockAllen.MembershipReboot.Hierarchical;
 using Microsoft.AspNet.Mvc;
 
 using Fsw.Enterprise.AuthCentral.Models;
+using System;
+using Microsoft.AspNet.Authorization;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
 {
-    [AllowAnonymous]
+    [Authorize]
     [Area("UserAccount"), Route("[area]/[controller]")]
     public class RegisterController : Controller
     {
@@ -19,12 +21,14 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
             _userAccountService = authSvc;
         }
 
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View(new RegisterInputModel());
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult Index(RegisterInputModel model)
         {
@@ -45,6 +49,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
         }
 
         [HttpGet("[action]")]
+        [AllowAnonymous]
         public ActionResult Verify()
         {
             return View();
@@ -54,9 +59,15 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
         [ValidateAntiForgeryToken]
         public ActionResult Verify(string foo)
         {
+            Guid userId;
+            if(!Guid.TryParse(User.Claims.GetValue("sub"), out userId))
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             try
             {
-                this._userAccountService.RequestAccountVerification(User.GetUserID());
+                this._userAccountService.RequestAccountVerification(userId);
                 return View("Success");
             }
             catch (ValidationException ex)
@@ -67,6 +78,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
         }
 
         [HttpGet("[action]/{id}")]
+        [AllowAnonymous]
         public ActionResult Cancel(string id)
         {
             try

@@ -29,6 +29,7 @@ Individuals wishing to contribute to this document should first read [Introducin
 - [Edit profile](#edit-profile)
 - [Self-register](#self-register)
 - [Reset forgotten password](#reset-forgotten-password)
+- [Change Password](#change-password)
 
 ## Administrator actions
 ### User Admin
@@ -551,3 +552,51 @@ Individuals wishing to contribute to this document should first read [Introducin
 
 **Then**
 * The user should see an error message stating the password criteria.
+
+### Change Password 
+---
+
+**Given**
+* that the user exists with a known email address
+* that the user is logged in
+* that the user has filled out the form (at /useraccount/changepassword) with valid values
+
+**When**
+* [ ] the form is submitted
+
+**Then**
+* The user's password will be changed to the new password provided
+* An email will be sent to the email address stored for the logged in user notifying the user, by email, that their password has been changed
+
+---
+
+
+### Verify Email
+---
+
+**Given**
+* that the user exists with a known email address
+* that the user is logged in
+* that user has already vefified their email address
+
+**When**
+* [ ] the user navigates to the verify page (at /useraccount/register/verify)
+
+**Then**
+* The user will see a message informing them that the account has already been verified
+
+---
+
+**Given**
+* that the user exists with a known email address
+* that the user is logged in
+* that user has NOT already vefified their email address
+
+**When**
+* [ ] the user navigates to the verify page (at /useraccount/register/verify)
+
+**Then**
+* The user will receive an email with a verification link it in for the user to click
+
+
+---

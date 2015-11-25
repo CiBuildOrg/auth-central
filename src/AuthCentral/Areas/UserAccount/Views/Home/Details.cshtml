@@ -1,0 +1,25 @@
+﻿@using System.Threading.Tasks
+@using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
+@model UserAccountViewModel
+@{
+    Layout = "~/Areas/UserAccount/Views/Shared/_Layout.cshtml";
+}
+@{
+    ViewBag.Title = "User Account";
+}
+
+@using (Html.BeginForm("Edit", "Home", new {area = "UserAccount" }, FormMethod.Get, new { @class = "form-horizontal"} )) {
+    @Html.ValidationSummary("Please correct the following errors")
+    @Html.AntiForgeryToken()
+
+    @Html.DisplayForModel()
+
+    <!--
+    <div class="form-group">
+       <div class="col-md-offset-2 col-md-10">
+           <input type="submit" value="Edit" class="btn btn-success" />
+       </div>
+    </div>
+    -->
+}
+

@@ -12,6 +12,7 @@ bower_components/
 *.xproj
 *.sln
 src/global.json
+src/AuthCentral/global.json
 
 
 # User-specific files

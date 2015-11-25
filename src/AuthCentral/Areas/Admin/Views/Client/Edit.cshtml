@@ -2,10 +2,12 @@
 @{
     Layout = "~/Areas/Admin/Views/Shared/_ClientAdminLayout.cshtml";
     ViewBag.Title = "Edit Client";
+
 }
 
 @using (Html.BeginForm("Save", "Client", new { clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @id="edit-form", @class = "form-horizontal"} )) 
 {   
+    @Html.AntiForgeryToken()
    <div class="form-group">
        <div class="col-md-offset-2 col-md-2">
            <input type="button" value="Save" class="btn btn-success" onclick="javascript: document.forms['edit-form'].submit();" />
@@ -20,7 +22,14 @@
    <div class="form-group">
        @Html.LabelFor(model => model.ClientId, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.TextBoxFor(model => model.ClientId, new {@class="form-control",  @placeholder="new_application_clientid"})
+           @if(!String.IsNullOrWhiteSpace(Model.ClientId))
+           {
+                @Html.TextBoxFor(model => model.ClientId, new { @class="form-control",  @placeholder="new_application_clientid", @disabled="disabled" })
+           }
+           else
+           {
+                @Html.TextBoxFor(model => model.ClientId, new {@class="form-control",  @placeholder="new_application_clientid"})
+           }
            @Html.ValidationMessageFor(model => model.ClientId)
        </div>
    </div>

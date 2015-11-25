@@ -7,6 +7,7 @@
 }
 
 @using (Html.BeginForm("Save", "ClientClaim", new {clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
+    @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.ClientId)
     @Html.EditorFor(model=> model.ClientClaims)
 

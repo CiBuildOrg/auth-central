@@ -93,31 +93,35 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
             }
 
-            bool saveRequired = false;
-
-            if(!client.AllowedScopes.Contains(allowedScope) && !String.IsNullOrWhiteSpace(allowedScope))
+            // if things have changed
+            if (originalAllowedScope != allowedScope)
             {
-                var insertAt = client.AllowedScopes.IndexOf(originalAllowedScope);
-                if(insertAt >= 0)
+                bool saveRequired = false;
+
+                if (!client.AllowedScopes.Contains(allowedScope) && !String.IsNullOrWhiteSpace(allowedScope))
                 {
-                    client.AllowedScopes.Insert(insertAt, allowedScope);
+                    var insertAt = client.AllowedScopes.IndexOf(originalAllowedScope);
+                    if (insertAt >= 0)
+                    {
+                        client.AllowedScopes.Insert(insertAt, allowedScope);
+                    }
+                    else
+                    {
+                        client.AllowedScopes.Add(allowedScope);
+                    }
+                    saveRequired = true;
                 }
-                else
+
+                if (client.AllowedScopes.Contains(originalAllowedScope))
                 {
-                    client.AllowedScopes.Add(allowedScope);
+                    client.AllowedScopes.Remove(originalAllowedScope);
+                    saveRequired = true;
                 }
-                saveRequired = true;
-            }
 
-            if(client.AllowedScopes.Contains(originalAllowedScope) )
-            {
-                client.AllowedScopes.Remove(originalAllowedScope);
-                saveRequired = true;
-            }
-
-            if(saveRequired)
-            {
-                await _clientService.Save(client);
+                if (saveRequired)
+                {
+                    await _clientService.Save(client);
+                }
             }
 
             var model = new ClientChildListContainer<string>()

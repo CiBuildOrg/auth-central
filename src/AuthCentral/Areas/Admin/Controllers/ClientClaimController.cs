@@ -79,6 +79,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
 
         [HttpPost("[action]/{clientId}")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string clientId, ClientClaim clientClaim)
         {
             Client client = await _clientService.Find(clientId);
@@ -112,6 +113,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Save(ClientClaimContainer csc)
         {
             //TODO: validate??
@@ -124,12 +126,22 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 return RedirectToAction("Index");
             }
 
+            bool saveRequired = false;
             foreach(var clientClaim in csc.ClientClaims)
             {
-                client.Claims.Add(new Claim(clientClaim.Type, clientClaim.Value));
+                if( !string.IsNullOrWhiteSpace(clientClaim.Type) && 
+                    !string.IsNullOrWhiteSpace(clientClaim.Value) )
+                {
+                    client.Claims.Add(new Claim(clientClaim.Type, clientClaim.Value));
+                    saveRequired = true;
+                }
             }
 
-            await _clientService.Save(client);
+            if(saveRequired)
+            {
+                await _clientService.Save(client);
+            }
+
             return RedirectToAction("Show", new { clientId = client.ClientId } );
         }
 

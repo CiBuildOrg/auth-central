@@ -44,7 +44,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
         [HttpGet("Details")]
         public IActionResult Details()
         {
-            Guid userId = Guid.Parse(User.Claims.GetValue("sub"));
+            Guid userId;
+            if(!Guid.TryParse(User.Claims.GetValue("sub"), out userId))
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             HierarchicalUserAccount user = _userAccountService.GetByID(userId);
             UserAccountViewModel viewModel = new UserAccountViewModel(user);
 

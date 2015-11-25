@@ -10,7 +10,7 @@ using Microsoft.AspNet.Authorization;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
 {
-    [AllowAnonymous]
+    [Authorize]
     [Area("UserAccount"), Route("[area]/[controller]")]
     public class RegisterController : Controller
     {
@@ -27,6 +27,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult Index(RegisterInputModel model)
         {
@@ -47,20 +48,24 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
         }
 
         [HttpGet("[action]")]
+        [AllowAnonymous]
         public ActionResult Verify()
         {
             return View();
         }
 
         [HttpPost("[action]")]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Verify(string foo)
         {
+            Guid userId;
+            if(!Guid.TryParse(User.Claims.GetValue("sub"), out userId))
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             try
             {
-                Guid userId = Guid.Parse(User.Claims.GetValue("sub"));
-
                 this._userAccountService.RequestAccountVerification(userId);
                 return View("Success");
             }
@@ -72,6 +77,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
         }
 
         [HttpGet("[action]/{id}")]
+        [AllowAnonymous]
         public ActionResult Cancel(string id)
         {
             try

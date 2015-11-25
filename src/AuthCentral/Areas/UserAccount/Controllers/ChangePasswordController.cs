@@ -29,7 +29,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            Guid userId = Guid.Parse(User.Claims.GetValue("sub"));
+
+            Guid userId;
+            if(!Guid.TryParse(User.Claims.GetValue("sub"), out userId))
+            {
+                return new HttpUnauthorizedResult();
+            }
 
             var acct = this.userAccountService.GetByID(userId);
             if (acct.HasPassword())
@@ -46,7 +51,11 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index(ChangePasswordInputModel model)
         {
-            Guid userId = Guid.Parse(User.Claims.GetValue("sub"));
+            Guid userId;
+            if(!Guid.TryParse(User.Claims.GetValue("sub"), out userId))
+            {
+                return new HttpUnauthorizedResult();
+            }
 
             if (ModelState.IsValid)
             {
@@ -67,9 +76,14 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SendPasswordReset()
         {
+            Guid userId;
+            if(!Guid.TryParse(User.Claims.GetValue("sub"), out userId))
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             try
             {
-                Guid userId = Guid.Parse(User.Claims.GetValue("sub"));
                 var acct = this.userAccountService.GetByID(userId);
                 this.userAccountService.ResetPassword(acct.Tenant, acct.Email);
                 return View("Sent");
@@ -80,5 +94,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             }
             return View("SendPasswordReset");
         }
+
     }
 }

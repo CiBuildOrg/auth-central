@@ -21,6 +21,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
             _userAccountService = authSvc;
         }
 
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View(new RegisterInputModel());

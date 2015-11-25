@@ -113,6 +113,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
             return View("Confirm", model);
         }
 
+        [AllowAnonymous]
         [HttpGet("[action]")]
         public ActionResult Success()
         {

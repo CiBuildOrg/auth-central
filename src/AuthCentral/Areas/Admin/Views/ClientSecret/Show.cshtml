@@ -16,7 +16,7 @@
 {
     <hr />
     @using (Html.BeginForm("Delete", "ClientSecret", new {clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
-        @Html.HiddenFor(model => Model.ClientId)
+        @Html.AntiForgeryToken()
         @Html.DisplayFor(model => clientSecret)
 
         <div class="form-group">

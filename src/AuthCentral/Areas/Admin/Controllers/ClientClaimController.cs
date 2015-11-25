@@ -79,6 +79,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
 
         [HttpPost("[action]/{clientId}")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string clientId, ClientClaim clientClaim)
         {
             Client client = await _clientService.Find(clientId);
@@ -112,6 +113,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Save(ClientClaimContainer csc)
         {
             //TODO: validate??

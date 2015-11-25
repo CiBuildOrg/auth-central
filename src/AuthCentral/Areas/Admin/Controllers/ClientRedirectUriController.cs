@@ -91,31 +91,35 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
             }
 
-            bool saveRequired = false;
-
-            if(!client.RedirectUris.Contains(redirectUri) && !String.IsNullOrWhiteSpace(redirectUri))
+            // if things have changed
+            if (originalRedirectUri != redirectUri)
             {
-                var insertAt = client.RedirectUris.IndexOf(originalRedirectUri);
-                if(insertAt >= 0)
+                bool saveRequired = false;
+
+                if (!client.RedirectUris.Contains(redirectUri) && !String.IsNullOrWhiteSpace(redirectUri))
                 {
-                    client.RedirectUris.Insert(insertAt, redirectUri);
+                    var insertAt = client.RedirectUris.IndexOf(originalRedirectUri);
+                    if (insertAt >= 0)
+                    {
+                        client.RedirectUris.Insert(insertAt, redirectUri);
+                    }
+                    else
+                    {
+                        client.RedirectUris.Add(redirectUri);
+                    }
+                    saveRequired = true;
                 }
-                else
+
+                if (client.RedirectUris.Contains(originalRedirectUri))
                 {
-                    client.RedirectUris.Add(redirectUri);
+                    client.RedirectUris.Remove(originalRedirectUri);
+                    saveRequired = true;
                 }
-                saveRequired = true;
-            }
 
-            if(client.RedirectUris.Contains(originalRedirectUri) )
-            {
-                client.RedirectUris.Remove(originalRedirectUri);
-                saveRequired = true;
-            }
-
-            if(saveRequired)
-            {
-                await _clientService.Save(client);
+                if (saveRequired)
+                {
+                    await _clientService.Save(client);
+                }
             }
 
             var model = new ClientChildListContainer<string>()

@@ -93,31 +93,35 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
             }
 
-            bool saveRequired = false;
-
-            if(!client.PostLogoutRedirectUris.Contains(postLogoutUri) && !String.IsNullOrWhiteSpace(postLogoutUri))
+            // if things have changed
+            if (originalPostLogoutUri != postLogoutUri)
             {
-                var insertAt = client.PostLogoutRedirectUris.IndexOf(originalPostLogoutUri);
-                if(insertAt >= 0)
+                bool saveRequired = false;
+
+                if (!client.PostLogoutRedirectUris.Contains(postLogoutUri) && !String.IsNullOrWhiteSpace(postLogoutUri))
                 {
-                    client.PostLogoutRedirectUris.Insert(insertAt, postLogoutUri);
+                    var insertAt = client.PostLogoutRedirectUris.IndexOf(originalPostLogoutUri);
+                    if (insertAt >= 0)
+                    {
+                        client.PostLogoutRedirectUris.Insert(insertAt, postLogoutUri);
+                    }
+                    else
+                    {
+                        client.PostLogoutRedirectUris.Add(postLogoutUri);
+                    }
+                    saveRequired = true;
                 }
-                else
+
+                if (client.PostLogoutRedirectUris.Contains(originalPostLogoutUri))
                 {
-                    client.PostLogoutRedirectUris.Add(postLogoutUri);
+                    client.PostLogoutRedirectUris.Remove(originalPostLogoutUri);
+                    saveRequired = true;
                 }
-                saveRequired = true;
-            }
 
-            if(client.PostLogoutRedirectUris.Contains(originalPostLogoutUri) )
-            {
-                client.PostLogoutRedirectUris.Remove(originalPostLogoutUri);
-                saveRequired = true;
-            }
-
-            if(saveRequired)
-            {
-                await _clientService.Save(client);
+                if (saveRequired)
+                {
+                    await _clientService.Save(client);
+                }
             }
 
             var model = new ClientChildListContainer<string>()

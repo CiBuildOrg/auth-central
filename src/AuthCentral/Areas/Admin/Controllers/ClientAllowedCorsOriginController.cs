@@ -93,31 +93,35 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
             }
 
-            bool saveRequired = false;
-
-            if(!client.AllowedCorsOrigins.Contains(corsOrigin) && !String.IsNullOrWhiteSpace(corsOrigin))
+            // if things have changed
+            if(originalCorsOrigin != corsOrigin)
             {
-                var insertAt = client.AllowedCorsOrigins.IndexOf(originalCorsOrigin);
-                if(insertAt >= 0)
+                bool saveRequired = false;
+
+                if(!client.AllowedCorsOrigins.Contains(corsOrigin) && !String.IsNullOrWhiteSpace(corsOrigin))
                 {
-                    client.AllowedCorsOrigins.Insert(insertAt, corsOrigin);
+                    var insertAt = client.AllowedCorsOrigins.IndexOf(originalCorsOrigin);
+                    if(insertAt >= 0)
+                    {
+                        client.AllowedCorsOrigins.Insert(insertAt, corsOrigin);
+                    }
+                    else
+                    {
+                        client.AllowedCorsOrigins.Add(corsOrigin);
+                    }
+                    saveRequired = true;
                 }
-                else
+
+                if(client.AllowedCorsOrigins.Contains(originalCorsOrigin) )
                 {
-                    client.AllowedCorsOrigins.Add(corsOrigin);
+                    client.AllowedCorsOrigins.Remove(originalCorsOrigin);
+                    saveRequired = true;
                 }
-                saveRequired = true;
-            }
 
-            if(client.AllowedCorsOrigins.Contains(originalCorsOrigin) )
-            {
-                client.AllowedCorsOrigins.Remove(originalCorsOrigin);
-                saveRequired = true;
-            }
-
-            if(saveRequired)
-            {
-                await _clientService.Save(client);
+                if(saveRequired)
+                {
+                    await _clientService.Save(client);
+                }
             }
 
             var model = new ClientChildListContainer<string>()

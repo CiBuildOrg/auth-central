@@ -16,6 +16,7 @@
 {
     <hr />
     @using (Html.BeginForm("Delete", "ClientClaim", new {clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
+        @Html.AntiForgeryToken()
         @Html.HiddenFor(model => Model.ClientId)
         @Html.DisplayFor(model => clientClaim)
 

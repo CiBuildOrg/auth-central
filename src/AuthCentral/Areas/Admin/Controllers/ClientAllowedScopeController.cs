@@ -52,6 +52,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost("[action]/{clientId}")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string clientId, string allowedScope)
         {
             Client client = await _clientService.Find(clientId);
@@ -62,10 +63,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 return RedirectToAction("Edit");
             }
 
-
-
-            int removed = client.AllowedScopes.RemoveAll(uri => uri.Equals(allowedScope));
-            if (removed > 0) {
+            if(client.AllowedScopes.Contains(allowedScope) )
+            {
+                client.AllowedScopes.Remove(allowedScope);
                 await _clientService.Save(client);
             }
 
@@ -81,7 +81,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpPost("[action]/{clientId}")]
-        public async Task<IActionResult> Save(string clientId, string allowedScope)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Save(string clientId, string originalAllowedScope, string allowedScope)
         {
             //TODO: validate??
 
@@ -92,9 +93,30 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
             }
 
+            bool saveRequired = false;
+
             if(!client.AllowedScopes.Contains(allowedScope) && !String.IsNullOrWhiteSpace(allowedScope))
             {
-                client.AllowedScopes.Add(allowedScope);
+                var insertAt = client.AllowedScopes.IndexOf(originalAllowedScope);
+                if(insertAt >= 0)
+                {
+                    client.AllowedScopes.Insert(insertAt, allowedScope);
+                }
+                else
+                {
+                    client.AllowedScopes.Add(allowedScope);
+                }
+                saveRequired = true;
+            }
+
+            if(client.AllowedScopes.Contains(originalAllowedScope) )
+            {
+                client.AllowedScopes.Remove(originalAllowedScope);
+                saveRequired = true;
+            }
+
+            if(saveRequired)
+            {
                 await _clientService.Save(client);
             }
 

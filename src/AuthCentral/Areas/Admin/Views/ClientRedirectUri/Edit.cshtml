@@ -9,10 +9,12 @@
 @for(var i=0; i < Model.ChildList.Count; i++)
 {
     @using (Html.BeginForm("Save", "ClientRedirectUri", new { clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @id="edit-form-" + i, @class = "form-inline"} )) {
+        @Html.AntiForgeryToken()
         @Html.HiddenFor(model => Model.ClientId)
 
         <div class="form-group">
            <div>
+               <input type="hidden" class="form-control" id="originalRedirectUri_@i" name="originalRedirectUri" placeholder="http://new-app.fsw.com/" value="@Model.ChildList[i]">
                <input type="url" class="form-control" id="redirectUri_@i" name="redirectUri" placeholder="http://new-app.fsw.com/" value="@Model.ChildList[i]">
            </div>
         </div>

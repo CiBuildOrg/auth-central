@@ -3,22 +3,24 @@
 
 @{
     Layout = "~/Areas/Admin/Views/Shared/_ClientAdminLayout.cshtml";
-    ViewBag.Title = "View Client Redirect Uri's";
+    ViewBag.Title = "View Allowed CORS Origins";
 }
 
 @for(var i=0; i < Model.ChildList.Count; i++)
 {
     @using (Html.BeginForm("Save", "ClientAllowedCorsOrigin", new { clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @id="edit-form-" + i, @class = "form-inline"} )) {
+        @Html.AntiForgeryToken()
         @Html.HiddenFor(model => Model.ClientId)
 
         <div class="form-group">
            <div>
-               <input type="url" class="form-control" id="redirectUri_@i" name="redirectUri" placeholder="http://new-app.fsw.com" value="@Model.ChildList[i]">
+               <input type="hidden" class="form-control" id="originalCorsOrigin_@i" name="originalCorsOrigin" placeholder="http://new-app.fsw.com" value="@Model.ChildList[i]">
+               <input type="url" class="form-control" id="corsOrigin_@i" name="corsOrigin" placeholder="http://new-app.fsw.com" value="@Model.ChildList[i]">
            </div>
         </div>
         <div class="form-group">
             <input type="button" value="Save" class="btn btn-success" onclick="javascript: document.forms['edit-form-@i'].submit();" />
-            <input type="button" value="Delete" class="btn btn-warning" onclick="    javascript: document.forms['edit-form-@i'].action = '/Admin/ClientAllowedCorsOrigin/Delete/@Model.ClientId'; document.forms['edit-form-@i'].submit();" />
+            <input type="button" value="Delete" class="btn btn-warning" onclick="javascript: document.forms['edit-form-@i'].action = '/Admin/ClientAllowedCorsOrigin/Delete/@Model.ClientId'; document.forms['edit-form-@i'].submit();" />
        </div>
        <hr />
     }

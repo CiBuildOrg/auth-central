@@ -2,10 +2,32 @@
     ViewBag.Title = "Cancel";
 }
 
-@Html.ValidationSummary()
+<div class="container">
+    <div class="page-header">
+        <h2>
+            Verification Cancelled
+        </h2>
+    </div>
+</div>
 
-<h2>Verification Cancelled</h2>
-<p>
-    The request that was emailed to you is now cancelled.
-</p>
-<p>Thanks!</p>
+@if (!Html.ViewData.ModelState.IsValid)
+{
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <div class="alert alert-danger">
+                @Html.ValidationSummary()
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container page-login">
+    <div class="row">
+        <div class="col-md-6 col-sm-6">
+            <div class="panel-default">
+                The request that was emailed to you is now cancelled.
+                <p>Thanks!</p>
+            </div>
+        </div>
+    </div>
+</div>

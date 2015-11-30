@@ -2,11 +2,33 @@
     ViewBag.Title = "Cancel";
 }
 
-@Html.ValidationSummary()
+<div class="container">
+    <div class="page-header">
+        <h2>
+            Registration Cancelled
+        </h2>
+    </div>
+</div>
 
-<h2>Registration Cancelled</h2>
-<p>
-    Your account has been closed.
-    If you would like to re-register click @(Html.ActionLink("here", "Index", "Register")).
-</p>
-<p>Thanks!</p>
+@if (!Html.ViewData.ModelState.IsValid)
+{
+    <div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="alert alert-danger">
+            @Html.ValidationSummary()
+        </div>
+    </div>
+</div>
+}
+
+<div class="container page-login">
+    <div class="row">
+        <div class="col-md-6 col-sm-6">
+            <div class="panel-default">
+                Your account has been closed.
+                If you would like to re-register click @(Html.ActionLink("here", "Index", "Register")).
+                <p>Thanks!</p>
+            </div>
+        </div>
+    </div>
+</div>

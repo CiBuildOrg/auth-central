@@ -1,10 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers;
 
-namespace Fsw.Enterprise.AuthCentral.Models
+namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
 {
+    /// <summary>
+    /// Input model for the index view of the <see cref="ChangeEmailController"/>
+    /// </summary>
     public class ChangeEmailRequestInputModel
     {
-        //[Required]
+        /// <summary>
+        /// User's new email address.
+        /// </summary>
+        [Required]
         [EmailAddress]
         public string NewEmail { get; set; }
     }

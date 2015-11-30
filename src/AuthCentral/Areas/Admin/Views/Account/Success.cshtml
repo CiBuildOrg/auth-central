@@ -1,10 +1,20 @@
-﻿@using Fsw.Enterprise.AuthCentral.Models
-@model CreateAccountInputModel
+﻿@model Fsw.Enterprise.AuthCentral.Areas.Admin.Models.CreateAccountInputModel
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Auth Central User Account Adminstration";
 }
 
-<h2>User Created</h2>
-<p>The user has been created and e-mails have been sent to confirm registration. The user can now log in @Html.ActionLink("here", "Index", "Login"). </p>
-<p>Thanks!</p>
+<div class="container">
+    <div class="page-header">
+        <h2>User Created</h2>
+    </div>
+</div>
+
+<div class="container page-login">
+    <div class="row">
+        <div class="col-md-6 col-sm-6">
+            The user has been created and e-mails have been sent to confirm registration. The user can now log in @Html.ActionLink("here", "Index", "Login").
+            <p>Thanks!</p>
+        </div>
+    </div>
+</div>

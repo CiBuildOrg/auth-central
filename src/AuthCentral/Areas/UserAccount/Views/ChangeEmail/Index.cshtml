@@ -1,35 +1,32 @@
-﻿@using Fsw.Enterprise.AuthCentral.Models
+﻿@using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
 @model ChangeEmailRequestInputModel
 @{
     ViewBag.Title = "Change Email";
 }
 
-<h2>@ViewBag.Title</h2>
+<div class="container page-login">
+    <div class="row">
+        <div class="col-md-6 col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@ViewBag.Title</h3>
+                </div>
+                <div class="panel-body">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.ValidationSummary("Error")
+                        @Html.AntiForgeryToken()
 
-@using (Html.BeginForm())
-{
-    @Html.ValidationSummary("Error")
-    @Html.AntiForgeryToken()
+                        <fieldset>
+                            @Html.EditorForModel()
 
-    <fieldset>
-        <legend>@ViewBag.Title</legend>
-
-        @Html.EditorForModel()
-
-        <div class="buttons">
-            <button>Change Email</button>
+                            <div class="form-group">
+                                <button class="btn btn-primary">Change Email</button>
+                            </div>
+                        </fieldset>
+                    }
+                </div>
+            </div>
         </div>
-    </fieldset>
-}
-
-@using (Html.BeginForm("Confirm", "ChangeEmail", FormMethod.Get))
-{
-    <fieldset>
-        <legend>Confirm</legend>
-        <p>
-            <label for="id">Key</label>
-            <input id="id" name="id" />
-        </p>
-        <p class="buttons"><button>Submit</button></p>
-    </fieldset>
-}
+    </div>
+</div>

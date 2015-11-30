@@ -58,7 +58,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
 
             try
             {
-                _userAccountService.ChangeEmailRequest(ClaimsPrincipalExtensions.GetUserID(User), model.NewEmail);
+                _userAccountService.ChangeEmailRequest(User.GetUserID(), model.NewEmail);
 
                 return _userAccountService.Configuration.RequireAccountVerification
                     ? View("ChangeRequestSuccess", model.NewEmail)

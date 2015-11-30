@@ -26,7 +26,7 @@ namespace Fsw.Enterprise.AuthCentral.Testing
                     {
                         Created = new DateTime(2015, 11, 19, 16, 18, 47),
                         Email = "preload@fsw.com",
-                        HashedPassword = "C350.AJ7NrlBZI/dudTuQHZn3nQOKp1OXO7tIfBFcm3kKiq1Kx/BcV0VNTm5I8prgb2d9mQ==",
+                        HashedPassword = "C350.AHGxOLvg8C41MoLx9kGPtToyIZs8A1ZO1mvDVzy3q27Uvolvn37yhmVaLDZTX10Hhw==",
                         ID = Guid.Parse("243dbc98-e273-43fc-a0d7-2976c939b1f0"),
                         IsAccountClosed = false,
                         IsAccountVerified = true,
@@ -58,7 +58,7 @@ namespace Fsw.Enterprise.AuthCentral.Testing
                     {
                         Created = new DateTime(2015, 11, 19, 16, 18, 47),
                         Email = "admin@fsw.com",
-                        HashedPassword = "C350.AJ7NrlBZI/dudTuQHZn3nQOKp1OXO7tIfBFcm3kKiq1Kx/BcV0VNTm5I8prgb2d9mQ==",
+                        HashedPassword = "C350.AHGxOLvg8C41MoLx9kGPtToyIZs8A1ZO1mvDVzy3q27Uvolvn37yhmVaLDZTX10Hhw==",
                         ID = new Guid(),
                         IsAccountClosed = false,
                         IsAccountVerified = true,

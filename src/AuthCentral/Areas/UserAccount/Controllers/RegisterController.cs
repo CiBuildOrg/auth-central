@@ -46,6 +46,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
             return View(model);
         }
 
+        [Authorize]
         [HttpGet("[action]")]
         public ActionResult Verify()
         {

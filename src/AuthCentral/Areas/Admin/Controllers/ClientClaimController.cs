@@ -111,6 +111,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return RedirectToAction("Show", new { clientId = client.ClientId } );
         }
 
+        
         [HttpPost("[action]")]
         public async Task<IActionResult> Save(ClientClaimContainer csc)
         {

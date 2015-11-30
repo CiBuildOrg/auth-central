@@ -1,0 +1,28 @@
+﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models
+@model UserClaimContainer
+
+@{
+    // Layout = "~/Areas/Admin/Views/Shared/_ClientAdminLayout.cshtml";
+    ViewBag.Title = "View User Claim";
+}
+
+<div class="row">
+    <div class="col-md-12" >
+        <a class="btn btn-success" href="/Admin/UserClaim/Create/@Model.UserId">Create Claim</a>
+    </div>
+</div>
+
+@foreach(var userClaim in Model.UserClaims)
+{
+    <hr />
+    @using (Html.BeginForm("Delete", "ClientClaim", new {userId = Model.UserId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
+        @Html.DisplayFor(model => userClaim)
+        <div class="form-group">
+           <div class="col-md-offset-2 col-md-10">
+               <input type="submit" value="Delete" class="btn btn-warning" />
+           </div>
+        </div>
+    }
+}
+
+<hr />

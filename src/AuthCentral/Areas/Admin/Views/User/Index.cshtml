@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Client Admin Home";
+}
+
+<div class="container">
+    <div class="jumbotron">
+        <h2>Manage Clients</h2>
+        <p>You have two options.</p>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <em>@ViewBag.Message</em>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3>Find a User by Email</h3>
+            @using (Html.BeginForm("Find", "User", new {area = "Admin" }, FormMethod.Post, new {@id = "search-form", @class = "form-horizontal" } )) 
+            {
+                <div class="form-group">
+                    <div  class="control-label col-sm-2 col-md-2 col-lg-2" >
+                        <label for="email">E-mail Address</label>
+                    </div>
+                    <div  class="editor-field col-sm-5 col-md-5 col-lg-5" >
+                        <input type="text" class="form-control" id="clientId" name="email" placeholder="E-mail Address">
+                    </div>
+                    <div  class="control-control col-sm-5 col-md-5 col-lg-5" >
+                        <button type="submit" class="btn btn-primary">Search &raquo;</button>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <h3>Create a New User</h3>
+            <p> <a href="/Admin/User/Create" class="btn btn-primary">Create User &raquo;</a></p>
+        </div>
+    </div>
+</div>
+<hr />

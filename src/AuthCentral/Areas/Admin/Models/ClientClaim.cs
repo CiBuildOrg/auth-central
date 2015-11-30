@@ -8,22 +8,23 @@ using System.Security.Claims;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
 {
-    public class ClientClaimContainer
+    public class ClaimModelContainer
     {
         public string ClientId { get; set; }
-        public List<ClientClaim> ClientClaims { get; set; }
+        public List<ClaimModel> ClientClaims { get; set; }
 
     }
 
-    public class ClientClaim
+    public class ClaimModel
     {
-        public ClientClaim() { }
-        public ClientClaim(string type, string value)
+        public ClaimModel() { }
+        public ClaimModel(string type, string value)
         {
             this.Type = type;
             this.Value = value;
         }
-        public ClientClaim(Claim claim):this(claim.Type, claim.Value) { }
+
+        public ClaimModel(Claim claim):this(claim.Type, claim.Value) { }
 
         public String Type { get; set; }
         public String Value { get; set; }

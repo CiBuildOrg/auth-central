@@ -1,0 +1,19 @@
+﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models
+@model UserClaimContainer
+
+@{
+    // Layout = "~/Areas/Admin/Views/Shared/_ClientAdminLayout.cshtml";
+    ViewBag.Title = "Create User Claim";
+}
+
+@using (Html.BeginForm("Save", "UserClaim", new {userId = Model.UserId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
+    @Html.EditorFor(model=> model.UserClaims)
+
+    <div class="form-group">
+       <div class="col-md-offset-2 col-md-10">
+           <input type="submit" value="Save" class="btn btn-success" />
+       </div>
+    </div>
+ }
+
+<hr />

@@ -48,9 +48,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 clientClaims.Add(new ClaimModel(claim));
             }
 
-            var model = new ClaimModelContainer()
+            var model = new ClientClaimModelContainer()
             {
-                ClaimantId = client.ClientId,
+                ClientId = client.ClientId,
                 Claims = clientClaims
             };
             
@@ -68,9 +68,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 return RedirectToAction("Index");
             }
 
-            var model = new ClaimModelContainer()
+            var model = new ClientClaimModelContainer()
             {
-                ClaimantId = client.ClientId,
+                ClientId = client.ClientId,
                 Claims = new List<ClaimModel>(new[] { new ClaimModel() })
             };
  
@@ -79,13 +79,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
         [HttpPost("[action]")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(string claimantId, ClaimModel clientClaim)
+        public async Task<IActionResult> Delete(string clientId, ClaimModel clientClaim)
         {
-            Client client = await _clientService.Find(claimantId);
+            Client client = await _clientService.Find(clientId);
 
             if(client == null)
             {
-                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", claimantId);
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
                 return RedirectToAction("Index");
             }
 
@@ -114,11 +114,11 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
         [HttpPost("[action]")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Save(ClaimModelContainer cmc)
+        public async Task<IActionResult> Save(ClientClaimModelContainer cmc)
         {
             //TODO: validate??
 
-            Client client = await _clientService.Find(cmc.ClaimantId);
+            Client client = await _clientService.Find(cmc.ClientId);
 
             if(client == null)
             {

@@ -1,5 +1,5 @@
 ﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models
-@model ClaimModelContainer
+@model UserClaimModelContainer
 
 @{
     Layout = "~/Areas/Admin/Views/Shared/_UserAdminLayout.cshtml";
@@ -8,17 +8,17 @@
 
 <div class="row">
     <div class="col-md-12" >
-        <a class="btn btn-success" href="/Admin/UserClaim/Create/@Model.ClaimantId">Create Claim</a>
+        <a class="btn btn-success" href="/Admin/UserClaim/Create/@Model.UserId">Create Claim</a>
     </div>
 </div>
 
 @foreach(var userClaim in Model.Claims)
 {
     <hr />
-    @using (Html.BeginForm("Delete", "UserClaim", new { claimantId = Model.ClaimantId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal" }))
+    @using (Html.BeginForm("Delete", "UserClaim", new { userId = Model.UserId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal" }))
     {
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(model => model.ClaimantId)
+        @Html.HiddenFor(model => model.UserId)
         @Html.DisplayFor(model => userClaim)
         <div class="form-group">
            <div class="col-md-offset-2 col-md-10">

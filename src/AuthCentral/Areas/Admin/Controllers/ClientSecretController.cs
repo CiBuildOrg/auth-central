@@ -19,7 +19,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 {
     [Authorize("FswAdmin")]
     [Area("Admin"), Route("[area]/[controller]")]
-    public class ClientSecretController : ClientAdminController
+    public class ClientSecretController : Controller
     {
         private IClientService _clientService;
 

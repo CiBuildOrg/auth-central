@@ -14,7 +14,25 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
 
         public IEnumerable<ClaimModel> Claims { get; set; }
     }
-    
+
+    public class UserClaimModelContainer : ClaimModelContainer
+    {
+        public string UserId
+        {
+            get { return ClaimantId; }
+            set { ClaimantId = value; }
+        }
+    }
+
+    public class ClientClaimModelContainer : ClaimModelContainer
+    {
+        public string ClientId
+        {
+            get { return ClaimantId; }
+            set { ClaimantId = value; }
+        }
+    }
+
     public class ClaimModel
     {
         public ClaimModel() { }

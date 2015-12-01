@@ -17,7 +17,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 {
     [Authorize("FswAdmin")]
     [Area("Admin"), Route("[area]/[controller]")]
-    public class ClientRedirectUriController : ClientAdminController
+    public class ClientRedirectUriController : Controller
     {
         
         private IClientService _clientService;

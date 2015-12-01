@@ -15,7 +15,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 {
     [Authorize("FswAdmin")]
     [Area("Admin"), Route("[area]/[controller]")]
-    public class UserClaimController : UserAdminController
+    public class UserClaimController : Controller
     {
         EnvConfig _cfg;
         UserAccountService<HierarchicalUserAccount> _userAccountService;
@@ -44,9 +44,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 return HttpUnauthorized();
             }
 
-            var model = new ClaimModelContainer()
+            var model = new UserClaimModelContainer()
             {
-                ClaimantId = user.ID.ToString(),
+                UserId = user.ID.ToString(),
                 Claims = user.Claims.Select(claim => new ClaimModel(claim))
             };
 
@@ -70,9 +70,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
 
-            var model = new ClaimModelContainer()
+            var model = new UserClaimModelContainer()
             {
-                ClaimantId = user.ID.ToString(),
+                UserId = user.ID.ToString(),
                 Claims = new List<ClaimModel>(new[] { new ClaimModel() })
             };
 
@@ -96,10 +96,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost("[action]")]
-        public ActionResult Save(ClaimModelContainer cmc)
+        public ActionResult Save(UserClaimModelContainer cmc)
         {
             Guid userGuid;
-            if (!Guid.TryParse(cmc.ClaimantId, out userGuid))
+            if (!Guid.TryParse(cmc.UserId, out userGuid))
             {
                 return HttpUnauthorized();
             }
@@ -108,20 +108,20 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             {
                 _userAccountService.AddClaims(userGuid, new UserClaimCollection(cmc.Claims.Select(c => new Claim(c.Type, c.Value))));
 
-                return RedirectToAction("Show", new { userId = cmc.ClaimantId });
+                return RedirectToAction("Show", new { userId = cmc.UserId });
             }
             
             HierarchicalUserAccount user = _userAccountService.GetByID(userGuid);
 
             if (user == null)
             {
-                ViewBag.Message = string.Format("The Auth Central User with UserId {0} could not be found.", cmc.ClaimantId);
+                ViewBag.Message = string.Format("The Auth Central User with UserId {0} could not be found.", cmc.UserId);
                 return RedirectToAction("Index");
             }
 
-            var model = new ClaimModelContainer()
+            var model = new UserClaimModelContainer()
             {
-                ClaimantId = user.ID.ToString(),
+                UserId = user.ID.ToString(),
                 Claims = new List<ClaimModel>(new[] { new ClaimModel() })
             };
 

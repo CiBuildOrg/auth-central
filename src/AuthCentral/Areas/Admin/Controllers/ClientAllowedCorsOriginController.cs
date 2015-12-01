@@ -19,7 +19,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 {
     [Authorize("FswAdmin")]
     [Area("Admin"), Route("[area]/[controller]")]
-    public class ClientAllowedCorsOriginController : ClientAdminController
+    public class ClientAllowedCorsOriginController : Controller
     {
         
         private IClientService _clientService;

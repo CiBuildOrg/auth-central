@@ -98,20 +98,34 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         [HttpPost("[action]")]
         public ActionResult Save(ClaimModelContainer cmc)
         {
-            if(ModelState.IsValid)
+            Guid userGuid;
+            if (!Guid.TryParse(cmc.ClaimantId, out userGuid))
             {
-                Guid userGuid;
-                if (!Guid.TryParse(cmc.ClaimantId, out userGuid))
-                {
-                    return HttpUnauthorized();
-                }
+                return HttpUnauthorized();
+            }
 
+            if (ModelState.IsValid)
+            {
                 _userAccountService.AddClaims(userGuid, new UserClaimCollection(cmc.Claims.Select(c => new Claim(c.Type, c.Value))));
 
                 return RedirectToAction("Show", new { userId = cmc.ClaimantId });
             }
+            
+            HierarchicalUserAccount user = _userAccountService.GetByID(userGuid);
 
-            return View("Create");
+            if (user == null)
+            {
+                ViewBag.Message = string.Format("The Auth Central User with UserId {0} could not be found.", cmc.ClaimantId);
+                return RedirectToAction("Index");
+            }
+
+            var model = new ClaimModelContainer()
+            {
+                ClaimantId = user.ID.ToString(),
+                Claims = new List<ClaimModel>(new[] { new ClaimModel() })
+            };
+
+            return View("Create", model);
         }
     }
 }

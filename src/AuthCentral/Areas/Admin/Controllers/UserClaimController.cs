@@ -32,7 +32,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             Guid userGuid;
             if(!Guid.TryParse(userId, out userGuid))
             {
-                return HttpUnauthorized();
+                return HttpBadRequest("Failed to parse user Id.");
             }
 
             // Not awaitable!
@@ -41,7 +41,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             if (user == null)
             {
                 ViewBag.Message = string.Format("The Auth Central User with UserId {0} could not be found.", userId);
-                return HttpUnauthorized();
+                return HttpBadRequest("Failed to find user with the given Id.");
             }
 
             var model = new UserClaimModelContainer()
@@ -59,7 +59,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             Guid userGuid;
             if (!Guid.TryParse(userId, out userGuid))
             {
-                return HttpUnauthorized();
+                return HttpBadRequest("Failed to parse userId.");
             }
             
             HierarchicalUserAccount user = _userAccountService.GetByID(userGuid);
@@ -86,7 +86,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             Guid userGuid;
             if (!Guid.TryParse(userId, out userGuid))
             {
-                return HttpUnauthorized();
+                return HttpBadRequest("Failed to parse user Id.");
             }
 
             _userAccountService.RemoveClaim(userGuid, userClaim.Type, userClaim.Value);
@@ -101,7 +101,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             Guid userGuid;
             if (!Guid.TryParse(cmc.UserId, out userGuid))
             {
-                return HttpUnauthorized();
+                return HttpBadRequest("Failed to parse user Id.");
             }
 
             if (ModelState.IsValid)

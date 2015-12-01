@@ -51,7 +51,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             var model = new ClientClaimModelContainer()
             {
                 ClientId = client.ClientId,
-                Claims = clientClaims
+                ClientClaims = clientClaims
             };
             
             return View(model);
@@ -71,7 +71,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             var model = new ClientClaimModelContainer()
             {
                 ClientId = client.ClientId,
-                Claims = new List<ClaimModel>(new[] { new ClaimModel() })
+                ClientClaims = new List<ClaimModel>(new[] { new ClaimModel() })
             };
  
             return View(model);
@@ -127,7 +127,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             }
             
             bool saveRequired = false;
-            foreach(var clientClaim in cmc.Claims)
+            foreach(var clientClaim in cmc.ClientClaims)
             {
                 if( !string.IsNullOrWhiteSpace(clientClaim.Type) && 
                     !string.IsNullOrWhiteSpace(clientClaim.Value) )

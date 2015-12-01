@@ -8,29 +8,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
 {
-    public class ClaimModelContainer
-    {
-        public string ClaimantId { get; set; }
 
-        public IEnumerable<ClaimModel> Claims { get; set; }
+    public class UserClaimModelContainer
+    {
+        public string UserId { get; set; }
+        public IEnumerable<ClaimModel> UserClaims { get; set; }
     }
 
-    public class UserClaimModelContainer : ClaimModelContainer
+    public class ClientClaimModelContainer
     {
-        public string UserId
-        {
-            get { return ClaimantId; }
-            set { ClaimantId = value; }
-        }
-    }
-
-    public class ClientClaimModelContainer : ClaimModelContainer
-    {
-        public string ClientId
-        {
-            get { return ClaimantId; }
-            set { ClaimantId = value; }
-        }
+        public string ClientId { get; set; }
+        public IEnumerable<ClaimModel> ClientClaims { get; set; }
     }
 
     public class ClaimModel

@@ -47,7 +47,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             var model = new UserClaimModelContainer()
             {
                 UserId = user.ID.ToString(),
-                Claims = user.Claims.Select(claim => new ClaimModel(claim))
+                UserClaims = user.Claims.Select(claim => new ClaimModel(claim))
             };
 
             return View(model);
@@ -73,7 +73,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             var model = new UserClaimModelContainer()
             {
                 UserId = user.ID.ToString(),
-                Claims = new List<ClaimModel>(new[] { new ClaimModel() })
+                UserClaims = new List<ClaimModel>(new[] { new ClaimModel() })
             };
 
             return View(model);
@@ -106,7 +106,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                _userAccountService.AddClaims(userGuid, new UserClaimCollection(cmc.Claims.Select(c => new Claim(c.Type, c.Value))));
+                _userAccountService.AddClaims(userGuid, new UserClaimCollection(cmc.UserClaims.Select(c => new Claim(c.Type, c.Value))));
 
                 return RedirectToAction("Show", new { userId = cmc.UserId });
             }
@@ -122,7 +122,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             var model = new UserClaimModelContainer()
             {
                 UserId = user.ID.ToString(),
-                Claims = new List<ClaimModel>(new[] { new ClaimModel() })
+                UserClaims = new List<ClaimModel>(new[] { new ClaimModel() })
             };
 
             return View("Create", model);

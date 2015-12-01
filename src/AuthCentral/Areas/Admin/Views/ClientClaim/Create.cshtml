@@ -11,7 +11,7 @@
     @Html.ValidationSummary("Please correct the following errors")
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.ClientId)
-    @Html.EditorFor(model => model.Claims)
+    @Html.EditorFor(model => model.ClientClaims)
 
     <div class="form-group">
        <div class="col-md-offset-2 col-md-10">

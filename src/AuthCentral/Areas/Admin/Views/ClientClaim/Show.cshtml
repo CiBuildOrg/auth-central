@@ -12,7 +12,7 @@
     </div>
 </div>
 
-@foreach(var clientClaim in Model.Claims)
+@foreach(var clientClaim in Model.ClientClaims)
 {
     <hr />
     @using (Html.BeginForm("Delete", "ClientClaim", new { clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {

@@ -77,7 +77,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return View(model);
         }
 
-        [HttpPost("[action]/{clientId}")]
+        [HttpPost("[action]")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string claimantId, ClaimModel clientClaim)
         {

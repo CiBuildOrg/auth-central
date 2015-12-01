@@ -33,7 +33,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return View();
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public IActionResult Create()
         {
             return View(new CreateAccountInputModel());

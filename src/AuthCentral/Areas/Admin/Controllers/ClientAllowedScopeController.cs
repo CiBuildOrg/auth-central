@@ -15,11 +15,11 @@ using Microsoft.AspNet.Authorization;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Fsw.Enterprise.AuthCentral.Areas.Admin
+namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 {
     [Authorize("FswAdmin")]
     [Area("Admin"), Route("[area]/[controller]")]
-    public class ClientAllowedScopeController : Controller
+    public class ClientAllowedScopeController : ClientAdminController
     {
         
         private IClientService _clientService;

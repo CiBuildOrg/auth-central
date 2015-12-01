@@ -1,0 +1,23 @@
+﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models
+@model ClaimModel
+
+<div>
+   <dl class="dl-horizontal">
+       <dt>
+           @Html.DisplayNameFor(model => model.Type)
+       </dt>
+       <dd>
+           @Html.HiddenFor(model => model.Type)
+           @Html.DisplayFor(model => model.Type)
+       </dd>
+
+        <dt>
+           @Html.DisplayNameFor(model => model.Value)
+       </dt>
+       <dd>
+           @Html.HiddenFor(model => model.Value)
+           @Html.DisplayFor(model => model.Value)
+       </dd>
+  </dl>
+
+</div>

@@ -1,13 +1,17 @@
 ﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models
-@model UserClaimContainer
+@model ClaimModelContainer
 
 @{
-    // Layout = "~/Areas/Admin/Views/Shared/_ClientAdminLayout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_UserAdminLayout.cshtml";
     ViewBag.Title = "Create User Claim";
 }
 
-@using (Html.BeginForm("Save", "UserClaim", new {userId = Model.UserId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
-    @Html.EditorFor(model=> model.UserClaims)
+@using (Html.BeginForm("Save", "UserClaim", new { claimantId = Model.ClaimantId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary("Please correct the following errors")
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.ClaimantId)
+    @Html.EditorFor(model=> Model.Claims)
 
     <div class="form-group">
        <div class="col-md-offset-2 col-md-10">

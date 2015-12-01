@@ -6,14 +6,16 @@ using BrockAllen.MembershipReboot;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Fsw.Enterprise.AuthCentral.Areas.Admin.Models;
+using System.Security.Claims;
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Fsw.Enterprise.AuthCentral.Areas.Admin
+namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 {
     [Authorize("FswAdmin")]
     [Area("Admin"), Route("[area]/[controller]")]
-    public class UserClaimController : Controller
+    public class UserClaimController : UserAdminController
     {
         EnvConfig _cfg;
         UserAccountService<HierarchicalUserAccount> _userAccountService;
@@ -42,10 +44,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 return HttpUnauthorized();
             }
 
-            var model = new UserClaimContainer()
+            var model = new ClaimModelContainer()
             {
-                UserId = user.ID.ToString(),
-                UserClaims = user.Claims
+                ClaimantId = user.ID.ToString(),
+                Claims = user.Claims.Select(claim => new ClaimModel(claim))
             };
 
             return View(model);
@@ -68,10 +70,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 return RedirectToAction("Index");
             }
 
-            var model = new UserClaimContainer()
+            var model = new ClaimModelContainer()
             {
-                UserId = user.ID.ToString(),
-                UserClaims = new List<UserClaim>()
+                ClaimantId = user.ID.ToString(),
+                Claims = new List<ClaimModel>(new[] { new ClaimModel() })
             };
 
             return View(model);
@@ -79,7 +81,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
         [ValidateAntiForgeryToken]
         [HttpPost("[action]/{userId}")]
-        public ActionResult Delete(string userId, UserClaim userClaim)
+        public ActionResult Delete(string userId, ClaimModel userClaim)
         {
             Guid userGuid;
             if (!Guid.TryParse(userId, out userGuid))
@@ -94,18 +96,22 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
 
         [ValidateAntiForgeryToken]
         [HttpPost("[action]")]
-        public ActionResult Save(UserClaimContainer usc)
+        public ActionResult Save(ClaimModelContainer cmc)
         {
-            //TODO: validate??
-            Guid userGuid;
-            if (!Guid.TryParse(usc.UserId, out userGuid))
+            if(ModelState.IsValid)
             {
-                return HttpUnauthorized();
+                Guid userGuid;
+                if (!Guid.TryParse(cmc.ClaimantId, out userGuid))
+                {
+                    return HttpUnauthorized();
+                }
+
+                _userAccountService.AddClaims(userGuid, new UserClaimCollection(cmc.Claims.Select(c => new Claim(c.Type, c.Value))));
+
+                return RedirectToAction("Show", new { userId = cmc.ClaimantId });
             }
 
-            _userAccountService.AddClaims(userGuid, new UserClaimCollection(usc.UserClaims));
-
-            return RedirectToAction("Show", new { userId = usc.UserId });
+            return View("Create");
         }
     }
 }

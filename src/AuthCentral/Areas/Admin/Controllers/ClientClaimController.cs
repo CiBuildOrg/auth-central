@@ -78,8 +78,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return View(model);
         }
 
-        [ValidateAntiForgeryToken]
         [HttpPost("[action]/{clientId}")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string claimantId, ClaimModel clientClaim)
         {
             Client client = await _clientService.Find(claimantId);
@@ -113,8 +113,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
 
-        [ValidateAntiForgeryToken]
         [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Save(ClaimModelContainer cmc)
         {
             //TODO: validate??
@@ -126,13 +126,23 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", client.ClientId);
                 return RedirectToAction("Index");
             }
-
+            
+            bool saveRequired = false;
             foreach(var clientClaim in cmc.Claims)
             {
-                client.Claims.Add(new Claim(clientClaim.Type, clientClaim.Value));
+                if( !string.IsNullOrWhiteSpace(clientClaim.Type) && 
+                    !string.IsNullOrWhiteSpace(clientClaim.Value) )
+                {
+                    client.Claims.Add(new Claim(clientClaim.Type, clientClaim.Value));
+                    saveRequired = true;
+                }
             }
 
-            await _clientService.Save(client);
+            if(saveRequired)
+            {
+                await _clientService.Save(client);
+            }
+
             return RedirectToAction("Show", new { clientId = client.ClientId } );
         }
 

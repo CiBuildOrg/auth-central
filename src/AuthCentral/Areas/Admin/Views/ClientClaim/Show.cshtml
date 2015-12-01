@@ -15,10 +15,9 @@
 @foreach(var clientClaim in Model.Claims)
 {
     <hr />
-    @using (Html.BeginForm("Delete", "ClientClaim", new { claimantId = Model.ClaimantId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal" }))
-    {
+    @using (Html.BeginForm("Delete", "ClientClaim", new { clientId = Model.ClaimantId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(model => model.ClaimantId)
+        @Html.HiddenFor(model => Model.ClaimantId)
         @Html.DisplayFor(model => clientClaim)
 
         <div class="form-group">

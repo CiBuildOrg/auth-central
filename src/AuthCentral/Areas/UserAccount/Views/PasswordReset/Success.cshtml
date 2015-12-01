@@ -1,19 +1,27 @@
 ﻿@{
     ViewBag.Title = "Password Changed";
 }
+<div class="container">
+    <div class="page-header">
+        <h2>Password Changed</h2>
+    </div>
+</div>
 
-<h2>Password Changed</h2>
-<p>
-    Your password has been changed.
-    @if (User.Identity.IsAuthenticated)
-    {
-        @: You are now logged in.
-    }
-    else
-    {
-        <div>
-            You can now login
-            @Html.ActionLink("here", "Index", "Login").
+<div class="container page-login">
+    <div class="row">
+        <div class="col-md-6 col-sm-6">
+            Your password has been changed.
+            @if (User.Identity.IsAuthenticated)
+            {
+                @: You are now logged in.
+            }
+            else
+            {
+                <div>
+                    You can now login
+            @Html.ActionLink("here", "Details", "Home", new { area = "UserAccount" }, null).
+                </div>
+            }
         </div>
-    }
-</p>
+    </div>
+</div>

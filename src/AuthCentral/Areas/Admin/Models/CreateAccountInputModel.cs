@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Fsw.Enterprise.AuthCentral.Models
+namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
 {
     public class CreateAccountInputModel
     {
-        [Required]
+        [ScaffoldColumn(false)]
         public string Username { get; set; }
         
         [Required]

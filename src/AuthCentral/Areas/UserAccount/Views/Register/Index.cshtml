@@ -1,46 +1,40 @@
-﻿@using Fsw.Enterprise.AuthCentral.Models
-@model RegisterInputModel
+﻿@model Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models.RegisterInputModel
 @{
     ViewBag.Title = "Register";
 }
 
-@using (Html.BeginForm())
-{
-    @Html.ValidationSummary("Please correct the following errors")
-    @Html.AntiForgeryToken()
+<div class="container page-login">
+    <div class="row">
+        <div class="col-md-6 col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Registration</h3>
+                </div>
+                <div class="panel-body">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
 
-    <fieldset class="editor small">
-        <legend>@ViewBag.Title</legend>
+                        if (!Html.ViewData.ModelState.IsValid)
+                        {
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="alert alert-danger">
+                                        @Html.ValidationSummary("Please correct the following errors")
+                                    </div>
+                                </div>
+                            </div>
+                        }
 
-        @Html.EditorForModel()
-
-        <div class="buttons">
-            <button>Register</button>
+                        <fieldset>
+                                @Html.EditorForModel()
+                            <div class="form-group">
+                                <button class="btn btn-primary">Register</button>
+                            </div>
+                        </fieldset>
+                    }
+                </div>
+            </div>
         </div>
-
-    </fieldset>
-}
-
-@using (Html.BeginForm("Confirm", "ChangeEmail", FormMethod.Get))
-{
-    <fieldset>
-        <legend>Confirm</legend>
-        <p>
-            <label for="id">Key</label>
-            <input id="id" name="id" />
-        </p>
-        <p class="buttons"><button>Submit</button></p>
-    </fieldset>
-}
-
-@using (Html.BeginForm("Cancel", "Register", FormMethod.Get))
-{
-    <fieldset>
-        <legend>Cancel</legend>
-        <p>
-            <label for="id">Key</label>
-            <input id="id" name="id" />
-        </p>
-        <p class="buttons"><button>Submit</button></p>
-    </fieldset>
-}
+    </div>
+</div>

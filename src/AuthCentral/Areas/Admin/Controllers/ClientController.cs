@@ -49,6 +49,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Client client)
         {
             Client existingClient = await _clientService.Find(client.ClientId);
@@ -83,6 +84,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpPost("[action]/{clientId}")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string clientId)
         {
             await _clientService.Delete(clientId);
@@ -92,6 +94,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
 
         [HttpPost("[action]/{clientId}")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Save(Client client)
         {
             if(ModelState.IsValid)

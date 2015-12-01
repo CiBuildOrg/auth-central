@@ -119,6 +119,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                 options.ResponseType = OpenIdConnectResponseTypes.Code;
                 options.DefaultToCurrentUriOnRedirect = true;
                 options.Scope.Add("fsw_platform");
+                options.Scope.Add("profile");
                 options.Scope.Add("openid");
 
                 options.Events = new OpenIdConnectEvents

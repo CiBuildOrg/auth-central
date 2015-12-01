@@ -52,6 +52,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpPost("[action]/{clientId}")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string clientId, string postLogoutUri)
         {
             Client client = await _clientService.Find(clientId);
@@ -62,8 +63,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 return RedirectToAction("Edit");
             }
 
-            int removed = client.PostLogoutRedirectUris.RemoveAll(uri => uri.Equals(postLogoutUri));
-            if (removed > 0) {
+            if(client.PostLogoutRedirectUris.Contains(postLogoutUri) )
+            {
+                client.PostLogoutRedirectUris.Remove(postLogoutUri);
                 await _clientService.Save(client);
             }
 
@@ -79,7 +81,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpPost("[action]/{clientId}")]
-        public async Task<IActionResult> Save(string clientId, string postLogoutUri)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Save(string clientId, string originalPostLogoutUri, string postLogoutUri)
         {
             //TODO: validate??
 
@@ -90,16 +93,35 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
             }
 
-            bool isSaveRequired = false;
-            if(!client.PostLogoutRedirectUris.Contains(postLogoutUri) && !String.IsNullOrWhiteSpace(postLogoutUri))
+            // if things have changed
+            if (originalPostLogoutUri != postLogoutUri)
             {
-               client.PostLogoutRedirectUris.Add(postLogoutUri);
-                isSaveRequired = true;
-            }
+                bool saveRequired = false;
 
-            if(isSaveRequired)
-            {
-                await _clientService.Save(client);
+                if (!client.PostLogoutRedirectUris.Contains(postLogoutUri) && !String.IsNullOrWhiteSpace(postLogoutUri))
+                {
+                    var insertAt = client.PostLogoutRedirectUris.IndexOf(originalPostLogoutUri);
+                    if (insertAt >= 0)
+                    {
+                        client.PostLogoutRedirectUris.Insert(insertAt, postLogoutUri);
+                    }
+                    else
+                    {
+                        client.PostLogoutRedirectUris.Add(postLogoutUri);
+                    }
+                    saveRequired = true;
+                }
+
+                if (client.PostLogoutRedirectUris.Contains(originalPostLogoutUri))
+                {
+                    client.PostLogoutRedirectUris.Remove(originalPostLogoutUri);
+                    saveRequired = true;
+                }
+
+                if (saveRequired)
+                {
+                    await _clientService.Save(client);
+                }
             }
 
             var model = new ClientChildListContainer<string>()

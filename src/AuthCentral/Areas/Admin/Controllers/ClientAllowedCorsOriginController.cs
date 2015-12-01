@@ -52,7 +52,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpPost("[action]/{clientId}")]
-        public async Task<IActionResult> Delete(string clientId, string redirectUri)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(string clientId, string corsOrigin)
         {
             Client client = await _clientService.Find(clientId);
 
@@ -62,20 +63,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 return RedirectToAction("Edit");
             }
 
-            bool saveRequired = false;
-            for(int i = (client.AllowedCorsOrigins.Count-1); i >= 0; i--)
+            if(client.AllowedCorsOrigins.Contains(corsOrigin))
             {
-                string existingRedirecUri = client.AllowedCorsOrigins[i];
-
-                if(existingRedirecUri.Equals(redirectUri))
-                {
-                    client.AllowedCorsOrigins.Remove(existingRedirecUri);
-                    saveRequired = true;
-                }
-           }
-
-            if(saveRequired)
-            {
+                client.AllowedCorsOrigins.Remove(corsOrigin);
                 await _clientService.Save(client);
             }
 
@@ -91,7 +81,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpPost("[action]/{clientId}")]
-        public async Task<IActionResult> Save(string clientId, string redirectUri)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Save(string clientId, string originalCorsOrigin, string corsOrigin)
         {
             //TODO: validate??
 
@@ -102,10 +93,35 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
             }
 
-            if(!client.AllowedCorsOrigins.Contains(redirectUri) && !String.IsNullOrWhiteSpace(redirectUri))
+            // if things have changed
+            if(originalCorsOrigin != corsOrigin)
             {
-                client.AllowedCorsOrigins.Add(redirectUri);
-                await _clientService.Save(client);
+                bool saveRequired = false;
+
+                if(!client.AllowedCorsOrigins.Contains(corsOrigin) && !String.IsNullOrWhiteSpace(corsOrigin))
+                {
+                    var insertAt = client.AllowedCorsOrigins.IndexOf(originalCorsOrigin);
+                    if(insertAt >= 0)
+                    {
+                        client.AllowedCorsOrigins.Insert(insertAt, corsOrigin);
+                    }
+                    else
+                    {
+                        client.AllowedCorsOrigins.Add(corsOrigin);
+                    }
+                    saveRequired = true;
+                }
+
+                if(client.AllowedCorsOrigins.Contains(originalCorsOrigin) )
+                {
+                    client.AllowedCorsOrigins.Remove(originalCorsOrigin);
+                    saveRequired = true;
+                }
+
+                if(saveRequired)
+                {
+                    await _clientService.Save(client);
+                }
             }
 
             var model = new ClientChildListContainer<string>()

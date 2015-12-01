@@ -79,6 +79,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
 
         [HttpPost("[action]/{clientId}")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string clientId, ClientSecret clientSecret)
         {
             Client client = await _clientService.Find(clientId);
@@ -94,11 +95,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             {
                 var existingSecret = client.ClientSecrets[i];
 
-                if( existingSecret.Value       == clientSecret.Value &&
-                    existingSecret.Description == clientSecret.Description &&
-                    existingSecret.Expiration  == clientSecret.Expiration &&
-                    existingSecret.Type        == clientSecret.Type )
-                {
+                if( (existingSecret.Value       == clientSecret.Value &&
+                     existingSecret.Description == clientSecret.Description &&
+                     existingSecret.Expiration  == clientSecret.Expiration &&
+                     existingSecret.Type        == clientSecret.Type
+                    ) ||
+                    String.IsNullOrWhiteSpace(existingSecret.Value) && String.IsNullOrWhiteSpace(clientSecret.Value)
+                ){
                     client.ClientSecrets.Remove(existingSecret);
                     saveRequired = true;
                     break;
@@ -113,12 +116,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             return RedirectToAction("Show", new { clientId = client.ClientId } );
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Save(ClientSecretContainer csc)
+        [HttpPost("[action]/{clientId}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Save(string clientId, List<ClientSecret> clientSecrets)
         {
             //TODO: validate??
-
-            Client client = await _clientService.Find(csc.ClientId);
+            Client client = await _clientService.Find(clientId);
 
             if(client == null)
             {
@@ -126,15 +129,24 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
 
-            foreach(var secret in csc.ClientSecrets)
+            bool saveRequired = false;
+            foreach(ClientSecret cs in clientSecrets)
             {
                 // The value must be hashed to work with IdentityServer3
-                secret.Value = secret.Value.Sha256();
-                client.ClientSecrets.Add(secret);
+                if(!String.IsNullOrWhiteSpace(cs.Value))
+                {
+                    cs.Value = cs.Value.Sha256();
+                    client.ClientSecrets.Add(cs);
 
+                    saveRequired = true;
+                }
             }
 
-            await _clientService.Save(client);
+            if(saveRequired)
+            {
+                await _clientService.Save(client);
+            }
+
             return RedirectToAction("Show", new { clientId = client.ClientId } );
         }
 

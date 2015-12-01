@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Authorization;
@@ -7,8 +7,9 @@ using BrockAllen.MembershipReboot.Hierarchical;
 using BrockAllen.MembershipReboot;
 
 using Fsw.Enterprise.AuthCentral.Crypto;
-using Fsw.Enterprise.AuthCentral.Models;
-using Microsoft.AspNet.Routing;
+using Fsw.Enterprise.AuthCentral.Areas.Admin.Models;
+
+
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin
@@ -27,16 +28,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpGet]
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        // GET: /<controller>/
-        [HttpGet("[action]")]
         public ActionResult Create()
         {
-            return View();
+            return View(new CreateAccountInputModel());
         }
 
         [HttpPost("[action]")]

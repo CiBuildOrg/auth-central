@@ -7,7 +7,7 @@
 }
 
 @using (Html.BeginForm("Save", "ClientSecret", new {clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
-    @Html.HiddenFor(model => model.ClientId)
+    @Html.AntiForgeryToken()
     @Html.EditorFor(model=> model.ClientSecrets)
 
     <div class="form-group">

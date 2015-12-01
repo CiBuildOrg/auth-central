@@ -9,10 +9,12 @@
 @for(var i=0; i < Model.ChildList.Count; i++)
 {
     @using (Html.BeginForm("Save", "ClientAllowedScope", new { clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @id="edit-form-" + i, @class = "form-inline"} )) {
+        @Html.AntiForgeryToken()
         @Html.HiddenFor(model => Model.ClientId)
 
         <div class="form-group">
            <div>
+               <input type="hidden" class="form-control" id="originalAllowedScope_@i" name="originalAllowedScope" placeholder="openid" value="@Model.ChildList[i]">
                <input type="text" class="form-control" id="allowedScope_@i" name="allowedScope" placeholder="openid" value="@Model.ChildList[i]">
            </div>
         </div>

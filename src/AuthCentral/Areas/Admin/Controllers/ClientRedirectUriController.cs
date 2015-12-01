@@ -22,7 +22,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         
         private IClientService _clientService;
 
-        //public ClientController(EnvConfig cfg, IAdminService adminService, IClientStore clientStore)
         public ClientRedirectUriController(IClientService clientService)
         {
             this._clientService = clientService;
@@ -50,8 +49,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             return View(model);
         }
 
-        // POST: /Admin/Client/DeleteClientSecret
         [HttpPost("[action]/{clientId}")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string clientId, string redirectUri)
         {
             Client client = await _clientService.Find(clientId);
@@ -62,8 +61,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 return RedirectToAction("Edit");
             }
 
-            int removed = client.RedirectUris.RemoveAll(uri => uri.Equals(redirectUri));
-            if (removed > 0) {
+            if(client.RedirectUris.Contains(redirectUri) )
+            {
+                client.RedirectUris.Remove(redirectUri);
                 await _clientService.Save(client);
             }
 
@@ -79,7 +79,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpPost("[action]/{clientId}")]
-        public async Task<IActionResult> Save(string clientId, string redirectUri)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Save(string clientId, string originalRedirectUri, string redirectUri)
         {
             //TODO: validate??
 
@@ -90,16 +91,35 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
             }
 
-            bool isSaveRequired = false;
-            if(!client.RedirectUris.Contains(redirectUri) && !String.IsNullOrWhiteSpace(redirectUri))
+            // if things have changed
+            if (originalRedirectUri != redirectUri)
             {
-               client.RedirectUris.Add(redirectUri);
-                isSaveRequired = true;
-            }
+                bool saveRequired = false;
 
-            if(isSaveRequired)
-            {
-                await _clientService.Save(client);
+                if (!client.RedirectUris.Contains(redirectUri) && !String.IsNullOrWhiteSpace(redirectUri))
+                {
+                    var insertAt = client.RedirectUris.IndexOf(originalRedirectUri);
+                    if (insertAt >= 0)
+                    {
+                        client.RedirectUris.Insert(insertAt, redirectUri);
+                    }
+                    else
+                    {
+                        client.RedirectUris.Add(redirectUri);
+                    }
+                    saveRequired = true;
+                }
+
+                if (client.RedirectUris.Contains(originalRedirectUri))
+                {
+                    client.RedirectUris.Remove(originalRedirectUri);
+                    saveRequired = true;
+                }
+
+                if (saveRequired)
+                {
+                    await _clientService.Save(client);
+                }
             }
 
             var model = new ClientChildListContainer<string>()

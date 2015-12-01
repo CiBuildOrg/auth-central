@@ -28,13 +28,19 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         }
 
         [HttpGet]
-        public ActionResult Create()
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Create()
         {
             return View(new CreateAccountInputModel());
         }
 
         [HttpPost("[action]")]
-        public ActionResult Create(CreateAccountInputModel model)
+        public IActionResult Create(CreateAccountInputModel model)
         {
             if (ModelState.IsValid)
             {
@@ -56,7 +62,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return View("Index", model);
         }
 
-        public ActionResult Find(string email)
+        public IActionResult Find(string email)
         {
             HierarchicalUserAccount account = _userAccountService.GetByEmail(email);
             if(account == null)

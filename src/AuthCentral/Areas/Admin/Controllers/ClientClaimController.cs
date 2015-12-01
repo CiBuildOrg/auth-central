@@ -35,7 +35,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
         public async Task<IActionResult> Show(string clientId)
         {
             Client client = await _clientService.Find(clientId);
-            ViewBag.ClientId = clientId;
 
             if(client == null)
             {

@@ -62,6 +62,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             return View("Index", model);
         }
 
+        [HttpPost("[action]")]
         public IActionResult Find(string email)
         {
             HierarchicalUserAccount account = _userAccountService.GetByEmail(email);

@@ -62,7 +62,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             }
             return View(model);
         }
-
+        
         /// <summary>
         /// GET response for the Verify action.
         /// </summary>

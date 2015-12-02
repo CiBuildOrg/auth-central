@@ -76,7 +76,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 UserClaims = new List<ClaimModel>(new[] { new ClaimModel() })
             };
 
-            return View(model);
+            return View("Create", model);
         }
 
         [ValidateAntiForgeryToken]
@@ -110,22 +110,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
                 return RedirectToAction("Show", new { userId = cmc.UserId });
             }
-            
-            HierarchicalUserAccount user = _userAccountService.GetByID(userGuid);
 
-            if (user == null)
-            {
-                ViewBag.Message = string.Format("The Auth Central User with UserId {0} could not be found.", cmc.UserId);
-                return RedirectToAction("Index");
-            }
-
-            var model = new UserClaimModelContainer()
-            {
-                UserId = user.ID.ToString(),
-                UserClaims = new List<ClaimModel>(new[] { new ClaimModel() })
-            };
-
-            return View("Create", model);
+            return Create(cmc.UserId);
         }
     }
 }

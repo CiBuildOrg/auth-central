@@ -9,6 +9,7 @@ using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
 
+//using Fsw.LogCentral.MicrosoftFramework;
 using Fsw.Enterprise.AuthCentral.Extensions;
 using Fsw.Enterprise.AuthCentral.Health;
 using Fsw.Enterprise.AuthCentral.IdMgr;
@@ -44,6 +45,10 @@ namespace Fsw.Enterprise.AuthCentral
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory, StoreSettings idSvrStoreSettings)
         {
+            app.ConfigureLoggers(logFactory, _config.IsDebug);
+            logFactory.AddSerilog();
+//            app.UseMiddleware<LogMiddleware>();
+
             MembershipRebootSetup.GetConfig(app); // Create the singleton to get around MVC DI container limitations            
             app.UseStatusCodePages();
             app.UseCookieAuthentication(options =>
@@ -54,10 +59,8 @@ namespace Fsw.Enterprise.AuthCentral
             });
 
             app.UseOpenIdConnectAuthentication(_config);
-            app.ConfigureLoggers(logFactory, _config.IsDebug);
             app.UseIISPlatformHandler();
             app.UseStaticFiles();
-            logFactory.AddSerilog();
             HealthChecker.ScheduleHealthCheck(_config, logFactory);
 
             app.Map("/ids", ids =>

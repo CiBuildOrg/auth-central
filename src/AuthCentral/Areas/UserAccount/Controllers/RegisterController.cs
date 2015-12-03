@@ -61,8 +61,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
                         new UserClaim("fsw:authcentral:admin", "false"),
                         new UserClaim("name", string.Join(" ",
                             new string[] { model.GivenName, model.MiddleName, model.FamilyName }
-                                           .Where(name => !string.IsNullOrWhiteSpace(name)))
-                        )
+                                           .Where(name => !string.IsNullOrWhiteSpace(name))
+                        ))
                     };
 
                     if (!string.IsNullOrWhiteSpace(model.MiddleName))

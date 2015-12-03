@@ -82,20 +82,25 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
         private void AddClaims(Guid accountId, CreateAccountInputModel model)
         {
+            model.Email = model.Email.ToLowerInvariant().Trim();
+
             UserClaimCollection claims = new UserClaimCollection
             {
                 new UserClaim("given_name", model.GivenName),
                 new UserClaim("family_name", model.FamilyName),
-                new UserClaim("fsw:authcentral:admin", model.IsAuthCentralAdmin.ToString()),
                 new UserClaim("name", string.Join(" ",
                     new string[] { model.GivenName, model.MiddleName, model.FamilyName }
-                                   .Where(name => !string.IsNullOrWhiteSpace(name)))
-                )
+                                   .Where(name => !string.IsNullOrWhiteSpace(name))
+                ))
             };
 
             if (!string.IsNullOrWhiteSpace(model.MiddleName))
             {
                 claims.Add(new UserClaim("middle_name", model.MiddleName));
+            }
+
+            if (model.IsAuthCentralAdmin) {
+                claims.Add(new UserClaim("fsw:authcentral:admin", "true"));
             }
             
             if(!string.IsNullOrWhiteSpace(model.Organization))

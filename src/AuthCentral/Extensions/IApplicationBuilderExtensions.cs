@@ -11,8 +11,8 @@ using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Builder;
 using Microsoft.Dnx.Runtime;
-using Microsoft.Framework.DependencyInjection;
-using Microsoft.Framework.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 using BrockAllen.MembershipReboot.Hierarchical;
@@ -26,6 +26,7 @@ using Fsw.Enterprise.AuthCentral.MongoStore;
 
 namespace Fsw.Enterprise.AuthCentral.Extensions
 {
+    using Microsoft.Extensions.PlatformAbstractions;
     using DataProtectionProviderDelegate = Func<string[], Tuple<Func<byte[], byte[]>, Func<byte[], byte[]>>>;
     using DataProtectionTuple = Tuple<Func<byte[], byte[]>, Func<byte[], byte[]>>;
 
@@ -115,9 +116,8 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                 options.ClientId = config.Client.Id;
                 options.ClientSecret = config.Client.Secret;
                 options.Authority = new UriBuilder(config.Uri.Scheme, config.Uri.Host, config.Uri.Port, "ids").Uri.AbsoluteUri;
-                options.RedirectUri = new UriBuilder(config.Uri.Scheme, config.Uri.Host, config.Uri.Port, "account").Uri.AbsoluteUri;
+                options.CallbackPath = new Microsoft.AspNet.Http.PathString("/account");
                 options.ResponseType = OpenIdConnectResponseTypes.Code;
-                options.DefaultToCurrentUriOnRedirect = true;
                 options.Scope.Add("fsw_platform");
                 options.Scope.Add("profile");
                 options.Scope.Add("openid");
@@ -128,7 +128,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                     {
                         var id = new ClaimsIdentity("application", "given_name", "role");
 
-                        var token = new JwtSecurityToken(data.TokenEndpointResponse.ProtocolMessage.AccessToken);
+                        var token = new JwtSecurityToken(data.TokenEndpointResponse.AccessToken);
                         IEnumerable<Claim> claims = token.Claims.Where(c => c.Type != "iss" &&
                                                                             c.Type != "aud" &&
                                                                             c.Type != "nbf" &&

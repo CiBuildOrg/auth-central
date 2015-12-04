@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
+using System.Security.Authentication;
 
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Authorization;
+
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 
 using Fsw.Enterprise.AuthCentral.IdMgr;
+using Fsw.Enterprise.AuthCentral.Extensions;
 using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
 
-
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
+namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
 {
     [Authorize]
     [Area("UserAccount"), Route("[area]"), Route("account")]
@@ -44,17 +42,17 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount
         [HttpGet("Details")]
         public IActionResult Details()
         {
-            Guid userId;
-            if(!Guid.TryParse(User.Claims.GetValue("sub"), out userId))
+            try
+            {
+                HierarchicalUserAccount user = _userAccountService.GetByID(User.GetId());
+                UserAccountViewModel viewModel = new UserAccountViewModel(user);
+
+                return View(viewModel);
+            }
+            catch(AuthenticationException)
             {
                 return new HttpUnauthorizedResult();
             }
-
-            HierarchicalUserAccount user = _userAccountService.GetByID(userId);
-            UserAccountViewModel viewModel = new UserAccountViewModel(user);
-
-            return View(viewModel);
         }
-
     }
 }

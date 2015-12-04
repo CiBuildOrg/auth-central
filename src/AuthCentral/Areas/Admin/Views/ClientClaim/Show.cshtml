@@ -1,5 +1,5 @@
 ﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models
-@model ClientClaimContainer
+@model ClientClaimModelContainer
 
 @{
     Layout = "~/Areas/Admin/Views/Shared/_ClientAdminLayout.cshtml";
@@ -15,7 +15,7 @@
 @foreach(var clientClaim in Model.ClientClaims)
 {
     <hr />
-    @using (Html.BeginForm("Delete", "ClientClaim", new {clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
+    @using (Html.BeginForm("Delete", "ClientClaim", new { clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal"} )) {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => Model.ClientId)
         @Html.DisplayFor(model => clientClaim)

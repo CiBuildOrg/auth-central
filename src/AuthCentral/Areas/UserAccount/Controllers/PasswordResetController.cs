@@ -1,116 +1,83 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
 using Fsw.Enterprise.AuthCentral.IdMgr;
-using Microsoft.AspNet.DataProtection;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.DataProtection;
+using Microsoft.AspNet.Authorization;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
 {
+    /// <summary>
+    /// Controller for the user Password Reset flow.
+    /// </summary>
     [AllowAnonymous]
     [Area("UserAccount"), Route("[area]/[controller]")]
     public class PasswordResetController : Controller
     {
         readonly UserAccountService<HierarchicalUserAccount> _userAccountService;
         readonly MongoAuthenticationService _authenticationService;
-        private readonly IDataProtector _protector;
 
-        public PasswordResetController(MongoAuthenticationService authenticationService, IDataProtectionProvider provider)
+        /// <summary>
+        /// Constructs a new <see cref="PasswordResetController"/> object.
+        /// </summary>
+        /// <param name="authenticationService">The authentication service used by the server.</param>
+        public PasswordResetController(MongoAuthenticationService authenticationService)
         {
-            this._authenticationService = authenticationService;
-            _protector = provider.CreateProtector(GetType().FullName);
-            this._userAccountService = authenticationService.UserAccountService;
+            _authenticationService = authenticationService;
+            _userAccountService = authenticationService.UserAccountService;
         }
 
+        /// <summary>
+        /// Main GET response for the Password Reset page.
+        /// </summary>
+        /// <returns>Index view.</returns>
         public ActionResult Index()
         {
             return View();
         }
 
+        /// <summary>
+        /// Action when the user posts from the index page.
+        /// </summary>
+        /// <param name="model">The values posted from the index page encapsulated in a <see cref="PasswordResetInputModel"/> object.</param>
+        /// <returns>ResetSuccess view if post data is valid; otherwise Index view.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(PasswordResetInputModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    var account = this._userAccountService.GetByEmail(model.Email);
-                    if (account != null)
-                    {
-                        if (!account.PasswordResetSecrets.Any())
-                        {
-                            this._userAccountService.ResetPassword(model.Email);
-                            return View("ResetSuccess");
-                        }
-
-                        var vm = new PasswordResetWithSecretInputModel(_protector, account.ID);
-                        vm.Questions =
-                            account.PasswordResetSecrets.Select(
-                                x => new PasswordResetSecretViewModel
-                                {
-                                    QuestionID = x.PasswordResetSecretID,
-                                    Question = x.Question
-                                }).ToArray();
-
-                        return View("ResetWithQuestions", vm);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Invalid email");
-                    }
-                }
-                catch (ValidationException ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-                }
+                return View("Index");
             }
+
+            try
+            {
+                HierarchicalUserAccount account = _userAccountService.GetByEmail(model.Email);
+
+                if (account != null)
+                {
+                    _userAccountService.ResetPassword(model.Email);
+                    return View("ResetSuccess");
+                }
+
+                ModelState.AddModelError("", "Invalid email");
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
             return View("Index");
         }
 
 
-        [HttpPost("[action]")]
-        [ValidateAntiForgeryToken]
-        public ActionResult ResetWithQuestions(PasswordResetWithSecretInputModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var answers =
-                        model.Questions.Select(x => new PasswordResetQuestionAnswer { QuestionID = x.QuestionID, Answer = x.Answer });
-                    this._userAccountService.ResetPasswordFromSecretQuestionAndAnswer(model.UnprotectedAccountID.Value, answers.ToArray());
-                    return View("ResetSuccess");
-                }
-                catch (ValidationException ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-                }
-            }
-
-            var id = model.UnprotectedAccountID;
-            if (id != null)
-            {
-                var account = this._userAccountService.GetByID(id.Value);
-                if (account != null)
-                {
-                    var vm = new PasswordResetWithSecretInputModel(_protector, account.ID);
-                    vm.Questions =
-                        account.PasswordResetSecrets.Select(
-                            x => new PasswordResetSecretViewModel
-                            {
-                                QuestionID = x.PasswordResetSecretID,
-                                Question = x.Question
-                            }).ToArray();
-                    return View("ResetWithQuestions", vm);
-                }
-            }
-
-            return RedirectToAction("Index");
-        }
-
+        /// <summary>
+        /// Confirm action called as a GET method with a string <paramref name="id"/> parameter.
+        /// </summary>
+        /// <param name="id">The verification key associated with the password reset request.</param>
+        /// <returns>Confirm view.</returns>
         [HttpGet("[action]/{id}")]
         public ActionResult Confirm(string id)
         {
@@ -118,48 +85,63 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             {
                 Key = id
             };
+
             return View("Confirm", vm);
         }
 
+        /// <summary>
+        /// Confirm action called as a POST from the Confirm view.
+        /// </summary>
+        /// <param name="model">Contains the form fields from the Confirm view in a <see cref="ChangePasswordFromResetKeyInputModel"/> object.</param>
+        /// <returns>Success view if password reset successfully completed; otherwise the Confirm view.</returns>
         [HttpPost("[action]/{id?}")]
         [ValidateAntiForgeryToken]
         public ActionResult Confirm(ChangePasswordFromResetKeyInputModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    HierarchicalUserAccount account;
-                    if (this._userAccountService.ChangePasswordFromResetKey(model.Key, model.Password, out account))
-                    {
-                        if (account.IsLoginAllowed && !account.IsAccountClosed)
-                        {
-                            this._authenticationService.SignIn(account);
-                            if (account.RequiresTwoFactorAuthCodeToSignIn())
-                            {
-                                return RedirectToAction("TwoFactorAuthCodeLogin", "Login");
-                            }
-                            if (account.RequiresTwoFactorCertificateToSignIn())
-                            {
-                                return RedirectToAction("CertificateLogin", "Login");
-                            }
-                        }
+                return View();
+            }
 
+            try
+            {
+                HierarchicalUserAccount account;
+                if (_userAccountService.ChangePasswordFromResetKey(model.Key, model.Password, out account))
+                {
+                    if (!account.IsLoginAllowed || account.IsAccountClosed)
+                    {
                         return RedirectToAction("Success");
                     }
-                    else
-                    {
-                        ModelState.AddModelError("", "Error changing password. The key might be invalid.");
-                    }
+
+                    _authenticationService.SignIn(account);
+                        
+                    // TODO: Uncomment if we do two-factor or certificate auth.
+                    //if (account.RequiresTwoFactorAuthCodeToSignIn())
+                    //{
+                    //    return RedirectToAction("TwoFactorAuthCodeLogin", "Login");
+                    //}
+
+                    //if (account.RequiresTwoFactorCertificateToSignIn())
+                    //{
+                    //    return RedirectToAction("CertificateLogin", "Login");
+                    //}
+
+                    return RedirectToAction("Success");
                 }
-                catch (ValidationException ex)
-                {
-                    ModelState.AddModelError("", ex.Message);
-                }
+
+                ModelState.AddModelError("", "Error changing password. The key might be invalid.");
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
             }
             return View();
         }
 
+        /// <summary>
+        /// Returns the Success view from a GET method call.
+        /// </summary>
+        /// <returns>Success view.</returns>
         [HttpGet("[action]")]
         public ActionResult Success()
         {

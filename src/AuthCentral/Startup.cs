@@ -4,12 +4,12 @@ using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
-using Microsoft.Dnx.Runtime;
-using Microsoft.Framework.Configuration;
-using Microsoft.Framework.DependencyInjection;
-using Microsoft.Framework.Logging;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 
-//using Fsw.LogCentral.MicrosoftFramework;
+using Fsw.LogCentral.MicrosoftFramework;
 using Fsw.Enterprise.AuthCentral.Extensions;
 using Fsw.Enterprise.AuthCentral.Health;
 using Fsw.Enterprise.AuthCentral.IdMgr;
@@ -47,7 +47,8 @@ namespace Fsw.Enterprise.AuthCentral
         {
             app.ConfigureLoggers(logFactory, _config.IsDebug);
             logFactory.AddSerilog();
-//            app.UseMiddleware<LogMiddleware>();
+            logFactory.AddProvider(new LoggingProvider(logFactory, env, Configuration));
+            app.UseMiddleware<LogMiddleware>();
 
             MembershipRebootSetup.GetConfig(app); // Create the singleton to get around MVC DI container limitations            
             app.UseStatusCodePages();

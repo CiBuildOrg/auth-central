@@ -1,35 +1,44 @@
-﻿@using System.Threading.Tasks
-@using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
+﻿@using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
 @model PasswordResetInputModel
 @{
     ViewBag.Title = "Reset Password";
 }
 
-@using (Html.BeginForm())
-{
-    @Html.ValidationSummary("Please correct the following errors")
-    @Html.AntiForgeryToken()
+<div class="container page-login">
+    <div class="row">
+        <div class="col-md-6 col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@ViewBag.Title</h3>
+                </div>
+                <div class="panel-body">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
 
-    <fieldset class="editor small">
-        <legend>@ViewBag.Title</legend>
+                        if (!Html.ViewData.ModelState.IsValid)
+                        {
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="alert alert-danger">
+                                        @Html.ValidationSummary("Please correct the following errors")
+                                    </div>
+                                </div>
+                            </div>
+                        }
 
-        @Html.EditorForModel()
+                        <fieldset>
 
-        <div class="buttons">
-            <button>Submit</button>
+                            @Html.EditorForModel()
+
+                            <div class="form-group">
+                                <button class="btn btn-primary">Submit</button>
+                            </div>
+
+                        </fieldset>
+                    }
+                </div>
+            </div>
         </div>
-
-    </fieldset>
-}
-
-@using (Html.BeginForm("Confirm", "PasswordReset", FormMethod.Get))
-{
-    <fieldset>
-        <legend>Confirm</legend>
-        <p>
-            <label for="id">Key</label>
-            <input id="id" name="id" />
-        </p>
-        <p class="buttons"><button>Submit</button></p>
-    </fieldset>
-}
+    </div>
+</div>

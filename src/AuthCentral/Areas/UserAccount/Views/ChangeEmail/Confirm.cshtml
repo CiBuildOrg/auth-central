@@ -1,25 +1,39 @@
-﻿@using Fsw.Enterprise.AuthCentral.Models
-@using Microsoft.AspNet.Mvc.Rendering
-@model ChangeEmailFromKeyInputModel
+﻿@using Microsoft.AspNet.Mvc.Rendering
+@model Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models.ChangeEmailFromKeyInputModel
 
 @{
     ViewBag.Title = "Confirm Email";
 }
 
-<h2>@ViewBag.Title</h2>
+<div class="container">
+    <div class="page-header">
+        <h2>@ViewBag.Title</h2>
+    </div>
+</div>
 
-@using (Html.BeginForm("Confirm", "ChangeEmail", null, FormMethod.Post, null))
-{
-    @Html.ValidationSummary("Error")
-    @Html.AntiForgeryToken()
+<div class="container page-login">
+    <div class="row">
+        <div class="col-md-6 col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@ViewBag.Title</h3>
+                </div>
+                <div class="panel-body">
+                    @using (Html.BeginForm("Confirm", "ChangeEmail", null, FormMethod.Post, null))
+                    {
+                        @Html.ValidationSummary("Error")
+                        @Html.AntiForgeryToken()
 
-    <fieldset>
-        <legend>@ViewBag.Title</legend>
+                        <fieldset>
+                            @Html.EditorForModel()
 
-        @Html.EditorForModel()
-
-        <div class="buttons">
-            <button>Confirm Email</button>
+                            <div class="form-group">
+                                <button class="btn btn-primary">Confirm Email</button>
+                            </div>
+                        </fieldset>
+                    }
+                </div>
+            </div>
         </div>
-    </fieldset>
-}
+    </div>
+</div>

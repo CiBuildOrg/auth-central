@@ -13,7 +13,7 @@ using Fsw.Enterprise.AuthCentral.Areas.Admin.Models;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 using Microsoft.AspNet.Authorization;
 
-namespace Fsw.Enterprise.AuthCentral.Areas.Admin
+namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 {
     [Authorize("FswAdmin")]
     [Area("Admin"), Route("[area]/[controller]")]

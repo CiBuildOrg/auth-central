@@ -13,10 +13,11 @@ using Fsw.Enterprise.AuthCentral.Areas.Admin.Models;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 using Microsoft.AspNet.Authorization;
 using System.Security.Claims;
+using Microsoft.AspNet.Mvc.Filters;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Fsw.Enterprise.AuthCentral.Areas.Admin
+namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 {
     [Authorize("FswAdmin")]
     [Area("Admin"), Route("[area]/[controller]")]
@@ -29,6 +30,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             this._clientService = clientService;
         }
 
+
         [HttpGet("[action]/{clientId}")]
         public async Task<IActionResult> Show(string clientId)
         {
@@ -40,13 +42,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 return RedirectToAction("Index");
             }
 
-            var clientClaims = new List<ClientClaim>();
+            var clientClaims = new List<ClaimModel>();
             foreach(Claim claim in client.Claims)
             {
-                clientClaims.Add(new ClientClaim(claim));
+                clientClaims.Add(new ClaimModel(claim));
             }
 
-            var model = new ClientClaimContainer()
+            var model = new ClientClaimModelContainer()
             {
                 ClientId = client.ClientId,
                 ClientClaims = clientClaims
@@ -66,21 +68,18 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
                 return RedirectToAction("Index");
             }
 
-            var model = new ClientClaimContainer()
+            var model = new ClientClaimModelContainer()
             {
                 ClientId = client.ClientId,
-                ClientClaims = new List<ClientClaim>()
+                ClientClaims = new List<ClaimModel>(new[] { new ClaimModel() })
             };
-
-            model.ClientClaims.Add(new ClientClaim());
  
             return View(model);
         }
 
-
-        [HttpPost("[action]/{clientId}")]
+        [HttpPost("[action]")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(string clientId, ClientClaim clientClaim)
+        public async Task<IActionResult> Delete(string clientId, ClaimModel clientClaim)
         {
             Client client = await _clientService.Find(clientId);
 
@@ -112,22 +111,23 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin
             return RedirectToAction("Show", new { clientId = client.ClientId } );
         }
 
+
         [HttpPost("[action]")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Save(ClientClaimContainer csc)
+        public async Task<IActionResult> Save(ClientClaimModelContainer cmc)
         {
             //TODO: validate??
 
-            Client client = await _clientService.Find(csc.ClientId);
+            Client client = await _clientService.Find(cmc.ClientId);
 
             if(client == null)
             {
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", client.ClientId);
                 return RedirectToAction("Index");
             }
-
+            
             bool saveRequired = false;
-            foreach(var clientClaim in csc.ClientClaims)
+            foreach(var clientClaim in cmc.ClientClaims)
             {
                 if( !string.IsNullOrWhiteSpace(clientClaim.Type) && 
                     !string.IsNullOrWhiteSpace(clientClaim.Value) )

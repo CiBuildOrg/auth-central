@@ -39,11 +39,29 @@ Individuals wishing to contribute to this document should first read [Introducin
 #### Edit a user resource claim
 ---
 
-#### Create a new claim
+#### Create a new user resource claim
 ---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Claim Admin screen (at Admin/UserClaim/Show/{userId})
+- The user clicked the "Create Claim" button and entered values in the required form fields
+
+**When** the Save button is clicked
+
+**Then** the new user claim will be persisted to the user data store
 
 #### Delete a user resource claim
 ---
+
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the Claim Admin screen (at Admin/UserClaim/Show/{userId})
+
+**When** the Delete button for the claim to delete is clicked
+
+**Then**: the user claim will be removed from the user data store
+
 
 #### Find a user account
 ---
@@ -162,7 +180,7 @@ Individuals wishing to contribute to this document should first read [Introducin
 **Given**:
 - The user has the fsw:authcentral:admin resource claim, and
 - The user has loaded the Secret Admin screen (at Admin/ClientSecret/Show/{clientid})
-- The user has clicke the "Create Secret" button and entred the required form fields
+- The user has clicked the "Create Secret" button and entered the required form fields
 
 **When** the save button is clicked
 
@@ -190,7 +208,7 @@ Individuals wishing to contribute to this document should first read [Introducin
 **Given**:
 - The user has the fsw:authcentral:admin resource claim, and
 - The user has loaded the Claim Admin screen (at Admin/ClientClaim/Show/{clientid})
-- The user has clicke the "Create Claim" button and entred the required form fields
+- The user has clicked the "Create Claim" button and entered the required form fields
 
 **When** the save button is clicked
 

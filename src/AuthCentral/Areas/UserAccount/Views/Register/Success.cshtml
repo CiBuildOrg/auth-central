@@ -1,24 +1,36 @@
-﻿@using Fsw.Enterprise.AuthCentral.Models
-@model Fsw.Enterprise.AuthCentral.Models.RegisterInputModel
+﻿@model Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models.RegisterInputModel
 @{
     ViewBag.Title = "Register";
 }
 
-<h2>Registration Success</h2>
-@if(true.Equals(ViewData["RequireAccountVerification"])) { 
-<p>
-    You should recieve an email shortly
-    @if(Model != null)
-    {
-        @: at @Model.Email
-    }.
-    It will contain instructions to verify your account
-    so that you can login.
-</p>
-}
-else
-{
-    <p>You can now login @Html.ActionLink("here", "Index", "Login").</p>
-}
-<p>Thanks!</p>
-    
+<div class="container">
+    <div class="page-header">
+        <h1>
+            Registration Success
+        </h1>
+    </div>
+</div>
+
+<div class="container page-login">
+    <div class="row">
+        <div class="col-md-6 col-sm-6">
+            @if (true.Equals(ViewData["RequireAccountVerification"]))
+            {
+                <p>
+                    You should recieve an email shortly
+                    @if (Model != null)
+                    {
+                        @: at @Model.Email
+                    }.
+                    It will contain instructions to verify your account
+                    so that you can login.
+                </p>
+            }
+            else
+            {
+                <p>You can now login @Html.ActionLink("here", "Index", "Login").</p>
+            }
+            <p>Thanks!</p>
+        </div>
+    </div>
+</div>

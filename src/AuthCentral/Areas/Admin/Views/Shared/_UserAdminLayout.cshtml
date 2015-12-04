@@ -1,0 +1,31 @@
+﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    string controller = ViewContext.RouteData.Values["controller"].ToString();
+    string action = ViewContext.RouteData.Values["action"].ToString();
+    object uUserId = ViewContext.RouteData.Values["userId"];
+
+    string homeClass = "";
+    string claimsClass = "";
+
+    if ( "UserClaim".Equals(controller) )
+    {
+        claimsClass = "active";
+    }
+    else
+    {
+        homeClass = "active";
+    }
+
+}
+
+<ul class="nav nav-tabs">
+    <li class="@homeClass"><a href="/Admin/User/">User Admin Home</a></li>
+    <li class="@claimsClass"><a href="/Admin/UserClaim/Show/@Model.UserId">Claims</a></li>
+</ul>
+
+@Html.ValidationSummary()
+<div><em>@ViewData["Message"]</em></div>
+
+@RenderBody()

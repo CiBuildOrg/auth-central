@@ -5,7 +5,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace Fsw.Enterprise.AuthCentral.Controllers
+namespace Fsw.Enterprise.AuthCentral.Areas.Api.Controllers
 {
     [Area("Api")]
     [Route("[controller]"), Route("[area]/[controller]")]

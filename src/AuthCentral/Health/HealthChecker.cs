@@ -10,7 +10,7 @@ using FluentScheduler.Model;
 using BrockAllen.MembershipReboot.Hierarchical;
 
 using Fsw.Enterprise.AuthCentral.MongoDb;
-using Microsoft.Framework.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Fsw.Enterprise.AuthCentral.Health
 {

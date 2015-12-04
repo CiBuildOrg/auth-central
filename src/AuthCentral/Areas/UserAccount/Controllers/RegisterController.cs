@@ -1,10 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Security.Authentication;
+using System.ComponentModel.DataAnnotations;
+
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
-using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
-using System;
-using Microsoft.AspNet.Authorization;
+
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Authorization;
+
+using Fsw.Enterprise.AuthCentral.Extensions;
+using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
 {
@@ -83,16 +87,14 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Verify(string foo)
         {
-            Guid userId;
-            if(!Guid.TryParse(User.Claims.GetValue("sub"), out userId))
-            {
-                return new HttpUnauthorizedResult();
-            }
-
             try
             {
-                this._userAccountService.RequestAccountVerification(userId);
+                this._userAccountService.RequestAccountVerification(User.GetId());
                 return View("Success");
+            }
+            catch (AuthenticationException)
+            {
+                return new HttpUnauthorizedResult();
             }
             catch (ValidationException ex)
             {

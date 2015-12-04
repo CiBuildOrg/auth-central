@@ -1,10 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
-using BrockAllen.MembershipReboot;
-using BrockAllen.MembershipReboot.Hierarchical;
-using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
-using Fsw.Enterprise.AuthCentral.IdMgr;
+﻿using System.Security.Authentication;
+using System.ComponentModel.DataAnnotations;
+
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
+
+using BrockAllen.MembershipReboot;
+using BrockAllen.MembershipReboot.Hierarchical;
+
+using Fsw.Enterprise.AuthCentral.IdMgr;
+using Fsw.Enterprise.AuthCentral.Extensions;
+using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
 {
@@ -58,11 +63,15 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
 
             try
             {
-                _userAccountService.ChangeEmailRequest(User.GetUserID(), model.NewEmail);
+                _userAccountService.ChangeEmailRequest(User.GetId(), model.NewEmail);
 
                 return _userAccountService.Configuration.RequireAccountVerification
                     ? View("ChangeRequestSuccess", model.NewEmail)
                     : View("Success");
+            }
+            catch(AuthenticationException)
+            {
+                return new HttpUnauthorizedResult();
             }
             catch (ValidationException ex)
             {

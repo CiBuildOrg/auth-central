@@ -124,11 +124,22 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
                 options.Events = new OpenIdConnectEvents
                 {
-                    OnAuthenticationValidated = data =>
+                    OnRedirectToAuthenticationEndpoint = context =>
+                    {
+                        if (context.HttpContext.User.Identity.IsAuthenticated && context.ProtocolMessage.RequestType != OpenIdConnectRequestType.LogoutRequest)
+                        {
+                            context.HandleResponse();
+                            context.HttpContext.Response.Redirect(Uri.EscapeUriString("/ids"));
+                        }
+
+                        return Task.FromResult(0);
+                    },
+
+                    OnAuthenticationValidated = context =>
                     {
                         var id = new ClaimsIdentity("application", "given_name", "role");
 
-                        var token = new JwtSecurityToken(data.TokenEndpointResponse.ProtocolMessage.AccessToken);
+                        var token = new JwtSecurityToken(context.TokenEndpointResponse.ProtocolMessage.AccessToken);
                         IEnumerable<Claim> claims = token.Claims.Where(c => c.Type != "iss" &&
                                                                             c.Type != "aud" &&
                                                                             c.Type != "nbf" &&
@@ -145,13 +156,13 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                             new DateTime(1970, 1, 1).AddSeconds(Convert.ToDouble(expiration))
                                 .ToString(CultureInfo.CurrentCulture)));
 
-                        data.AuthenticationTicket = new AuthenticationTicket(
+                        context.AuthenticationTicket = new AuthenticationTicket(
                             new ClaimsPrincipal(id),
-                            data.AuthenticationTicket.Properties,
-                            data.AuthenticationTicket.AuthenticationScheme);
+                            context.AuthenticationTicket.Properties,
+                            context.AuthenticationTicket.AuthenticationScheme);
 
                         return Task.FromResult(0);
-                    }
+                    },
                 };
             });
         }

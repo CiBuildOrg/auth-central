@@ -19,7 +19,24 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-        
+
+        /// <summary>
+        /// User's given (first) name.
+        /// </summary>
+        [Required]
+        public string GivenName { get; set; }
+
+        /// <summary>
+        /// User's middle name.
+        /// </summary>
+        public string MiddleName { get; set; }
+
+        /// <summary>
+        /// User's family (last) name.
+        /// </summary>
+        [Required]
+        public string FamilyName { get; set; }
+
         /// <summary>
         /// User's password.
         /// </summary>
@@ -34,5 +51,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
         [Compare("Password", ErrorMessage="Password confirmation must match password.")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
+
     }
 }

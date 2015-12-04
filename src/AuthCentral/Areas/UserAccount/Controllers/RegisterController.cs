@@ -3,6 +3,7 @@ using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
 using System;
+using System.Linq;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 
@@ -51,8 +52,37 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             {
                 try
                 {
+                    model.Email = model.Email.ToLowerInvariant().Trim();
+
                     var account = this._userAccountService.CreateAccount(model.Username, model.Password, model.Email);
                     ViewData["RequireAccountVerification"] = this._userAccountService.Configuration.RequireAccountVerification;
+                    UserClaimCollection claims = new UserClaimCollection
+                    {
+                        new UserClaim("given_name", model.GivenName),
+                        new UserClaim("family_name", model.FamilyName),
+                        new UserClaim("name", string.Join(" ",
+                            new string[] { model.GivenName, model.MiddleName, model.FamilyName }
+                                           .Where(name => !string.IsNullOrWhiteSpace(name))
+                        ))
+                    };
+
+                    if (!string.IsNullOrWhiteSpace(model.MiddleName))
+                    {
+                        claims.Add(new UserClaim("middle_name", model.MiddleName));
+                    }
+
+                    if (model.Email.EndsWith("@foodservicewarehouse.com") || model.Email.EndsWith("@fsw.com"))
+                    {
+                        claims.Add(new UserClaim("fsw:organization", "FSW"));
+                    }
+                    else
+                    {
+                        string emailDomain = model.Email.Split('@')[1];
+                        claims.Add(new UserClaim("fsw:organization", emailDomain));
+                    }
+
+                    _userAccountService.AddClaims(account.ID, claims);
+                    
                     return View("Success", model);
                 }
                 catch (ValidationException ex)

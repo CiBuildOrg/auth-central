@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.ComponentModel.DataAnnotations;
 
 using Microsoft.AspNet.Mvc;
@@ -50,6 +52,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                     HierarchicalUserAccount account = _userAccountService.CreateAccount(model.Username, password, model.Email);
                     _userAccountService.SetConfirmedEmail(account.ID, model.Email);
                     _userAccountService.ResetPassword(account.ID);
+                    AddClaims(account.ID, model);
 
                     return View("Success", model);
                 }
@@ -75,6 +78,51 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             return RedirectToAction("Show", "UserClaim", new {
                 userId = account.ID.ToString()
             });
+        }
+
+        private void AddClaims(Guid accountId, CreateAccountInputModel model)
+        {
+            model.Email = model.Email.ToLowerInvariant().Trim();
+
+            UserClaimCollection claims = new UserClaimCollection
+            {
+                new UserClaim("given_name", model.GivenName),
+                new UserClaim("family_name", model.FamilyName),
+                new UserClaim("name", string.Join(" ",
+                    new string[] { model.GivenName, model.MiddleName, model.FamilyName }
+                                   .Where(name => !string.IsNullOrWhiteSpace(name))
+                ))
+            };
+
+            if (!string.IsNullOrWhiteSpace(model.MiddleName))
+            {
+                claims.Add(new UserClaim("middle_name", model.MiddleName));
+            }
+
+            if (model.IsAuthCentralAdmin) {
+                claims.Add(new UserClaim("fsw:authcentral:admin", "true"));
+            }
+            
+            if(!string.IsNullOrWhiteSpace(model.Organization))
+            {
+                claims.Add(new UserClaim("fsw:organization", model.Organization));
+            }
+            else if(model.Email.EndsWith("@foodservicewarehouse.com") || model.Email.EndsWith("@fsw.com"))
+            {
+                claims.Add(new UserClaim("fsw:organization", "FSW"));
+            }
+            else
+            {
+                string emailDomain = model.Email.Split('@')[1];
+                claims.Add(new UserClaim("fsw:organization", emailDomain));
+            }
+
+            if(!string.IsNullOrWhiteSpace(model.Department))
+            {
+                claims.Add(new UserClaim("fsw:department", model.Department));
+            }
+            
+            _userAccountService.AddClaims(accountId, claims);
         }
     }
 }

@@ -129,7 +129,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                         if (context.HttpContext.User.Identity.IsAuthenticated && context.ProtocolMessage.RequestType != OpenIdConnectRequestType.LogoutRequest)
                         {
                             context.HandleResponse();
-                            context.HttpContext.Response.Redirect(Uri.EscapeUriString("/ids"));
+                            context.HttpContext.Response.StatusCode = 403;
                         }
 
                         return Task.FromResult(0);

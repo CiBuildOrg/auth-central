@@ -23,9 +23,7 @@ namespace Fsw.Enterprise.AuthCentral
 
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(appEnv.ApplicationBasePath)
-                .AddJsonFile("appsettings.json", optional: true);
+            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true);
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
             _config = new EnvConfig(Configuration);

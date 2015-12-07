@@ -11,9 +11,10 @@ src/AuthCentral/wwwroot/lib/
 bower_components/
 *.xproj
 *.sln
+pubroot/
 src/global.json
 src/AuthCentral/global.json
-
+src/AuthCentral/Package/site.7z
 
 # User-specific files
 *.user

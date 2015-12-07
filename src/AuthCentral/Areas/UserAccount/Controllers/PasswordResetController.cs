@@ -4,6 +4,8 @@ using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
 using Fsw.Enterprise.AuthCentral.IdMgr;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.DataProtection;
+using Microsoft.AspNet.Authorization;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
 {

@@ -4,10 +4,10 @@ using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
-using Microsoft.Dnx.Runtime;
-using Microsoft.Framework.Configuration;
-using Microsoft.Framework.DependencyInjection;
-using Microsoft.Framework.Logging;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 
 using Fsw.Enterprise.AuthCentral.Extensions;
 using Fsw.Enterprise.AuthCentral.Health;
@@ -23,9 +23,7 @@ namespace Fsw.Enterprise.AuthCentral
 
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(appEnv.ApplicationBasePath)
-                .AddJsonFile("appsettings.json", optional: true);
+            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true);
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
             _config = new EnvConfig(Configuration);

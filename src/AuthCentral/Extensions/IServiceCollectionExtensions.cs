@@ -11,7 +11,7 @@ using IdentityServer3.MembershipReboot;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Builder;
-using Microsoft.Framework.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using Serilog;
 using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;

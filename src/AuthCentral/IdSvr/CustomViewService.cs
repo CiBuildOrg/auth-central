@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
+
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
 using IdentityServer3.Core.Validation;
 using IdentityServer3.Core.ViewModels;
-using Microsoft.Dnx.Runtime;
+
+using Microsoft.Extensions.PlatformAbstractions;
 
 namespace Fsw.Enterprise.AuthCentral.IdSvr
 {

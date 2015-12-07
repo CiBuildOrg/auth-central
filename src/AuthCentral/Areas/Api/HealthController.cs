@@ -2,7 +2,7 @@
 using System.IO;
 using Fsw.Enterprise.AuthCentral.Health;
 using Microsoft.AspNet.Mvc;
-using Microsoft.Framework.Logging;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Api.Controllers

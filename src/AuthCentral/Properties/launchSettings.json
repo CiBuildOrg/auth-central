@@ -10,7 +10,8 @@
       }
     },
     "web": {
-        "commandName": "web",
+      "commandName": "web",
+      "launchBrowser": true,
       "launchUrl": "https://auth1.local-fsw.com:44333/ids",
       "environmentVariables": {
         "ASPNET_ENV": "Development",

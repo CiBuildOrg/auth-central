@@ -158,7 +158,7 @@ namespace Fsw.Enterprise.AuthCentral.Testing
                     },
                     RedirectUris = new List<string>
                     {
-                      "https://auth1.local-fsw.com:44333/UserAccount"
+                      "https://auth1.local-fsw.com:44333/account"
                     },
                     RefreshTokenExpiration = TokenExpiration.Absolute,
                     RefreshTokenUsage = TokenUsage.OneTimeOnly,

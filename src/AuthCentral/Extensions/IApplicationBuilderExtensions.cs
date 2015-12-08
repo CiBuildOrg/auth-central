@@ -10,7 +10,6 @@ using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Builder;
-using Microsoft.Dnx.Runtime;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -39,7 +38,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
 			var idSvcFactory = Factory.Configure(usrSrv);
             idSvcFactory.ViewService = new Registration<IViewService>(typeof (CustomViewService));
-            idSvcFactory.ConfigureTestUserService(app, config.DB.MembershipReboot);			
+            idSvcFactory.ConfigureTestUserService(app);			
             idSvcFactory.Register(new Registration<IApplicationEnvironment>(env));
 
             var options = new IdentityServerOptions

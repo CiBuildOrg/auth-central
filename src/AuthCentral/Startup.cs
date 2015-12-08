@@ -12,7 +12,6 @@ using Microsoft.AspNet.Http;
 using Fsw.Enterprise.AuthCentral.IdMgr;
 using Fsw.Enterprise.AuthCentral.Health;
 using Fsw.Enterprise.AuthCentral.MongoStore;
-using Fsw.Enterprise.AuthCentral.Testing;
 
 namespace Fsw.Enterprise.AuthCentral
 {

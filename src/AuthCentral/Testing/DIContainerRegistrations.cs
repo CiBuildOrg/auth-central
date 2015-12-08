@@ -1,16 +1,15 @@
 ﻿using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.IdMgr;
-using Fsw.Enterprise.AuthCentral.MongoDb;
 using IdentityServer3.Core.Configuration;
 using Microsoft.AspNet.Builder;
-using Microsoft.Framework.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Fsw.Enterprise.AuthCentral.Testing
 {
     public static class DIContainerRegistrations
     {
-        public static void ConfigureTestUserService(this IdentityServerServiceFactory factory, IApplicationBuilder app, string connString)
+        public static void ConfigureTestUserService(this IdentityServerServiceFactory factory, IApplicationBuilder app)
         {
             factory.Register(new Registration<UserAccount, HierarchicalUserAccount>());
             factory.Register(new Registration<MembershipRebootConfiguration<HierarchicalUserAccount>>(x => MembershipRebootSetup.GetConfig(app)));

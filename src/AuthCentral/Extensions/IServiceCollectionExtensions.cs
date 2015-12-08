@@ -1,21 +1,13 @@
-﻿using BrockAllen.MembershipReboot;
-using BrockAllen.MembershipReboot.Hierarchical;
-using Fsw.Enterprise.AuthCentral.IdMgr;
-using Fsw.Enterprise.AuthCentral.IdSvr;
-using Fsw.Enterprise.AuthCentral.MongoDb;
+﻿using Fsw.Enterprise.AuthCentral.IdMgr;
 using Fsw.Enterprise.AuthCentral.MongoStore;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 using Fsw.Enterprise.AuthCentral.Testing;
-using IdentityServer3.Core.Configuration;
-using IdentityServer3.Core.Services;
-using IdentityServer3.MembershipReboot;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using Serilog;
-using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
 
 namespace Fsw.Enterprise.AuthCentral.Extensions
 {
@@ -29,12 +21,6 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             services.AddInstance<StoreSettings>(idSvrStoreSettings);
             services.AddInstance<IClientService>(AdminServiceFactory.CreateClientService(idSvrStoreSettings));
             services.AddInstance<IScopeService>(AdminServiceFactory.CreateScopeService(idSvrStoreSettings));
-            services.AddScoped<ServiceFactory>(svc => new ServiceFactory(new Registration<IUserService>()));
-            var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
-            var idSvcfactory = new ServiceFactory(usrSrv, idSvrStoreSettings)
-            {
-                ViewService = new Registration<IViewService>(typeof(CustomViewService))
-            };
         }
 
         public static void AddAuthorizationPolicies(this IServiceCollection services)

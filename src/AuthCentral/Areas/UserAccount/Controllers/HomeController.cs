@@ -1,5 +1,4 @@
-﻿using System;
-using System.Security.Authentication;
+﻿using System.Security.Authentication;
 
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Authorization;

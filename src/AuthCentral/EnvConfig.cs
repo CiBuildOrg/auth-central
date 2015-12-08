@@ -23,6 +23,7 @@ namespace Fsw.Enterprise.AuthCentral
             public static string DebugMode = "AUTHCENTRAL_DEBUG_MODE";
             public static string ClientId = "AUTHCENTRAL_CLIENT_ID";
             public static string ClientSecret = "AUTHCENTRAL_CLIENT_SECRET";
+            public static string Log4NetConfig = "AUTHCENTRAL_LOG4NET_CONFIG_PATH";
         }
 
         public EnvConfig(IConfigurationRoot root) {
@@ -55,6 +56,12 @@ namespace Fsw.Enterprise.AuthCentral
             get { return _root.Get<bool>(EnvVars.DebugMode); }
         }
 
+        public string Log4NetConfigPath
+        {
+            get { return _root.Get<string>(EnvVars.Log4NetConfig); }
+        }
+
+
         public class DatabaseConfig
         {
             private IConfigurationRoot _root;
@@ -79,7 +86,6 @@ namespace Fsw.Enterprise.AuthCentral
             }
 
          }
-
 
         public class UriConfig
         {

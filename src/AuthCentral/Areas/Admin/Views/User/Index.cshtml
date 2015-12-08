@@ -1,12 +1,10 @@
-﻿@{
+﻿@addTagHelper "*, cloudscribe.Web.Pagination"
+@model Fsw.Enterprise.AuthCentral.Areas.Admin.Models.UserListViewModel
+@{
     ViewBag.Title = "Client Admin Home";
 }
 
 <div class="container">
-    <div class="jumbotron">
-        <h2>Manage Users</h2>
-        <p>You have two options.</p>
-    </div>
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <em>@ViewBag.Message</em>
@@ -35,5 +33,32 @@
             <p> <a href="/Admin/User/Create" class="btn btn-primary">Create User &raquo;</a></p>
         </div>
     </div>
+    <table class="table table-striped table-hover col-sm-12 col-md-12 col-lg-12">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Organization</th>
+                <th>Department</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var account in Model.Accounts)
+            {
+                <tr>
+                    <td><a href="/Admin/UserClaim/Show/@account.ID.ToString()">@account.Claims.FirstOrDefault(claim => claim.Type == "name")?.Value</a></td>
+                    <td><a href="mailto:@account.Email">@account.Email</a></td>
+                    <td>@account.Claims.FirstOrDefault(claim => claim.Type == "fsw:organization")?.Value</td>
+                    <td>@account.Claims.FirstOrDefault(claim => claim.Type == "fsw:department")?.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <cs-pager cs-paging-pagesize="@Model.PageSize"
+              cs-paging-pagenumber="@Model.PageNumber"
+              cs-paging-totalitems="@Model.TotalItemCount"
+              cs-pagenumber-param="page"
+              asp-controller="User"
+              asp-action="Index"></cs-pager>
 </div>
 <hr />

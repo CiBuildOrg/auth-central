@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
 
@@ -10,6 +11,7 @@ using BrockAllen.MembershipReboot;
 
 using Fsw.Enterprise.AuthCentral.Crypto;
 using Fsw.Enterprise.AuthCentral.Areas.Admin.Models;
+using Fsw.Enterprise.AuthCentral.IdMgr;
 
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,18 +23,29 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
     public class UserController : Controller
     {
         EnvConfig _cfg;
+
+        // Creates and updates accounts, finds single accounts by id or email
         UserAccountService<HierarchicalUserAccount> _userAccountService;
 
-        public UserController(EnvConfig cfg, UserAccountService<HierarchicalUserAccount> userSvc)
+        // Used for querying multiple user accounts
+        IBulkUserRepository<HierarchicalUserAccount> _repository;
+
+        public UserController(EnvConfig cfg, 
+            UserAccountService<HierarchicalUserAccount> userSvc, 
+            IBulkUserRepository<HierarchicalUserAccount> repository)
         {
             this._cfg = cfg;
             this._userAccountService = userSvc;
+            this._repository = repository;
         }
 
-        [HttpGet]
-        public IActionResult Index()
+        [HttpGet("{page?}")]
+        public IActionResult Index(string nameFilter, int page = 1, int pageSize = 25)
         {
-            return View();
+            long count;
+            IEnumerable<HierarchicalUserAccount> users = _repository.GetPagedUsers(page, pageSize, out count);
+            UserListViewModel model = new UserListViewModel(users, page, pageSize, (int)count);
+            return View("Index", model);
         }
 
         [HttpGet("[action]")]

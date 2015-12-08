@@ -5,6 +5,9 @@ using IdentityServer3.Core.Configuration;
 
 using Fsw.Enterprise.AuthCentral.IdMgr;
 using Microsoft.AspNet.Builder;
+using System.Threading.Tasks;
+using System;
+using System.Linq;
 
 namespace Fsw.Enterprise.AuthCentral.Extensions
 {
@@ -18,5 +21,5 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             factory.Register(new Registration<UserAccountService<HierarchicalUserAccount>>());
             factory.Register(new Registration<MongoDatabase>(resolver => new MongoDatabase(connString)));
         }
-    }    
+    }
 }

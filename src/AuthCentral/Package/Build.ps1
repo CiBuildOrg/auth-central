@@ -38,8 +38,8 @@ $sevenZip        = Join-Path -Path $scriptDir        -ChildPath "7za.exe" -Resol
 "========================================================================="
 " Setting .NET Version "
 "========================================================================="
-"# dnvm use 1.0.0-beta8"
-dnvm use 1.0.0-beta8 -arch x64
+"# dnvm use 1.0.0-rc1-update1"
+dnvm use 1.0.0-rc1-update1 -arch x64
 
 " "
 "========================================================================="
@@ -98,8 +98,8 @@ If(!$?) { Exit 1 }
 "========================================================================="
 " Prep for Zipping "
 "========================================================================="
-"#dnu publish $projectDir --out $publishDir --runtime dnx-clr-win-x64.1.0.0-beta8"
-dnu publish $projectDir --out $publishDir --runtime dnx-clr-win-x64.1.0.0-beta8 --wwwroot-out $wwwrootDir
+"#dnu publish $projectDir --out $publishDir --runtime dnx-clr-win-x64.1.0.0-rc1-update1"
+dnu publish $projectDir --out $publishDir --runtime dnx-clr-win-x64.1.0.0-rc1-update1 --wwwroot-out $wwwrootDir
 If(!$?) { Exit 1 }
 
 # 7-zip the publish directory

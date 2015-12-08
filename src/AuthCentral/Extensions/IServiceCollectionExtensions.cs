@@ -18,9 +18,9 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             StoreSettings idSvrStoreSettings = StoreSettings.DefaultSettings();
             idSvrStoreSettings.ConnectionString = idsConnectionString;
             idSvrStoreSettings.Database = MongoUrl.Create(idSvrStoreSettings.ConnectionString).DatabaseName;
-            services.AddInstance<StoreSettings>(idSvrStoreSettings);
-            services.AddInstance<IClientService>(AdminServiceFactory.CreateClientService(idSvrStoreSettings));
-            services.AddInstance<IScopeService>(AdminServiceFactory.CreateScopeService(idSvrStoreSettings));
+            services.AddInstance(idSvrStoreSettings);
+            services.AddScoped<IClientService, MemoryClientService>();
+            services.AddScoped<IScopeService, MemoryScopeService>();
         }
 
         public static void AddAuthorizationPolicies(this IServiceCollection services)

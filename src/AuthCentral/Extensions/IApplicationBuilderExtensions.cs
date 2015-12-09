@@ -116,7 +116,6 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                 options.ClientId = config.Client.Id;
                 options.ClientSecret = config.Client.Secret;
                 options.Authority = new UriBuilder(config.Uri.Scheme, config.Uri.Host, config.Uri.Port, "ids").Uri.AbsoluteUri;
-                options.CallbackPath = new Microsoft.AspNet.Http.PathString("/account");
                 options.ResponseType = OpenIdConnectResponseTypes.Code;
                 options.Scope.Add("fsw_platform");
                 options.Scope.Add("profile");

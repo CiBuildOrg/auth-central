@@ -160,6 +160,10 @@ namespace Fsw.Enterprise.AuthCentral.Testing
                     {
                       "https://auth1.local-fsw.com:44333/account"
                     },
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                      "https://auth1.local-fsw.com:44333/UserAccount"
+                    },
                     RefreshTokenExpiration = TokenExpiration.Absolute,
                     RefreshTokenUsage = TokenUsage.OneTimeOnly,
                     RequireConsent = false,

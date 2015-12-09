@@ -15,6 +15,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
     [Area("UserAccount"), Route("[area]"), Route("account")]
     public class HomeController : Controller
     {
+
         readonly UserAccountService<HierarchicalUserAccount> _userAccountService;
         private readonly MongoAuthenticationService _authService;
 
@@ -55,10 +56,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
         }
 
         [HttpGet("LogOut")]
-        public IActionResult LogOut()
+        public void LogOut()
         {
             _authService.SignOut();
-            return RedirectToAction("Index");
         }
     }
 }

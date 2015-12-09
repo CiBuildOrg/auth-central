@@ -33,7 +33,7 @@ try {
         }
       }
 
-      if($arguments.ContainsKey("InstallPath"))
+      if($arguments.ContainsKey("InstallRoot"))
       {
         $installRoot = $arguments["InstallRoot"]
       }

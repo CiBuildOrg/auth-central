@@ -158,7 +158,7 @@ namespace Fsw.Enterprise.AuthCentral.Testing
                     },
                     RedirectUris = new List<string>
                     {
-                      "https://auth1.local-fsw.com:44333/account"
+                      "https://auth1.local-fsw.com:44333/signin-oidc"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {

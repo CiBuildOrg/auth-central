@@ -45,7 +45,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
             var options = new IdentityServerOptions
             {
-                SiteName = "FSW Identity Server",
+                SiteName = "FSW",
                 PublicOrigin = config.Uri.IssuerUri,
                 SigningCertificate = Certificate.Get(config.Cert.StoreName, config.Cert.Thumbprint),
                 IssuerUri = config.Uri.IssuerUri,
@@ -115,7 +115,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.ClientId = config.Client.Id;
                 options.ClientSecret = config.Client.Secret;
-                options.Authority = new UriBuilder(config.Uri.Scheme, config.Uri.Host, config.Uri.Port, "ids").Uri.AbsoluteUri;
+                options.Authority = config.Uri.Authority;
                 options.ResponseType = OpenIdConnectResponseTypes.Code;
                 options.Scope.Add("fsw_platform");
                 options.Scope.Add("profile");

@@ -10,7 +10,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
         public static Guid GetId(this ClaimsPrincipal user)
         {
             Guid userId;
-            if(!Guid.TryParse(user.Claims.FirstOrDefault(claim => claim.Type == "sub").Value, out userId))
+            if(!Guid.TryParse(user.Claims.FirstOrDefault(claim => claim.Type == "sub")?.Value, out userId))
             {
                 throw new AuthenticationException();
             }

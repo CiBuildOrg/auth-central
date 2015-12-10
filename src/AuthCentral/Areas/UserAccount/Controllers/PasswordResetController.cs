@@ -108,24 +108,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
                 HierarchicalUserAccount account;
                 if (_userAccountService.ChangePasswordFromResetKey(model.Key, model.Password, out account))
                 {
-                    if (!account.IsLoginAllowed || account.IsAccountClosed)
-                    {
-                        return RedirectToAction("Success");
-                    }
-
-                    _authenticationService.SignIn(account);
-                        
-                    // TODO: Uncomment if we do two-factor or certificate auth.
-                    //if (account.RequiresTwoFactorAuthCodeToSignIn())
-                    //{
-                    //    return RedirectToAction("TwoFactorAuthCodeLogin", "Login");
-                    //}
-
-                    //if (account.RequiresTwoFactorCertificateToSignIn())
-                    //{
-                    //    return RedirectToAction("CertificateLogin", "Login");
-                    //}
-
                     return RedirectToAction("Success");
                 }
 

@@ -3,6 +3,7 @@ using System.Security.Claims;
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Microsoft.AspNet.Authentication.Cookies;
+using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Authentication;
 
@@ -30,6 +31,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
         protected override void RevokeToken()
         {
             _context.Authentication.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            _context.Authentication.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
         }
 
         protected override void IssueToken(ClaimsPrincipal principal, TimeSpan? tokenLifetime = null, bool? persistentCookie = null)

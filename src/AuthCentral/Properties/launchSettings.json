@@ -12,10 +12,10 @@
     "web": {
       "commandName": "web",
       "launchBrowser": true,
-      "launchUrl": "https://auth1.local-fsw.com:44333/ids",
+      "launchUrl": "https://auth1.local-fsw.com:44333/",
       "environmentVariables": {
-        "ASPNET_ENV": "Development",
-        "AUTHCENTRAL_CERT_STORENAME": "MY"
+          "ASPNET_ENV": "Development",
+          "AUTHCENTRAL_CERT_STORENAME": "MY"
       },
       "sdkVersion": "dnx-clr-win-x64.1.0.0-rc1-update1"
     }

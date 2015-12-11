@@ -23,6 +23,7 @@ namespace Fsw.Enterprise.AuthCentral
             public static string DebugMode = "AUTHCENTRAL_DEBUG_MODE";
             public static string ClientId = "AUTHCENTRAL_CLIENT_ID";
             public static string ClientSecret = "AUTHCENTRAL_CLIENT_SECRET";
+            public static string Log4NetConfig = "AUTHCENTRAL_LOG4NET_CONFIG_PATH";
         }
 
         public EnvConfig(IConfigurationRoot root) {
@@ -55,6 +56,12 @@ namespace Fsw.Enterprise.AuthCentral
             get { return _root.Get<bool>(EnvVars.DebugMode); }
         }
 
+        public string Log4NetConfigPath
+        {
+            get { return _root.Get<string>(EnvVars.Log4NetConfig); }
+        }
+
+
         public class DatabaseConfig
         {
             private IConfigurationRoot _root;
@@ -80,13 +87,28 @@ namespace Fsw.Enterprise.AuthCentral
 
          }
 
-
         public class UriConfig
         {
             private IConfigurationRoot _root;
             public UriConfig(IConfigurationRoot root)
             {
                 _root = root;
+            }
+
+            public string AuthorityMapPath
+            {
+                get
+                {
+                    return "/auth";
+                }
+            } 
+
+            public string LoginPath
+            {
+                get
+                {
+                    return this.AuthorityMapPath + "/login";
+                }
             }
 
             public string Scheme
@@ -113,22 +135,21 @@ namespace Fsw.Enterprise.AuthCentral
                 } 
             }
 
-            public string ServiceRoot 
-            { 
-                get 
-                {
-                    return _root.Get<string>(EnvVars.UriServiceRoot);
-                } 
-            }
-
             public string IssuerUri
             {
                 get
                 {
-                    return new UriBuilder(this.Scheme, this.Host, this.Port, this.ServiceRoot).Uri.AbsoluteUri;
+                    return new UriBuilder(this.Scheme, this.Host, this.Port).Uri.AbsoluteUri;
                 }
             }
 
+            public string Authority
+            {
+                get
+                {
+                    return new UriBuilder(this.Scheme, this.Host, this.Port, this.AuthorityMapPath).Uri.AbsoluteUri;
+                }
+            }
         }
 
 

@@ -5,9 +5,6 @@ using IdentityServer3.Core.Configuration;
 
 using Fsw.Enterprise.AuthCentral.IdMgr;
 using Microsoft.AspNet.Builder;
-using System.Threading.Tasks;
-using System;
-using System.Linq;
 
 namespace Fsw.Enterprise.AuthCentral.Extensions
 {

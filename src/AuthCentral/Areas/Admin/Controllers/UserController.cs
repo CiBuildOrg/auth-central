@@ -40,7 +40,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpGet("{page?}")]
-        public IActionResult Index(string nameFilter, int page = 1, int pageSize = 25)
+        public IActionResult Index(int page = 1, int pageSize = 25)
         {
             long count;
             IEnumerable<HierarchicalUserAccount> users = _repository.GetPagedUsers(page, pageSize, out count);

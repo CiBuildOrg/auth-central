@@ -35,13 +35,13 @@ namespace Fsw.Enterprise.AuthCentral.MongoDb
             if (pageSize < 1) { pageSize = 25; }
 
             var accountsQuery = _db.Users().FindAllAs<T>();
+            count = accountsQuery.Count();
 
             // MongoCursor.Limit(x) restricts how many records can be retrieved
             // But MongoCursor.Skip enumerates the list, removes the first N and returns the rest as an IEnumerable<T>
             // This enumeration counts towards Limit. Once Skip is called, Limit is no longer useful.
             // Therefore to our Limit we have to add the number of records that will be skipped.
             accountsQuery.Limit = page * pageSize;
-            count = accountsQuery.Count();
             IEnumerable<T> accounts = accountsQuery.Skip((page - 1) * pageSize);
 
             return accounts;

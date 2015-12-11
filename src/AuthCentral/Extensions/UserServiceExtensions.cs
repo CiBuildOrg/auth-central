@@ -18,5 +18,5 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             factory.Register(new Registration<UserAccountService<HierarchicalUserAccount>>());
             factory.Register(new Registration<MongoDatabase>(resolver => new MongoDatabase(connString)));
         }
-    }    
+    }
 }

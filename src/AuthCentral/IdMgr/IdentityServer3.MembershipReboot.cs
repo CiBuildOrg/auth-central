@@ -36,7 +36,7 @@ namespace IdentityServer3.MembershipReboot
         public string DisplayNameClaimType { get; set; }
 
         protected readonly UserAccountService<TAccount> userAccountService;
-
+        
         public MembershipRebootUserService(UserAccountService<TAccount> userAccountService)
         {
             if (userAccountService == null) throw new ArgumentNullException("userAccountService");

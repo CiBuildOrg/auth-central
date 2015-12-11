@@ -1,11 +1,13 @@
 using System;
 
+using cloudscribe.Web.Pagination;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions; // Yes, really.
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 
@@ -38,6 +40,7 @@ namespace Fsw.Enterprise.AuthCentral
             services.AddAuthorizationPolicies();
             services.AddAuthCentralDependencies(_config);
             services.AddIdentityServer(_config.DB.IdentityServer3);
+            services.TryAddTransient<IBuildPaginationLinks, PaginationLinkBuilder>();
         }
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory, StoreSettings idSvrStoreSettings)

@@ -95,6 +95,22 @@ namespace Fsw.Enterprise.AuthCentral
                 _root = root;
             }
 
+            public string AuthorityMapPath
+            {
+                get
+                {
+                    return "/auth";
+                }
+            } 
+
+            public string LoginPath
+            {
+                get
+                {
+                    return this.AuthorityMapPath + "/login";
+                }
+            }
+
             public string Scheme
             {
                 get
@@ -119,22 +135,21 @@ namespace Fsw.Enterprise.AuthCentral
                 } 
             }
 
-            public string ServiceRoot 
-            { 
-                get 
-                {
-                    return _root.Get<string>(EnvVars.UriServiceRoot);
-                } 
-            }
-
             public string IssuerUri
             {
                 get
                 {
-                    return new UriBuilder(this.Scheme, this.Host, this.Port, this.ServiceRoot).Uri.AbsoluteUri;
+                    return new UriBuilder(this.Scheme, this.Host, this.Port).Uri.AbsoluteUri;
                 }
             }
 
+            public string Authority
+            {
+                get
+                {
+                    return new UriBuilder(this.Scheme, this.Host, this.Port, this.AuthorityMapPath).Uri.AbsoluteUri;
+                }
+            }
         }
 
 

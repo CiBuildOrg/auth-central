@@ -1,11 +1,8 @@
 ﻿using System.Security.Authentication;
-
-using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Authorization;
-
+using Microsoft.AspNet.Mvc;
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
-
 using Fsw.Enterprise.AuthCentral.IdMgr;
 using Fsw.Enterprise.AuthCentral.Extensions;
 using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
@@ -17,11 +14,14 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
     [Area("UserAccount"), Route("[area]"), Route("account")]
     public class HomeController : Controller
     {
+
         readonly UserAccountService<HierarchicalUserAccount> _userAccountService;
+        private readonly MongoAuthenticationService _authService;
 
         public HomeController(MongoAuthenticationService authSvc)
         {
             _userAccountService = authSvc.UserAccountService;
+            _authService = authSvc;
         }
 
         [HttpGet]
@@ -52,6 +52,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             {
                 return new HttpUnauthorizedResult();
             }
+        }
+
+        [HttpGet("LogOut")]
+        public void LogOut()
+        {
+            _authService.SignOut();
         }
     }
 }

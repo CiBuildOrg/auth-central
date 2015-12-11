@@ -51,7 +51,7 @@ namespace Fsw.Enterprise.AuthCentral
             app.UseStatusCodePages();
             app.UseCookieAuthentication(options =>
             {
-                options.LoginPath = new PathString("/ids/login");
+                options.LoginPath = new PathString(_config.Uri.LoginPath);
                 options.AuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
             });
@@ -61,7 +61,7 @@ namespace Fsw.Enterprise.AuthCentral
             app.UseStaticFiles();
             HealthChecker.ScheduleHealthCheck(_config, logFactory);
 
-            app.Map("/ids", ids =>
+            app.Map(_config.Uri.AuthorityMapPath, ids =>
             {
                 ids.UseIdentityServer(env, _config, idSvrStoreSettings);
             });

@@ -27,8 +27,8 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 return base.GetBody(evt, values);
 
             string preBody;
-
-            using (var s = new FileStream(@"IdMgr\EmailTemplates\PasswordResetRequestedEvent_Body.html", FileMode.Open))
+            var file = Path.Combine(_appEnvironment.ApplicationBasePath, @"IdMgr/EmailTemplates/PasswordResetRequestedEvent_Body.html");
+            using (var s = new FileStream(file, FileMode.Open))
             {
                 using (var sr = new StreamReader(s))
                 {

@@ -63,7 +63,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 "UserAccount/Register/Cancel/",
                 "UserAccount/PasswordReset/Confirm/");
 
-            var emailFormatter = new ACEmailMessageFormatter(appinfo);
+            var emailFormatter = new AuthCentralEmailMessageFormatter(appinfo);
             newInstance.AddEventHandler(new DebuggerEventHandler<HierarchicalUserAccount>());
             newInstance.AddEventHandler(new EmailAccountEventsHandler<HierarchicalUserAccount>(emailFormatter));
             //newInstance.AddEventHandler(new TwilioSmsEventHandler(appinfo));

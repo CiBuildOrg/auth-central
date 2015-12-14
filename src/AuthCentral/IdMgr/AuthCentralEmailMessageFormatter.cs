@@ -6,13 +6,13 @@ using BrockAllen.MembershipReboot.Hierarchical;
 
 namespace Fsw.Enterprise.AuthCentral.IdMgr
 {
-    internal class ACEmailMessageFormatter : EmailMessageFormatter<HierarchicalUserAccount>
+    internal class AuthCentralEmailMessageFormatter : EmailMessageFormatter<HierarchicalUserAccount>
     {
-        public ACEmailMessageFormatter(AuthCentralAppInfo appInfo) : base(appInfo)
+        public AuthCentralEmailMessageFormatter(AuthCentralAppInfo appInfo) : base(appInfo)
         {
         }
 
-        public ACEmailMessageFormatter(Lazy<ApplicationInformation> appInfo) : base(appInfo)
+        public AuthCentralEmailMessageFormatter(Lazy<ApplicationInformation> appInfo) : base(appInfo)
         {
         }
 
@@ -23,9 +23,8 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
 
             string preBody;
 
-            using (var s = GetType().Assembly.GetManifestResourceStream(@"Testing\EmailTemplates\PasswordResetRequestedEvent_Body.html"))
+            using (var s = new FileStream(@"IdMgr\EmailTemplates\PasswordResetRequestedEvent_Body.html", FileMode.Open))
             {
-                if (s == null) return null;
                 using (var sr = new StreamReader(s))
                 {
                     preBody = sr.ReadToEnd();

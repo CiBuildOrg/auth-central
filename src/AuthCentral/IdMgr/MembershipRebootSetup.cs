@@ -66,7 +66,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
 
             var emailFormatter = new AuthCentralEmailMessageFormatter(appEnv,appinfo);
             newInstance.AddEventHandler(new DebuggerEventHandler<HierarchicalUserAccount>());
-            newInstance.AddEventHandler(new EmailAccountEventsHandler<HierarchicalUserAccount>(emailFormatter));
+            newInstance.AddEventHandler(new EmailAccountEventsHandler<HierarchicalUserAccount>(emailFormatter, new SmtpMessageDelivery(true)));
             //newInstance.AddEventHandler(new TwilioSmsEventHandler(appinfo));
 
             return newInstance;

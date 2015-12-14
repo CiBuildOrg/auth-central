@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using System.IO;
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
+using Microsoft.Extensions.PlatformAbstractions;
 
 namespace Fsw.Enterprise.AuthCentral.IdMgr
 {
     internal class AuthCentralEmailMessageFormatter : EmailMessageFormatter<HierarchicalUserAccount>
     {
-        public AuthCentralEmailMessageFormatter(AuthCentralAppInfo appInfo) : base(appInfo)
+        private readonly IApplicationEnvironment _appEnvironment;
+
+        public AuthCentralEmailMessageFormatter(IApplicationEnvironment appEnvironment, AuthCentralAppInfo appInfo) : base(appInfo)
         {
+            _appEnvironment = appEnvironment;
         }
 
-        public AuthCentralEmailMessageFormatter(Lazy<ApplicationInformation> appInfo) : base(appInfo)
+        public AuthCentralEmailMessageFormatter(IApplicationEnvironment appEnvironment, Lazy<ApplicationInformation> appInfo) : base(appInfo)
         {
+            _appEnvironment = appEnvironment;
         }
 
         protected override string GetBody(UserAccountEvent<HierarchicalUserAccount> evt, IDictionary<string, string> values)

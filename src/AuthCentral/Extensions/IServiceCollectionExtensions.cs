@@ -12,6 +12,7 @@ using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.PlatformAbstractions;
 using MongoDB.Driver;
 using Serilog;
 using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
@@ -57,9 +58,9 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
         public static void AddMembershipReboot(this IServiceCollection services, string mrConnectionString)
         {
-            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>()));
+            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>(), provider.GetService<IApplicationEnvironment>()));
             services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
-            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null));
+            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null, null));
             services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
             services.AddScoped(typeof(IUserAccountRepository<HierarchicalUserAccount>), typeof(MongoUserAccountRepository<HierarchicalUserAccount>));
             services.AddScoped<IBulkUserRepository<HierarchicalUserAccount>, MongoUserAccountRepository<HierarchicalUserAccount>>();

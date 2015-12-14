@@ -5,6 +5,7 @@ using Microsoft.AspNet.Http;
 
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
+using Microsoft.Extensions.PlatformAbstractions;
 
 namespace Fsw.Enterprise.AuthCentral.IdMgr
 {
@@ -16,7 +17,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
         private MembershipRebootSetup(): base() { }
         private MembershipRebootSetup(SecuritySettings securitySettings) : base(securitySettings) { }
         
-        public static MembershipRebootSetup GetConfig(IApplicationBuilder app)
+        public static MembershipRebootSetup GetConfig(IApplicationBuilder app, IApplicationEnvironment appEnv)
         {
             if(TheOneInstance == null)
             {
@@ -24,7 +25,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 {
                     if (TheOneInstance == null)
                     {
-                        TheOneInstance = CreateNewInstance(app);
+                        TheOneInstance = CreateNewInstance(app, appEnv);
                     }
                 }
             }
@@ -32,7 +33,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             return TheOneInstance;
         }
  
-        private static MembershipRebootSetup CreateNewInstance(IApplicationBuilder app)
+        private static MembershipRebootSetup CreateNewInstance(IApplicationBuilder app, IApplicationEnvironment appEnv)
         {
             SecuritySettings securitySettings = new SecuritySettings();
 
@@ -63,7 +64,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 "UserAccount/Register/Cancel/",
                 "UserAccount/PasswordReset/Confirm/");
 
-            var emailFormatter = new AuthCentralEmailMessageFormatter(appinfo);
+            var emailFormatter = new AuthCentralEmailMessageFormatter(appEnv,appinfo);
             newInstance.AddEventHandler(new DebuggerEventHandler<HierarchicalUserAccount>());
             newInstance.AddEventHandler(new EmailAccountEventsHandler<HierarchicalUserAccount>(emailFormatter));
             //newInstance.AddEventHandler(new TwilioSmsEventHandler(appinfo));

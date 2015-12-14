@@ -40,7 +40,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                 ViewService = new Registration<IViewService>(typeof(CustomViewService))
             };
 
-            idSvcFactory.ConfigureCustomUserService(app, config.DB.MembershipReboot);
+            idSvcFactory.ConfigureCustomUserService(app, config.DB.MembershipReboot, env);
             idSvcFactory.Register(new Registration<IApplicationEnvironment>(env));
 
             var options = new IdentityServerOptions

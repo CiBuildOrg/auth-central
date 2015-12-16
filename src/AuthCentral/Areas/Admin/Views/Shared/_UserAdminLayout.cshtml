@@ -8,10 +8,15 @@
 
     string homeClass = "";
     string claimsClass = "";
+    string profileClass = "";
 
     if ( "UserClaim".Equals(controller) )
     {
         claimsClass = "active";
+    }
+    else if  ("UserProfile".Equals(controller))
+    {
+        profileClass = "active";
     }
     else
     {
@@ -22,6 +27,7 @@
 
 <ul class="nav nav-tabs">
     <li class="@homeClass"><a href="/Admin/User/">User Admin Home</a></li>
+    <li class="@profileClass"><a href="/Admin/UserProfile/Edit/@Model.UserId">Profile</a></li>
     <li class="@claimsClass"><a href="/Admin/UserClaim/Show/@Model.UserId">Claims</a></li>
 </ul>
 

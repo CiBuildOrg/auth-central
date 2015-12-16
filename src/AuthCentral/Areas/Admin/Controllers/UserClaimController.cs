@@ -47,7 +47,11 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             var model = new UserClaimModelContainer()
             {
                 UserId = user.ID.ToString(),
-                UserClaims = user.Claims.Select(claim => new ClaimModel(claim))
+                UserClaims = user.Claims.Where(claim => claim.Type != "name"
+                                                     && claim.Type != "given_name"
+                                                     && claim.Type != "middle_name"
+                                                     && claim.Type != "family_name")
+                                        .Select(claim => new ClaimModel(claim))
             };
 
             return View(model);

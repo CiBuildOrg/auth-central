@@ -46,7 +46,7 @@
             @foreach(var account in Model.Accounts)
             {
                 <tr>
-                    <td><a href="/Admin/UserClaim/Show/@account.ID.ToString()">@account.Claims.FirstOrDefault(claim => claim.Type == "name")?.Value</a></td>
+                    <td><a href="/Admin/UserProfile/Edit/@account.ID.ToString()">@account.Claims.FirstOrDefault(claim => claim.Type == "name")?.Value</a></td>
                     <td><a href="mailto:@account.Email">@account.Email</a></td>
                     <td>@account.Claims.FirstOrDefault(claim => claim.Type == "fsw:organization")?.Value</td>
                     <td>@account.Claims.FirstOrDefault(claim => claim.Type == "fsw:department")?.Value</td>

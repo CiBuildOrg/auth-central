@@ -25,13 +25,15 @@
 
 }
 
+@if (!string.IsNullOrWhiteSpace(ViewData["Message"]?.ToString()))
+{
+    <div class="alert alert-info"><em>@ViewData["Message"]</em></div>
+}
+
 <ul class="nav nav-tabs">
     <li class="@homeClass"><a href="/Admin/User/">User Admin Home</a></li>
     <li class="@profileClass"><a href="/Admin/UserProfile/Edit/@Model.UserId">Profile</a></li>
     <li class="@claimsClass"><a href="/Admin/UserClaim/Show/@Model.UserId">Claims</a></li>
 </ul>
-
-@Html.ValidationSummary()
-<div><em>@ViewData["Message"]</em></div>
 
 @RenderBody()

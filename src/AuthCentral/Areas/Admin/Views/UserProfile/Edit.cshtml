@@ -4,11 +4,6 @@
     ViewBag.Title = "Edit User Profile";
 
 }
-<div class="row">
-    <div class="col-sm-12 col-md-12 col-lg-12">
-        <em>@ViewBag.Message</em>
-    </div>
-</div>
 <br />
 @using (Html.BeginForm("Save", "UserProfile", new { userId = Model.UserId, area = "Admin" }, FormMethod.Post, new { @id = "edit-form", @class = "form-horizontal" }))
 {

@@ -31,8 +31,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpGet("[action]/{userId?}")]
-        public IActionResult Edit(string userId)
+        public IActionResult Edit(string userId, bool changed)
         {
+            if (changed)
+            {
+                ViewBag.Message = "The requested change was processed successfully.";
+            }
+
             Guid userGuid;
             if (!Guid.TryParse(userId, out userGuid))
             {
@@ -65,6 +70,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Save(UserProfileModel profile)
         {
+
             Guid userGuid;
             if (!Guid.TryParse(profile.UserId, out userGuid))
             {
@@ -97,9 +103,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 claims.Add("fsw:department", profile.Department);
 
                 _userAccountService.AddClaims(userGuid, claims);
-                
-                // ViewBag.Message = string.Format("The Auth Central User {0} was successfully saved!", user.Email);
-                return RedirectToAction("Edit", new { userId = profile.UserId });
+                return RedirectToAction("Edit", new { userId = profile.UserId, changed = true });
             }
 
             return View("Edit");
@@ -115,8 +119,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 return HttpBadRequest("Failed to parse userId.");
             }
             _userAccountService.ChangeEmailRequest(userGuid, email);
-            // ViewBag.Message = "The change e-mail request was submitted successfully.";
-            return RedirectToAction("Edit", new { userId = userId });
+            return RedirectToAction("Edit", new { userId = userId, changed = true });
         }
     }
 }

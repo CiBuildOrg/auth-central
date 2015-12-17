@@ -6,7 +6,8 @@ Individuals wishing to contribute to this document should first read [Introducin
 **[Administrator actions](#administrator-actions)**
 - [User Admin](#client-admin)
     - [Find a user account](#find-a-user-account)
-    - [Edit a user account](#edit-a-user-account)
+    - [Edit a user's profile](#edit-a-users-profile)
+    - [Edit a user's Email address](#edit-a-users-email-address)
     - [Create a new user account](#create-a-new-user-account)
     - [Delete a user account](#delete-a-user-account)
     - [Find a user resource claim](#find-a-user-resource-claim)
@@ -28,6 +29,7 @@ Individuals wishing to contribute to this document should first read [Introducin
 - [View permissions](#view-permissions)
 - [Edit profile](#edit-profile)
 - [Self-register](#self-register)
+- [Confirm Email Address](#confirm-email-address)
 - [Reset forgotten password](#reset-forgotten-password)
 - [Change Password](#change-password)
 
@@ -36,8 +38,28 @@ Individuals wishing to contribute to this document should first read [Introducin
 #### Find a user resource claim
 ---
 
+**Given**
+- The user ("the admin") has the fsw:authcentral:admin resource claim
+
+**When** the admin loads the Claim Admin screen (at Admin/UserClaim/Show/{userId})
+
+**Then**
+- The selected user's resource claims are displayed, 
+- The selected user's *name* claims are not displayed
+
 #### Edit a user resource claim
 ---
+
+**Given**:
+- The user ("the admin") has the fsw:authcentral:admin resource claim, and
+- The admin has loaded the Claim Admin screen (at Admin/UserClaim/Show/{userId})
+- The admin has changed the type and/or value of a claim
+
+**When** The corresponding save button is clicked
+
+**Then**
+- The changes to the existing claim are saved
+- No other claims are affected.
 
 #### Create a new user resource claim
 ---
@@ -66,8 +88,27 @@ Individuals wishing to contribute to this document should first read [Introducin
 #### Find a user account
 ---
 
-#### Edit a user account
+#### Edit a user's Email address
 ---
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the user profile screen (at Admin/UserProfile/Edit/{userid}), and  
+- The user has made a change to the Email address
+
+**When** the Trigger Change Request button is clicked
+
+**Then** an e-mail will be sent to the user's new e-mail address to confirm it
+
+#### Edit a user's Email address
+---
+**Given**:
+- The user has the fsw:authcentral:admin resource claim, and
+- The user has loaded the user profile screen (at Admin/UserProfile/Edit/{userid}), and  
+- The user has made a valid change to the name fields
+
+**When** the Save button is clicked
+
+**Then** the user's profile will be updated
 
 #### Create a new user account
 ---
@@ -470,10 +511,12 @@ Individuals wishing to contribute to this document should first read [Introducin
 
 ---
 
+### Confirm Email Address
+---
+
 **Given**
-* That a user has submitted a user registration request
-* That the user received the registration confirmation email
-* More than 20 minutes have passed since registration
+* That the user received a "Confirm Email Request" email
+* More than 20 minutes have passed since the request was initiated
 
 **When**
 * [ ] the user goes to the register confirmation link
@@ -484,8 +527,7 @@ Individuals wishing to contribute to this document should first read [Introducin
 ---
 
 **Given**
-* That a user has submitted a user registration request
-* That the user received the registration confirmation email
+* That the user received a "Confirm Email Request" email
 * That the user goes to the confirm link in the confirmation email within 20 minutes of the registration
 
 **When**
@@ -493,6 +535,18 @@ Individuals wishing to contribute to this document should first read [Introducin
 
 **Then**
 * The user will see an error message stating that the password entered is invalid.
+
+---
+
+**Given**
+* That the user received a "Confirm Email Request" email
+* That the user goes to the confirm link in the confirmation email within 20 minutes of the registration
+
+**When**
+* [ ] The user enters the correct password
+
+**Then**
+* The user will see an message stating that their address has been confirmed and they can log in.
 
 ---
 

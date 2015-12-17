@@ -27,8 +27,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpGet("[action]/{userId}")]
-        public ActionResult Show(string userId)
+        public ActionResult Show(string userId, bool changed)
         {
+            if(changed)
+            {
+                ViewBag.Message = "The requested change was processed successfully.";
+            }
+
             Guid userGuid;
             if(!Guid.TryParse(userId, out userGuid))
             {
@@ -47,7 +52,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             var model = new UserClaimModelContainer()
             {
                 UserId = user.ID.ToString(),
-                UserClaims = user.Claims.Select(claim => new ClaimModel(claim))
+                UserClaims = user.Claims.Where(claim => claim.Type != "name"
+                                                     && claim.Type != "given_name"
+                                                     && claim.Type != "middle_name"
+                                                     && claim.Type != "family_name"
+                                                     && claim.Type != "fsw:organization"
+                                                     && claim.Type != "fsw:department")
+                                        .Select(claim => new ClaimModel(claim))
             };
 
             return View(model);
@@ -91,7 +102,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
             _userAccountService.RemoveClaim(userGuid, userClaim.Type, userClaim.Value);
 
-            return RedirectToAction("Show", new { userId = userId });
+            return RedirectToAction("Show", new { userId = userId, changed = true });
         }
 
         [ValidateAntiForgeryToken]
@@ -108,7 +119,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             {
                 _userAccountService.AddClaims(userGuid, new UserClaimCollection(cmc.UserClaims.Select(c => new Claim(c.Type, c.Value))));
 
-                return RedirectToAction("Show", new { userId = cmc.UserId });
+                return RedirectToAction("Show", new { userId = cmc.UserId, changed = true });
             }
 
             return Create(cmc.UserId);

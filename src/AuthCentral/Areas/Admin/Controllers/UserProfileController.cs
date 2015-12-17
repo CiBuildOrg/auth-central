@@ -49,6 +49,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                     FamilyName = user.Claims.FirstOrDefault(c => c.Type == "family_name")?.Value,
                     MiddleName = user.Claims.FirstOrDefault(c => c.Type == "middle_name")?.Value,
                     GivenName = user.Claims.FirstOrDefault(c => c.Type == "given_name")?.Value,
+                    Organization = user.Claims.FirstOrDefault(c => c.Type == "fsw:organization")?.Value,
+                    Department = user.Claims.FirstOrDefault(c => c.Type == "fsw:department")?.Value,
                     UserId = userId
                 });
             }
@@ -77,7 +79,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                     new UserClaimCollection(user.Claims.Where(claim => claim.Type == "given_name"
                                                                     || claim.Type == "middle_name"
                                                                     || claim.Type == "family_name"
-                                                                    || claim.Type == "name")));
+                                                                    || claim.Type == "name"
+                                                                    || claim.Type == "fsw:organization"
+                                                                    || claim.Type == "fsw:department")));
                 var claims = new UserClaimCollection();
                 claims.Add("given_name", profile.GivenName);
                 if(profile.MiddleName != null)
@@ -88,6 +92,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 claims.Add("name", string.Join(" ",
                     new string[] { profile.GivenName, profile.MiddleName, profile.FamilyName }
                    .Where(name => !string.IsNullOrWhiteSpace(name))));
+
+                claims.Add("fsw:organization", profile.Organization);
+                claims.Add("fsw:department", profile.Department);
 
                 _userAccountService.AddClaims(userGuid, claims);
                 

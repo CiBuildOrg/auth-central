@@ -89,24 +89,35 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                                                                     || claim.Type == "fsw:organization"
                                                                     || claim.Type == "fsw:department")));
                 var claims = new UserClaimCollection();
+
                 claims.Add("given_name", profile.GivenName);
-                if(profile.MiddleName != null)
+
+                if(!string.IsNullOrWhiteSpace(profile.MiddleName))
                 {
                     claims.Add("middle_name", profile.MiddleName);
                 }
+
                 claims.Add("family_name", profile.FamilyName);
+
                 claims.Add("name", string.Join(" ",
                     new string[] { profile.GivenName, profile.MiddleName, profile.FamilyName }
                    .Where(name => !string.IsNullOrWhiteSpace(name))));
 
-                claims.Add("fsw:organization", profile.Organization);
-                claims.Add("fsw:department", profile.Department);
+                if (!string.IsNullOrWhiteSpace(profile.Organization))
+                {
+                    claims.Add("fsw:organization", profile.Organization);
+                }
+
+                if(!string.IsNullOrWhiteSpace(profile.Department))
+                {
+                    claims.Add("fsw:department", profile.Department);
+                }
 
                 _userAccountService.AddClaims(userGuid, claims);
                 return RedirectToAction("Edit", new { userId = profile.UserId, changed = true });
             }
 
-            return View("Edit");
+            return View("Edit", profile);
         }
 
         [HttpPost("[action]")]

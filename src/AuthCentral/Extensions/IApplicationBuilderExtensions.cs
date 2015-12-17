@@ -38,7 +38,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
 			var idSvcFactory = Factory.Configure(usrSrv);
             idSvcFactory.ViewService = new Registration<IViewService>(typeof (CustomViewService));
-            idSvcFactory.ConfigureTestUserService(app);			
+            idSvcFactory.ConfigureTestUserService(app, env);			
             idSvcFactory.Register(new Registration<IApplicationEnvironment>(env));
 
             var options = new IdentityServerOptions

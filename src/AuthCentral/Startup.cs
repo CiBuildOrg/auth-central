@@ -1,5 +1,6 @@
 using System;
 
+using cloudscribe.Web.Pagination;
 using Microsoft.AspNet.Authentication.Cookies;
 
 using Fsw.Enterprise.AuthCentral.Extensions;
@@ -7,6 +8,7 @@ using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions; // Yes, really.
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.AspNet.Http;
@@ -38,6 +40,7 @@ namespace Fsw.Enterprise.AuthCentral
             services.AddAuthorizationPolicies();
             services.AddAuthCentralDependencies(_config);
             services.AddIdentityServer(_config.DB.IdentityServer3);
+            services.TryAddTransient<IBuildPaginationLinks, PaginationLinkBuilder>();
         }
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory, StoreSettings idSvrStoreSettings)
@@ -47,7 +50,7 @@ namespace Fsw.Enterprise.AuthCentral
             logFactory.AddProvider(new LogCentral.MicrosoftFramework.LoggingProvider(_config.Log4NetConfigPath));
             app.UseMiddleware<LogCentral.MicrosoftFramework.LogMiddleware>();
 
-            MembershipRebootSetup.GetConfig(app); // Create the singleton to get around MVC DI container limitations            
+            MembershipRebootSetup.GetConfig(app, env); // Create the singleton to get around MVC DI container limitations            
             app.UseStatusCodePages();
             app.UseCookieAuthentication(options =>
             {

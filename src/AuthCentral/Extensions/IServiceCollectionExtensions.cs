@@ -1,11 +1,14 @@
-﻿using Fsw.Enterprise.AuthCentral.IdMgr;
+﻿using BrockAllen.MembershipReboot;
+using BrockAllen.MembershipReboot.Hierarchical;
+using Fsw.Enterprise.AuthCentral.IdMgr;
+using Fsw.Enterprise.AuthCentral.Testing;
 using Fsw.Enterprise.AuthCentral.MongoStore;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
-using Fsw.Enterprise.AuthCentral.Testing;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.PlatformAbstractions;
 using MongoDB.Driver;
 using Serilog;
 
@@ -44,8 +47,9 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
         public static void AddMembershipReboot(this IServiceCollection services, string mrConnectionString)
         {
-            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>()));
+            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>(), provider.GetService<IApplicationEnvironment>()));
             services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null, provider.GetService<IApplicationEnvironment>()));
 			DIContainerRegistrations.ConfigureIServiceCollection(services);
         }
 
@@ -56,7 +60,6 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
         public static void AddSerilog(this IServiceCollection services, bool isDebug)
         {
-
             var loggerConfig = new LoggerConfiguration()
                .WriteTo.Trace()
                .WriteTo.Console();

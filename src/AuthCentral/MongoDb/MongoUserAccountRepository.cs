@@ -1,11 +1,15 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using MongoDB.Driver.Builders;
+using MongoDB.Driver;
+using Fsw.Enterprise.AuthCentral.IdMgr;
 
 namespace Fsw.Enterprise.AuthCentral.MongoDb
 {
-    public class MongoUserAccountRepository<T> : QueryableUserAccountRepository<T>
+    public class MongoUserAccountRepository<T> : QueryableUserAccountRepository<T>, IBulkUserRepository<T>
         where T : HierarchicalUserAccount, new()
     {
         private readonly MongoDatabase _db;
@@ -22,6 +26,26 @@ namespace Fsw.Enterprise.AuthCentral.MongoDb
             get { 
                 return (IQueryable<T>) _db.Users().FindAll().AsQueryable();
             }
+        }
+
+        public IEnumerable<T> GetPagedUsers(int page, int pageSize, out long count)
+        {
+            // Optional parameters must appear after all other parameters
+            if (page < 1) { page = 1; }
+            if (pageSize < 1) { pageSize = 25; }
+
+            var accountsQuery = _db.Users().FindAllAs<T>();
+
+            // MongoCursor.Limit(x) restricts how many records can be retrieved
+            // But MongoCursor.Skip enumerates the list, removes the first N and returns the rest as an IEnumerable<T>
+            // This enumeration counts towards Limit. Once Skip is called, Limit is no longer useful.
+            // Therefore to our Limit we have to add the number of records that will be skipped.
+            accountsQuery.Limit = page * pageSize;
+            // Count() locks the cursor, so Limit can't be called anymore
+            count = accountsQuery.Count();
+            IEnumerable<T> accounts = accountsQuery.Skip((page - 1) * pageSize);
+
+            return accounts;
         }
 
         public override T Create()

@@ -5,10 +5,11 @@ using Microsoft.AspNet.Http;
 
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
+using Microsoft.Extensions.PlatformAbstractions;
 
 namespace Fsw.Enterprise.AuthCentral.IdMgr
 {
-    class MembershipRebootSetup: MembershipRebootConfiguration<HierarchicalUserAccount>
+    internal class MembershipRebootSetup: MembershipRebootConfiguration<HierarchicalUserAccount>
     {
         private static MembershipRebootSetup TheOneInstance;
         private static object InstanceLock = new object();
@@ -16,7 +17,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
         private MembershipRebootSetup(): base() { }
         private MembershipRebootSetup(SecuritySettings securitySettings) : base(securitySettings) { }
         
-        public static MembershipRebootSetup GetConfig(IApplicationBuilder app)
+        public static MembershipRebootSetup GetConfig(IApplicationBuilder app, IApplicationEnvironment appEnv)
         {
             if(TheOneInstance == null)
             {
@@ -24,7 +25,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 {
                     if (TheOneInstance == null)
                     {
-                        TheOneInstance = CreateNewInstance(app);
+                        TheOneInstance = CreateNewInstance(app, appEnv);
                     }
                 }
             }
@@ -32,7 +33,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             return TheOneInstance;
         }
  
-        private static MembershipRebootSetup CreateNewInstance(IApplicationBuilder app)
+        private static MembershipRebootSetup CreateNewInstance(IApplicationBuilder app, IApplicationEnvironment appEnv)
         {
             SecuritySettings securitySettings = new SecuritySettings();
 
@@ -63,59 +64,59 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 "UserAccount/Register/Cancel/",
                 "UserAccount/PasswordReset/Confirm/");
 
-            var emailFormatter = new EmailMessageFormatter<HierarchicalUserAccount>(appinfo);
+            var emailFormatter = new AuthCentralEmailMessageFormatter(appEnv,appinfo);
             newInstance.AddEventHandler(new DebuggerEventHandler<HierarchicalUserAccount>());
-            newInstance.AddEventHandler(new EmailAccountEventsHandler<HierarchicalUserAccount>(emailFormatter));
+            newInstance.AddEventHandler(new EmailAccountEventsHandler<HierarchicalUserAccount>(emailFormatter, new SmtpMessageDelivery(true)));
             //newInstance.AddEventHandler(new TwilioSmsEventHandler(appinfo));
 
             return newInstance;
         }
+    }
 
-        private class AuthCentralAppInfo : RelativePathApplicationInformation
+    internal class AuthCentralAppInfo : RelativePathApplicationInformation
+    {
+        IApplicationBuilder app;
+
+        public AuthCentralAppInfo(
+            IApplicationBuilder app,
+            string appName,
+            string emailSig,
+            string relativeLoginUrl,
+            string relativeConfirmChangeEmailUrl,
+            string relativeCancelNewAccountUrl,
+            string relativeConfirmPasswordResetUrl)
         {
-            IApplicationBuilder app;
-
-            public AuthCentralAppInfo(
-                IApplicationBuilder app,
-                string appName,
-                string emailSig,
-                string relativeLoginUrl,
-                string relativeConfirmChangeEmailUrl,
-                string relativeCancelNewAccountUrl,
-                string relativeConfirmPasswordResetUrl)
+            this.app = app;
+            app.Use((ctx, next) =>
             {
-                this.app = app;
-                app.Use((ctx, next) =>
-                {
-                    this.SetBaseUrl(GetApplicationBaseUrl(ctx));
-                    return next();
-                });
-                this.ApplicationName = appName;
-                this.EmailSignature = emailSig;
-                this.RelativeLoginUrl = relativeLoginUrl;
-                this.RelativeCancelVerificationUrl = relativeCancelNewAccountUrl;
-                this.RelativeConfirmPasswordResetUrl = relativeConfirmPasswordResetUrl;
-                this.RelativeConfirmChangeEmailUrl = relativeConfirmChangeEmailUrl;
-            }
+                this.SetBaseUrl(GetApplicationBaseUrl(ctx));
+                return next();
+            });
+            this.ApplicationName = appName;
+            this.EmailSignature = emailSig;
+            this.RelativeLoginUrl = relativeLoginUrl;
+            this.RelativeCancelVerificationUrl = relativeCancelNewAccountUrl;
+            this.RelativeConfirmPasswordResetUrl = relativeConfirmPasswordResetUrl;
+            this.RelativeConfirmChangeEmailUrl = relativeConfirmChangeEmailUrl;
+        }
 
-            string GetApplicationBaseUrl(HttpContext ctx)
+        string GetApplicationBaseUrl(HttpContext ctx)
+        {
+            var tmp = ctx.Request.Scheme + "://" + ctx.Request.Host;
+            if (ctx.Request.PathBase.HasValue)
             {
-                var tmp = ctx.Request.Scheme + "://" + ctx.Request.Host;
-                if (ctx.Request.PathBase.HasValue)
-                {
-                    if (!ctx.Request.PathBase.Value.StartsWith("/"))
-                    {
-                        tmp += "/";
-                    }
-                    tmp += ctx.Request.PathBase.Value;
-                }
-                else
+                if (!ctx.Request.PathBase.Value.StartsWith("/"))
                 {
                     tmp += "/";
                 }
-                if (!tmp.EndsWith("/")) tmp += "/"; 
-                return tmp;
+                tmp += ctx.Request.PathBase.Value;
             }
+            else
+            {
+                tmp += "/";
+            }
+            if (!tmp.EndsWith("/")) tmp += "/"; 
+            return tmp;
         }
     }
 }

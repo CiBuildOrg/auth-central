@@ -170,10 +170,31 @@ namespace IdentityServer3.MembershipReboot
             return Task.FromResult<AuthenticateResult>(null);
         }
 
-        protected virtual bool ValidateLocalCredentials(string username, string password, SignInMessage message, out TAccount account)
+        /// <summary>
+        ///     Given a <paramref name="username" />, <paramref name="password" />, and an IDS3
+        ///     <paramref name="message">SignIn Message</paramref>, validates the user's credentials by attempting to
+        ///     authenticate them.
+        /// </summary>
+        /// <param name="username">User's username or email.</param>
+        /// <param name="password">User's password</param>
+        /// <param name="message">Message built by IDS3 that contains context information such as client and tenant.</param>
+        /// <param name="account">If credentials are valid, returns the user's account.</param>
+        /// <returns><c>true</c> if the user's credentials are valid for their tenant; otherwise <c>false</c></returns>
+        protected virtual bool ValidateLocalCredentials(string username, string password, SignInMessage message,
+            out TAccount account)
         {
-            var tenant = String.IsNullOrWhiteSpace(message.Tenant) ? userAccountService.Configuration.DefaultTenant : message.Tenant;
-            return userAccountService.Authenticate(tenant, username, password, out account);
+            string tenant = string.IsNullOrWhiteSpace(message.Tenant)
+                ? userAccountService.Configuration.DefaultTenant
+                : message.Tenant;
+
+            if (userAccountService.Authenticate(tenant, username, password, out account))
+            {
+                return true;
+            }
+
+            // Returns true IFF username is a valid email address and it's associated with an account and password matches the account's password.
+            return new EmailAddressAttribute().IsValid(username) &&
+                   userAccountService.AuthenticateWithEmail(tenant, username, password, out account);
         }
 
         public override async Task AuthenticateExternalAsync(ExternalAuthenticationContext ctx)

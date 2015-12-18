@@ -9,7 +9,8 @@ Individuals wishing to contribute to this document should first read [Introducin
     - [Edit a user's profile](#edit-a-users-profile)
     - [Edit a user's Email address](#edit-a-users-email-address)
     - [Create a new user account](#create-a-new-user-account)
-    - [Delete a user account](#delete-a-user-account)
+    - [Disable a user account](#disable-a-user-account)
+    - [Enable a user account](#enable-a-user-account)
     - [Find a user resource claim](#find-a-user-resource-claim)
     - [Edit a user resource claim](#edit-a-user-resource-claim)
     - [Create a new claim](#create-a-new-claim)
@@ -134,8 +135,24 @@ Individuals wishing to contribute to this document should first read [Introducin
 **When** that user enters correct credentials into the login form,  
 **Then** that user should be successfully redirected to a page with no errors or warnings.  
 
-#### Delete a user account
+#### Disable a user account
 ---
+
+**Given** that an admin has loaded a page of users at /admin/user,
+**When** a button labeled "Disable" is clicked,
+**Then** 
+- the account is disabled (cannot log in)
+- On the subsequent page load, the button is replaced by an "Enable" button
+
+
+#### Enable a user account
+---
+
+**Given** that an admin has loaded a page of users at /admin/user,
+**When** a button labeled "Enable" is clicked,
+**Then** 
+- the account is enabled (can log in)
+- On the subsequent page load, the button is replaced by an "Enable" button
 
 
 ### Server Admin
@@ -423,6 +440,9 @@ Individuals wishing to contribute to this document should first read [Introducin
 ## User account actions
 ### Log in
 ---
+**Given** that the login form has been filled out with correct credentials for an account that has been disabled by an admin
+**When** the login form is submitted
+**Then** a message is displayed to inform the user that the account is not allowed to log in
 
 ### View permissions
 ---

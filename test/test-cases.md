@@ -131,15 +131,19 @@ Individuals wishing to contribute to this document should first read [Introducin
 
 ---
 
-**Given** that a user has been created by an administrator,  
-**When** that user enters correct credentials into the login form,  
-**Then** that user should be successfully redirected to a page with no errors or warnings.  
+**Given** that a user has been created by an administrator,
+
+**When** that user enters correct credentials into the login form, 
+
+**Then** that user should be successfully redirected to a page with no errors or warnings.
 
 #### Disable a user account
 ---
 
 **Given** that an admin has loaded a page of users at /admin/user,
+
 **When** a button labeled "Disable" is clicked,
+
 **Then** 
 - the account is disabled (cannot log in)
 - On the subsequent page load, the button is replaced by an "Enable" button
@@ -149,7 +153,9 @@ Individuals wishing to contribute to this document should first read [Introducin
 ---
 
 **Given** that an admin has loaded a page of users at /admin/user,
+
 **When** a button labeled "Enable" is clicked,
+
 **Then** 
 - the account is enabled (can log in)
 - On the subsequent page load, the button is replaced by an "Enable" button
@@ -441,7 +447,9 @@ Individuals wishing to contribute to this document should first read [Introducin
 ### Log in
 ---
 **Given** that the login form has been filled out with correct credentials for an account that has been disabled by an admin
+
 **When** the login form is submitted
+
 **Then** a message is displayed to inform the user that the account is not allowed to log in
 
 ### View permissions

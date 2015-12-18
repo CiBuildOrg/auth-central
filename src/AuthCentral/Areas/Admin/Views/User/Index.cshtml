@@ -40,6 +40,7 @@
                 <th>Email</th>
                 <th>Organization</th>
                 <th>Department</th>
+                <th>Disable</th>
             </tr>
         </thead>
         <tbody>
@@ -50,6 +51,21 @@
                     <td><a href="mailto:@account.Email">@account.Email</a></td>
                     <td>@account.Claims.FirstOrDefault(claim => claim.Type == "fsw:organization")?.Value</td>
                     <td>@account.Claims.FirstOrDefault(claim => claim.Type == "fsw:department")?.Value</td>
+                    <td>
+                        @if (account.IsLoginAllowed)
+                        {
+                            @using (Html.BeginForm("Disable", "User", new { userId = account.ID.ToString(), page = Model.PageNumber, area = "Admin" }, FormMethod.Post)) {
+                                @Html.AntiForgeryToken()
+                                <input type="submit" value="Disable" />
+                            }
+                        } else {
+                            @using (Html.BeginForm("Enable", "User", new { userId = account.ID.ToString(), page = Model.PageNumber, area = "Admin" }, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="submit" value="Enable" />
+                            }
+                        }
+                    </td>
                 </tr>
             }
         </tbody>

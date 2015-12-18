@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 
 using Microsoft.AspNet.Mvc;
 
-using IdentityServer3.Core.Models;
-using IdentityServer3.Core.Services;
-
-using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 using Microsoft.AspNet.Authorization;
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
@@ -56,6 +49,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                     GivenName = user.Claims.FirstOrDefault(c => c.Type == "given_name")?.Value,
                     Organization = user.Claims.FirstOrDefault(c => c.Type == "fsw:organization")?.Value,
                     Department = user.Claims.FirstOrDefault(c => c.Type == "fsw:department")?.Value,
+                    IsLoginAllowed = user.IsLoginAllowed,
                     UserId = userId
                 });
             }
@@ -131,6 +125,47 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             }
             _userAccountService.ChangeEmailRequest(userGuid, email);
             return RedirectToAction("Edit", new { userId = userId, changed = true });
+        }
+
+        [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Disable(string userId, int page, bool confirm)
+        {
+            Guid userGuid;
+            if (!Guid.TryParse(userId, out userGuid))
+            {
+                return HttpBadRequest("Failed to parse userId.");
+            }
+
+            if(confirm)
+            {
+                _userAccountService.SetIsLoginAllowed(userGuid, false);
+            }
+
+            return RedirectToAction("Edit", new
+            {
+                userId = userId,
+                changed = confirm
+            });
+        }
+
+        [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Enable(string userId, int page)
+        {
+            Guid userGuid;
+            if (!Guid.TryParse(userId, out userGuid))
+            {
+                return HttpBadRequest("Failed to parse userId.");
+            }
+
+            _userAccountService.SetIsLoginAllowed(userGuid, true);
+
+            return RedirectToAction("Edit", new
+            {
+                userId = userId,
+                changed = true
+            });
         }
     }
 }

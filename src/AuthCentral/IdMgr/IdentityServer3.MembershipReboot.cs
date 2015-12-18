@@ -187,14 +187,7 @@ namespace IdentityServer3.MembershipReboot
                 ? userAccountService.Configuration.DefaultTenant
                 : message.Tenant;
 
-            if (userAccountService.Authenticate(tenant, username, password, out account))
-            {
-                return true;
-            }
-
-            // Returns true IFF username is a valid email address and it's associated with an account and password matches the account's password.
-            return new EmailAddressAttribute().IsValid(username) &&
-                   userAccountService.AuthenticateWithEmail(tenant, username, password, out account);
+            return userAccountService.AuthenticateWithUsernameOrEmail(tenant, username, password, out account);
         }
 
         public override async Task AuthenticateExternalAsync(ExternalAuthenticationContext ctx)

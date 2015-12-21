@@ -1,0 +1,27 @@
+﻿@using IdentityServer3.Core.Models
+@model Fsw.Enterprise.AuthCentral.Areas.Admin.Models.ScopeListModel
+
+@{
+    ViewBag.Title = "AuthCentral Scope Administration";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-sm-6 panel panel-default">
+            <div class="panel-heading">
+                <h3>Scope Administration</h3>
+            </div>
+            <div class="panel-body">
+                @foreach (Scope scope in Model.Scopes)
+                {
+                    <div class="row col-md-12 col-sm-12 list-group">
+                        <div class="list-group-item-heading">@scope.DisplayName</div>
+                        <div class="list-group-item-text">
+                            @Html.Label(scope.DisplayName);
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

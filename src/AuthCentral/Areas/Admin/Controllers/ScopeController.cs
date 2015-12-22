@@ -20,5 +20,11 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             var model = new ScopeListModel(_scopeService.Get().Result);
             return View(model);
         }
+
+        [HttpPost("[action]")]
+        public IActionResult Edit()
+        {
+            return RedirectToAction("Index");
+        }
     }
 }

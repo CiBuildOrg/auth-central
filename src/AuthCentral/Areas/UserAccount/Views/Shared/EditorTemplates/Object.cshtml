@@ -10,26 +10,28 @@
                 }
                 else
                 {
-                    @Html.Label(prop.PropertyName)
+                    @Html.Label(prop.PropertyName, prop.PropertyName, new {@class = "control-label col-sm-2"})
                     @:
-                    if(prop.IsReadOnly)
-                    {
-                        @Html.Display(prop.PropertyName)
-                    }
-                    else
-                    {
-                        if (prop.ModelType == typeof(Boolean))
+                    <div class="col-sm-10">
+                        @if(prop.IsReadOnly)
                         {
-                            @Html.Editor(prop.PropertyName, new { htmlAttributes = new { @class = "checkbox" } })
+                            @Html.Display(prop.PropertyName)
                         }
                         else
                         {
-                            @Html.Editor(prop.PropertyName, new { htmlAttributes = new { @class = "form-control" } })
+                            if (prop.ModelType == typeof(Boolean))
+                            {
+                                @Html.Editor(prop.PropertyName, new { htmlAttributes = new { @class = "checkbox" } })
+                            }
+                            else
+                            {
+                                @Html.Editor(prop.PropertyName, new { htmlAttributes = new { @class = "form-control" } })
+                            }
+                            @:
+                            @Html.ValidationMessage(prop.PropertyName)
+                            @:
                         }
-                        @:
-                        @Html.ValidationMessage(prop.PropertyName)
-                        @:
-                    }
+                    </div>
                 }
             </div>
         }

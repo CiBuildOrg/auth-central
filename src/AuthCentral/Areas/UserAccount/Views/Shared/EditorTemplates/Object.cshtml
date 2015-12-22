@@ -18,7 +18,14 @@
                     }
                     else
                     {
-                        @Html.Editor(prop.PropertyName, new { htmlAttributes = new { @class = "form-control"} })
+                        if (prop.ModelType == typeof(Boolean))
+                        {
+                            @Html.Editor(prop.PropertyName, new { htmlAttributes = new { @class = "checkbox" } })
+                        }
+                        else
+                        {
+                            @Html.Editor(prop.PropertyName, new { htmlAttributes = new { @class = "form-control" } })
+                        }
                         @:
                         @Html.ValidationMessage(prop.PropertyName)
                         @:

@@ -10,7 +10,7 @@
                 }
                 else
                 {
-                    @Html.Label(prop.PropertyName, prop.PropertyName, new {@class = "control-label col-sm-2"})
+                    @Html.Label(prop.PropertyName, null, new {@class = "control-label col-sm-2"})
                     @:
                     <div class="col-sm-10">
                         @if(prop.IsReadOnly)
@@ -27,9 +27,8 @@
                             {
                                 @Html.Editor(prop.PropertyName, new { htmlAttributes = new { @class = "form-control" } })
                             }
-                            @:
+
                             @Html.ValidationMessage(prop.PropertyName)
-                            @:
                         }
                     </div>
                 }

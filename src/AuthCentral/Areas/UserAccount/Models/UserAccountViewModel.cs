@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Globalization;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
 using BrockAllen.MembershipReboot;
@@ -24,7 +21,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
             this.Created = user.Created.ToUniversalTime();
 
             // Optional
-            this.MiddleName = user.GetClaimValue("middle_name");
             this.PhoneNumber = user.GetClaimValue("phone_number");
             //this.ProfilePhotoUrl = new Uri(user.GetClaimValue("picture"));
             //this.Locale = System.Globalization.CultureInfo.GetCultureInfo(user.GetClaimValue("locale"));

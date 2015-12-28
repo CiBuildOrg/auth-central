@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
+namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
 {
     public class UserProfileModel
     {
@@ -35,6 +35,21 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
         /// User's department (e.g. Technology)
         /// </summary>
         public string Department { get; set; }
+
+        /// <summary>
+        /// User's current password
+        /// </summary>
+        public string OldPassword { get; set; }
+
+        /// <summary>
+        /// User's desired password
+        /// </summary>
+        public string NewPassword { get; set; }
+
+        /// <summary>
+        /// User's desired password (retyped)
+        /// </summary>
+        public string NewPasswordConfirm { get; set; }
 
     }
 }

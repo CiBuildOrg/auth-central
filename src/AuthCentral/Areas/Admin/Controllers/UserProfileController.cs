@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 
 using Microsoft.AspNet.Mvc;
 
-using IdentityServer3.Core.Models;
-using IdentityServer3.Core.Services;
-
-using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 using Microsoft.AspNet.Authorization;
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
@@ -55,6 +48,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                     GivenName = user.Claims.FirstOrDefault(c => c.Type == "given_name")?.Value,
                     Organization = user.Claims.FirstOrDefault(c => c.Type == "fsw:organization")?.Value,
                     Department = user.Claims.FirstOrDefault(c => c.Type == "fsw:department")?.Value,
+                    IsLoginAllowed = user.IsLoginAllowed,
                     UserId = userId
                 });
             }
@@ -140,7 +134,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             {
                 _userAccountService.SetIsLoginAllowed(userGuid, false);
             }
-
+            
             return RedirectToAction("Edit", new { userId = userId, changed = confirm });
         }
 
@@ -155,8 +149,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             }
 
             _userAccountService.SetIsLoginAllowed(userGuid, true);
-
+            
             return RedirectToAction("Edit", new {  userId = userId, changed = true });
+
         }
     }
 }

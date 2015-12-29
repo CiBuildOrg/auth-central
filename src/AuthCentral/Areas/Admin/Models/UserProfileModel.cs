@@ -36,5 +36,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
         /// </summary>
         public string Department { get; set; }
 
+        public bool IsLoginAllowed { get; set; }
+
     }
 }

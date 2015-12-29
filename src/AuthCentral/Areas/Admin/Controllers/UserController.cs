@@ -92,6 +92,42 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 userId = account.ID.ToString()
             });
         }
+        
+        [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Disable(string userId, int page)
+        {
+            Guid userGuid;
+            if (!Guid.TryParse(userId, out userGuid))
+            {
+                return HttpBadRequest("Failed to parse userId.");
+            }
+
+            _userAccountService.SetIsLoginAllowed(userGuid, false);
+
+            return RedirectToAction("Index", "User", new
+            {
+                page = page
+            });
+        }
+
+        [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Enable(string userId, int page)
+        {
+            Guid userGuid;
+            if (!Guid.TryParse(userId, out userGuid))
+            {
+                return HttpBadRequest("Failed to parse userId.");
+            }
+
+            _userAccountService.SetIsLoginAllowed(userGuid, true);
+
+            return RedirectToAction("Index", "User", new
+            {
+                page = page
+            });
+        }
 
         private void AddClaims(Guid accountId, CreateAccountInputModel model)
         {

@@ -1,10 +1,12 @@
 # AuthCentral
 
+
 Master build: [![Build Status](http://fswjenkins01.foodservicewarehouse.com:8080/buildStatus/icon?job=build_voltron_docs)](http://fswjenkins01.foodservicewarehouse.com:8080/job/build_voltron_docs/)
 
 ![openid_certified](https://cloud.githubusercontent.com/assets/1454075/7611268/4d19de32-f97b-11e4-895b-31b2455a7ca6.png)
 
 [Certified](http://openid.net/certification/) OpenID Connect implementation.
+
 
 ## Overview ##
 

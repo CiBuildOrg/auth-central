@@ -3,30 +3,28 @@
     Layout = "~/Areas/UserAccount/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Edit Profile";
 }
+
 <br />
-@using (Html.BeginForm("ChangeName", "Profile", new { userId = Model.UserId, area = "UserAccount" }, FormMethod.Post, new { @id = "edit-form", @class = "form-inline" }))
+@using (Html.BeginForm("ChangeName", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "edit-form", @class = "form-inline" }))
 {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(model => model.UserId)
-
     <label class="control-label col-md-2">Name</label>
     <div class="col-md-10" id="nameText">
-        @Model.Name <a href="#" onclick="$('#nameText').hide();$('#nameForm').show();">edit</a>
+        @Model.Name.Name <a href="#" onclick="$('#nameText').hide();$('#nameForm').show();">edit</a>
     </div>
     <div class="col-md-10" style="display: none" id="nameForm">
-        @Html.TextBoxFor(model => model.GivenName, new { @class = "form-control", @placeholder = "First" })
-        @Html.TextBoxFor(model => model.FamilyName, new { @class = "form-control", @placeholder = "Last" })
-        @Html.ValidationMessageFor(model => model.GivenName)
-        @Html.ValidationMessageFor(model => model.FamilyName)
+        @Html.TextBoxFor(model => model.Name.GivenName, new { @class = "form-control", @placeholder = "First" })
+        @Html.TextBoxFor(model => model.Name.FamilyName, new { @class = "form-control", @placeholder = "Last" })
+        @Html.ValidationMessageFor(model => model.Name.GivenName)
+        @Html.ValidationMessageFor(model => model.Name.FamilyName)
         <input type="submit" value="Save" class="btn btn-success" onclick="javascript: document.forms['edit-form'].submit();" />
     </div>
 }
 
     <br style="clear: both" />
-@using (Html.BeginForm("ChangeEmail", "Profile", new { userId = Model.UserId, area = "UserAccount" }, FormMethod.Post, new { @id = "edit-form", @class = "form-inline" }))
+@using (Html.BeginForm("ChangeEmail", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "edit-form", @class = "form-inline" }))
 {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(model => model.UserId)
     <label class="control-label col-md-2">Email</label>
     <div class="col-md-10" id="emailText">
         @Model.Email <a href="#" onclick="$('#emailText').hide();$('#emailForm').show();">edit</a>
@@ -40,31 +38,30 @@
 
 <br style="clear: both" />
 
-@using (Html.BeginForm("ChangePassword", "Profile", new { userId = Model.UserId, area = "UserAccount" }, FormMethod.Post, new { @id = "edit-form", @class = "form-inline" }))
+@using (Html.BeginForm("ChangePassword", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "edit-form", @class = "form-inline" }))
 {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(model => model.UserId)
     <label class="control-label col-md-2">Password</label>
     <div class="col-md-10" id="passwordText">
         ********** <a href="#" onclick="$('#passwordText').hide();$('#passwordForm').show();">edit</a>
     </div>
     <div class="col-md-10" style="display: none" id="passwordForm">
         <div class="form-group">
-            @Html.LabelFor(model => model.OldPassword)
-            @Html.PasswordFor(model => model.OldPassword, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.OldPassword)
+            @Html.LabelFor(model => model.Password.OldPassword)
+            @Html.PasswordFor(model => model.Password.OldPassword, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Password.OldPassword)
         </div>
         <br />
         <div class="form-group">
-            @Html.LabelFor(model => model.NewPassword)
-            @Html.PasswordFor(model => model.NewPassword, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.NewPassword)
+            @Html.LabelFor(model => model.Password.NewPassword)
+            @Html.PasswordFor(model => model.Password.NewPassword, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Password.NewPassword)
         </div>
         <br />
         <div class="form-group">
-            @Html.LabelFor(model => model.NewPasswordConfirm)
-            @Html.PasswordFor(model => model.NewPasswordConfirm, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.NewPasswordConfirm)
+            @Html.LabelFor(model => model.Password.NewPasswordConfirm)
+            @Html.PasswordFor(model => model.Password.NewPasswordConfirm, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Password.NewPasswordConfirm)
         </div>
         <br />
         <input type="submit" value="Change Password" class="btn btn-success" onclick="javascript: document.forms['email-form'].submit();" />

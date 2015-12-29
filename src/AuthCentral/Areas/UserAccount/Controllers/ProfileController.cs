@@ -8,6 +8,8 @@ using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
 using Fsw.Enterprise.AuthCentral.Extensions;
+using System.Security.Authentication;
+using System.ComponentModel.DataAnnotations;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -40,90 +42,106 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
 
             if (user != null)
             {
-                return View(new UserProfileModel
+                return View("Edit", new UserProfileModel
                 {
+                    Name = new UserNameModel
+                    {
+                        FamilyName = user.Claims.FirstOrDefault(c => c.Type == "family_name")?.Value,
+                        GivenName = user.Claims.FirstOrDefault(c => c.Type == "given_name")?.Value,
+                    },
                     Email = user.Email,
-                    FamilyName = user.Claims.FirstOrDefault(c => c.Type == "family_name")?.Value,
-                    GivenName = user.Claims.FirstOrDefault(c => c.Type == "given_name")?.Value,
                     Organization = user.Claims.FirstOrDefault(c => c.Type == "fsw:organization")?.Value,
-                    Department = user.Claims.FirstOrDefault(c => c.Type == "fsw:department")?.Value,
-                    UserId = user.ID.ToString()
+                    Department = user.Claims.FirstOrDefault(c => c.Type == "fsw:department")?.Value
                 });
             }
-            return View();
+            return View("Edit");
         }
 
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost("[action]")]
-        public IActionResult ChangeName(UserProfileModel profile)
+        public IActionResult ChangeName(UserNameModel model)
         {
-            Guid userGuid;
-            if (!Guid.TryParse(profile.UserId, out userGuid))
-            {
-                return HttpBadRequest("Failed to parse userId.");
-            }
-
             if (ModelState.IsValid)
             {
-                var user = _userAccountService.GetByID(userGuid);
+                var user = _userAccountService.GetByID(User.GetId());
 
-                _userAccountService.RemoveClaims(userGuid,
+                _userAccountService.RemoveClaims(user.ID,
                     new UserClaimCollection(user.Claims.Where(claim => claim.Type == "given_name"
                                                                     || claim.Type == "family_name"
                                                                     || claim.Type == "name")));
                 var claims = new UserClaimCollection();
 
-                claims.Add("given_name", profile.GivenName);
+                claims.Add("given_name", model.GivenName);
 
-                claims.Add("family_name", profile.FamilyName);
+                claims.Add("family_name", model.FamilyName);
 
                 claims.Add("name", string.Join(" ",
-                    new string[] { profile.GivenName, profile.FamilyName }
+                    new string[] { model.GivenName, model.FamilyName }
                    .Where(name => !string.IsNullOrWhiteSpace(name))));
 
-                _userAccountService.AddClaims(userGuid, claims);
-                return RedirectToAction("Edit", new { userId = profile.UserId, changed = true });
+                _userAccountService.AddClaims(user.ID, claims);
+                return RedirectToAction("Edit", new { changed = true });
             }
 
-            return View("Edit", profile);
+            return Edit(false);
         }
 
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost("[action]")]
-        public IActionResult ChangePassword(UserProfileModel profile)
+        public IActionResult ChangePassword(ChangePasswordInputModel profile)
         {
-            Guid userGuid;
-            if (!Guid.TryParse(profile.UserId, out userGuid))
+            try
             {
-                return HttpBadRequest("Failed to parse userId.");
+                var acct = _userAccountService.GetByID(User.GetId());
+                _userAccountService.ResetPassword(acct.Tenant, acct.Email);
+                return View("PasswordSent");
             }
-
-            if(profile.NewPasswordConfirm != profile.NewPassword)
+            catch (AuthenticationException)
             {
-                return HttpBadRequest("New passwords must match.");
+                return new HttpUnauthorizedResult();
             }
-
-            _userAccountService.ChangePassword(userGuid, profile.OldPassword, profile.NewPassword);
-            _authSvc.SignIn(_userAccountService.GetByID(userGuid));
-            return RedirectToAction("Edit", new { userId = profile.UserId, changed = true });
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+            return View("SendPasswordReset");
         }
 
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost("[action]")]
-        public IActionResult ChangeEmail(UserProfileModel profile)
+        public IActionResult ChangeEmail(ChangeEmailRequestInputModel model)
         {
-            Guid userGuid;
-            if (!Guid.TryParse(profile.UserId, out userGuid))
+            if (!ModelState.IsValid)
             {
-                return HttpBadRequest("Failed to parse userId.");
+                return View("Index", model);
             }
-            
-            _userAccountService.ChangeEmailRequest(userGuid, profile.Email);
 
-            return RedirectToAction("Edit", new { userId = profile.UserId, changed = true });
+            try
+            {
+                _userAccountService.ChangeEmailRequest(User.GetId(), model.NewEmail);
+
+                if (_userAccountService.Configuration.RequireAccountVerification)
+                {
+                    return View("EmailConfirmationSent", model);
+                }
+                else
+                {
+                    return RedirectToAction("Success", "ChangeEmail", null);
+                }
+            }
+            catch (AuthenticationException)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
+            return View("Index", model);
         }
     }
 }

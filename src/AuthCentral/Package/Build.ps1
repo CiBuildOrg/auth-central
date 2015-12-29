@@ -2,7 +2,8 @@ param (
     [parameter(Mandatory=$false)][String]$envFile="injectble-vars.env",
     [parameter(Mandatory=$false)][Boolean]$createPackage=$false,
     [parameter(Mandatory=$false)][Boolean]$publishPackage=$false,
-    [parameter(Mandatory=$false)][String]$buildNumber="alpha"
+    [parameter(Mandatory=$false)][String]$buildNumber="alpha",
+    [parameter(Mandatory=$false)][String]$configuration="Release"
 )    
 
 function Get-ScriptDirectory {
@@ -89,8 +90,8 @@ If($createPackage) {
 "========================================================================="
 " Building "
 "========================================================================="
-"# dnu build $projectDir"
-dnu build $projectDir
+"# dnu build $projectDir --configuration $configuration"
+dnu build $projectDir --configuration $configuration
 If(!$?) { Exit 1 } 
 
 # create the package, which we will zip up
@@ -98,8 +99,8 @@ If(!$?) { Exit 1 }
 "========================================================================="
 " Prep for Zipping "
 "========================================================================="
-"#dnu publish $projectDir --out $publishDir --runtime dnx-clr-win-x64.1.0.0-rc1-update1"
-dnu publish $projectDir --out $publishDir --runtime dnx-clr-win-x64.1.0.0-rc1-update1 --wwwroot-out $wwwrootDir
+"#dnu publish $projectDir --out $publishDir --runtime dnx-clr-win-x64.1.0.0-rc1-update1 --wwwroot-out $wwwrootDir --configuration $configuration"
+dnu publish $projectDir --out $publishDir --runtime dnx-clr-win-x64.1.0.0-rc1-update1 --wwwroot-out $wwwrootDir --configuration $configuration
 If(!$?) { Exit 1 }
 
 # 7-zip the publish directory

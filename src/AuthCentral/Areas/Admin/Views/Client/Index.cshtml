@@ -1,13 +1,11 @@
-﻿@{
+﻿@addTagHelper "*, cloudscribe.Web.Pagination"
+@model Fsw.Enterprise.AuthCentral.Areas.Admin.Models.ClientListViewModel
+@{
     ViewBag.Title = "Client Admin Home";
 }
 
 <div class="container">
-    <div class="jumbotron">
-        <h2>Manage Clients</h2>
-        <p>You have two options.</p>
-    </div>
-    <div class="row">
+   <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <em>@ViewBag.Message</em>
         </div>
@@ -35,5 +33,44 @@
             <p> <a href="/Admin/Client/Create" class="btn btn-primary">Create Client &raquo;</a></p>
         </div>
     </div>
+    <table class="table table-striped table-hover col-sm-12 col-md-12 col-lg-12">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Disable</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var client in Model.Clients)
+            {
+                <tr>
+                    <td><a href="/Admin/Client/Edit/@client.ClientId">@client.ClientName</a></td>
+                    <td>@client.AccessTokenType</td>
+                    <td>
+                        @if (client.Enabled)
+                        {
+                            @using (Html.BeginForm("Disable", "Client", new { clientId = client.ClientId, page = Model.PageNumber, area = "Admin" }, FormMethod.Post)) {
+                                @Html.AntiForgeryToken()
+                                <input type="submit" value="Disable" />
+                            }
+                        } else {
+                            @using (Html.BeginForm("Enable", "User", new { clientId = client.ClientId, page = Model.PageNumber, area = "Admin" }, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="submit" value="Enable" />
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <cs-pager cs-paging-pagesize="@Model.PageSize"
+              cs-paging-pagenumber="@Model.PageNumber"
+              cs-paging-totalitems="@Model.TotalItemCount"
+              cs-pagenumber-param="page"
+              asp-controller="Client"
+              asp-action="Index"></cs-pager>
 </div>
 <hr />

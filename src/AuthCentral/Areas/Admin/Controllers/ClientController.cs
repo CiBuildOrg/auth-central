@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Authorization;
 
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
 
+using Fsw.Enterprise.AuthCentral.MongoStore;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
-using Microsoft.AspNet.Authorization;
+using Fsw.Enterprise.AuthCentral.Areas.Admin.Models;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,10 +29,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             this._clientService = clientService;
         }
 
-        [HttpGet]
-        public IActionResult Index()
+        [HttpGet("{page?}")]
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 3)
         {
-            return View();
+            ClientPagingResult clientsPage = await this._clientService.GetPageAsync(page, pageSize);
+            ClientListViewModel clvm = new ClientListViewModel(clientsPage, page, pageSize);
+
+            return View(clvm);
         }
 
         [HttpGet("[action]")]

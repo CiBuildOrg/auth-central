@@ -15,14 +15,19 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public int TotalItemCount { get; set; }
+        public ClientListViewModel(ClientPagingResult clientPagingResult, int pageNumber, int pageSize) : this(clientPagingResult, pageNumber, pageSize, null) { }
 
-        public ClientListViewModel(ClientPagingResult clientPagingResult, int pageNumber, int pageSize)
+        public ClientListViewModel(ClientPagingResult clientPagingResult, int pageNumber, int pageSize, int? totalItemCount)
         {
             Clients = clientPagingResult.Collection;
             PageNumber = pageNumber;
             PageSize = pageSize;
 
-            if(clientPagingResult.HasMore)
+            if(totalItemCount != null)
+            {
+                TotalItemCount = totalItemCount.GetValueOrDefault();
+            }
+            else if(clientPagingResult.HasMore)
             {
                 TotalItemCount = pageNumber * pageSize + 1;
             }
@@ -30,8 +35,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
             {
                 TotalItemCount = pageNumber * pageSize;
             }
-
-
         }
     }
 }

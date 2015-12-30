@@ -22,6 +22,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
     [Area("Admin"), Route("[area]/[controller]")]
     public class ClientController : Controller
     {
+        private const string CLIENT_COUNT_COOKIE_KEY = "idsrv.admin.clients.count";
         private IClientService _clientService;
 
         public ClientController(IClientService clientService)
@@ -33,9 +34,31 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         public async Task<IActionResult> Index(int page = 1, int pageSize = 3)
         {
             ClientPagingResult clientsPage = await this._clientService.GetPageAsync(page, pageSize);
-            ClientListViewModel clvm = new ClientListViewModel(clientsPage, page, pageSize);
+            ClientListViewModel clientListViewModel = new ClientListViewModel(clientsPage, page, pageSize);
 
-            return View(clvm);
+            // retrieve the stored item count (if it exists)
+            string itemCountAsString = this.Request.Cookies[CLIENT_COUNT_COOKIE_KEY];
+            int itemCount;
+
+            // create the ClientListViewModel with appropriate total item account
+            if (itemCountAsString != null && int.TryParse(itemCountAsString, out itemCount) && 
+                itemCount > clientListViewModel.TotalItemCount)
+            {
+                // use the larger of the two total item counts
+                clientListViewModel = new ClientListViewModel(clientsPage, page, pageSize, itemCount);
+            }
+            else
+            {
+                // track the latest computed total item count
+                // TODO: expose an IList instead of an IEnumerable
+                if(clientListViewModel.Clients.ToList().Count > 0)
+                {
+                    // keep track of the computed total item count, when there are actually items returned
+                    this.Response.Cookies.Append(CLIENT_COUNT_COOKIE_KEY, clientListViewModel.TotalItemCount.ToString());
+                }
+            }
+
+            return View(clientListViewModel);
         }
 
         [HttpGet("[action]")]

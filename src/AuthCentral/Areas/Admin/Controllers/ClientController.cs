@@ -50,7 +50,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             else
             {
                 // track the latest computed total item count
-                // TODO: expose an IList instead of an IEnumerable
                 if(clientListViewModel.Clients.ToList().Count > 0)
                 {
                     // keep track of the computed total item count, when there are actually items returned

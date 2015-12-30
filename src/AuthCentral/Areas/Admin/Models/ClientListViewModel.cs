@@ -23,9 +23,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
             PageNumber = pageNumber;
             PageSize = pageSize;
 
-            if(totalItemCount != null)
+            if(totalItemCount.HasValue)
             {
-                TotalItemCount = totalItemCount.GetValueOrDefault();
+                TotalItemCount = totalItemCount.Value;
             }
             else if(clientPagingResult.HasMore)
             {

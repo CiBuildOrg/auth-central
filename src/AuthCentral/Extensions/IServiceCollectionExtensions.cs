@@ -70,6 +70,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
         public static void AddAuthCentralDependencies(this IServiceCollection services, EnvConfig config)
         {
             services.AddScoped<MongoAuthenticationService>();
+            services.AddScoped(typeof(AuthenticationService<HierarchicalUserAccount>), typeof(MongoAuthenticationService));
             services.AddInstance<EnvConfig>(config);
         }
 

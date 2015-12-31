@@ -38,7 +38,7 @@
 
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <li>@Html.ActionLink("Account Details", "Details", "Home", new { area = "UserAccount" }, null)</li>
+                                <li>@Html.ActionLink("Account Details", "Edit", "Profile", new { area = "UserAccount" }, null)</li>
                                 <li>@Html.ActionLink("Verify Your Email Account", "Verify", "Register", new { area = "UserAccount" }, null)</li>
                                 <li>@Html.ActionLink("Change Email", "Index", "ChangeEmail", new { area = "UserAccount" }, null)</li>
                                 <li>@Html.ActionLink("Change Password", "Index", "ChangePassword", new {area = "UserAccount"}, null)</li>

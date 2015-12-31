@@ -33,6 +33,20 @@
             <a href="/Admin/Client/Create" class="btn btn-primary">&#43; Create a New Client</a>
         </div>
     </div>
+    @{ 
+        string noResultsMsg = "There are currently no clients.  Perhaps you'd like to create one?";
+        if(Model.PageNumber > 1)
+        {
+            noResultsMsg = "No results were returned for this page";
+        }
+    }
+
+    @if(Model.Clients.ToList().Count <=0)
+    {
+       <div class="row well well-lg" style="padding:0px">
+            <div class="col-sm-12 col-md-12 col-lg-12"> @noResultsMsg </div>
+        </div>
+    }
     @foreach (var client in Model.Clients)
     {
         <div class="row well well-lg" style="padding:0px">
@@ -103,6 +117,7 @@
               cs-paging-totalitems="@Model.TotalItemCount"
               cs-pagenumber-param="page"
               asp-controller="Client"
-              asp-action="Index"></cs-pager>
+              asp-action="Index"
+              asp-route-pageSize="@Model.PageSize"></cs-pager>
 </div>
 <hr />

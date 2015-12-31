@@ -30,33 +30,30 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             this._clientService = clientService;
         }
 
-        [HttpGet("{page?}")]
+        [HttpGet]
         public async Task<IActionResult> Index(int page = 1, int pageSize = 3)
         {
             ClientPagingResult clientsPage = await this._clientService.GetPageAsync(page, pageSize);
             ClientListViewModel clientListViewModel = new ClientListViewModel(clientsPage, page, pageSize);
+            int clientsFoundForPage = clientListViewModel.Clients.ToList().Count;
 
             // retrieve the stored item count (if it exists)
+            int itemCount = 0;
             string itemCountAsString = this.Request.Cookies[CLIENT_COUNT_COOKIE_KEY];
-            int itemCount;
 
-            int clientsFoundForPage = clientListViewModel.Clients.ToList().Count;
 
             // create the ClientListViewModel with appropriate total item account
             if (itemCountAsString != null && int.TryParse(itemCountAsString, out itemCount) && 
-                itemCount > clientListViewModel.TotalItemCount && clientsFoundForPage > 0)
+                itemCount > clientListViewModel.TotalItemCount && clientsFoundForPage > 0 && 
+                clientsPage.HasMore)
             {
-                // use the larger of the two total item counts
+                // use the saved total item counts
                 clientListViewModel = new ClientListViewModel(clientsPage, page, pageSize, itemCount);
             }
-            else
+
+            if(itemCount != clientListViewModel.TotalItemCount && clientsFoundForPage > 0)
             {
-                // track the latest computed total item count
-//                if(clientsFoundForPage > 0)
-                {
-                    // keep track of the computed total item count, when there are actually items returned
-                    this.Response.Cookies.Append(CLIENT_COUNT_COOKIE_KEY, clientListViewModel.TotalItemCount.ToString());
-                }
+                this.Response.Cookies.Append(CLIENT_COUNT_COOKIE_KEY, clientListViewModel.TotalItemCount.ToString());
             }
 
             return View(clientListViewModel);

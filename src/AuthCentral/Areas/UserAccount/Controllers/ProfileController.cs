@@ -29,7 +29,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
         }
 
         // GET: /<controller>/
-        [Authorize]
         [HttpGet]
         public IActionResult Edit(bool changed)
         {
@@ -56,11 +55,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             }
             return View("Edit");
         }
-
-        [Authorize]
+        
         [ValidateAntiForgeryToken]
         [HttpPost("[action]")]
-        public IActionResult ChangeName(UserNameModel model)
+        public IActionResult ChangeName([Bind(Prefix = "Name")]UserNameModel model)
         {
             if (ModelState.IsValid)
             {
@@ -87,10 +85,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             return Edit(false);
         }
 
-        [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost("[action]")]
-        public IActionResult ChangePassword(ChangePasswordInputModel profile)
+        public IActionResult ChangePassword([Bind(Prefix = "Password")]ChangePasswordInputModel profile)
         {
             try
             {
@@ -108,8 +105,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             }
             return View("SendPasswordReset");
         }
-
-        [Authorize]
+        
         [ValidateAntiForgeryToken]
         [HttpPost("[action]")]
         public IActionResult ChangeEmail(ChangeEmailRequestInputModel model)

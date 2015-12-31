@@ -5,7 +5,7 @@
 }
 
 <br />
-@using (Html.BeginForm("ChangeName", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "edit-form", @class = "form-inline" }))
+@using (Html.BeginForm("ChangeName", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "name-form", @class = "form-inline" }))
 {
     @Html.AntiForgeryToken()
     <label class="control-label col-md-2">Name</label>
@@ -22,7 +22,7 @@
 }
 
     <br style="clear: both" />
-@using (Html.BeginForm("ChangeEmail", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "edit-form", @class = "form-inline" }))
+@using (Html.BeginForm("ChangeEmail", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "email-form", @class = "form-inline" }))
 {
     @Html.AntiForgeryToken()
     <label class="control-label col-md-2">Email</label>
@@ -38,7 +38,7 @@
 
 <br style="clear: both" />
 
-@using (Html.BeginForm("ChangePassword", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "edit-form", @class = "form-inline" }))
+@using (Html.BeginForm("ChangePassword", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "password-form", @class = "form-inline" }))
 {
     @Html.AntiForgeryToken()
     <label class="control-label col-md-2">Password</label>
@@ -64,7 +64,7 @@
             @Html.ValidationMessageFor(model => model.Password.NewPasswordConfirm)
         </div>
         <br />
-        <input type="submit" value="Change Password" class="btn btn-success" onclick="javascript: document.forms['email-form'].submit();" />
+        <input type="submit" value="Change Password" class="btn btn-success" />
     </div>
 }
 <hr style="clear: both" />

@@ -133,7 +133,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             }
 
             ViewBag.Message = string.Format("The Auth Central Client {0} was successfully saved!", client.ClientName);
-            return RedirectToAction("Edit", new { clientId = client.ClientId, ViewBag = ViewBag });
+            return RedirectToAction("Edit", new { clientId = client.ClientId });
         }
 
     }

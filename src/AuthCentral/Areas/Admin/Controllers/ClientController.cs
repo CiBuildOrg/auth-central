@@ -40,9 +40,11 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             string itemCountAsString = this.Request.Cookies[CLIENT_COUNT_COOKIE_KEY];
             int itemCount;
 
+            int clientsFoundForPage = clientListViewModel.Clients.ToList().Count;
+
             // create the ClientListViewModel with appropriate total item account
             if (itemCountAsString != null && int.TryParse(itemCountAsString, out itemCount) && 
-                itemCount > clientListViewModel.TotalItemCount)
+                itemCount > clientListViewModel.TotalItemCount && clientsFoundForPage > 0)
             {
                 // use the larger of the two total item counts
                 clientListViewModel = new ClientListViewModel(clientsPage, page, pageSize, itemCount);
@@ -50,7 +52,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             else
             {
                 // track the latest computed total item count
-                if(clientListViewModel.Clients.ToList().Count > 0)
+//                if(clientsFoundForPage > 0)
                 {
                     // keep track of the computed total item count, when there are actually items returned
                     this.Response.Cookies.Append(CLIENT_COUNT_COOKIE_KEY, clientListViewModel.TotalItemCount.ToString());
@@ -107,6 +109,50 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             {
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
                 return View("Index", ViewBag);
+            }
+        }
+
+        [HttpPost("[action]/{clientId?}")]
+        public async Task<IActionResult> Disable(string clientId, int page = 1)
+        {
+            Client client = await _clientService.Find(clientId);
+
+            if(client != null)
+            {
+                client.Enabled = false;
+                await _clientService.Save(client);
+
+                return this.RedirectToAction("Index", "Client", new
+                {
+                    page = page
+                });
+            }
+            else
+            {
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
+                return View("Index");
+            }
+        }
+
+        [HttpPost("[action]/{clientId?}")]
+        public async Task<IActionResult> Enable(string clientId, int page = 1)
+        {
+            Client client = await _clientService.Find(clientId);
+
+            if(client != null)
+            {
+                client.Enabled = true;
+                await _clientService.Save(client);
+
+                return RedirectToAction("Index", "Client", new
+                {
+                    page = page
+                });
+            }
+            else
+            {
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
+                return View("Index");
             }
         }
 

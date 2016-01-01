@@ -89,11 +89,16 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
         [HttpPost("[action]")]
         public IActionResult ChangePassword([Bind(Prefix = "Password")]ChangePasswordInputModel profile)
         {
+            if(!ModelState.IsValid)
+            {
+                return Edit(false);
+            }
+
             try
             {
                 var acct = _userAccountService.GetByID(User.GetId());
-                _userAccountService.ResetPassword(acct.Tenant, acct.Email);
-                return View("PasswordSent");
+                _userAccountService.ChangePassword(acct.ID, profile.OldPassword, profile.NewPassword);
+                return RedirectToAction("Edit", new { changed = true });
             }
             catch (AuthenticationException)
             {

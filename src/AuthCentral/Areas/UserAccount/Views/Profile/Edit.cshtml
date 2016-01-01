@@ -4,6 +4,7 @@
     ViewBag.Title = "Edit Profile";
 }
 
+<div><em>@ViewData["Message"]</em></div>
 <br />
 @using (Html.BeginForm("ChangeName", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "name-form", @class = "form-inline" }))
 {

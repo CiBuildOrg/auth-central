@@ -108,20 +108,20 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
         
         [ValidateAntiForgeryToken]
         [HttpPost("[action]")]
-        public IActionResult ChangeEmail(ChangeEmailRequestInputModel model)
+        public IActionResult ChangeEmail([EmailAddress]string email)
         {
             if (!ModelState.IsValid)
             {
-                return View("Index", model);
+                return Edit(false);
             }
 
             try
             {
-                _userAccountService.ChangeEmailRequest(User.GetId(), model.NewEmail);
+                _userAccountService.ChangeEmailRequest(User.GetId(), email);
 
                 if (_userAccountService.Configuration.RequireAccountVerification)
                 {
-                    return View("EmailConfirmationSent", model);
+                    return View("EmailConfirmationSent", email);
                 }
                 else
                 {
@@ -137,7 +137,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
                 ModelState.AddModelError("", ex.Message);
             }
 
-            return View("Index", model);
+            return Edit(false);
         }
     }
 }

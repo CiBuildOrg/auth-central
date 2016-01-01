@@ -17,7 +17,7 @@
         @Html.TextBoxFor(model => model.Name.FamilyName, new { @class = "form-control", @placeholder = "Last" })
         @Html.ValidationMessageFor(model => model.Name.GivenName)
         @Html.ValidationMessageFor(model => model.Name.FamilyName)
-        <input type="submit" value="Save" class="btn btn-success" onclick="javascript: document.forms['edit-form'].submit();" />
+        <input type="submit" value="Save" class="btn btn-success" />
     </div>
 }
 
@@ -30,9 +30,9 @@
         @Model.Email <a href="#" onclick="$('#emailText').hide();$('#emailForm').show();">edit</a>
     </div>
     <div class="col-md-10" style="display: none" id="emailForm">
-        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "Email" })
+        @Html.TextBoxFor(model => model.Email, new { @name = "NewEmail", @class = "form-control", @placeholder = "Email" })
         @Html.ValidationMessageFor(model => model.Email)
-        <input type="submit" value="Send Confirmation Email" class="btn btn-success" onclick="javascript: document.forms['email-form'].submit();" />
+        <input type="submit" value="Send Confirmation Email" class="btn btn-success" />
     </div>
 }
 

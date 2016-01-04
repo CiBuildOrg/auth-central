@@ -1,5 +1,6 @@
-﻿@using IdentityServer3.Core.Models
-@model Fsw.Enterprise.AuthCentral.Areas.Admin.Models.ScopeListModel
+﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models
+
+@model ScopeListModel
 
 @{
     ViewBag.Title = "AuthCentral Scope Administration";
@@ -8,7 +9,7 @@
 <div class="page-header">
     <h1>Scope Administration</h1>
 </div>
-@foreach (Scope scope in Model.Scopes)
+@foreach (ScopeModel scope in Model.Scopes)
 {
     <div class="panel panel-default">
         <div class="panel-heading">

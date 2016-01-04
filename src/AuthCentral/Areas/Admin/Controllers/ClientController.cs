@@ -41,7 +41,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 PrefixClientClaims = false,
                 AlwaysSendClientClaims = true,
                 RequireConsent = false,
-                LogoUri = "//fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg",
+                LogoUri = "https://fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg",
                 Flow = Flows.AuthorizationCode
             };
 

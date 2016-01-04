@@ -41,7 +41,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 PrefixClientClaims = false,
                 AlwaysSendClientClaims = true,
                 RequireConsent = false,
-                LogoUri = "https://img3.foodservicewarehouse.com/Img/fsw15.svg",
+                LogoUri = "https://fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg",
                 Flow = Flows.AuthorizationCode
             };
 
@@ -133,7 +133,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             }
 
             ViewBag.Message = string.Format("The Auth Central Client {0} was successfully saved!", client.ClientName);
-            return RedirectToAction("Edit", new { clientId = client.ClientId, ViewBag = ViewBag });
+            return RedirectToAction("Edit", new { clientId = client.ClientId });
         }
 
     }

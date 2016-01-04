@@ -13,7 +13,7 @@ namespace Fsw.Enterprise.AuthCentral.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            return this.RedirectPermanent("/account");
+            return this.RedirectPermanent("/useraccount/profile");
         }
     }
 }

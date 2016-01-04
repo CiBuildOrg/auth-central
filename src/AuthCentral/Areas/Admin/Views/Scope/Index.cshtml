@@ -80,7 +80,11 @@
                                         <td>@claim.Description</td>
                                         <td>@claim.AlwaysIncludeInIdToken.ToString()</td>
                                         <td>
-
+                                            <button class="btn btn-primary" onclick="$(@showRow).addClass('hidden'); $(@editRow).removeClass('hidden');">Edit</button>
+                                            @using (Html.BeginForm("RemoveClaim", "Scope", new {scope = scope.Name, claim = claim.Name}, FormMethod.Post))
+                                            {
+                                                <button class="btn btn-default" type="submit">Delete</button>
+                                            }
                                         </td>
                                     </tr>
                                 }

@@ -47,6 +47,10 @@
                 @using (@Html.BeginForm("Edit", "Scope", FormMethod.Post, new {@class="form-horizontal"}))
                 {
                     @Html.EditorFor(model => scope)
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Save</button>
+                        <button class="btn btn-default" type="button" onclick="$('#edit_@scope.Name').addClass('hidden'); $('#show_@scope.Name').removeClass('hidden'); $('#editScopeBtn_@scope.Name').removeClass('hidden');">Cancel</button>
+                    </div>
                 }
             </div>
             <div class="row">
@@ -116,7 +120,7 @@
             </div>
         </div>
         <div class="panel-footer">
-            <button class="btn btn-primary" onclick="$('#edit_@scope.Name').removeClass('hidden'); $('#show_@scope.Name').addClass('hidden'); $('#editScopeBtn_@scope.Name').addClass('hidden'); " id="editScopeBtn_@scope.Name">Edit</button>
+            <button class="btn btn-primary" onclick="$('#edit_@scope.Name').removeClass('hidden'); $('#show_@scope.Name').addClass('hidden'); $('#editScopeBtn_@scope.Name').addClass('hidden'); $('editScopeCancelBtn_@scope.Name').removeClass('hidden');" id="editScopeBtn_@scope.Name">Edit</button>
         </div>
     </div>
 }

@@ -61,10 +61,37 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Changes an existing claim in a scope.
+        /// </summary>
+        /// <param name="claim">The <see cref="ScopeClaim"/> with all its (possibly changed) values.</param>
+        /// <param name="claimId">The original name of the claim.  Might be different in <paramref name="claim"/></param>
+        /// <param name="scope">The name of the scope we're updating claims in.</param>
         [HttpPost("[action]")]
         public async Task<IActionResult> EditClaim(ScopeClaim claim, string claimId, string scope)
         {
-            return new EmptyResult();
+            var claimScope = await _scopeService.Find(scope);
+
+            if (claimScope == null)
+            {
+                ModelState.AddModelError("FindScope", $"Scope with the name {scope} could not be found.");
+                return RedirectToAction("Index");
+            }
+
+            var claimToRemove = claimScope.Claims.SingleOrDefault(scopeClaim => scopeClaim.Name == claimId);
+
+            if (claimToRemove == default(ScopeClaim))
+            {
+                ModelState.AddModelError("FindClaim", $"Claim with the name {claimId} was not found in the scope {scope}");
+                return RedirectToAction("Index");
+            }
+
+            int index = claimScope.Claims.IndexOf(claimToRemove);
+            claimScope.Claims[index] = claim;
+            
+            await _scopeService.Save(claimScope);
+
+            return RedirectToAction("Index");
         }
     }
 }

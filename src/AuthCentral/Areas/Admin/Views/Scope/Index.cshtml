@@ -85,7 +85,10 @@
                                 <tbody>
                                 @foreach (var claim in scope.Claims)
                                 {
-                                    <tr>
+                                    string claimName = claim.Name;
+                                    string showRow = $"show_{scope.Name}_{claimName}";
+                                    string editRow = $"edit_{scope.Name}_{claimName}";
+                                    <tr id="@showRow">
                                         <td>@claim.Name</td>
                                         <td>@claim.Description</td>
                                         <td>@claim.AlwaysIncludeInIdToken.ToString()</td>
@@ -97,6 +100,18 @@
                                             }
                                         </td>
                                     </tr>
+                                    @using (Html.BeginForm("EditClaim", "Scope", new {scope, claim, claimId = claimName }, FormMethod.Post))
+                                    {
+                                        <tr id="@editRow" class="hidden">
+                                            <td>@Html.EditorFor(model => claim.Name)</td>
+                                            <td>@Html.EditorFor(model => claim.Description)</td>
+                                            <td>@Html.EditorFor(model => claim.AlwaysIncludeInIdToken)</td>
+                                            <td>
+                                                <button class="btn btn-primary" type="submit">Save</button>
+                                                <button class="btn btn-default" type="button" onclick="$(@showRow).removeClass('hidden'); $(@editRow).addClass('hidden');">Cancel</button>
+                                            </td>
+                                        </tr>
+                                    }
                                 }
                                 </tbody>
                             </table>

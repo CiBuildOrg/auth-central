@@ -1,4 +1,4 @@
-﻿using System.Linq;us
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Fsw.Enterprise.AuthCentral.Areas.Admin.Models;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
@@ -59,6 +59,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             await _scopeService.Save(editScope);
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> EditClaim(ScopeModel scope, ScopeClaim claim, string claimId)
+        {
+            return new EmptyResult();
         }
     }
 }

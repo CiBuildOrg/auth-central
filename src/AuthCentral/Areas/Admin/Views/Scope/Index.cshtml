@@ -101,10 +101,13 @@
                                             }
                                         </td>
                                     </tr>
-                                    @using (Html.BeginForm("EditClaim", "Scope", new {scope, claim, claimId = claimName }, FormMethod.Post))
+                                    @using (Html.BeginForm("EditClaim", "Scope", FormMethod.Post))
                                     {
                                         <tr id="@editRow" class="hidden">
-                                            <td>@Html.EditorFor(model => claim.Name)</td>
+                                            <td>@Html.EditorFor(model => claim.Name)
+                                                @Html.Hidden("claimId", claimName)
+                                                @Html.Hidden("scope", scope.Name)
+                                            </td>
                                             <td>@Html.EditorFor(model => claim.Description)</td>
                                             <td>@Html.EditorFor(model => claim.AlwaysIncludeInIdToken)</td>
                                             <td>

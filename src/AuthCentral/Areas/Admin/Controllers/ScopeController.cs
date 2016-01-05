@@ -62,7 +62,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditClaim(ScopeModel scope, ScopeClaim claim, string claimId)
+        public async Task<IActionResult> EditClaim(ScopeClaim claim, string claimId, string scope)
         {
             return new EmptyResult();
         }

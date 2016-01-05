@@ -86,8 +86,9 @@
                                 @foreach (var claim in scope.Claims)
                                 {
                                     string claimName = claim.Name;
-                                    string showRow = $"show_{scope.Name}_{claimName}";
-                                    string editRow = $"edit_{scope.Name}_{claimName}";
+                                    string safeClaimName = claimName.Replace(':', '_');
+                                    string showRow = $"show_{scope.Name}_{safeClaimName}";
+                                    string editRow = $"edit_{scope.Name}_{safeClaimName}";
                                     <tr id="@showRow">
                                         <td>@claim.Name</td>
                                         <td>@claim.Description</td>

@@ -31,7 +31,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 3)
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
         {
             ClientPagingResult clientsPage = await this._clientService.GetPageAsync(page, pageSize);
             ClientListViewModel clientListViewModel = new ClientListViewModel(clientsPage, page, pageSize);

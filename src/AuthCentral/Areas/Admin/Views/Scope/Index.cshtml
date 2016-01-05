@@ -15,6 +15,16 @@
         <div class="panel-heading">
             <h3 >@scope.Name</h3>
         </div>
+        @if (!Html.ViewData.ModelState.IsValid)
+        {
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="alert alert-danger">
+                        @Html.ValidationSummary("Please correct the following errors")
+                    </div>
+                </div>
+            </div>
+        }
         <div class="panel-body panel-group">
             <div class="row panel">
                 <div class="col-md-12">@scope.Description</div>

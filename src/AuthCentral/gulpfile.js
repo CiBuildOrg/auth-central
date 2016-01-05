@@ -6,6 +6,7 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 
 var fs = require('fs');
+var path = require('path');
 var merge2 = require('merge2');
 var del = require('del');
 var uglify = require('gulp-uglify');
@@ -15,72 +16,100 @@ var replace = require('gulp-html-replace');
 var bower = require('gulp-bower');
 
 var paths = {
-    bower: "./bower_components/",
-    lib: "./wwwroot/libs/",
-		assets: "./wwwroot/assets/"
+    bower: "./bower_components",
+    wwwroot: "./wwwroot",
+    clientApp: "./wwwroot/app",
+    lib: "./wwwroot/libs",
+    assets: "./wwwroot/assets",
+    customSass: "./Styles",
+    sharedLayouts: './Areas/UserAccount/Views/Shared'
 };
 
 gulp.task('bower', function () {
-    return bower()
-      .pipe(gulp.dest(config.bowerDir)) });
-
-gulp.task('icons', function() {     return gulp.src(config.bowerDir + '/fontawesome/fonts/**.*')       .pipe(gulp.dest(paths.assets + 'fonts')); 
+  //return bower().pipe(gulp.dest(paths.bower));
 });
 
-gulp.task('default', ['watch']);
+gulp.task('fonts', function () {
+  return gulp.src(paths.bower + '/font-awesome/fonts/**.*')
+    .pipe(gulp.dest(paths.assets + '/fonts'));
+});
+
+gulp.task('default', ['build']);
 
 gulp.task('build', ['sass'], function() {
-	return gulp.start('layout');
+	return gulp.start('injectlatest');
 });
 
-gulp.task('build:sass', ['sass'], function() {
-	return gulp.start('layout');
-});
-
-gulp.task('clean:sass', function() {
-  del(paths.assets + '**/*.css');
+gulp.task('clean', function() {
+  del(paths.assets + '/**/*.css');
   return gulp.start('bower');
 });
 
-gulp.task('watch', ['watch:sass']);
-
-gulp.task('watch:sass', function () {
-	return gulp.watch('./Styles/**/*.scss', function() {
-		return gulp.start('build:sass');
-	});
+gulp.task('watch', function () {
+  return gulp.watch(paths.customSass + '/**/*.scss', ['sass']);
 });
 
-gulp.task('sass', ['clean:sass'], function () {
-    return gulp.src(['./Styles/main.scss', './Styles/vendor.scss'])
+gulp.task('sass', ['clean', 'bower', 'fonts'], function () {
+    return gulp.src(paths.customSass + '/**/*.scss')
 		.pipe(sass({
-            loadPath: [
-                './Styles',
-                config.bowerDir + '/bootstrap-sass-official/assets/stylesheets',
-                config.bowerDir + '/fontawesome/scss',
+//            outputStyle: 'compressed',
+            includePaths: [
+                paths.customSass,
+                paths.bower + '/bootstrap-sass-official/assets/stylesheets',
+                paths.bower + '/font-awesome/scss'
             ]
-        })
+        }).on('error', sass.logError)
      )
 		.pipe(rev())
-		.pipe(gulp.dest(paths.assets) + 'css');
+		.pipe(gulp.dest(paths.assets));
 });
 
-gulp.task('layout', function() {
+gulp.task('injectlatest', function() {
+
+  // get a list of all custom views used by IdentityServer3
+  var customViews = fs.readdirSync(paths.clientApp).reverse().map(function (f) {
+    return paths.clientApp + '/' + f;
+  }).filter(function (f) {
+    return (f.indexOf('.html') !== -1);
+  });
+
+  // get a list of all built files
 	var files = fs.readdirSync(paths.assets).reverse().map(function(f) { return '/assets/' + f; });
 	
+  // filter list to just css files
 	var cssFiles = files.filter(function(f) {
 		return f.indexOf('.css') !== -1;
 	});
 	
+  // filter list to just javascript files
 	var jsFiles = files.filter(function(f) {
 		return f.indexOf('.js') !== -1;
 	});
-	
-	return gulp.src('./Areas/UserAccount/Views/Shared/_Layout.cshtml')
-		.pipe(replace({
-			'css': cssFiles,
-			'js': jsFiles
-		}, { 
-			keepBlockTags: true 
-		}))
-		.pipe(gulp.dest('./Areas/UserAccount/Views/Shared/'));
+
+  // inject into the main layout
+	gulp.src(paths.sharedLayouts + '/_Layout.cshtml')
+		.pipe(replace(
+      {
+        'css': cssFiles,
+        'js': jsFiles
+      },
+      {
+			  keepBlockTags: true 
+      })
+    )
+		.pipe(gulp.dest(paths.sharedLayouts));
+
+  // inject into the custom views
+	gulp.src(customViews)
+		.pipe(replace(
+      {
+        'css': cssFiles,
+        'js': jsFiles
+      },
+      {
+			  keepBlockTags: true 
+      })
+    )
+		.pipe(gulp.dest(paths.clientApp));
+
 });

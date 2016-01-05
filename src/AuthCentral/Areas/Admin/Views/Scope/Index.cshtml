@@ -156,24 +156,31 @@
         </div>
     </div>
 }
-<script type="text/javascript">
-    $(function() {
-        $('.edit-row button.save').on('click', function(event) {
-            var $editRow = $(this).parent('tr');
-            var $showRow = $editRow.prev();
-            var data = {
-                claim: {
-                    Name: $editRow.find('.claim-name').val(),
-                    Description: $editRow.find('.claim-desc').val(),
-                    AlwaysIncludeInIdToken: $editRow.find('.claim-include').val()
-                },
-                claimId: $editRow.find('input[name=claimId]').val(),
-                scope: $editRow.find('input[name=scope]').val()
-            };
-            $.post('/Admin/Scope/EditClaim/', data, function(msg) {
-                $showRow.removeClass('hidden');
-                $editRow.addClass('hidden');
+
+@section scripts{
+    <script type="text/javascript">
+        $(function() {
+            $('.edit-row button.save').on('click', function(event) {
+                var $editRow = $(this).parent('tr');
+                var $showRow = $editRow.prev();
+                var data = {
+                    claim: {
+                        Name: $editRow.find('.claim-name').val(),
+                        Description: $editRow.find('.claim-desc').val(),
+                        AlwaysIncludeInIdToken: $editRow.find('.claim-include').val()
+                    },
+                    claimId: $editRow.find('input[name=claimId]').val(),
+                    scope: $editRow.find('input[name=scope]').val()
+                };
+                $.post('/Admin/Scope/EditClaim/', data, function(msg) {
+                    $showRow.removeClass('hidden');
+                    $editRow.addClass('hidden');
+                });
             });
         });
-    });
-</script>
+
+            var data = {
+            };
+            });
+    </script>
+}

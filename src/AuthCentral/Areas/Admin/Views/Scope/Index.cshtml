@@ -102,7 +102,7 @@
                                             }
                                         </td>
                                     </tr>
-                                    <tr id="@editRow" class="hidden edit-row">
+                                    <tr id="@editRow" class="hidden edit-claim-row">
                                         <td>
                                             @Html.EditorFor(model => claim.Name, new { htmlAttributes = new { @class = "claim-name" } })
                                             @Html.Hidden("claimId", claimName)
@@ -161,7 +161,7 @@
 @section scripts{
     <script type="text/javascript">
         $(function() {
-            $('.edit-row button.save').on('click', function(event) {
+            $('.edit-claim-row button.save').on('click', function(event) {
                 var $editRow = $(this).parents('tr');
                 var $showRow = $editRow.prev();
                 var $claimName = $editRow.find('.claim-name');
@@ -190,9 +190,5 @@
                 });
             });
         });
-
-            var data = {
-            };
-            });
     </script>
 }

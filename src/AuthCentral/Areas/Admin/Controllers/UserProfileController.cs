@@ -34,7 +34,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             Guid userGuid;
             if (!Guid.TryParse(userId, out userGuid))
             {
-                throw new Exception("Could not parse user Id.");
+                return HttpBadRequest("Could not parse user Id.");
             }
 
             HierarchicalUserAccount user = _userAccountService.GetByID(userGuid);

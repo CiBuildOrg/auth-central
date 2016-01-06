@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Authorization;
 
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
 
+using Fsw.Enterprise.AuthCentral.MongoStore;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
-using Microsoft.AspNet.Authorization;
+using Fsw.Enterprise.AuthCentral.Areas.Admin.Models;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,6 +22,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
     [Area("Admin"), Route("[area]/[controller]")]
     public class ClientController : Controller
     {
+        private const string CLIENT_COUNT_COOKIE_KEY = "idsrv.admin.clients.count";
         private IClientService _clientService;
 
         public ClientController(IClientService clientService)
@@ -28,9 +31,32 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
         {
-            return View();
+            ClientPagingResult clientsPage = await this._clientService.GetPageAsync(page, pageSize);
+            ClientListViewModel clientListViewModel = new ClientListViewModel(clientsPage, page, pageSize);
+            int clientsFoundForPage = clientListViewModel.Clients.ToList().Count;
+
+            // retrieve the stored item count (if it exists)
+            int itemCount = 0;
+            string itemCountAsString = this.Request.Cookies[CLIENT_COUNT_COOKIE_KEY];
+
+
+            // create the ClientListViewModel with appropriate total item account
+            if (itemCountAsString != null && int.TryParse(itemCountAsString, out itemCount) && 
+                itemCount > clientListViewModel.TotalItemCount && clientsFoundForPage > 0 && 
+                clientsPage.HasMore)
+            {
+                // use the saved total item counts
+                clientListViewModel = new ClientListViewModel(clientsPage, page, pageSize, itemCount);
+            }
+
+            if(itemCount != clientListViewModel.TotalItemCount && clientsFoundForPage > 0)
+            {
+                this.Response.Cookies.Append(CLIENT_COUNT_COOKIE_KEY, clientListViewModel.TotalItemCount.ToString());
+            }
+
+            return View(clientListViewModel);
         }
 
         [HttpGet("[action]")]
@@ -80,6 +106,50 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             {
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
                 return View("Index", ViewBag);
+            }
+        }
+
+        [HttpPost("[action]/{clientId?}")]
+        public async Task<IActionResult> Disable(string clientId, int page = 1)
+        {
+            Client client = await _clientService.Find(clientId);
+
+            if(client != null)
+            {
+                client.Enabled = false;
+                await _clientService.Save(client);
+
+                return this.RedirectToAction("Index", "Client", new
+                {
+                    page = page
+                });
+            }
+            else
+            {
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
+                return View("Index");
+            }
+        }
+
+        [HttpPost("[action]/{clientId?}")]
+        public async Task<IActionResult> Enable(string clientId, int page = 1)
+        {
+            Client client = await _clientService.Find(clientId);
+
+            if(client != null)
+            {
+                client.Enabled = true;
+                await _clientService.Save(client);
+
+                return RedirectToAction("Index", "Client", new
+                {
+                    page = page
+                });
+            }
+            else
+            {
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
+                return View("Index");
             }
         }
 

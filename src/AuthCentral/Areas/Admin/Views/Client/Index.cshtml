@@ -1,39 +1,123 @@
-﻿@{
+﻿@addTagHelper "*, cloudscribe.Web.Pagination"
+@model Fsw.Enterprise.AuthCentral.Areas.Admin.Models.ClientListViewModel
+@{
     ViewBag.Title = "Client Admin Home";
 }
 
-<div class="container">
-    <div class="jumbotron">
-        <h2>Manage Clients</h2>
-        <p>You have two options.</p>
-    </div>
-    <div class="row">
+<div>
+   <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <em>@ViewBag.Message</em>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-6">
-            <h3>Find a Client by ClientId</h3>
+        <div class="col-md-6">
+            <h5>Find a Client by ID</h5>
             @using (Html.BeginForm("Edit", "Client", new {area = "Admin" }, FormMethod.Post, new {@id = "search-form", @class = "form-horizontal",  @onsubmit = "javascript: location.href='/Admin/Client/Edit/'+document.forms['search-form'].clientId.value; return false;" } )) 
             {
                 <div class="form-group">
                     <div  class="control-label col-sm-2 col-md-2 col-lg-2" >
-                        <label for="clientId">ClientId</label>
+                        <label for="clientId">Client&nbsp;ID</label>
                     </div>
                     <div  class="editor-field col-sm-5 col-md-5 col-lg-5" >
                         <input type="text" class="form-control" id="clientId" name="clientId" placeholder="ClientId">
                     </div>
                     <div  class="control-control col-sm-5 col-md-5 col-lg-5" >
-                        <button type="submit" class="btn btn-primary">Search &raquo;</button>
+                        <button type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </div>
             }
         </div>
-        <div class="col-sm-6 col-md-6 col-lg-6">
-            <h3>Create a New Client</h3>
-            <p> <a href="/Admin/Client/Create" class="btn btn-primary">Create Client &raquo;</a></p>
+        <div class="col-md-6 text-right">
+            <h5>Add Clients</h5>
+            <a href="/Admin/Client/Create" class="btn btn-primary">&#43; Create a New Client</a>
         </div>
     </div>
+    @{ 
+        string noResultsMsg = "There are currently no clients.  Perhaps you'd like to create one?";
+        if(Model.PageNumber > 1)
+        {
+            noResultsMsg = "No results were returned for this page";
+        }
+    }
+
+    @if(Model.Clients.ToList().Count <=0)
+    {
+       <div class="row well well-lg" style="padding:0px">
+            <div class="col-sm-12 col-md-12 col-lg-12"> @noResultsMsg </div>
+        </div>
+    }
+    @foreach (var client in Model.Clients)
+    {
+        <div class="row well well-lg" style="padding:0px">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="row" style="background:#245580; padding: 4px; color:#FFF">
+                    <div class="col-md-6">
+                        <a href="/Admin/Client/Edit/@client.ClientId" style="color:#FFF">@client.ClientName</a>
+                    </div>
+                    <div class="col-md-6" align="right">
+                        #@client.ClientId
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 15px; margin-bottom: 15px;">
+                    <div class="col-md-1">
+                        <img src="@client.LogoUri" class="img-thumbnail img-responsive img-rounded center-block" />
+                    </div>
+                    <div class="col-md-8">
+                        @if (!String.IsNullOrWhiteSpace(client.ClientUri)) {
+                            <div class="row">
+                                <div class="col-md-2 text-right">Client&nbsp;URI:</div><div class="col-md-6">@client.ClientUri</div>
+                            </div>
+                        }
+                        @if (client.RedirectUris.Count > 0) {
+                            <div class="row">
+                                <div class="col-md-2 text-right">Redirect&nbsp;URI:</div><div class="col-md-6">@client.RedirectUris[0]</div>
+                            </div>
+                        }
+                        @if (client.PostLogoutRedirectUris.Count > 0) {
+                            <div class="row">
+                                <div class="col-md-2 text-right">Logout&nbsp;URI:</div><div class="col-md-6">@client.PostLogoutRedirectUris[0]</div>
+                            </div>
+                        }
+                    </div>
+                    <div class="col-md-3">
+                            <div class="row">
+                                <div class="text">Flow: @client.Flow</div>
+                            </div>
+                            <div class="row">
+                                <div class="text">Access Token Type: @client.AccessTokenType</div>
+                            </div>
+                            <div class="row">
+                                <div class="text-right" style="margin-right:15px">
+                                    @if (client.Enabled) {
+                                        @using (Html.BeginForm("Disable", "Client", new { clientId = client.ClientId, page = Model.PageNumber, area = "Admin" }, FormMethod.Post)) {
+                                            @Html.AntiForgeryToken()
+                                            <input type="submit" class="btn btn-warning btn-xs" value="Disable" />
+                                        }
+                                    }
+                                    else {
+                                        @using (Html.BeginForm("Enable", "Client", new { clientId = client.ClientId, page = Model.PageNumber, area = "Admin" }, FormMethod.Post))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <input type="submit" class="btn btn-info btn-xs" value="Enable" />
+                                        }
+                                    }
+ 
+                                </div>
+                            </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+    <cs-pager cs-paging-pagesize="@Model.PageSize"
+              cs-paging-pagenumber="@Model.PageNumber"
+              cs-paging-totalitems="@Model.TotalItemCount"
+              cs-pagenumber-param="page"
+              asp-controller="Client"
+              asp-action="Index"
+              asp-route-pageSize="@Model.PageSize"></cs-pager>
 </div>
 <hr />

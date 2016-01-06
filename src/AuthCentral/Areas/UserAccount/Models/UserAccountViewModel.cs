@@ -40,7 +40,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-        public string MiddleName { get; set;  }
 
         public Uri ProfilePhotoUrl { get; set; }
         public string PhoneNumber { get; set; }

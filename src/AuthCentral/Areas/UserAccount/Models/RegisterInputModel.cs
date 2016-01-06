@@ -27,11 +27,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
         public string GivenName { get; set; }
 
         /// <summary>
-        /// User's middle name.
-        /// </summary>
-        public string MiddleName { get; set; }
-
-        /// <summary>
         /// User's family (last) name.
         /// </summary>
         [Required]

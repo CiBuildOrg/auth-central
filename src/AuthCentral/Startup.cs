@@ -51,7 +51,8 @@ namespace Fsw.Enterprise.AuthCentral
             app.UseMiddleware<LogCentral.MicrosoftFramework.LogMiddleware>();
 
             MembershipRebootSetup.GetConfig(app, env); // Create the singleton to get around MVC DI container limitations            
-            app.UseStatusCodePages();
+            app.UseStatusCodePagesWithReExecute("/errors/{0}.html");
+            app.UseExceptionHandler("/Home/Error");
             app.UseCookieAuthentication(options =>
             {
                 options.LoginPath = new PathString(_config.Uri.LoginPath);

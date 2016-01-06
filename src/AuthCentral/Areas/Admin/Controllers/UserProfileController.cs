@@ -34,7 +34,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             Guid userGuid;
             if (!Guid.TryParse(userId, out userGuid))
             {
-                return HttpBadRequest("Failed to parse userId.");
+                throw new Exception("Could not parse user Id.");
             }
 
             HierarchicalUserAccount user = _userAccountService.GetByID(userGuid);
@@ -63,7 +63,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Save(UserProfileModel profile)
         {
-
             Guid userGuid;
             if (!Guid.TryParse(profile.UserId, out userGuid))
             {

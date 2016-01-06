@@ -2,14 +2,7 @@
   "name": "AuthCentral",
   "private": true,
   "dependencies": {
-    "bootstrap-sass-official": "3.3.5",
+    "bootstrap-sass-official": "3.3.6",
     "font-awesome": "~4.5.0"
-  },
-  "exportsOverride": {
-    "bootstrap": {
-      "js": "dist/js/*.*",
-      "css": "dist/css/*.*",
-      "fonts": "dist/fonts/*.*"
-    }
   }
 }

@@ -26,7 +26,7 @@ var paths = {
 };
 
 gulp.task('bower', function () {
-  //return bower().pipe(gulp.dest(paths.bower));
+  return bower(paths.bower);
 });
 
 gulp.task('default', ['build']);

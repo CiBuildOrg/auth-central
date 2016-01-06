@@ -104,12 +104,12 @@
                                     </tr>
                                     <tr id="@editRow" class="hidden edit-row">
                                         <td>
-                                            @Html.EditorFor(model => claim.Name, new { @class = "claim-name" })
+                                            @Html.EditorFor(model => claim.Name, new { htmlAttributes = new { @class = "claim-name" } })
                                             @Html.Hidden("claimId", claimName)
                                             @Html.Hidden("scope", scope.Name)
                                         </td>
-                                        <td>@Html.EditorFor(model => claim.Description, new { @class = "claim-desc"})</td>
-                                        <td>@Html.EditorFor(model => claim.AlwaysIncludeInIdToken, new { @class = "claim-include" })</td>
+                                        <td>@Html.EditorFor(model => claim.Description, new { htmlAttributes = new { @class = "claim-desc" } })</td>
+                                        <td>@Html.EditorFor(model => claim.AlwaysIncludeInIdToken, new { htmlAttributes = new { @class = "claim-include" } })</td>
                                         <td>
                                             <button class="btn btn-primary save" type="button">Save</button>
                                             <button class="btn btn-default" type="button" onclick="$(@showRow).removeClass('hidden'); $(@editRow).addClass('hidden');">Cancel</button>

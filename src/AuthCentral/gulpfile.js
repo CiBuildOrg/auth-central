@@ -29,27 +29,23 @@ gulp.task('bower', function () {
   //return bower().pipe(gulp.dest(paths.bower));
 });
 
-gulp.task('fonts', function () {
-  return gulp.src(paths.bower + '/font-awesome/fonts/**.*')
-    .pipe(gulp.dest(paths.assets + '/fonts'));
-});
-
 gulp.task('default', ['build']);
 
-gulp.task('build', ['sass'], function() {
-	return gulp.start('injectlatest');
+gulp.task('clean', ['clean:css','clean:fonts']);
+
+gulp.task('clean:css', function() {
+  del(paths.assets + '/**/*.css');
 });
 
-gulp.task('clean', function() {
-  del(paths.assets + '/**/*.css');
-  return gulp.start('bower');
+gulp.task('clean:fonts', function() {
+  del(paths.assets + '/fonts');
 });
 
 gulp.task('watch', function () {
-  return gulp.watch(paths.customSass + '/**/*.scss', ['sass']);
+  return gulp.watch(paths.customSass + '/**/*.scss', ['build']);
 });
 
-gulp.task('sass', ['clean', 'bower', 'fonts'], function () {
+gulp.task('css', ['bower', 'clean:css'], function () {
     return gulp.src(paths.customSass + '/**/*.scss')
 		.pipe(sass({
 //            outputStyle: 'compressed',
@@ -64,7 +60,13 @@ gulp.task('sass', ['clean', 'bower', 'fonts'], function () {
 		.pipe(gulp.dest(paths.assets));
 });
 
-gulp.task('injectlatest', function() {
+gulp.task('fonts', ['bower', 'clean:fonts'], function () {
+  return gulp.src(paths.bower + '/font-awesome/fonts/**.*')
+    .pipe(gulp.dest(paths.assets + '/fonts'));
+});
+
+
+gulp.task('build', ['css', 'fonts'], function() {
 
   // get a list of all custom views used by IdentityServer3
   var customViews = fs.readdirSync(paths.clientApp).reverse().map(function (f) {
@@ -111,5 +113,4 @@ gulp.task('injectlatest', function() {
       })
     )
 		.pipe(gulp.dest(paths.clientApp));
-
 });

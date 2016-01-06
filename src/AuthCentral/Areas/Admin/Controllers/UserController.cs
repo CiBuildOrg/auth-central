@@ -45,6 +45,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             long count;
             IEnumerable<HierarchicalUserAccount> users = _repository.GetPagedUsers(page, pageSize, out count);
             UserListViewModel model = new UserListViewModel(users, page, pageSize, (int)count);
+            model.CanDeleteUsers = User.Claims.Any(claim => claim.Type == "fsw:testautomation" && claim.Value == "true");
             return View("Index", model);
         }
 
@@ -128,6 +129,23 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 page = page
             });
         }
+        
+        [Authorize("FswAutomation")]
+        [HttpPost("[action]/{userId}")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(string userId, int page)
+        {
+            Guid userGuid;
+            if (!Guid.TryParse(userId, out userGuid))
+            {
+                return HttpBadRequest("Failed to parse userId.");
+            }
+
+            _userAccountService.DeleteAccount(userGuid);
+
+            return RedirectToAction("Index", "User", new { page = page });
+
+        }
 
         private void AddClaims(Guid accountId, CreateAccountInputModel model)
         {
@@ -138,16 +156,11 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 new UserClaim("given_name", model.GivenName),
                 new UserClaim("family_name", model.FamilyName),
                 new UserClaim("name", string.Join(" ",
-                    new string[] { model.GivenName, model.MiddleName, model.FamilyName }
+                    new string[] { model.GivenName, model.FamilyName }
                                    .Where(name => !string.IsNullOrWhiteSpace(name))
                 ))
             };
-
-            if (!string.IsNullOrWhiteSpace(model.MiddleName))
-            {
-                claims.Add(new UserClaim("middle_name", model.MiddleName));
-            }
-
+            
             if (model.IsAuthCentralAdmin) {
                 claims.Add(new UserClaim("fsw:authcentral:admin", "true"));
             }

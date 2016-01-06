@@ -45,7 +45,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 {
                     Email = user.Email,
                     FamilyName = user.Claims.FirstOrDefault(c => c.Type == "family_name")?.Value,
-                    MiddleName = user.Claims.FirstOrDefault(c => c.Type == "middle_name")?.Value,
                     GivenName = user.Claims.FirstOrDefault(c => c.Type == "given_name")?.Value,
                     Organization = user.Claims.FirstOrDefault(c => c.Type == "fsw:organization")?.Value,
                     Department = user.Claims.FirstOrDefault(c => c.Type == "fsw:department")?.Value,
@@ -77,7 +76,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
                 _userAccountService.RemoveClaims(userGuid,
                     new UserClaimCollection(user.Claims.Where(claim => claim.Type == "given_name"
-                                                                    || claim.Type == "middle_name"
                                                                     || claim.Type == "family_name"
                                                                     || claim.Type == "name"
                                                                     || claim.Type == "fsw:organization"
@@ -86,15 +84,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
                 claims.Add("given_name", profile.GivenName);
 
-                if(!string.IsNullOrWhiteSpace(profile.MiddleName))
-                {
-                    claims.Add("middle_name", profile.MiddleName);
-                }
-
                 claims.Add("family_name", profile.FamilyName);
 
                 claims.Add("name", string.Join(" ",
-                    new string[] { profile.GivenName, profile.MiddleName, profile.FamilyName }
+                    new string[] { profile.GivenName, profile.FamilyName }
                    .Where(name => !string.IsNullOrWhiteSpace(name))));
 
                 if (!string.IsNullOrWhiteSpace(profile.Organization))
@@ -141,12 +134,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             {
                 _userAccountService.SetIsLoginAllowed(userGuid, false);
             }
-
-            return RedirectToAction("Edit", new
-            {
-                userId = userId,
-                changed = confirm
-            });
+            
+            return RedirectToAction("Edit", new { userId = userId, changed = confirm });
         }
 
         [HttpPost("[action]")]
@@ -160,12 +149,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             }
 
             _userAccountService.SetIsLoginAllowed(userGuid, true);
+            
+            return RedirectToAction("Edit", new {  userId = userId, changed = true });
 
-            return RedirectToAction("Edit", new
-            {
-                userId = userId,
-                changed = true
-            });
         }
     }
 }

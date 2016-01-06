@@ -3,17 +3,13 @@ This file in the main entry point for defining Gulp tasks and using Gulp plugins
 Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
 */
 var gulp = require('gulp');
-var concat = require('gulp-concat');
-
 var fs = require('fs');
-var path = require('path');
-var merge2 = require('merge2');
 var del = require('del');
-var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
 var rev = require('gulp-rev');
 var replace = require('gulp-html-replace');
 var bower = require('gulp-bower');
+var gutil = require('gulp-util');
 
 var paths = {
     bower: "./bower_components",
@@ -46,19 +42,33 @@ gulp.task('watch', function () {
 });
 
 gulp.task('css', ['bower', 'clean:css'], function () {
-    return gulp.src(paths.customSass + '/**/*.scss')
-		.pipe(sass({
-//            outputStyle: 'compressed',
+    var workStream = gulp.src(paths.customSass + '/**/*.scss');
+
+    workStream.pipe(sass({
+            outputStyle: 'compressed',
             includePaths: [
                 paths.customSass,
                 paths.bower + '/bootstrap-sass-official/assets/stylesheets',
                 paths.bower + '/font-awesome/scss'
             ]
         }).on('error', sass.logError)
-     )
-		.pipe(rev())
-		.pipe(gulp.dest(paths.assets));
+     );
+ 
+    if(process.env.AUTH_CENTRAL_BUILD_ENV==='release') {
+       gutil.log(gutil.colors.green('NOTE: AUTH_CENTRAL_BUILD_ENV environment variable is set for "release":'),
+                                    'versioning css...');
+       workStream.pipe(rev());
+    }
+    else {
+        gutil.log(gutil.colors.yellow('NOTE: to version the CSS file for a release build, set the'),
+                  gutil.colors.yellow('AUTH_CENTRAL_BUILD_ENV environment variable to "release"'));
+    }
+
+    workStream.pipe(gulp.dest(paths.assets));
+
+    return workStream;
 });
+
 
 gulp.task('fonts', ['bower', 'clean:fonts'], function () {
   return gulp.src(paths.bower + '/font-awesome/fonts/**.*')
@@ -67,7 +77,6 @@ gulp.task('fonts', ['bower', 'clean:fonts'], function () {
 
 
 gulp.task('build', ['css', 'fonts'], function() {
-
   // get a list of all custom views used by IdentityServer3
   var customViews = fs.readdirSync(paths.clientApp).reverse().map(function (f) {
     return paths.clientApp + '/' + f;
@@ -87,6 +96,11 @@ gulp.task('build', ['css', 'fonts'], function() {
 	var jsFiles = files.filter(function(f) {
 		return f.indexOf('.js') !== -1;
 	});
+
+  gutil.log("printing all built css files in `" + paths.assets + "`:");
+  cssFiles.forEach(function(element) {
+      gutil.log('\t' + element);
+  });
 
   // inject into the main layout
 	gulp.src(paths.sharedLayouts + '/_Layout.cshtml')

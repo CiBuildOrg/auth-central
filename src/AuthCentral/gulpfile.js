@@ -42,9 +42,17 @@ gulp.task('watch', function () {
 });
 
 gulp.task('css', ['bower', 'clean:css'], function () {
+    var isRelease = false;
+    var outputStyle = 'nested';
+
+    if(process.env.AUTH_CENTRAL_BUILD_ENV==='release') {
+        isRelease = true;
+        outputStyle = 'compressed';
+    }
+
     var s = gulp.src(paths.customSass + '/**/*.scss')
     .pipe(sass({
-            outputStyle: 'compressed',
+            outputStyle: outputStyle,
             includePaths: [
                 paths.customSass,
                 paths.bower + '/bootstrap-sass-official/assets/stylesheets',
@@ -53,7 +61,7 @@ gulp.task('css', ['bower', 'clean:css'], function () {
         }).on('error', sass.logError)
      );
  
-    if(process.env.AUTH_CENTRAL_BUILD_ENV==='release') {
+    if(isRelease) {
         gutil.log(gutil.colors.yellow("IMPORTANT: ") + 
                   "'" + gutil.colors.cyan('AUTH_CENTRAL_BUILD_ENV') + "' " + 
                   gutil.colors.green('is set for') + " '" +

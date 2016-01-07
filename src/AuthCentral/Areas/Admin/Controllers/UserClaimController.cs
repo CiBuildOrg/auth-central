@@ -54,7 +54,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 UserId = user.ID.ToString(),
                 UserClaims = user.Claims.Where(claim => claim.Type != "name"
                                                      && claim.Type != "given_name"
-                                                     && claim.Type != "middle_name"
                                                      && claim.Type != "family_name"
                                                      && claim.Type != "fsw:organization"
                                                      && claim.Type != "fsw:department")

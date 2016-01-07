@@ -14,7 +14,7 @@ var gutil = require('gulp-util');
 var paths = {
     bower: "./bower_components",
     wwwroot: "./wwwroot",
-    clientApp: "./wwwroot/app",
+    idSvrCustomViews: "./IdSvr/CustomViews",
     lib: "./wwwroot/libs",
     assets: "./wwwroot/assets",
     customSass: "./Styles",
@@ -89,8 +89,8 @@ gulp.task('fonts', ['bower', 'clean:fonts'], function () {
 
 gulp.task('build', ['css', 'fonts'], function() {
   // get a list of all custom views used by IdentityServer3
-  var customViews = fs.readdirSync(paths.clientApp).reverse().map(function (f) {
-    return paths.clientApp + '/' + f;
+  var customViews = fs.readdirSync(paths.idSvrCustomViews).reverse().map(function (f) {
+    return paths.idSvrCustomViews + '/' + f;
   }).filter(function (f) {
     return (f.indexOf('.html') !== -1);
   });
@@ -137,5 +137,5 @@ gulp.task('build', ['css', 'fonts'], function() {
 			  keepBlockTags: true 
       })
     )
-		.pipe(gulp.dest(paths.clientApp));
+		.pipe(gulp.dest(paths.idSvrCustomViews));
 });

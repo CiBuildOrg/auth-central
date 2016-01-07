@@ -8,6 +8,7 @@ BrockAllen.MembershipReboot/
 
 .vagrant/
 src/AuthCentral/wwwroot/lib/
+src/AuthCentral/wwwroot/assets/
 bower_components/
 *.xproj
 *.sln

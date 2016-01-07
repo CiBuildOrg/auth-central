@@ -42,9 +42,8 @@ gulp.task('watch', function () {
 });
 
 gulp.task('css', ['bower', 'clean:css'], function () {
-    var workStream = gulp.src(paths.customSass + '/**/*.scss');
-
-    workStream.pipe(sass({
+    var s = gulp.src(paths.customSass + '/**/*.scss')
+    .pipe(sass({
             outputStyle: 'compressed',
             includePaths: [
                 paths.customSass,
@@ -55,18 +54,22 @@ gulp.task('css', ['bower', 'clean:css'], function () {
      );
  
     if(process.env.AUTH_CENTRAL_BUILD_ENV==='release') {
-       gutil.log(gutil.colors.green('NOTE: AUTH_CENTRAL_BUILD_ENV environment variable is set for "release":'),
-                                    'versioning css...');
-       workStream.pipe(rev());
+        gutil.log(gutil.colors.yellow("IMPORTANT: ") + 
+                  "'" + gutil.colors.cyan('AUTH_CENTRAL_BUILD_ENV') + "' " + 
+                  gutil.colors.green('is set for') + " '" +
+                  gutil.colors.magenta('release') + "'" +
+                  gutil.colors.green(': Versioning css files...'));
+
+        s = s.pipe(rev());
     }
     else {
-        gutil.log(gutil.colors.yellow('NOTE: to version the CSS file for a release build, set the'),
-                  gutil.colors.yellow('AUTH_CENTRAL_BUILD_ENV environment variable to "release"'));
+        gutil.log(gutil.colors.yellow("IMPORTANT:") +  " Set "  + 
+                  "'" + gutil.colors.cyan('AUTH_CENTRAL_BUILD_ENV') + '=' + 
+                  gutil.colors.magenta('release') + "' " +
+                  'to version css files.');
     }
 
-    workStream.pipe(gulp.dest(paths.assets));
-
-    return workStream;
+    return s.pipe(gulp.dest(paths.assets));
 });
 
 
@@ -97,7 +100,7 @@ gulp.task('build', ['css', 'fonts'], function() {
 		return f.indexOf('.js') !== -1;
 	});
 
-  gutil.log("printing all built css files in `" + paths.assets + "`:");
+  gutil.log("Printing all built css files in `" + paths.assets + "`:");
   cssFiles.forEach(function(element) {
       gutil.log('\t' + element);
   });

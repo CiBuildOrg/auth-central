@@ -41,6 +41,10 @@
                 <th>Organization</th>
                 <th>Department</th>
                 <th>Disable</th>
+                @if (Model.CanDeleteUsers)
+                {
+                    <th>Delete</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -56,16 +60,26 @@
                         {
                             @using (Html.BeginForm("Disable", "User", new { userId = account.ID.ToString(), page = Model.PageNumber, area = "Admin" }, FormMethod.Post)) {
                                 @Html.AntiForgeryToken()
-                                <input type="submit" value="Disable" />
+                                <input type="submit" class="btn btn-warning" value="Disable" />
                             }
                         } else {
                             @using (Html.BeginForm("Enable", "User", new { userId = account.ID.ToString(), page = Model.PageNumber, area = "Admin" }, FormMethod.Post))
                             {
                                 @Html.AntiForgeryToken()
-                                <input type="submit" value="Enable" />
+                                <input type="submit" class="btn btn-success" value="Enable" />
                             }
                         }
                     </td>
+                    @if (Model.CanDeleteUsers)
+                    {
+                        <td>
+                            @using (Html.BeginForm("Delete", "User", new { userId = account.ID.ToString(), page = Model.PageNumber, area = "Admin" }, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="submit" class="btn btn-danger" value="Delete" />
+                            }
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

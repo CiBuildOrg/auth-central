@@ -1,4 +1,4 @@
-﻿@using BrockAllen.MembershipReboot;
+@using BrockAllen.MembershipReboot;
 
 @{ 
     bool isAdmin = false;
@@ -16,11 +16,13 @@
         <meta charset="utf-8" />
         <title>@ViewBag.Title | FSW</title>
         <meta name="viewport" content="width=device-width, initial-scale-1.0" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"><!-- Optional Bootstrap theme -->
-        <link rel="stylesheet" href="~/app/app.css"/>
+
+        <!-- build:css -->
+        <link rel="stylesheet" href="/assets/vendor.css">
+        <link rel="stylesheet" href="/assets/main.css">
+        <!-- endbuild -->
     </head>
-    <body style="padding-top:70px">
+    <body >
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -38,7 +40,7 @@
 
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <li>@Html.ActionLink("Account Details", "Details", "Home", new { area = "UserAccount" }, null)</li>
+                                <li>@Html.ActionLink("Account Details", "Edit", "Profile", new { area = "UserAccount" }, null)</li>
                                 <li>@Html.ActionLink("Verify Your Email Account", "Verify", "Register", new { area = "UserAccount" }, null)</li>
                                 <li>@Html.ActionLink("Change Email", "Index", "ChangeEmail", new { area = "UserAccount" }, null)</li>
                                 <li>@Html.ActionLink("Change Password", "Index", "ChangePassword", new {area = "UserAccount"}, null)</li>
@@ -80,8 +82,9 @@
             <p>&copy;@DateTime.Now.Year - FSW</p>
         </footer>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+     
     @RenderSection("scripts", required: false)
     </body>
 </html>

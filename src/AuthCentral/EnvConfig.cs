@@ -5,6 +5,7 @@ namespace Fsw.Enterprise.AuthCentral
 {
     public class EnvConfig
     {
+        private CspConfig _csp;
         private CertConfig _cert;
         private UriConfig _uri;
         private ClientConfig _client;
@@ -24,14 +25,22 @@ namespace Fsw.Enterprise.AuthCentral
             public static string ClientId = "AUTHCENTRAL_CLIENT_ID";
             public static string ClientSecret = "AUTHCENTRAL_CLIENT_SECRET";
             public static string Log4NetConfig = "AUTHCENTRAL_LOG4NET_CONFIG_PATH";
+            public static string CspScriptSource = "AUTHCENTRAL_CSP_SCRIPT_SRC";
+            public static string CspStyleSource = "AUTHCENTRAL_CSP_STYLE_SRC";
+            public static string CspFontSource = "AUTHCENTRAL_CSP_FONT_SRC";
         }
 
         public EnvConfig(IConfigurationRoot root) {
             this._root = root;
+            this._csp = new CspConfig(root);
             this._cert = new CertConfig(root);
             this._uri = new UriConfig(root);
             this._db = new DatabaseConfig(root);
             this._client = new ClientConfig(root);
+        }
+
+        public CspConfig Csp {
+            get { return this._csp; }
         }
 
         public CertConfig Cert {
@@ -202,6 +211,40 @@ namespace Fsw.Enterprise.AuthCentral
                 } 
             }
         }
+
+        public class CspConfig
+        {
+            private IConfigurationRoot _root;
+            public CspConfig(IConfigurationRoot root)
+            {
+                _root = root;
+            }
+
+            public string ScriptSrc
+            {
+                get
+                {
+                    return _root.Get<string>(EnvVars.CspScriptSource);
+                }
+            }
+
+            public string StyleSrc 
+            { 
+                get 
+                {
+                    return _root.Get<string>(EnvVars.CspStyleSource);
+                } 
+            }
+
+            public string FontSrc 
+            { 
+                get 
+                {
+                    return _root.Get<string>(EnvVars.CspFontSource);
+                } 
+            }
+
+         }
 
     }
 }

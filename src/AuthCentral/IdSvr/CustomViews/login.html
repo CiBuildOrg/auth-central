@@ -1,10 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html ng-app="app" ng-controller="LayoutCtrl">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>{siteName}</title>
-    <link href="/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/app/app.css" rel="stylesheet">
+
+    <!-- build:css -->
+    <link rel="stylesheet" href="/assets/vendor.css">
+    <link rel="stylesheet" href="/assets/main.css">
+    <!-- endbuild -->
 </head>
 <body lang="en">
 
@@ -36,7 +39,7 @@
     <div class="container">
         <div  class="col-md-2 col-sm-2">&nbsp;</div>
         <div  class="col-md-2 col-sm-2">
-            <img title="FSW" src="http://img3.foodservicewarehouse.com/Img/fsw15.svg" alt="FSW Image"></img>
+            <img title="FSW" src="https://fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg" alt="FSW Image" />
         </div>
         <div  class="col-md-2 col-sm-2">&nbsp;</div>
     </div>
@@ -124,9 +127,9 @@
     <script id='modelJson' type='application/json'>
         {model}
     </script>
-    <script src="/libs/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/libs/jquery/jquery-1.11.0.min.js"></script>
-    <script src="/libs/angular/angular.1.2.13.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
     <script src="/libs/encoder/encoder.min.js"></script>
     <script src="/app/app.js"></script>
 </body>

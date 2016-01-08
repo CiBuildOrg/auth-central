@@ -135,8 +135,8 @@
                                                     <input type="text" class="form-control" id="newClaim" placeholder="claim_to_add_to_scope"/>
                                                 </div>
                                             </div>
-                                            <button type="submit" class="btn btn-primary add-claim" data-dismiss="modal">Add</button>
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                            <button class="btn btn-primary add-claim" data-dismiss="modal">Add</button>
+                                            <button class="btn btn-default" data-dismiss="modal">Cancel</button>
                                         </div>
                                     </div>
 
@@ -196,6 +196,17 @@
                 $.post('/Admin/Scope/RemoveClaim/', data, function(msg) {
                     //showRow.remove();
                     //editRow.remove();
+                });
+            });
+
+            $('button.add-claim').on('click', function(event) {
+                var addDiv = $(this).parents('div.add-claim');
+                var scopeId = addDiv.find('input.add-claim-scope').val();
+                var claimId = addDiv.find('#newClaim').val();
+                var data = { scope: scopeId, claim: claimId };
+
+                $.post('/Admin/Scope/AddClaim/', data, function(msg) {
+
                 });
             });
         });

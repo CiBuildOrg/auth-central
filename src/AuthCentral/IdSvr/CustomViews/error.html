@@ -10,7 +10,6 @@
     <!-- endbuild -->
 </head>
 <body lang="en">
-<!--
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-header">
             <span class="navbar-brand">{siteName}</span>
@@ -27,6 +26,7 @@
         </ul>
     </div>
 
+<!--
     <div class="container">
         <div class="page-header">
             <h1>This is a custom view</h1>
@@ -34,27 +34,18 @@
     </div>
 -->
 
-    <div class="container">
-        <div  class="col-md-2 col-sm-2">&nbsp;</div>
-        <div  class="col-md-2 col-sm-2">
-            <img title="FSW" src="https://fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg" alt="FSW Image" />
-        </div>
-        <div  class="col-md-2 col-sm-2">&nbsp;</div>
-    </div>
-    <br />
-    <br />
-
-    <div class='container page-loggedOut' ng-cloak>
+    <div class='container page-error' ng-cloak>
         <div class="page-header">
-            <h1>
-<!--                Logout
--->                <small>You are now logged out</small>
-            </h1>
-            <div ng-show="model.redirectUrl">
-                Click <a ng-href="{{model.redirectUrl}}">here</a> to return to the
-                <span ng-bind="model.clientName"></span> application.
+            <h1>Error</h1>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <div class="alert alert-danger">
+                    <div ng-show="model.errorMessage">{{model.errorMessage}}</div>
+                </div>
+                <div class="request-id">Request Id: <span ng-bind="model.requestId"></span></div>
             </div>
-            <iframe class="signout" ng-repeat="url in model.iFrameUrls" ng-src="{{url}}"></iframe>
         </div>
     </div>
 
@@ -65,7 +56,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
     <script src="/libs/encoder/encoder.min.js"></script>
-    <script src="/app/app.js"></script>
+    <script src="/idsrvr.js"></script>
 </body>
 </html>
 

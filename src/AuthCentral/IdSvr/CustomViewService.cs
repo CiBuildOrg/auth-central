@@ -72,7 +72,7 @@ namespace Fsw.Enterprise.AuthCentral.IdSvr
 
         private string LoadHtml(string name)
         {
-            var file = Path.Combine(_appEnvironment.ApplicationBasePath, @"wwwroot/app");
+            var file = Path.Combine(_appEnvironment.ApplicationBasePath, @"IdSvr/CustomViews");
             file = Path.Combine(file, name + ".html");
             return File.ReadAllText(file);
         }

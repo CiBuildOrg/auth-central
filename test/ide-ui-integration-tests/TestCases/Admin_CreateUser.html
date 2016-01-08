@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="https://secure.dev-fsw.com/" />
+<title>Admin_CreateUser</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Admin_CreateUser</td></tr>
+</thead><tbody>
+<tr>
+	<td>click</td>
+	<td>${UserAdminMenu}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>${Header_CreateAccount}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>${Account_CreateAccountButton}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Account_Username}</td>
+	<td>${NewUser_Username}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Account_Email}</td>
+	<td>${NewUser_Email}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Account_GivenName}</td>
+	<td>${NewUser_FirstName}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Account_FamilyName}</td>
+	<td>${NewUser_LastName}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Account_Organization}</td>
+	<td>Food Service Warehouse</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Account_Department}</td>
+	<td>Canadian Imports</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>${Account_CreateAccountButton}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>${PageBody}</td>
+	<td>*User Created*</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>${UserAdminMenu}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>${Header_UserLookup}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>${NewUser_Link}</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

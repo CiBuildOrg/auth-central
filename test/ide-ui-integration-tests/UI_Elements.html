@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="https://secure.dev-fsw.com/" />
+<title>UI_Elements</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">UI_Elements</td></tr>
+</thead><tbody>
+<!--If changing a UI element, do it via find/replace in a text editor to ensure all references are changed too-->
+<tr>
+	<td>store</td>
+	<td>//a[.='Login']</td>
+	<td>LoginButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Register Now »</td>
+	<td>RegisterNowButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=username</td>
+	<td>LoginPage_Username</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=password</td>
+	<td>LoginPage_Password</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//button[.='Sign In']</td>
+	<td>LoginPage_SignInButton</td>
+</tr>
+<!--All Pages-->
+<tr>
+	<td>store</td>
+	<td>css=div.container.body-content</td>
+	<td>PageBody</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=User Admin</td>
+	<td>UserAdminMenu</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Server Admin</td>
+	<td>ServerAdminMenu</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Account</td>
+	<td>AccountMenu</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=User Lookup</td>
+	<td>Header_UserLookup</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Create Account</td>
+	<td>Header_CreateAccount</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Clients</td>
+	<td>Header_Clients</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Scopes</td>
+	<td>Header_Scopes</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Logout</td>
+	<td>Header_Logout</td>
+</tr>
+<!--Create Account Page-->
+<tr>
+	<td>store</td>
+	<td>id=Username</td>
+	<td>Account_Username</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=Email</td>
+	<td>Account_Email</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=GivenName</td>
+	<td>Account_GivenName</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>${Account_GivenName}</td>
+	<td>Account_FirstName</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=MiddleName</td>
+	<td>Account_MiddleName</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=FamilyName</td>
+	<td>Account_FamilyName</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>${Account_FamilyName}</td>
+	<td>Account_LastName</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=IsAuthCentralAdmin</td>
+	<td>Account_IsAuthCentralAdmin</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=Organization</td>
+	<td>Account_Organization</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=Department</td>
+	<td>Account_Department</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=Password</td>
+	<td>Account_Password</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=ConfirmPassword</td>
+	<td>Account_ConfirmPassword</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//button[.='Create Account']</td>
+	<td>Account_CreateAccountButton</td>
+</tr>
+<!--Edit User Page-->
+<tr>
+	<td>store</td>
+	<td>link=Claims</td>
+	<td>Account_ClaimsTab</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Profile</td>
+	<td>Account_ProfileTab</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//input[@value='Save']</td>
+	<td>Account_SaveButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Create Claim</td>
+	<td>Account_CreateClaimButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//input[contains(@value,'ecommadmin')]/../../../following-sibling::div/div/input[@value='Delete']</td>
+	<td>Account_DeleteClaim_ecommadmin</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//input[contains(@value,'authcentral:admin')]/../../../following-sibling::div/div/input[@value='Delete']</td>
+	<td>Account_DeleteClaim_authcentraladmin</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//div/em</td>
+	<td>Account_ConfirmationMessage</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//input[contains(@id,&quot;Type&quot;)]</td>
+	<td>Account_ClaimType</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//input[contains(@id,&quot;Value&quot;)]</td>
+	<td>Account_ClaimValue</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//div[@class='container body-content']/form</td>
+	<td>Account_UniqueClaim</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//input[@value='${NewUser_ClaimType}']/../../../following-sibling::div/div/input</td>
+	<td>Account_NewClaim_DeleteButton</td>
+</tr>
+<!--User Lookup Page-->
+<tr>
+	<td>store</td>
+	<td>//a[.='${NewUser_Email}']/../../td/form/input[@value='Delete']</td>
+	<td>NewUser_DeleteButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//input[@value='Delete']</td>
+	<td>DeleteButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=clientId</td>
+	<td>EmailSearch</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>css=button.btn.btn-primary</td>
+	<td>EmailSearchButton</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/UserAccount/LogOut</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/account</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

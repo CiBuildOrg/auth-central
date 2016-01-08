@@ -50,8 +50,8 @@ namespace Fsw.Enterprise.AuthCentral
             logFactory.AddProvider(new LogCentral.MicrosoftFramework.LoggingProvider(_config.Log4NetConfigPath));
             app.UseMiddleware<LogCentral.MicrosoftFramework.LogMiddleware>();
 
-            MembershipRebootSetup.GetConfig(app, env); // Create the singleton to get around MVC DI container limitations            
-            app.UseStatusCodePages();
+            MembershipRebootSetup.GetConfig(app, env); // Create the singleton to get around MVC DI container limitations
+            app.UseStatusCodePagesWithReExecute("/errors/{0}.html");
             app.UseCookieAuthentication(options =>
             {
                 options.LoginPath = new PathString(_config.Uri.LoginPath);

@@ -66,15 +66,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
                         new UserClaim("given_name", model.GivenName),
                         new UserClaim("family_name", model.FamilyName),
                         new UserClaim("name", string.Join(" ",
-                            new string[] { model.GivenName, model.MiddleName, model.FamilyName }
+                            new string[] { model.GivenName, model.FamilyName }
                                            .Where(name => !string.IsNullOrWhiteSpace(name))
                         ))
                     };
-
-                    if (!string.IsNullOrWhiteSpace(model.MiddleName))
-                    {
-                        claims.Add(new UserClaim("middle_name", model.MiddleName));
-                    }
 
                     if (model.Email.EndsWith("@foodservicewarehouse.com") || model.Email.EndsWith("@fsw.com"))
                     {

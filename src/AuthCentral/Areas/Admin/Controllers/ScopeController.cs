@@ -25,6 +25,26 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpPost("[action]")]
+        public async Task<IActionResult> AddClaim(string scope, string claim)
+        {
+            var claimScope = await _scopeService.Find(scope);
+
+            if (claimScope == null)
+            {
+                ModelState.AddModelError("AddClaim", $"Scope with the name {scope} could not be found");
+                return RedirectToAction("Index");
+            }
+
+            var newClaim = new ScopeClaim(claim);
+
+            claimScope.Claims.Add(newClaim);
+
+            await _scopeService.Save(claimScope);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost("[action]")]
         public IActionResult Edit()
         {
             return RedirectToAction("Index");

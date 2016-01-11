@@ -1,139 +1,172 @@
 <!DOCTYPE html>
 <html ng-app="app" ng-controller="LayoutCtrl">
-<head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>{siteName}</title>
 
-    <!-- build:css -->
-    <link rel="stylesheet" href="/assets/vendor.css">
-    <link rel="stylesheet" href="/assets/main.css">
-    <!-- endbuild -->
+    <head>
 
-</head>
-<body lang="en">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>{siteName}</title>
 
-<!--
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-header">
-            <span class="navbar-brand">{siteName}</span>
+        <!-- build:css -->
+        <link rel="stylesheet" href="/assets/vendor.css">
+        <link rel="stylesheet" href="/assets/main.css">
+        <!-- endbuild -->
+
+
+
+    </head>
+
+    <body lang="en">
+
+        <!--
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-header">
+                <span class="navbar-brand">{siteName}</span>
+            </div>
+            <ul class="nav navbar-nav" ng-show="model.currentUser" ng-cloak>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{model.currentUser}} <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{model.logoutUrl}}">Logout</a></li>
+                        <li class="divider" ng-show="model.loginWithDifferentAccountUrl"></li>
+                        <li><a href="{{model.loginWithDifferentAccountUrl}}" ng-show="model.loginWithDifferentAccountUrl">Login With Different Account</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-        <ul class="nav navbar-nav" ng-show="model.currentUser" ng-cloak>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{model.currentUser}} <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li><a href="{{model.logoutUrl}}">Logout</a></li>
-                    <li class="divider" ng-show="model.loginWithDifferentAccountUrl"></li>
-                    <li><a href="{{model.loginWithDifferentAccountUrl}}" ng-show="model.loginWithDifferentAccountUrl">Login With Different Account</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
 
-    <div class="container">
-        <div class="page-header">
-            <h1>
-                <small ng-show="clientName"><strong>{clientName}</strong> is asking you to login</small>
-            </h1>
-        </div>
-    </div>
--->
-    <div class="container">
-        <div  class="col-md-2 col-sm-2">&nbsp;</div>
-        <div  class="col-md-2 col-sm-2">
-            <img title="FSW" src="https://fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg" alt="FSW Image" />
-        </div>
-        <div  class="col-md-2 col-sm-2">&nbsp;</div>
-    </div>
-    <br />
-    <br />
-
-    <div class='container page-login' ng-cloak>
-        <!-- 
-        <div class="page-header">
-            <h1>Login</h1>
+        <div class="container">
+            <div class="page-header">
+                <h1>
+                    <small ng-show="clientName"><strong>{clientName}</strong> is asking you to login</small>
+                </h1>
+            </div>
         </div>
         -->
 
-        <div class="row" ng-show="model.errorMessage">
-            <div class="col-md-12 col-sm-12">
-                <div class="alert alert-danger">
-                    <strong>Error:</strong>
-                    {{model.errorMessage}}
-                </div>
-            </div>
-        </div>
+        <div class="container login">
 
-        <div class="row">
-            <div class="col-md-6 col-sm-6" ng-show="model.loginUrl">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Sign In</h3>
-                    </div>
-                    <div class="panel-body">
-                        <form name="form" method="post" action="{{model.loginUrl}}">
-                            <anti-forgery-token token="model.antiForgery"></anti-forgery-token>
-
-                            <fieldset>
-                                <div class="form-group">
-                                    <label for="username">Username</label>
-                                    <input required name="username" autofocus id="username" type="text" class="form-control" placeholder="Username" ng-model="model.username" maxlength="100">
-                                </div>
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input required id="password" name="password" type="password" class="form-control" placeholder="Password" ng-model="model.password" maxlength="100" autocomplete="off">
-                                </div>
-                                <div class="form-group login-remember" ng-show="model.allowRememberMe">
-                                    <label for="rememberMe">
-                                        <input type="checkbox" id="rememberMe" name="rememberMe" ng-model="model.rememberMe" value="true">
-                                        <strong>Remember My Login</strong>
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn btn-primary" ng-disabled="form.$invalid">Sign In</button>
-                                </div>
-                            </fieldset>
-                        </form>
-                    </div>
-                    <ul class="list-unstyled">
-                        <li ng-repeat="link in model.additionalLinks"><a ng-href="{{link.href}}">{{link.text}}</a></li>
-                    </ul>
+            <div class="row">
+                <div  class="col-xs-12 text-center">
+                    <img title="FSW" src="https://fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg" alt="FSW" class="fsw-logo" />
                 </div>
             </div>
 
-            <div class="col-md-6 col-sm-6 external-providers" ng-show="model.externalProviders">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">External Login</h3>
+            <div class="row" ng-cloak>
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+
+                    <div class="row">
+                        <div class="col-xs-12" ng-show="model.errorMessage">
+                            <p class="alert alert-danger">
+                                <strong>Error:</strong> {{model.errorMessage}}
+                            </p>
+                        </div>
                     </div>
-                    <div class="panel-body">
-                        <ul class="list-inline">
-                            <li ng-repeat="provider in model.externalProviders">
-                                <a class="btn btn-default" href="{{provider.href}}">{{provider.text}}</a>
-                            </li>
-                        </ul>
+
+                    <div class="row">
+                        <div class="col-xs-12" ng-show="model.loginUrl">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h2 class="panel-title">Sign In</h2>
+                                </div>
+                                <div class="panel-body">
+                                    <form name="form" method="post" action="{{model.loginUrl}}">
+                                        <anti-forgery-token token="model.antiForgery"></anti-forgery-token>
+
+                                        <fieldset>
+                                            <div class="row">
+
+                                                <div class="col-xs-12">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">Email</div>
+                                                            <input required name="username" autofocus id="username" type="text" class="form-control" ng-model="model.username" maxlength="100">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xs-12">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">Password</div>
+                                                            <input required id="password" name="password" type="password" class="form-control" ng-model="model.password" maxlength="100" autocomplete="off">
+                                                        </div>
+                                                        <div class="text-right link-sm">
+                                                            <a href="/useraccount/passwordreset">Forgot Password?</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xs-4">
+                                                    <button class="btn btn-primary" ng-disabled="form.$invalid">Sign In</button>
+                                                </div>
+
+                                                <div class="col-xs-8">
+                                                    <div class="form-group no-bot-margin" ng-show="model.allowRememberMe">
+                                                        <div class="checkbox no-bot-margin">
+                                                            <label>
+                                                                <input type="checkbox" id="rememberMe" name="rememberMe" ng-model="model.rememberMe" value="true"> Remember my login
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </fieldset>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Not sure what this is (mj) -->
+                            <ul class="list-unstyled">
+                                <li ng-repeat="link in model.additionalLinks">
+                                    <a ng-href="{{link.href}}">{{link.text}}</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <a href="/useraccount/register">Create an Account</a>
+                        </div>
+                    </div>
+
+                    <!-- Not sure what this is (mj) -->
+                    <div class="row">
+                        <div class="col-xs-12 external-providers" ng-show="model.externalProviders">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">External Login</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ul class="list-inline">
+                                        <li ng-repeat="provider in model.externalProviders">
+                                            <a class="btn btn-default" href="{{provider.href}}">{{provider.text}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-        </div>
- 
-        <div class="row">
-            <div class="col-md-8 col-sm-8 account-actions">
-                <div class="col-md-4 col-sm-4 create-account"><a href="/useraccount/register">Create an Account</a></div>
-                <div class="col-md-4 col-sm-4 forgot-password"><a href="/useraccount/passwordreset">Forgot Password?</a></div>
-            </div>
+
         </div>
 
-    </div>
+        <!-- Script Things -->
+        <script id='modelJson' type='application/json'>
+            {model}
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
+        <script src="/libs/encoder/encoder.min.js"></script>
+        <script src="/idsrvr.js"></script>
 
-    <script id='modelJson' type='application/json'>
-        {model}
-    </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
-    <script src="/libs/encoder/encoder.min.js"></script>
-    <script src="/idsrvr.js"></script>
-</body>
+    </body>
+
 </html>
 
 

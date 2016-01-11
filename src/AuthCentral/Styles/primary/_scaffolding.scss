@@ -1,0 +1,25 @@
+// Body Classes
+
+body {
+	margin-top: 0;
+}
+
+// Helper Classes
+
+.no-bot-margin {
+	margin-bottom: 0;
+
+	&.checkbox {
+		margin-top: $margin-small-vertical+3;
+		margin-bottom: $margin-small-vertical;
+	}
+
+}
+
+
+// Link Classes
+
+.link-sm {
+	margin-top: $margin-small-vertical;
+	font-size: $font-size-small;
+}

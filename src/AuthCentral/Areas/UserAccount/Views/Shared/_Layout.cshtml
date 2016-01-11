@@ -12,26 +12,51 @@
 <!DOCTYPE html>
 
 <html ng-app="app" ng-controller="LayoutCtrl">
+
     <head>
         <meta charset="utf-8" />
         <title>@ViewBag.Title | FSW</title>
-        <meta name="viewport" content="width=device-width, initial-scale-1.0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <!-- build:css -->
         <link rel="stylesheet" href="/assets/vendor.css">
         <link rel="stylesheet" href="/assets/main.css">
         <!-- endbuild -->
+
+
+
+
+
     </head>
-    <body >
-        <div class="navbar navbar-inverse navbar-fixed-top">
+
+    <body>
+
+        <header class="navbar navbar-fixed-top">
+
             <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"> </span>
-                        <span class="icon-bar"> </span>
-                        <span class="icon-bar"> </span>
-                    </button>
-               </div>
+
+                <div class="row">
+
+                    <div class="col-xs-6 clear-fix">
+                        <img title="FSW" src="https://fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg" alt="FSW" class="fsw-logo">
+                        <span>Auth Central</span>
+                    </div>
+
+                    <div class="col-xs-6 text-right">
+                        <ul class="nav nav-pills">
+                            <li role="presentation" class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bars"></i></a>
+                                <ul class="dropdown-menu">
+                                    <li>Something</li>
+                                    <li>Something</li>
+                                    <li>Something</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                        <li class="dropdown">
@@ -74,17 +99,24 @@
                         }
                     </ul>
                 </div>
+
             </div>
+
+        </header>
+
+        <div class="container body-content">
+            @RenderBody()
         </div>
-    <div class="container body-content">
-        @RenderBody()
-        <footer>
-            <p>&copy;@DateTime.Now.Year - FSW</p>
+
+        <footer class="container-fluid">
+            &copy; @DateTime.Now.Year FSW • All rights reserved.
         </footer>
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-     
-    @RenderSection("scripts", required: false)
+
+        <!-- Script Things -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        @RenderSection("scripts", required: false)
+
     </body>
+
 </html>

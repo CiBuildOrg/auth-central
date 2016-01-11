@@ -1,0 +1,59 @@
+// Body Classes
+
+body {
+	margin-top: 0;
+}
+
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('../fonts/fontawesome-webfont.eot');
+  src: url('../fonts/fontawesome-webfont.eot') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2') format('woff2'), url('../fonts/fontawesome-webfont.woff') format('woff'), url('../fonts/fontawesome-webfont.ttf') format('truetype'), url('../fonts/fontawesome-webfont.svg#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+// Header Classes
+
+header {
+
+	&.navbar {
+		padding: $padding-small-vertical*3 0;
+		background-color: $gray-dark;
+	}
+
+	.fsw-logo {
+		float: left;
+		width: 50px;
+	}
+
+	span {
+		display: block;
+		float: left;
+		margin-top: 4px;
+		font-size: $font-size-base+2;
+		color: $brand-fsw;
+	}
+
+}
+
+
+//Content Classes
+
+.body-content {
+	margin-top: $margin-large-vertical*6;
+}
+
+
+// Footer Classes
+
+footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	padding: $padding-small-vertical;
+	background-color: $gray-dark;
+	font-size: $font-size-small;
+	text-align: center;
+	color: $gray-lighter;
+}

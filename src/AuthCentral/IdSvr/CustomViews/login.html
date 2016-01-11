@@ -2,7 +2,6 @@
 <html ng-app="app" ng-controller="LayoutCtrl">
 
     <head>
-
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>{siteName}</title>
 
@@ -17,37 +16,11 @@
 
     <body lang="en">
 
-        <!--
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-header">
-                <span class="navbar-brand">{siteName}</span>
-            </div>
-            <ul class="nav navbar-nav" ng-show="model.currentUser" ng-cloak>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{model.currentUser}} <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{{model.logoutUrl}}">Logout</a></li>
-                        <li class="divider" ng-show="model.loginWithDifferentAccountUrl"></li>
-                        <li><a href="{{model.loginWithDifferentAccountUrl}}" ng-show="model.loginWithDifferentAccountUrl">Login With Different Account</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-
-        <div class="container">
-            <div class="page-header">
-                <h1>
-                    <small ng-show="clientName"><strong>{clientName}</strong> is asking you to login</small>
-                </h1>
-            </div>
-        </div>
-        -->
-
         <div class="container login">
 
             <div class="row">
                 <div  class="col-xs-12 text-center">
-                    <img title="FSW" src="https://fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg" alt="FSW" class="fsw-logo" />
+                    <img title="FSW" src="https://fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg" alt="FSW" class="fsw-logo">
                 </div>
             </div>
 
@@ -129,6 +102,12 @@
                     <div class="row">
                         <div class="col-xs-12 text-center">
                             <a href="/useraccount/register">Create an Account</a>
+                        </div>
+                    </div>
+
+                    <div class="row help-text">
+                        <div class="col-xs-12">
+                            <p><strong>Need Help?</strong> Call an FSW Customer Service Representative Toll Free at <span class="text-fsw">1-877-877-5655</span> or email <a href="mailto:support@fsw.com">support@fsw.com</a> (for employees).</p>
                         </div>
                     </div>
 

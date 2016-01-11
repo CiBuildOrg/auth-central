@@ -4,22 +4,15 @@ body {
 	margin-top: 0;
 }
 
-@font-face {
-  font-family: 'FontAwesome';
-  src: url('../fonts/fontawesome-webfont.eot');
-  src: url('../fonts/fontawesome-webfont.eot') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2') format('woff2'), url('../fonts/fontawesome-webfont.woff') format('woff'), url('../fonts/fontawesome-webfont.ttf') format('truetype'), url('../fonts/fontawesome-webfont.svg#fontawesomeregular') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
 
 // Header Classes
 
 header {
 
 	&.navbar {
+		height: 50px;
 		padding: $padding-small-vertical*3 0;
-		background-color: $gray-dark;
+		background-color: $gray-darker;
 	}
 
 	.fsw-logo {
@@ -30,9 +23,48 @@ header {
 	span {
 		display: block;
 		float: left;
-		margin-top: 4px;
+		margin-top: 9px;
 		font-size: $font-size-base+2;
+		line-height: .8;
 		color: $brand-fsw;
+	}
+
+	.dropdown-toggle {
+		display: block;
+		float: right;
+		width: 50px;
+    height: 50px;
+    margin: -15px;
+		background-color: $gray-base;
+		font-size: $font-size-h3 - 2;
+		text-align: center;
+		line-height: 2.4;
+		color: $text-contrast;
+
+		&:hover,
+		&:active,
+		&:focus {
+			background-color: $brand-fsw;
+		}
+
+	}
+
+	.dropdown-menu {
+    top: 35px;
+    right: 0;
+  	left: auto;
+    min-width: 160px;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    border: none;
+    border-radius: 0 0 0 3px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.175);
+
+    li a {
+    	padding: $padding-small-vertical $padding-large-horizontal;
+    }
+
 	}
 
 }
@@ -52,7 +84,7 @@ footer {
 	bottom: 0;
 	width: 100%;
 	padding: $padding-small-vertical;
-	background-color: $gray-dark;
+	background-color: $gray-darker;
 	font-size: $font-size-small;
 	text-align: center;
 	color: $gray-lighter;

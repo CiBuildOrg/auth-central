@@ -58,12 +58,64 @@ header {
     padding: 0;
     background-color: #fff;
     border: none;
-    border-radius: 0 0 0 3px;
+    border-radius: 0 0 0 $border-radius-base;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.175);
 
-    li a {
-    	padding: $padding-small-vertical $padding-large-horizontal;
+    li {
+
+    	&.bottom-border {
+    		border-bottom: 1px solid $gray-lighter;
+    	}
+
+    	a {
+	    	padding: $padding-small-vertical $padding-large-horizontal;
+	    	text-align: right;
+	    	color: $gray;
+
+	    	&:hover {
+	    		background-color: lighten($gray-lighter, 2%);
+	    		color: $gray-dark;
+	    	}
+
+	    }
+
+	    &:last-child {
+
+    		a {
+    			background-color: $gray-lighter;
+    			border-radius: 0 0 0 $border-radius-base;
+    			color: $gray-dark;
+
+    			&:hover {
+    				background-color: darken($gray-lighter, 5%);
+    			}
+
+    		}
+
+    	}
+
     }
+
+	}
+
+	@media only screen and (min-width:768px) {
+
+		.dropdown-menu {
+	    border-radius: 0 0 $border-radius-base $border-radius-base;
+
+	    li {
+
+		    &:last-child {
+
+	    		a {
+	    			border-radius: 0 0 $border-radius-base $border-radius-base;
+	    		}
+
+	    	}
+
+	    }
+
+		}
 
 	}
 

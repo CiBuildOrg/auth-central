@@ -24,11 +24,6 @@
         <!-- endbuild -->
 
 
-
-
-
-
-
     </head>
 
     <body>
@@ -39,14 +34,21 @@
 
                 <div class="row">
 
-                    <div class="col-xs-6 clear-fix">
+                    <div class="col-xs-9 clear-fix">
                         <img title="FSW" src="http://fsw-res.cloudinary.com/image/upload/v1452553297/logos/fsw-white-logo.svg" alt="FSW" class="fsw-logo">
                         <span>Auth Central</span>
                     </div>
 
-                    <div class="col-xs-6 text-right">
+                    <div class="col-xs-3 text-right">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bars"></i></a>
                         <ul class="dropdown-menu">
+                            @if (isAdmin)
+                            {
+                            <li>@Html.ActionLink("Clients", "Index", "Client", new { area = "Admin" }, null)</li>
+                            <li>@Html.ActionLink("Scopes", "Index", "Client", new { area = "Admin" }, null)</li>
+                            <li>@Html.ActionLink("User Lookup", "Index", "User", new { area = "Admin" }, null)</li>
+                            <li class="bottom-border">@Html.ActionLink("Create Account", "Create", "User", new { area = "Admin" }, null)</li>
+                            }   
                             @if (User.Identity.IsAuthenticated)
                             {
                             <li>@Html.ActionLink("Account Details", "Edit", "Profile", new { area = "UserAccount" }, null)</li>
@@ -64,49 +66,6 @@
                         </ul>
                     </div>
 
-                </div>
-
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                       <li class="dropdown">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">Account<b class="caret"></b></a>
-                            <ul role="menu" class="dropdown-menu" >
-
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <li>@Html.ActionLink("Account Details", "Edit", "Profile", new { area = "UserAccount" }, null)</li>
-                                <li>@Html.ActionLink("Verify Your Email Account", "Verify", "Register", new { area = "UserAccount" }, null)</li>
-                                <li>@Html.ActionLink("Change Email", "Index", "ChangeEmail", new { area = "UserAccount" }, null)</li>
-                                <li>@Html.ActionLink("Change Password", "Index", "ChangePassword", new {area = "UserAccount"}, null)</li>
-                                <li>@Html.ActionLink("Logout", "Logout", "Home", new { area = "UserAccount" }, null)</li>
-                            }
-                            else
-                            {
-                                <li>@Html.ActionLink("Login", "Details", "Home", new { area = "UserAccount" }, null)</li>
-                                <li>@Html.ActionLink("Register", "Index", "Register", new { area = "UserAccount" }, null)</li>
-                                <li>@Html.ActionLink("Reset Password", "Index", "PasswordReset", new { area = "UserAccount" }, null)</li>
-                            }
-
-                            </ul>
-                        </li>
-                        @if (isAdmin)
-                        {
-                            <li class="dropdown">
-                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Server Admin<b class="caret"></b></a>
-                                <ul role="menu" class="dropdown-menu">
-                                    <li>@Html.ActionLink("Clients", "Index", "Client", new { area = "Admin" }, null)</li>
-                                    <li>@Html.ActionLink("Scopes", "Index", "Client", new { area = "Admin" }, null)</li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">User Admin<b class="caret"></b></a>
-                                <ul role="menu" class="dropdown-menu">
-                                    <li>@Html.ActionLink("User Lookup", "Index", "User", new { area = "Admin" }, null)</li>
-                                    <li>@Html.ActionLink("Create Account", "Create", "User", new { area = "Admin" }, null)</li>
-                                </ul>
-                            </li>
-                        }
-                    </ul>
                 </div>
 
             </div>

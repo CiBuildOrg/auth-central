@@ -6,7 +6,7 @@ using System.Net.Mail;
 using Newtonsoft.Json;
 using BrockAllen.MembershipReboot;
 
-namespace Fsw.Enterprise.AuthCentral.IdMgr
+namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email
 {
     public class AuthCentralSmtpMessageDelivery : IMessageDelivery
     {
@@ -17,11 +17,13 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             MultipartAlternativeAsJson = 3
         }
 
+        public EnvConfig Config { get; set; }
         public MsgBodyTypes MsgBodyType { get; set; }
         public int SmtpTimeout { get; set; }
 
-        public AuthCentralSmtpMessageDelivery(MsgBodyTypes bodyType, int smtpTimeout = 5000)
+        public AuthCentralSmtpMessageDelivery(EnvConfig config, MsgBodyTypes bodyType, int smtpTimeout = 5000)
         {
+            this.Config = config;
             this.MsgBodyType = bodyType;
             this.SmtpTimeout = smtpTimeout;
         }
@@ -32,14 +34,12 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
 
             if (String.IsNullOrWhiteSpace(msg.From))
             {
-                //TODO: read from address from config
-                msg.From = "support@foodservicewarehouse.com";
+                msg.From = Config.Smtp.From;
             }
 
             using (SmtpClient smtp = new SmtpClient())
             {
-                //TODO: read SMTP host from config
-                smtp.Host = "obm.foodservicewarehouse.com";
+                smtp.Host = Config.Smtp.Host;
                 smtp.Timeout = SmtpTimeout;
 
                 try

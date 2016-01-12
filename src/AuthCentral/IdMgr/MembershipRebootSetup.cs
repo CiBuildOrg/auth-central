@@ -58,15 +58,17 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             var appinfo = new AuthCentralAppInfo(
                 app,
                 "FSW Auth Central", 
-                "Copyright fsw.com 2015",
+                "FSW: Shop now, save later.",
                 "UserAccount/Details", 
                 "UserAccount/ChangeEmail/Confirm/",
                 "UserAccount/Register/Cancel/",
                 "UserAccount/PasswordReset/Confirm/");
 
             var emailFormatter = new AuthCentralEmailMessageFormatter(appEnv,appinfo);
+            var smtpMsgDelivery = new AuthCentralSmtpMessageDelivery(AuthCentralSmtpMessageDelivery.MsgBodyTypes.Html);
+
             newInstance.AddEventHandler(new DebuggerEventHandler<HierarchicalUserAccount>());
-            newInstance.AddEventHandler(new EmailAccountEventsHandler<HierarchicalUserAccount>(emailFormatter, new SmtpMessageDelivery(true)));
+            newInstance.AddEventHandler(new EmailAccountEventsHandler<HierarchicalUserAccount>(emailFormatter, smtpMsgDelivery));
             //newInstance.AddEventHandler(new TwilioSmsEventHandler(appinfo));
 
             return newInstance;

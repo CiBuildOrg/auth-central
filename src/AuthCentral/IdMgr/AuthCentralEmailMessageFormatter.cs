@@ -9,6 +9,10 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
 {
     internal class AuthCentralEmailMessageFormatter : EmailMessageFormatter<HierarchicalUserAccount>
     {
+        const string HTML_FILE_EXTENSION        = "html";
+        const string PLAIN_TEXT_FILE_EXTENSION  = "txt";
+        const string TEMPLATE_PATH_NO_EXTENSION = "IdMgr/EmailTemplates/{0}";
+
         private readonly IApplicationEnvironment _appEnvironment;
 
         public AuthCentralEmailMessageFormatter(IApplicationEnvironment appEnvironment, AuthCentralAppInfo appInfo) : base(appInfo)
@@ -21,22 +25,52 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             _appEnvironment = appEnvironment;
         }
 
+        protected override string GetSubject(UserAccountEvent<HierarchicalUserAccount> evt, IDictionary<string, string> values)
+        {
+            return FormatValue(evt, LoadSubjectTemplate(evt), values);
+        }
+
         protected override string GetBody(UserAccountEvent<HierarchicalUserAccount> evt, IDictionary<string, string> values)
         {
-            if(evt.GetType() != typeof (PasswordResetRequestedEvent<HierarchicalUserAccount>))
-                return base.GetBody(evt, values);
+            return FormatValue(evt, LoadBodyTemplate(evt), values);
+        }
 
-            string preBody;
-            var file = Path.Combine(_appEnvironment.ApplicationBasePath, @"IdMgr/EmailTemplates/PasswordResetRequestedEvent_Body.html");
-            using (var s = new FileStream(file, FileMode.Open))
+        
+        protected override string LoadSubjectTemplate(UserAccountEvent<HierarchicalUserAccount> evt)
+        {
+            return LoadTemplate(CleanGenericName(evt.GetType()) + "_Subject." + PLAIN_TEXT_FILE_EXTENSION);
+        }
+
+        protected override string LoadBodyTemplate(UserAccountEvent<HierarchicalUserAccount> evt)
+        {
+            return LoadTemplate(CleanGenericName(evt.GetType()) + "_Body." + HTML_FILE_EXTENSION);
+        }
+
+        string LoadTemplate(string name)
+        {
+            name = String.Format(TEMPLATE_PATH_NO_EXTENSION, name);
+
+            var file = Path.Combine(_appEnvironment.ApplicationBasePath, name);
+            using (var s = new FileStream(file, FileMode.Open, FileAccess.Read))
             {
+                if (s == null) return null;
                 using (var sr = new StreamReader(s))
                 {
-                    preBody = sr.ReadToEnd();
+                    return sr.ReadToEnd();
                 }
             }
-
-            return FormatValue(evt, preBody, values);
         }
+
+        private string CleanGenericName(Type type)
+        {
+            var name = type.Name;
+            var idx = name.IndexOf('`');
+            if (idx > 0)
+            {
+                name = name.Substring(0, idx);
+            }
+            return name;
+        }
+
     }
 }

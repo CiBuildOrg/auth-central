@@ -18,6 +18,33 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email
         private readonly IApplicationEnvironment _appEnvironment;
         private readonly AuthCentralSmtpMessageDelivery.MsgBodyTypes _msgBodyType;
 
+        /// <summary>
+        ///     Method definition required when overriding Subject Template Name resolution.
+        /// </summary>
+        /// <param name="evt">The event for which to return the Subject TEmplate Name.</param>
+        /// <returns>The name of the subject template to load (expected to be in the same directory as all other templates).</returns>
+        public delegate string ResolveSubjectTemplateName(UserAccountEvent<HierarchicalUserAccount> evt);
+
+        /// <summary>
+        ///     Method definition required when overriding Body Template Name resolution.
+        /// </summary>
+        /// <param name="evt">The event for which to return the Body TEmplate Name.</param>
+        /// <returns>The name of the body template to load (expected to be in the same directory as all other templates).</returns>
+        public delegate string ResolveBodyTemplateName(UserAccountEvent<HierarchicalUserAccount> evt, string fileExtension);
+
+        /// <summary>
+        ///     A collection of <typeparamref name="ResolveBodyTemplateName"/>s used to override the default 
+        ///     body template name resolution behavior.
+        /// </summary>
+        public IDictionary<Type, ResolveBodyTemplateName> BodyTemplateNameResolverOverrides = new Dictionary<Type, ResolveBodyTemplateName>();
+
+        /// <summary>
+        ///     A collection of <typeparamref name="ResolveSubjectTemplateName"/>s used to override the default 
+        ///     subject template name resolution behavior.
+        /// </summary>
+        public IDictionary<Type, ResolveSubjectTemplateName> SubjectTemplateNameResolverOverrides = new Dictionary<Type, ResolveSubjectTemplateName>();
+
+
         public AuthCentralEmailMessageFormatter(IApplicationEnvironment appEnvironment, AuthCentralAppInfo appInfo, 
                                                 AuthCentralSmtpMessageDelivery.MsgBodyTypes msgBodyType) : base(appInfo) {
             _appEnvironment = appEnvironment;
@@ -64,13 +91,28 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email
 
             return msgBody;
         }
-        
+
         protected override string LoadSubjectTemplate(UserAccountEvent<HierarchicalUserAccount> evt) {
-            return LoadTemplate(CleanGenericName(evt.GetType()) + "_Subject." + PLAIN_TEXT_FILE_EXTENSION);
+            ResolveSubjectTemplateName resolveSubjectTemplateName;
+
+            if(!SubjectTemplateNameResolverOverrides.TryGetValue(evt.GetType(), out resolveSubjectTemplateName)) {
+                resolveSubjectTemplateName = DefaultSubjectTemplateNameResolver;
+            }
+
+            string templateName = resolveSubjectTemplateName(evt);
+
+            return LoadTemplate(templateName);
         }
 
-        private string LoadBodyTemplate(UserAccountEvent<HierarchicalUserAccount> evt, string extension) {
-            StringBuilder bodyTemplate = new StringBuilder(LoadTemplate(CleanGenericName(evt.GetType()) + "_Body." + extension));
+        public virtual string LoadBodyTemplate(UserAccountEvent<HierarchicalUserAccount> evt, string extension) {
+            ResolveBodyTemplateName resolveBodyTemplateName;
+
+            if(!BodyTemplateNameResolverOverrides.TryGetValue(evt.GetType(), out resolveBodyTemplateName)) {
+                resolveBodyTemplateName = DefaultBodyTemplateNameResolver;
+            }
+
+            string templateName = resolveBodyTemplateName(evt, extension);
+            StringBuilder bodyTemplate = new StringBuilder(LoadTemplate(templateName));
 
             if(extension == HTML_FILE_EXTENSION)
             {
@@ -81,7 +123,8 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email
             return bodyTemplate.ToString();
         }
 
-        protected override string LoadBodyTemplate(UserAccountEvent<HierarchicalUserAccount> evt) {
+        // intentionally hide derrived type member
+        protected string LoadBodyTemplate(UserAccountEvent<HierarchicalUserAccount> evt) {
             throw new NotImplementedException();
         }
 
@@ -100,7 +143,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email
             }
         }
 
-        private string CleanGenericName(Type type)
+        private static string CleanGenericName(Type type)
         {
             var name = type.Name;
             var idx = name.IndexOf('`');
@@ -109,6 +152,16 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email
                 name = name.Substring(0, idx);
             }
             return name;
+        }
+
+        private static string DefaultSubjectTemplateNameResolver(UserAccountEvent<HierarchicalUserAccount> evt)
+        {
+            return CleanGenericName(evt.GetType()) + "_Subject." + PLAIN_TEXT_FILE_EXTENSION;
+        }
+        
+        private static string DefaultBodyTemplateNameResolver(UserAccountEvent<HierarchicalUserAccount> evt, string fileExtension)
+        {
+            return CleanGenericName(evt.GetType()) + "_Body." + fileExtension;
         }
 
     }

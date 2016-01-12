@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="https://secure.dev-fsw.com/" />
+<title>User_CheckEmail</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">User_CheckEmail</td></tr>
+</thead><tbody>
+<tr>
+	<td>store</td>
+	<td>1</td>
+	<td>MinutesToAdd</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>javascript{var dates = new Date();var minutes = dates.getMinutes() + 1; var hours = dates.getHours();if (minutes &gt; 59){hours = hours + 1;minutes = minutes - 60;} if (minutes &lt; 10){minutes = '0' + minutes;}if (hours &lt; 10){hours = '0' + hours;} hours + ':' + minutes;}</td>
+	<td>NextTime</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>javascript{var m = new Date().getMinutes(); (m &gt; 9 ? m : '0' + m)}</td>
+	<td>CurrentMinute</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>javascript{var h = new Date().getHours(); (h &gt; 9 ? h : '0' + h)}</td>
+	<td>CurrentHour</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>javascript{var m = ((new Date()).getMinutes()+46).toString(); (m &gt; 9 ? m : '0' + m)}</td>
+	<td>NextMinute</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>javascript{var m = storedVars['NextMinute']; m &lt; 60 ? m : m.replace('6','0')}</td>
+	<td>NextMinute</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>javascript{var h = ((new Date()).getMinutes()+3); (h != 0 ? (new Date().getHours()) : ((new Date()).getHours()+1))}</td>
+	<td>NextHour</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>${CurrentHour} + ':' + ${CurrentMinute}</td>
+	<td>CurrentTime</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>${NextHour} + ':' + ${NextMinute}</td>
+	<td>OneMinuteFromNow</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>https://outlook.foodservicewarehouse.com/owa/auth/logon.aspx?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>${Owa_Username}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Owa_Username}</td>
+	<td>${NewUser_Email_Username}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Owa_Password}</td>
+	<td>${NewUser_Email_Password}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>${Owa_SignInButton}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//span[.='${CurrentTime}'] | //span[.='${OneMinuteFromNow}']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>javascript{ ((new Date()).getMinutes()-2).toFixed(-1) }</td>
+	<td>minutes</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>javascript{ ((new Date()).getHours()) +':' + ((new Date()).getMinutes()-20) }</td>
+	<td>date</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

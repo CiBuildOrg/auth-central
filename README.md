@@ -59,6 +59,15 @@ In order to run the application, some setup is required...
 
 At this point, you should be all set to run the app from visual studio.  Be sure to select the `web` command from the dropdown (not `iisexpress`)
 
+### Building / Running from Command Line ###
+
+1. dnu restore
+2. dnu build
+3. dnx web
+
+To watch for style changes and automatically rebuild the stylesheets, use `gulp watch`.
+
+
 ## Related repositories ##
 * [Identity Server](https://github.com/identityserver/IdentityServer3)
 * [Access Token Validation](https://github.com/identityserver/IdentityServer3.AccessTokenValidation)

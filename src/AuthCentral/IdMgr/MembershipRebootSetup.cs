@@ -6,6 +6,7 @@ using Microsoft.AspNet.Http;
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Microsoft.Extensions.PlatformAbstractions;
+using Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email;
 
 namespace Fsw.Enterprise.AuthCentral.IdMgr
 {
@@ -17,7 +18,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
         private MembershipRebootSetup(): base() { }
         private MembershipRebootSetup(SecuritySettings securitySettings) : base(securitySettings) { }
         
-        public static MembershipRebootSetup GetConfig(IApplicationBuilder app, IApplicationEnvironment appEnv)
+        public static MembershipRebootSetup GetConfig(IApplicationBuilder app, IApplicationEnvironment appEnv, EnvConfig config)
         {
             if(TheOneInstance == null)
             {
@@ -25,7 +26,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 {
                     if (TheOneInstance == null)
                     {
-                        TheOneInstance = CreateNewInstance(app, appEnv);
+                        TheOneInstance = CreateNewInstance(app, appEnv, config);
                     }
                 }
             }
@@ -33,7 +34,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             return TheOneInstance;
         }
  
-        private static MembershipRebootSetup CreateNewInstance(IApplicationBuilder app, IApplicationEnvironment appEnv)
+        private static MembershipRebootSetup CreateNewInstance(IApplicationBuilder app, IApplicationEnvironment appEnv, EnvConfig config)
         {
             SecuritySettings securitySettings = new SecuritySettings();
 
@@ -64,9 +65,12 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 "UserAccount/Register/Cancel/",
                 "UserAccount/PasswordReset/Confirm/");
 
-            var emailFormatter = new AuthCentralEmailMessageFormatter(appEnv,appinfo);
+            var emailBodyType = AuthCentralSmtpMessageDelivery.MsgBodyTypes.MultipartAlternativeAsJson;
+            var emailFormatter = new AuthCentralEmailMessageFormatter(appEnv, appinfo, emailBodyType);
+            var smtpMsgDelivery = new AuthCentralSmtpMessageDelivery(config, emailBodyType);
+
             newInstance.AddEventHandler(new DebuggerEventHandler<HierarchicalUserAccount>());
-            newInstance.AddEventHandler(new EmailAccountEventsHandler<HierarchicalUserAccount>(emailFormatter, new SmtpMessageDelivery(true)));
+            newInstance.AddEventHandler(new EmailAccountEventsHandler<HierarchicalUserAccount>(emailFormatter, smtpMsgDelivery));
             //newInstance.AddEventHandler(new TwilioSmsEventHandler(appinfo));
 
             return newInstance;

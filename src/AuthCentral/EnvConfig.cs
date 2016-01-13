@@ -5,11 +5,12 @@ namespace Fsw.Enterprise.AuthCentral
 {
     public class EnvConfig
     {
+        private UriConfig _uri;
         private CspConfig _csp;
         private CertConfig _cert;
-        private UriConfig _uri;
-        private ClientConfig _client;
+        private SmtpConfig _smtp;
         private DatabaseConfig _db;
+        private ClientConfig _client;
         private IConfigurationRoot _root;
 
         private static class EnvVars {
@@ -18,6 +19,8 @@ namespace Fsw.Enterprise.AuthCentral
             public static string UriScheme = "AUTHCENTRAL_URI_SCHEME";
             public static string UriHost = "AUTHCENTRAL_URI_HOST";
             public static string UriPort = "AUTHCENTRAL_URI_PORT";
+            public static string SmtpHost = "AUTHCENTRAL_SMTP_HOST";
+            public static string SmtpFrom = "AUTHCENTRAL_SMTP_FROM";
             public static string UriServiceRoot = "AUTHCENTRAL_URI_SERVICEROOT";
             public static string CertStoreName = "AUTHCENTRAL_CERT_STORENAME";
             public static string CertThumbprint = "AUTHCENTRAL_CERT_THUMBPRINT";
@@ -37,6 +40,7 @@ namespace Fsw.Enterprise.AuthCentral
             this._uri = new UriConfig(root);
             this._db = new DatabaseConfig(root);
             this._client = new ClientConfig(root);
+            this._smtp = new SmtpConfig(root);
         }
 
         public CspConfig Csp {
@@ -45,6 +49,10 @@ namespace Fsw.Enterprise.AuthCentral
 
         public CertConfig Cert {
             get { return this._cert; }
+        }
+
+        public SmtpConfig Smtp {
+            get { return this._smtp; }
         }
 
         public ClientConfig Client {
@@ -186,6 +194,32 @@ namespace Fsw.Enterprise.AuthCentral
                 } 
             }
         }
+
+        public class SmtpConfig
+        {
+            private IConfigurationRoot _root;
+            public SmtpConfig(IConfigurationRoot root)
+            {
+                _root = root;
+            }
+
+            public string Host
+            {
+                get
+                {
+                    return _root.Get<string>(EnvVars.SmtpHost);
+                }
+            }
+
+            public string From 
+            { 
+                get 
+                {
+                    return _root.Get<string>(EnvVars.SmtpFrom);
+                } 
+            }
+        }
+
 
         public class ClientConfig
         {

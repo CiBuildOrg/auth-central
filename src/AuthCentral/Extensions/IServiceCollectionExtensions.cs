@@ -65,15 +65,15 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             });
         }
 
-        public static void AddMembershipReboot(this IServiceCollection services, string mrConnectionString)
+        public static void AddMembershipReboot(this IServiceCollection services, EnvConfig config)
         {
-            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>(), provider.GetService<IApplicationEnvironment>()));
+            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>(), provider.GetService<IApplicationEnvironment>(), config));
             services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
-            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null, null));
+            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null, null, config));
             services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
             services.AddScoped(typeof(IUserAccountRepository<HierarchicalUserAccount>), typeof(MongoUserAccountRepository<HierarchicalUserAccount>));
             services.AddScoped<IBulkUserRepository<HierarchicalUserAccount>, MongoUserAccountRepository<HierarchicalUserAccount>>();
-            services.AddScoped(provider => new MongoDatabase(mrConnectionString));
+            services.AddScoped(provider => new MongoDatabase(config.DB.MembershipReboot));
         }
 
         public static void AddAuthCentralDependencies(this IServiceCollection services, EnvConfig config)

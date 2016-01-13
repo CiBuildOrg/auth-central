@@ -73,11 +73,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
             set { _scope.Type = value; }
         }
 
-        public List<ScopeClaim> Claims
-        {
-            get { return _scope.Claims; }
-            set { _scope.Claims = value; }
-        }
+        [ReadOnly(true)]
+        public IEnumerable<ScopeClaim> Claims => _scope.Claims;
 
         [Display(Name = "Include all claims for users")]
         public bool IncludeAllClaimsForUser

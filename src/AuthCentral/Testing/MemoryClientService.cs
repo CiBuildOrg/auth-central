@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fsw.Enterprise.AuthCentral.MongoStore;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 using IdentityServer3.Core.Models;
 
@@ -43,6 +44,28 @@ namespace Fsw.Enterprise.AuthCentral.Testing
         public async Task Delete(string clientId)
         {
             Clients.Remove(clientId);
+        }
+
+        public async Task<ClientPagingResult> GetPageAsync(int pageNumber, int rowsPerPage)
+        {
+            var result = new ClientPagingResult
+            {
+                Collection = Clients.Values,
+                HasMore = false
+            };
+
+            return result;
+        }
+
+        public async Task<ClientPagingResult> GetRangeAsync(int offset, int limit)
+        {
+            var result = new ClientPagingResult
+            {
+                Collection = Clients.Values.Skip(offset).Take(limit),
+                HasMore = (Clients.Count - offset - limit) > 0
+            };
+
+            return result;
         }
     }
 }

@@ -39,5 +39,10 @@ namespace Fsw.Enterprise.AuthCentral.Testing
         {
             return Task.FromResult(Scopes.Where(pair => scopeNames.Contains(pair.Key)).Select(pair => pair.Value));
         }
+
+        public async Task<IEnumerable<Scope>> Get(bool publicOnly = true)
+        {
+            return publicOnly ? Scopes.Values.Where(scope => scope.ShowInDiscoveryDocument) : Scopes.Values;
+        }
     }
 }

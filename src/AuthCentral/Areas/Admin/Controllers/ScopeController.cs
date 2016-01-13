@@ -35,6 +35,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
 
+            if (claimScope.Claims.Any(scopeClaim => scopeClaim.Name == claim))
+            {
+                ModelState.AddModelError("AddClaim", $"Claim with name {claim} already exists for scope {scope}");
+                return RedirectToAction("Index");
+            }
+
             var newClaim = new ScopeClaim(claim);
 
             claimScope.Claims.Add(newClaim);

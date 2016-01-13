@@ -37,17 +37,29 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
         public string Email { get; set; }
         
         [Required]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
-        [Required]
-        public string LastName { get; set; }
-        public string MiddleName { get; set;  }
 
-        public Uri ProfilePhotoUrl { get; set; }
-        public string PhoneNumber { get; set; }
-        public System.TimeZoneInfo Timezone { get; set;  }
-        public CultureInfo Locale { get; set; }
         [Required]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+
+        [Display(Name = "Profile Photo URL")]
+        public Uri ProfilePhotoUrl { get; set; }
+
+        [Display(Name = "Phone Number")]
+        public string PhoneNumber { get; set; }
+
+        [Display(Name = "Time Zone")]
+        public System.TimeZoneInfo Timezone { get; set;  }
+        
+        public CultureInfo Locale { get; set; }
+
+        [Required]
+        [Display(Name = "Last Updated")]
         public DateTimeOffset LastUpdated { get; set; }
+
         [Required]
         public DateTimeOffset Created { get; set; }
     }

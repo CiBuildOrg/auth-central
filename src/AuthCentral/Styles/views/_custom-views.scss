@@ -1,0 +1,26 @@
+// Login Styles
+
+.login {
+
+	.fsw-logo {
+		width: 175px;
+		margin: $margin-large-vertical*2 0;
+	}
+
+	@media only screen and (min-width:768px) {
+
+		.fsw-logo {
+			margin: $margin-large-vertical*3 0;
+		}
+
+	}
+
+	@media only screen and (min-width:768px) {
+
+		.fsw-logo {
+			margin: $margin-large-vertical*7 auto $margin-large-vertical*3;
+		}
+
+	}
+
+}

@@ -79,7 +79,10 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                 },
                 CspOptions = new CspOptions()
                 {
-                    Enabled = true
+                    Enabled = true,
+                    ScriptSrc = config.Csp.ScriptSrc,
+                    StyleSrc = config.Csp.StyleSrc,
+                    FontSrc = config.Csp.FontSrc
                 },
                 EnableWelcomePage = true
             };
@@ -169,11 +172,11 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             if (isDebug)
             {
                 loggerFactory.MinimumLevel = LogLevel.Verbose;
-                app.UseDeveloperExceptionPage();
             }
             else
             {
                 loggerFactory.MinimumLevel = LogLevel.Error;
+                app.UseRuntimeInfoPage();
             }
         }
     }

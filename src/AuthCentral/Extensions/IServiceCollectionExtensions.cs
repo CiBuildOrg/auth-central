@@ -30,6 +30,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
         {
             services.AddAuthorization(options =>
             {
+                // AuthorizeAttribute seems to accept multiple policies, so making these less cumulative might be useful.
                 options.AddPolicy("FswPlatform", policy => {
                     policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
                     policy.RequireClaim("scope", "fsw_platform");
@@ -39,6 +40,14 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                     policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
                     policy.RequireClaim("scope", "fsw_platform");
                     policy.RequireClaim("fsw:authcentral:admin", "true");
+                });
+
+                options.AddPolicy("FswAutomation", policy =>
+                {
+                    policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+                    policy.RequireClaim("scope", "fsw_platform");
+                    policy.RequireClaim("fsw:authcentral:admin", "true");
+                    policy.RequireClaim("fsw:testautomation", "true");
                 });
 
                 options.DefaultPolicy = options.GetPolicy("FswPlatform");

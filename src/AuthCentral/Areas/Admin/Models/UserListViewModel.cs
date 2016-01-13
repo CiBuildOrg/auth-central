@@ -13,6 +13,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public int TotalItemCount { get; set; }
+        public bool CanDeleteUsers { get; set; }
 
         public UserListViewModel(IEnumerable<HierarchicalUserAccount> accounts, int pageNumber, int pageSize, int totalCount)
         {

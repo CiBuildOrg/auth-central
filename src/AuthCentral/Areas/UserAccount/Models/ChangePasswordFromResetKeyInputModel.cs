@@ -21,6 +21,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
         [Required]
         [Compare("Password", ErrorMessage = "Password confirmation must match password.")]
         [DataType(DataType.Password)]
+        [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; }
         
         /// <summary>

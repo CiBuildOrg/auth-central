@@ -45,6 +45,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             long count;
             IEnumerable<HierarchicalUserAccount> users = _repository.GetPagedUsers(page, pageSize, out count);
             UserListViewModel model = new UserListViewModel(users, page, pageSize, (int)count);
+            model.CanDeleteUsers = User.Claims.Any(claim => claim.Type == "fsw:testautomation" && claim.Value == "true");
             return View("Index", model);
         }
 
@@ -75,7 +76,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 }
             }
 
-            return View("Index", model);
+            return Create();
         }
 
         [HttpPost("[action]")]
@@ -127,6 +128,23 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             {
                 page = page
             });
+        }
+        
+        [Authorize("FswAutomation")]
+        [HttpPost("[action]/{userId}")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(string userId, int page)
+        {
+            Guid userGuid;
+            if (!Guid.TryParse(userId, out userGuid))
+            {
+                return HttpBadRequest("Failed to parse userId.");
+            }
+
+            _userAccountService.DeleteAccount(userGuid);
+
+            return RedirectToAction("Index", "User", new { page = page });
+
         }
 
         private void AddClaims(Guid accountId, CreateAccountInputModel model)

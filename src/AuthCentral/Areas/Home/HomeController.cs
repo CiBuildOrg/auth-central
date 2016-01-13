@@ -7,13 +7,13 @@ using Newtonsoft.Json;
 
 namespace Fsw.Enterprise.AuthCentral.Controllers
 {
-    [Route("")]
+    [Area("Home"), Route("")]
     public class IndexController : Controller
     {
         [HttpGet]
         public ActionResult Index()
         {
-            return this.RedirectPermanent("/account");
+            return this.RedirectPermanent("/useraccount/profile");
         }
     }
 }

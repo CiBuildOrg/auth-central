@@ -63,7 +63,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
             await _scopeService.Delete(scopeName);
 
+            scope.IdsScope.Claims = editScope.Claims;
 
+            await _scopeService.Save(scope.IdsScope);
 
             return RedirectToAction("Index");
         }

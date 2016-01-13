@@ -1,0 +1,32 @@
+// Helper Classes
+
+.no-bot-margin {
+	margin-bottom: 0;
+
+	&.checkbox {
+		margin-top: $margin-small-vertical+3;
+		margin-bottom: $margin-small-vertical;
+	}
+
+}
+
+.help-text {
+	margin-top: $margin-large-vertical*3;
+	font-size: 90%;
+	color: $gray-light;
+}
+
+
+// Color Classes
+
+.text-fsw {
+	color: $brand-fsw;
+}
+
+
+// Link Classes
+
+.link-sm {
+	margin-top: $margin-small-vertical;
+	font-size: $font-size-small;
+}

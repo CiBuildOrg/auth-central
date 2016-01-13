@@ -17,6 +17,20 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email
 
         private readonly IApplicationEnvironment _appEnvironment;
         private readonly AuthCentralSmtpMessageDelivery.MsgBodyTypes _msgBodyType;
+        private readonly IDictionary<Type, ResolveBodyTemplateName> _bodyTemplateNameResolverOverrides = new Dictionary<Type, ResolveBodyTemplateName>();
+        private readonly IDictionary<Type, ResolveSubjectTemplateName> _subjectTemplateNameResolverOverrides = new Dictionary<Type, ResolveSubjectTemplateName>();
+
+        public AuthCentralEmailMessageFormatter(IApplicationEnvironment appEnvironment, AuthCentralAppInfo appInfo, 
+                                                AuthCentralSmtpMessageDelivery.MsgBodyTypes msgBodyType) : base(appInfo) {
+            _appEnvironment = appEnvironment;
+            _msgBodyType = msgBodyType;
+        }
+
+        public AuthCentralEmailMessageFormatter(IApplicationEnvironment appEnvironment, Lazy<ApplicationInformation> appInfo, 
+                                                AuthCentralSmtpMessageDelivery.MsgBodyTypes msgBodyType) : base(appInfo) {
+            _appEnvironment = appEnvironment;
+            _msgBodyType = msgBodyType;
+        }
 
         /// <summary>
         ///     Method definition required when overriding Subject Template Name resolution.
@@ -36,25 +50,21 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email
         ///     A collection of <typeparamref name="ResolveBodyTemplateName"/>s used to override the default 
         ///     body template name resolution behavior.
         /// </summary>
-        public IDictionary<Type, ResolveBodyTemplateName> BodyTemplateNameResolverOverrides = new Dictionary<Type, ResolveBodyTemplateName>();
+        public IDictionary<Type, ResolveBodyTemplateName> BodyTemplateNameResolverOverrides {
+            get {
+                return this._bodyTemplateNameResolverOverrides;
+            }
+        }
 
         /// <summary>
         ///     A collection of <typeparamref name="ResolveSubjectTemplateName"/>s used to override the default 
         ///     subject template name resolution behavior.
         /// </summary>
-        public IDictionary<Type, ResolveSubjectTemplateName> SubjectTemplateNameResolverOverrides = new Dictionary<Type, ResolveSubjectTemplateName>();
-
-
-        public AuthCentralEmailMessageFormatter(IApplicationEnvironment appEnvironment, AuthCentralAppInfo appInfo, 
-                                                AuthCentralSmtpMessageDelivery.MsgBodyTypes msgBodyType) : base(appInfo) {
-            _appEnvironment = appEnvironment;
-            _msgBodyType = msgBodyType;
-        }
-
-        public AuthCentralEmailMessageFormatter(IApplicationEnvironment appEnvironment, Lazy<ApplicationInformation> appInfo, 
-                                                AuthCentralSmtpMessageDelivery.MsgBodyTypes msgBodyType) : base(appInfo) {
-            _appEnvironment = appEnvironment;
-            _msgBodyType = msgBodyType;
+        public IDictionary<Type, ResolveSubjectTemplateName> SubjectTemplateNameResolverOverrides
+        {
+            get {
+                return this._subjectTemplateNameResolverOverrides;
+            }
         }
 
         protected override string GetSubject(UserAccountEvent<HierarchicalUserAccount> evt, IDictionary<string, string> values) {

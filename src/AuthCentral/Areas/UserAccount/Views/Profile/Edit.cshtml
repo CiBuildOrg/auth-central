@@ -4,80 +4,244 @@
     ViewBag.Title = "Edit Profile";
 }
 
-<div><em>@ViewData["Message"]</em></div>
-<br />
-@using (Html.BeginForm("ChangeName", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "name-form", @class = "form-inline" }))
-{
-    @Html.AntiForgeryToken()
-    <label class="control-label col-md-2">Name</label>
-    <div class="col-md-10" id="nameText">
-        @Model.Name.Name <a href="#" onclick="$('#nameText').hide();$('#nameForm').show();">edit</a>
-    </div>
-    <div class="col-md-10" style="display: none" id="nameForm">
-        @Html.TextBoxFor(model => model.Name.GivenName, new { @class = "form-control", @placeholder = "First" })
-        @Html.TextBoxFor(model => model.Name.FamilyName, new { @class = "form-control", @placeholder = "Last" })
-        @Html.ValidationMessageFor(model => model.Name.GivenName)
-        @Html.ValidationMessageFor(model => model.Name.FamilyName)
-        <input type="submit" value="Save" class="btn btn-success" />
-    </div>
-}
+<script type="text/javascript">
+    function showNameForm() {
+        $('#nameText').hide();
+        $('#nameForm').show();
+        $('#emailText').show();
+        $('#emailForm').hide();
+        $('#passwordText').show();
+        $('#passwordForm').hide();
+    }
+    function showEmailForm() {
+        $('#nameText').show();
+        $('#nameForm').hide();
+        $('#emailText').hide();
+        $('#emailForm').show();
+        $('#passwordText').show();
+        $('#passwordForm').hide();
+    }
+    function showPasswordForm() {
+        $('#nameText').show();
+        $('#nameForm').hide();
+        $('#emailText').show();
+        $('#emailForm').hide();
+        $('#passwordText').hide();
+        $('#passwordForm').show();
+    }
+    @if(ViewBag.Expand == "password")
+    {
+        @:document.addEventListener("DOMContentLoaded", function(event) {
+            @:showPasswordForm();
+        @:});
+    }
 
-    <br style="clear: both" />
-@using (Html.BeginForm("ChangeEmail", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "email-form", @class = "form-inline" }))
-{
-    @Html.AntiForgeryToken()
-    <label class="control-label col-md-2">Email</label>
-    <div class="col-md-10" id="emailText">
-        @Model.Email <a href="#" onclick="$('#emailText').hide();$('#emailForm').show();">edit</a>
-    </div>
-    <div class="col-md-10" style="display: none" id="emailForm">
-        @Html.TextBoxFor(model => model.Email, new { @name = "NewEmail", @class = "form-control", @placeholder = "Email" })
-        @Html.ValidationMessageFor(model => model.Email)
-        <input type="submit" value="Send Confirmation Email" class="btn btn-success" />
-    </div>
-}
 
-<br style="clear: both" />
+    @if(ViewBag.Expand == "email")
+    {
+        @:document.addEventListener("DOMContentLoaded", function(event) {
+            @:showEmailForm();
+        @:});
+    }
 
-@using (Html.BeginForm("ChangePassword", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "password-form", @class = "form-inline" }))
-{
-    @Html.AntiForgeryToken()
-    <label class="control-label col-md-2">Password</label>
-    <div class="col-md-10" id="passwordText">
-        ********** <a href="#" onclick="$('#passwordText').hide();$('#passwordForm').show();">edit</a>
-    </div>
-    <div class="col-md-10" style="display: none" id="passwordForm">
-        <div class="form-group">
-            @Html.LabelFor(model => model.Password.OldPassword)
-            @Html.PasswordFor(model => model.Password.OldPassword, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Password.OldPassword)
-        </div>
-        <br />
-        <div class="form-group">
-            @Html.LabelFor(model => model.Password.NewPassword)
-            @Html.PasswordFor(model => model.Password.NewPassword, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Password.NewPassword)
-        </div>
-        <br />
-        <div class="form-group">
-            @Html.LabelFor(model => model.Password.NewPasswordConfirm)
-            @Html.PasswordFor(model => model.Password.NewPasswordConfirm, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Password.NewPasswordConfirm)
-        </div>
-        <br />
-        <input type="submit" value="Change Password" class="btn btn-success" />
-    </div>
-}
-<hr style="clear: both" />
+    @if(ViewBag.Expand == "name")
+    {
+        @:document.addEventListener("DOMContentLoaded", function (event) {
+            @:showNameForm();
+        @:});
+    }
+</script>
 
-<label class="control-label col-md-2">Organization</label>
-<div class="col-md-10">
-    @Model.Organization
+<div class="row">
+    <div class="col-xs-12 text-center">
+        <h1>Account Details</h1>
+    </div>
 </div>
 
-<br style="clear: both" />
+<div class="row account-details">
+    <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
 
-<label class="control-label col-md-2">Department</label>
-<div class="col-md-8">
-    @Model.Department
+        <div class="row greeting">
+            <div class="col-xs-12">
+                <p>Hello, <span>@Model.Name.GivenName</span>!</p>
+                <p>From here you can view and edit all of your primary account information.</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                @* Would be great if this was hidden with angular or an if in some way so I could style an alert for it. *@
+                <div class="success-message"><em>@ViewData["Message"]</em></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default info">
+                    <div class="panel-body">
+                        <div class="row">
+                            @* Name *@
+                            <div class="col-xs-12 info-type">
+                                @using (Html.BeginForm("ChangeName", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "name-form" }))
+                                {
+                                <div class="row">
+                                    <div class="col-xs-4 text-right account-label">
+                                        @* Not sure what these tokens do *@
+                                        @Html.AntiForgeryToken()
+                                        <label>Name:</label>
+                                    </div>
+                                    <div id="nameText" class="col-xs-8">
+                                        <div class="row">
+                                            <div class="col-xs-8">
+                                                @Model.Name.Name
+                                            </div>
+                                            <div class="col-xs-4 text-right">
+                                                <a href="#" onclick="showNameForm();">edit</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @* Edit Form *@
+                                    <div class="col-xs-8">
+                                        <div class="row" style="display: none" id="nameForm">
+                                            <div class="col-xs-12">
+                                                @Html.TextBoxFor(model => model.Name.GivenName, new { @class = "form-control input-sm", @placeholder = "First" })
+                                                @Html.ValidationMessageFor(model => model.Name.GivenName)
+                                            </div>
+                                            <div class="col-xs-12">
+                                                @Html.TextBoxFor(model => model.Name.FamilyName, new { @class = "form-control input-sm", @placeholder = "Last" })
+                                                @Html.ValidationMessageFor(model => model.Name.FamilyName)
+                                            </div>
+                                            <div class="col-xs-12">
+                                                <input type="submit" value="Save" class="btn btn-sm btn-success" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                            @* Email *@
+                            <div class="col-xs-12 info-type">
+                                @using (Html.BeginForm("ChangeEmail", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "email-form" }))
+                                {
+                                <div class="row">
+                                    <div class="col-xs-4 text-right account-label">
+                                        @Html.AntiForgeryToken()
+                                        <label>Email:</label>
+                                    </div>
+                                    <div id="emailText" class="col-xs-8">
+                                        <div class="row">
+                                            <div class="col-xs-8">
+                                                @Model.Email
+                                            </div>
+                                            <div class="col-xs-4 text-right">
+                                                <a href="#" onclick="showEmailForm();">edit</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @* Edit Form *@
+                                    <div class="col-xs-8">
+                                        <div class="row" style="display: none" id="emailForm">
+                                            <div class="col-xs-12">
+                                                @Html.TextBoxFor(model => model.Email, new { @name = "NewEmail", @class = "form-control input-sm", @placeholder = "Email" })
+                                                @Html.ValidationMessageFor(model => model.Email)
+                                            </div>
+                                            <div class="col-xs-12">
+                                                <input type="submit" value="Save" class="btn btn-sm btn-success" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                            @* Password *@
+                            <div class="col-xs-12 info-type">
+                                @using (Html.BeginForm("ChangePassword", "Profile", new { area = "UserAccount" }, FormMethod.Post, new { @id = "password-form" }))
+                                {
+                                <div class="row">
+                                    <div class="col-xs-4 text-right account-label">
+                                        @Html.AntiForgeryToken()
+                                        <label>Password:</label>
+                                    </div>
+                                    <div id="passwordText" class="col-xs-8">
+                                        <div class="row">
+                                            <div class="col-xs-8">
+                                                **************
+                                            </div>
+                                            <div class="col-xs-4 text-right">
+                                                <a href="#" onclick="showPasswordForm();">edit</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @* Edit Form *@
+                                    <div class="col-xs-8">
+                                        <div class="row" style="display: none" id="passwordForm">
+                                            <div class="col-xs-12">
+                                                @Html.PasswordFor(model => model.Password.OldPassword, new { @class = "form-control input-sm", @placeholder = "Current Password" })
+                                                @Html.ValidationMessageFor(model => model.Password.OldPassword)
+                                            </div>
+                                            <div class="col-xs-12">
+                                                @Html.PasswordFor(model => model.Password.NewPassword, new { @class = "form-control input-sm", @placeholder = "New Password" })
+                                                @Html.ValidationMessageFor(model => model.Password.NewPassword)
+                                            </div>
+                                            <div class="col-xs-12">
+                                                @Html.PasswordFor(model => model.Password.NewPasswordConfirm, new { @class = "form-control input-sm", @placeholder = "Confirm New Password" })
+                                                @Html.ValidationMessageFor(model => model.Password.NewPasswordConfirm)
+                                            </div>
+                                            <div class="col-xs-12">
+                                                <input type="submit" value="Change Password" class="btn btn-success" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                            @* Organization *@
+                            <div class="col-xs-12 info-type">
+                                <div class="row">
+                                    <div class="col-xs-4 text-right account-label">
+                                        <label>Organization:</label>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                @Model.Organization
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @* Department *@
+                            <div class="col-xs-12 info-type">
+                                <div class="row">
+                                    <div class="col-xs-4 text-right account-label">
+                                        <label>Department:</label>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                @Model.Department
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row signout">
+            <div class="col-xs-12 text-center">
+                @Html.ActionLink("Sign Out", "Logout", "Home", new { area = "UserAccount" }, null)
+            </div>
+        </div>
+
+        <div class="row help-text">
+            <div class="col-xs-12">
+                <p><strong>Need Help?</strong> Call an FSW Customer Service Representative Toll Free at <span class="text-fsw">1-877-877-5655</span> or email <a href="mailto:support@fsw.com">support@fsw.com</a> (for employees).</p>
+            </div>
+        </div>
+
+    </div>
 </div>

@@ -60,10 +60,10 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 app,
                 "FSW Auth Central", 
                 "Copyright fsw.com 2015",
-                "UserAccount/Details", 
-                "UserAccount/ChangeEmail/Confirm/",
-                "UserAccount/Register/Cancel/",
-                "UserAccount/PasswordReset/Confirm/");
+                "useraccount/profile", 
+                "useraccount/changeemail/confirm/",
+                "useraccount/register/cancel/",
+                "useraccount/passwordreset/confirm/");
 
             var emailBodyType = AuthCentralSmtpMessageDelivery.MsgBodyTypes.MultipartAlternativeAsJson;
             var emailFormatter = new AuthCentralEmailMessageFormatter(appEnv, appinfo, emailBodyType);

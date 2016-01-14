@@ -18,9 +18,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var model = new ScopeListModel(_scopeService.Get().Result);
+            var model = new ScopeListModel(await _scopeService.Get());
             return View(model);
         }
 

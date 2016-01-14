@@ -51,18 +51,18 @@
 }
 
 <ul class="nav nav-tabs">
-    <li class="@homeClass"><a href="/Admin/Client/">Client Admin Home</a></li>
-    <li class="@editClass"><a href="/Admin/Client/Edit/@Model.ClientId">Edit Client: @Model.ClientId</a></li>
-    <li class="@secretsClass"><a href="/Admin/ClientSecret/Show/@Model.ClientId">Client Secrets</a></li>
-    <li class="@claimsClass"><a href="/Admin/ClientClaim/Show/@Model.ClientId">Claims</a></li>
-    <li class="@scopesClass"><a href="/Admin/ClientAllowedScope/Edit/@Model.ClientId">Allowed Scopes</a></li>
+    <li class="@homeClass"><a href="/admin/client/">Client Admin Home</a></li>
+    <li class="@editClass"><a href="/admin/client/edit/@Model.ClientId">Edit Client: @Model.ClientId</a></li>
+    <li class="@secretsClass"><a href="/admin/clientsecret/show/@Model.ClientId">Client Secrets</a></li>
+    <li class="@claimsClass"><a href="/admin/clientclaim/show/@Model.ClientId">Claims</a></li>
+    <li class="@scopesClass"><a href="/admin/clientallowedscope/edit/@Model.ClientId">Allowed Scopes</a></li>
 
     <li class="dropdown">
         <a data-toggle="dropdown" class="dropdown-toggle" href="#">Uri's<b class="caret"></b></a>
         <ul role="menu" class="dropdown-menu">
-            <li class="@redirectClass"><a href="/Admin/ClientRedirectUri/Edit/@Model.ClientId">Redirect Uri's</a></li>
-            <li class="@postLogoutClass"><a href="/Admin/ClientLogoutUri/Edit/@Model.ClientId">Logout Uri's</a></li>
-            <li class="@corsClass"><a href="/Admin/ClientAllowedCorsOrigin/Edit/@Model.ClientId">Allowed CORS Origins</a></li>
+            <li class="@redirectClass"><a href="/admin/clientredirecturi/edit/@Model.ClientId">Redirect Uri's</a></li>
+            <li class="@postLogoutClass"><a href="/admin/clientlogouturi/edit/@Model.ClientId">Logout Uri's</a></li>
+            <li class="@corsClass"><a href="/admin/clientallowedcorsorigin/edit/@Model.ClientId">Allowed CORS Origins</a></li>
         </ul>
     </li>
  
@@ -70,8 +70,8 @@
     <li class="dropdown">
         <a data-toggle="dropdown" class="dropdown-toggle" href="#">Advanced<b class="caret"></b></a>
         <ul role="menu" class="dropdown-menu">
-            <li><a href="/Admin/ClientClaim/Edit/@Model.ClientId">Client Cliams</a></li>
-            <li><a href="/Admin/ClientAllowedCorsOrigin/Edit/@Model.ClientId">Allowed Cors Headers</a></li>
+            <li><a href="/admin/clientclaim/edit/@Model.ClientId">Client Cliams</a></li>
+            <li><a href="/admin/clientAllowedcorsorigin/edit/@Model.ClientId">Allowed Cors Headers</a></li>
         </ul>
     </li>
     -->

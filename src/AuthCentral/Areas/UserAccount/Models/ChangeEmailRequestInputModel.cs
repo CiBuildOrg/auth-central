@@ -13,6 +13,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models
         /// </summary>
         [Required]
         [EmailAddress]
+        [Display(Name = "New E-mail")]
         public string NewEmail { get; set; }
     }
 }

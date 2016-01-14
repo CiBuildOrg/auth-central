@@ -76,7 +76,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 }
             }
 
-            return View("Index", model);
+            return Create();
         }
 
         [HttpPost("[action]")]

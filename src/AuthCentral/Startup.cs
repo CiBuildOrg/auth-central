@@ -36,7 +36,7 @@ namespace Fsw.Enterprise.AuthCentral
             services.AddSerilog(_config.IsDebug);
             services.AddDataProtection();
             services.AddMvc();
-            services.AddMembershipReboot(_config.DB.MembershipReboot);
+            services.AddMembershipReboot(_config);
             services.AddAuthorizationPolicies();
             services.AddAuthCentralDependencies(_config);
             services.AddIdentityServer(_config.DB.IdentityServer3);
@@ -50,8 +50,8 @@ namespace Fsw.Enterprise.AuthCentral
             logFactory.AddProvider(new LogCentral.MicrosoftFramework.LoggingProvider(_config.Log4NetConfigPath));
             app.UseMiddleware<LogCentral.MicrosoftFramework.LogMiddleware>();
 
-            MembershipRebootSetup.GetConfig(app, env); // Create the singleton to get around MVC DI container limitations            
-            app.UseStatusCodePages();
+            MembershipRebootSetup.GetConfig(app, env, _config); // Create the singleton to get around MVC DI container limitations
+            app.UseStatusCodePagesWithReExecute("/errors/{0}.html");
             app.UseCookieAuthentication(options =>
             {
                 options.LoginPath = new PathString(_config.Uri.LoginPath);

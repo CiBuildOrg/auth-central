@@ -40,7 +40,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                 ViewService = new Registration<IViewService>(typeof(CustomViewService))
             };
 
-            idSvcFactory.ConfigureCustomUserService(app, config.DB.MembershipReboot, env);
+            idSvcFactory.ConfigureCustomUserService(app, config.DB.MembershipReboot, env, config);
             idSvcFactory.Register(new Registration<IApplicationEnvironment>(env));
 
             var options = new IdentityServerOptions
@@ -81,7 +81,10 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                 },
                 CspOptions = new CspOptions()
                 {
-                    Enabled = true
+                    Enabled = true,
+                    ScriptSrc = config.Csp.ScriptSrc,
+                    StyleSrc = config.Csp.StyleSrc,
+                    FontSrc = config.Csp.FontSrc
                 },
                 EnableWelcomePage = true
             };
@@ -171,11 +174,11 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             if (isDebug)
             {
                 loggerFactory.MinimumLevel = LogLevel.Verbose;
-                app.UseDeveloperExceptionPage();
             }
             else
             {
                 loggerFactory.MinimumLevel = LogLevel.Error;
+                app.UseRuntimeInfoPage();
             }
         }
     }

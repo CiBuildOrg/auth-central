@@ -42,7 +42,7 @@ In order to run the application, some setup is required...
    following must be run from a CMD prompt running as administrator.
 
         netsh http delete sslcert ipport=0.0.0.0:44333
-        netsh http add sslcert ipport=0.0.0.0:44333 appid={12345678-db90-4b66-8b01-88f7af2e36bf} certhash=656de34b45066d8fc9d88a3952082a6121f80c82 certstorename=webhosting
+        netsh http add sslcert ipport=0.0.0.0:44333 appid={12345678-db90-4b66-8b01-88f7af2e36bf} certhash=656de34b45066d8fc9d88a3952082a6121f80c82 certstorename=my
 
 4. In order to avoid the need to run visual studio as administrator, run the following commands in an administrator command prompt:
 
@@ -58,6 +58,15 @@ In order to run the application, some setup is required...
         127.0.0.1	localhost auth1.local-fsw.com
 
 At this point, you should be all set to run the app from visual studio.  Be sure to select the `web` command from the dropdown (not `iisexpress`)
+
+### Building / Running from Command Line ###
+
+1. dnu restore
+2. dnu build
+3. dnx web
+
+To watch for style changes and automatically rebuild the stylesheets, use `gulp watch`.
+
 
 ## Related repositories ##
 * [Identity Server](https://github.com/identityserver/IdentityServer3)

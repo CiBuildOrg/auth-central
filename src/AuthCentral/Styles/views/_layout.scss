@@ -125,7 +125,14 @@ header {
 //Content Classes
 
 .body-content {
-	margin-top: $margin-large-vertical*6;
+	margin-top: $margin-large-vertical*6.5;
+
+	@media only screen and (min-width:768px) {
+
+		margin-top: $margin-large-vertical*8.5;
+
+	}
+
 }
 
 

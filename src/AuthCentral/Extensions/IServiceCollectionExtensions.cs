@@ -54,12 +54,12 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             });
         }
 
-        public static void AddMembershipReboot(this IServiceCollection services, string mrConnectionString)
+        public static void AddMembershipReboot(this IServiceCollection services, EnvConfig config)
         {
-            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>(), provider.GetService<IApplicationEnvironment>()));
+            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>(), provider.GetService<IApplicationEnvironment>(), config));
             services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
-            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null, provider.GetService<IApplicationEnvironment>()));
-			DIContainerRegistrations.ConfigureIServiceCollection(services);
+            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null, provider.GetService<IApplicationEnvironment>(), config));
+            services.AddScoped(provider => new MongoDatabase(mrConnectionString));
         }
 
         public static void AddAuthCentralDependencies(this IServiceCollection services, EnvConfig config)

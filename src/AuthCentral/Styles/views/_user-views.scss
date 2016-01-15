@@ -1,0 +1,71 @@
+// Account Details Styles
+
+.account-details {
+
+	.greeting {
+
+		p {
+
+			&:first-child {
+				margin-bottom: 0;
+				font-size: $font-size-large - 1;
+				color: $gray-light;
+
+				span {
+					color: $brand-fsw;
+				}
+
+			}
+
+		}
+
+	}
+
+	.success-message {
+		margin-bottom: $margin-large-vertical;
+		font-size: $font-size-small+1;
+		color: $brand-success;
+	}
+
+	.info {
+		font-size: $font-size-small;
+
+		.info-type {
+			margin-bottom: $margin-large-vertical*1.5;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+
+			span {
+				display: block;
+				margin-top: $margin-small-vertical;
+				margin-bottom: $margin-large-vertical;
+		    font-size: $font-size-small - 1;
+		    color: $brand-danger;
+		    line-height: 1.2;
+			}
+
+		}
+
+	}
+
+	.account-label {
+		padding-right: 0;
+		color: lighten($gray-light, 10%);
+
+		label {
+			margin-bottom: 0;
+		}
+
+	}
+
+	@media only screen and (min-width:768px) {
+
+		.info {
+			font-size: $font-size-small+1;
+		}
+
+	}
+
+}

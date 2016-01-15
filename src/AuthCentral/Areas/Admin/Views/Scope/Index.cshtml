@@ -1,19 +1,31 @@
-﻿@using IdentityServer3.Core.Models
-@model Fsw.Enterprise.AuthCentral.Areas.Admin.Models.ScopeListModel
+﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models
+
+@model ScopeListModel
 
 @{
     ViewBag.Title = "AuthCentral Scope Administration";
+    Layout = "~/Areas/UserAccount/Views/Shared/_Layout.cshtml";
 }
 
 <div class="page-header">
     <h1>Scope Administration</h1>
 </div>
-@foreach (Scope scope in Model.Scopes)
+@foreach (ScopeModel scope in Model.Scopes)
 {
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 >@scope.Name</h3>
         </div>
+        @if (!Html.ViewData.ModelState.IsValid)
+        {
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="alert alert-danger">
+                        @Html.ValidationSummary("Please correct the following errors")
+                    </div>
+                </div>
+            </div>
+        }
         <div class="panel-body panel-group">
             <div class="row panel">
                 <div class="col-md-12">@scope.Description</div>
@@ -74,12 +86,30 @@
                                 <tbody>
                                 @foreach (var claim in scope.Claims)
                                 {
-                                    <tr>
+                                    string claimName = claim.Name;
+                                    string safeClaimName = claimName.Replace(':', '_');
+                                    string showRow = $"show_{scope.Name}_{safeClaimName}";
+                                    string editRow = $"edit_{scope.Name}_{safeClaimName}";
+                                    <tr id="@showRow" class="show-claim-row">
                                         <td>@claim.Name</td>
                                         <td>@claim.Description</td>
                                         <td>@claim.AlwaysIncludeInIdToken.ToString()</td>
                                         <td>
-
+                                            <button class="btn btn-primary" onclick="$(@showRow).addClass('hidden'); $(@editRow).removeClass('hidden');">Edit</button>
+                                            <button class="btn btn-default delete-claim" type="submit">Delete</button>
+                                        </td>
+                                    </tr>
+                                    <tr id="@editRow" class="hidden edit-claim-row">
+                                        <td>
+                                            @Html.EditorFor(model => claim.Name, new { htmlAttributes = new { @class = "claim-name" } })
+                                            @Html.Hidden("claimId", claimName)
+                                            @Html.Hidden("scope", scope.Name)
+                                        </td>
+                                        <td>@Html.EditorFor(model => claim.Description, new { htmlAttributes = new { @class = "claim-desc" } })</td>
+                                        <td>@Html.EditorFor(model => claim.AlwaysIncludeInIdToken, new { htmlAttributes = new { @class = "claim-include" } })</td>
+                                        <td>
+                                            <button class="btn btn-primary save" type="button">Save</button>
+                                            <button class="btn btn-default" type="button" onclick="$(@showRow).removeClass('hidden'); $(@editRow).addClass('hidden');">Cancel</button>
                                         </td>
                                     </tr>
                                 }
@@ -97,18 +127,16 @@
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             <h4 class="modal-title">Add Claim</h4>
                                         </div>
-                                        <div class="modal-body">
-                                            <form class="form-horizontal" role="form" id="addClaim" method="post">
-                                                <input type="hidden" value="@scope.Name" id="scopeToAddClaim"/>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2" for="newClaim">Claim:</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="newClaim" placeholder="claim_to_add_to_scope"/>
-                                                    </div>
+                                        <div class="modal-body add-claim">
+                                            <input type="hidden" class="add-claim-scope" value="@scope.Name" id="scopeToAddClaim"/>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-2" for="newClaim">Claim:</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="newClaim" placeholder="claim_to_add_to_scope"/>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary" data-dismiss="modal">Add</button>
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                            </form>
+                                            </div>
+                                            <button class="btn btn-primary add-claim" data-dismiss="modal">Add</button>
+                                            <button class="btn btn-default" data-dismiss="modal">Cancel</button>
                                         </div>
                                     </div>
 
@@ -123,4 +151,64 @@
             <button class="btn btn-primary" onclick="$('#edit_@scope.Name').removeClass('hidden'); $('#show_@scope.Name').addClass('hidden'); $('#editScopeBtn_@scope.Name').addClass('hidden'); $('editScopeCancelBtn_@scope.Name').removeClass('hidden');" id="editScopeBtn_@scope.Name">Edit</button>
         </div>
     </div>
+}
+
+@section scripts{
+    <script type="text/javascript">
+        $(function() {
+            $('.edit-claim-row button.save').on('click', function(event) {
+                var $editRow = $(this).parents('tr');
+                var $showRow = $editRow.prev();
+                var $claimName = $editRow.find('.claim-name');
+                var $claimDesc = $editRow.find('.claim-desc');
+                var $claimInc = $editRow.find('.claim-include');
+                var $claimId = $editRow.find('#claimId');
+                var $scopeId = $editRow.find('#scope');
+
+                var data = {
+                    claim: {
+                        Name: $claimName.val(),
+                        Description: $claimDesc.val(),
+                        AlwaysIncludeInIdToken: $claimInc.is(':checked')
+                    },
+                    claimId: $claimId.val(),
+                    scope: $scopeId.val()
+                };
+                $.post('/Admin/Scope/EditClaim/', data, function (msg) {
+                    var $showChildren = $showRow.children('td');
+                    $showChildren[0].textContent = $claimName.val();
+                    $showChildren[1].textContent = $claimDesc.val();
+                    $showChildren[2].textContent = $claimInc.is(':checked');
+                    $claimId.text = $claimName.val();
+                    $showRow.removeClass('hidden');
+                    $editRow.addClass('hidden');
+                });
+            });
+
+            $('button.delete-claim').on('click', function(event) {
+                var showRow = $(this).parents('tr.show-claim-row');
+                var editRow = showRow.next();
+                var scopeId = editRow.find('#scope');
+                var claimId = editRow.find('#claimId');
+
+                var data = { scope: scopeId.val(), claim: claimId.val() };
+
+                $.post('/Admin/Scope/RemoveClaim/', data, function(msg) {
+                    //showRow.remove();
+                    //editRow.remove();
+                });
+            });
+
+            $('button.add-claim').on('click', function(event) {
+                var addDiv = $(this).parents('div.add-claim');
+                var scopeId = addDiv.find('input.add-claim-scope').val();
+                var claimId = addDiv.find('#newClaim').val();
+                var data = { scope: scopeId, claim: claimId };
+
+                $.post('/Admin/Scope/AddClaim/', data, function(msg) {
+
+                });
+            });
+        });
+    </script>
 }

@@ -59,7 +59,6 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>(), provider.GetService<IApplicationEnvironment>(), config));
             services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
             services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null, provider.GetService<IApplicationEnvironment>(), config));
-            services.AddScoped(provider => new MongoDatabase(mrConnectionString));
         }
 
         public static void AddAuthCentralDependencies(this IServiceCollection services, EnvConfig config)

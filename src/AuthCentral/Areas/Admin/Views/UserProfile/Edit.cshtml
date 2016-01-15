@@ -48,6 +48,20 @@
     </div>
 }
 
+@if (Model.CanDeleteUsers)
+{
+    @using (Html.BeginForm("Delete", "User", new { userId = Model.UserId, area = "Admin" }, FormMethod.Post, new { @id = "delete-form", @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-2">
+                <input id="delete" name="delete" type="submit" class="btn btn-danger" value="Delete" />
+            </div>
+        </div>
+    }
+}
+ 
+
 <hr /> <!-- hi morgan. I'm sorry about all this. -->
 @using (Html.BeginForm("ChangeEmail", "UserProfile", new { userId = Model.UserId, area = "Admin" }, FormMethod.Post, new { @id = "edit-form", @class = "form-horizontal" }))
 {
@@ -68,6 +82,7 @@
 }
 
 <hr />
+
 @if (Model.IsLoginAllowed)
 {
     @using (Html.BeginForm("Disable", "UserProfile", new { userId = Model.UserId, area = "Admin" }, FormMethod.Post, new { @id = "edit-form", @class = "form-horizontal" }))

@@ -47,6 +47,11 @@
 	<td>//button[.='Confirm Email']</td>
 	<td>ConfirmEmailButton</td>
 </tr>
+<tr>
+	<td>store</td>
+	<td>//input[@value='Save']</td>
+	<td>SaveButton</td>
+</tr>
 <!--All Pages-->
 <tr>
 	<td>store</td>
@@ -82,6 +87,26 @@
 	<td>store</td>
 	<td>link=Logout</td>
 	<td>Header_Logout</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Account Details</td>
+	<td>Header_AccountDetails</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Verify Your Email Account</td>
+	<td>Header_VerifyYourEmailAccount</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Change Email</td>
+	<td>Header_ChangeEmail</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Change Password</td>
+	<td>Header_ChangePassword</td>
 </tr>
 <!--Create Account Page-->
 <tr>
@@ -246,6 +271,68 @@
 	<td>store</td>
 	<td>id=confirm</td>
 	<td>Owa_EmailConfirmationLink</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/UserAccount/LogOut</td>
+	<td></td>
+</tr>
+<!--Account Details Page-->
+<tr>
+	<td>store</td>
+	<td>//div[@id='nameText']/div/div</td>
+	<td>AccountDetails_Name</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//div[@id='emailText']/div/div</td>
+	<td>AccountDetails_Email</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//div[@id='nameText']/div/div/a[.='edit']</td>
+	<td>AccountDetails_Name_Edit</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//div[@id='emailText']/div/div/a[.='edit']</td>
+	<td>AccountDetails_Email_Edit</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//div[@id='passwordText']/div/div/a[.='edit']</td>
+	<td>AccountDetails_Password_Edit</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=Name_GivenName</td>
+	<td>AccountDetails_FirstName</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=Name_FamilyName</td>
+	<td>AccountDetails_LastName</td>
+</tr>
+<!--Change Password Page-->
+<tr>
+	<td>store</td>
+	<td>id=OldPassword</td>
+	<td>ChangePassword_CurrentPassword</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=NewPassword</td>
+	<td>ChangePassword_NewPassword</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=NewPasswordConfirm</td>
+	<td>ChangePassword_ConfirmNewPassword</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>css=button</td>
+	<td>ChangePasswordButton</td>
 </tr>
 </tbody></table>
 </body>

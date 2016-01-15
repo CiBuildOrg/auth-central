@@ -24,7 +24,8 @@
                 <div class="modal-body">
                     @using (Html.BeginForm("CreateScope", "Scope", FormMethod.Post, new {@class="form-horizontal"}))
                     {
-                        @Html.EditorFor(model => new ScopeModel())
+                        var newScope = new ScopeModel();
+                        @Html.EditorFor(model => newScope)
 
                         <button class="btn btn-primary" type="submit">Add</button>
                         <button class="btn btn-default" data-dismiss="modal">Cancel</button>

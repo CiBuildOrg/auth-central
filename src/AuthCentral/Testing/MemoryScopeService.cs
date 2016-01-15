@@ -32,7 +32,7 @@ namespace Fsw.Enterprise.AuthCentral.Testing
 
         public Task<Scope> Find(string scopeName)
         {
-            return Scopes.ContainsKey(scopeName) ? Task.FromResult(Scopes[scopeName]) : null;
+            return Task.FromResult(Scopes.ContainsKey(scopeName) ? Scopes[scopeName] : null);
         }
 
         public Task<IEnumerable<Scope>> Find(IEnumerable<string> scopeNames)
@@ -40,9 +40,10 @@ namespace Fsw.Enterprise.AuthCentral.Testing
             return Task.FromResult(Scopes.Where(pair => scopeNames.Contains(pair.Key)).Select(pair => pair.Value));
         }
 
-        public async Task<IEnumerable<Scope>> Get(bool publicOnly = true)
+        public Task<IEnumerable<Scope>> Get(bool publicOnly = true)
         {
-            return publicOnly ? Scopes.Values.Where(scope => scope.ShowInDiscoveryDocument) : Scopes.Values;
+            return
+                Task.FromResult(publicOnly ? Scopes.Values.Where(scope => scope.ShowInDiscoveryDocument) : Scopes.Values);
         }
     }
 }

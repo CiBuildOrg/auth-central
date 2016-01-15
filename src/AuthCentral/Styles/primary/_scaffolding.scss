@@ -1,0 +1,66 @@
+// Helper Classes
+
+.no-bot-margin {
+	margin-bottom: 0;
+
+	&.checkbox {
+		margin-top: $margin-small-vertical+3;
+		margin-bottom: $margin-small-vertical;
+	}
+
+}
+
+.help-text {
+	margin-top: $margin-large-vertical*3;
+	font-size: 90%;
+	color: $gray-light;
+}
+
+
+// Typography
+
+h1 {
+	margin-top: 0;
+	margin-bottom: $margin-large-vertical;
+	font-size: $font-size-h3;
+	color: lighten($gray-light, 15%);
+
+	@media only screen and (min-width:768px) {
+
+		margin-bottom: $margin-large-vertical*2.5;
+
+	}
+
+	@media only screen and (min-width:992px) {
+
+		font-size: $font-size-h2 - 2;
+
+	}
+
+}
+
+
+// Color Classes
+
+.text-fsw {
+	color: $brand-fsw;
+}
+
+
+// Link Classes
+
+.link-sm {
+	margin-top: $margin-small-vertical;
+	font-size: $font-size-small;
+}
+
+
+// Stuff that might be needed for something
+
+[ng-cloak] {
+  display: none;
+}
+
+.page-loggedOut iframe.signout {
+  display: none;
+}

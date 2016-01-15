@@ -31,24 +31,18 @@
     }
     @if(ViewBag.Expand == "password")
     {
-        @:document.addEventListener("DOMContentLoaded", function(event) {
-            @:showPasswordForm();
-        @:});
+        @:$(showPasswordForm);
     }
 
 
     @if(ViewBag.Expand == "email")
     {
-        @:document.addEventListener("DOMContentLoaded", function(event) {
-            @:showEmailForm();
-        @:});
+        @:$(showEmailForm);
     }
 
     @if(ViewBag.Expand == "name")
     {
-        @:document.addEventListener("DOMContentLoaded", function (event) {
-            @:showNameForm();
-        @:});
+        @:$(showNameForm);
     }
 </script>
 

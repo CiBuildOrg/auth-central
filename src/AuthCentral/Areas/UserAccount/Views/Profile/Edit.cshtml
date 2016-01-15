@@ -4,6 +4,48 @@
     ViewBag.Title = "Edit Profile";
 }
 
+<script type="text/javascript">
+    function showNameForm() {
+        $('#nameText').hide();
+        $('#nameForm').show();
+        $('#emailText').show();
+        $('#emailForm').hide();
+        $('#passwordText').show();
+        $('#passwordForm').hide();
+    }
+    function showEmailForm() {
+        $('#nameText').show();
+        $('#nameForm').hide();
+        $('#emailText').hide();
+        $('#emailForm').show();
+        $('#passwordText').show();
+        $('#passwordForm').hide();
+    }
+    function showPasswordForm() {
+        $('#nameText').show();
+        $('#nameForm').hide();
+        $('#emailText').show();
+        $('#emailForm').hide();
+        $('#passwordText').hide();
+        $('#passwordForm').show();
+    }
+    @if(ViewBag.Expand == "password")
+    {
+        @:$(showPasswordForm);
+    }
+
+
+    @if(ViewBag.Expand == "email")
+    {
+        @:$(showEmailForm);
+    }
+
+    @if(ViewBag.Expand == "name")
+    {
+        @:$(showNameForm);
+    }
+</script>
+
 <div class="row">
     <div class="col-xs-12 text-center">
         <h1>Account Details</h1>
@@ -48,7 +90,7 @@
                                                 @Model.Name.Name
                                             </div>
                                             <div class="col-xs-4 text-right">
-                                                <a href="#" onclick="$('#nameText').hide();$('#nameForm').show();">edit</a>
+                                                <a href="#" onclick="showNameForm();">edit</a>
                                             </div>
                                         </div>
                                     </div>
@@ -86,7 +128,7 @@
                                                 @Model.Email
                                             </div>
                                             <div class="col-xs-4 text-right">
-                                                <a href="#" onclick="$('#emailText').hide();$('#emailForm').show();">edit</a>
+                                                <a href="#" onclick="showEmailForm();">edit</a>
                                             </div>
                                         </div>
                                     </div>
@@ -120,7 +162,7 @@
                                                 **************
                                             </div>
                                             <div class="col-xs-4 text-right">
-                                                <a href="#" onclick="$('#passwordText').hide();$('#passwordForm').show();">edit</a>
+                                                <a href="#" onclick="showPasswordForm();">edit</a>
                                             </div>
                                         </div>
                                     </div>

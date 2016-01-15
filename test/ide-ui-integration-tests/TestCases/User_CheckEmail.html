@@ -12,16 +12,6 @@
 <tr><td rowspan="1" colspan="3">User_CheckEmail</td></tr>
 </thead><tbody>
 <tr>
-	<td>store</td>
-	<td>javascript{var dates = new Date();var minutes = dates.getMinutes(); var hours = dates.getHours();if (minutes &lt; 10){minutes = '0' + minutes;}if (hours &lt; 10){hours = '0' + hours;} hours + ':' + minutes;}</td>
-	<td>CurrentTime</td>
-</tr>
-<tr>
-	<td>store</td>
-	<td>javascript{var dates = new Date();var minutes = dates.getMinutes() + 1; var hours = dates.getHours();if (minutes &gt; 59){hours = hours + 1;minutes = minutes - 60;} if (minutes &lt; 10){minutes = '0' + minutes;}if (hours &lt; 10){hours = '0' + hours;} hours + ':' + minutes;}</td>
-	<td>OneMinuteFromNow</td>
-</tr>
-<tr>
 	<td>open</td>
 	<td>https://outlook.foodservicewarehouse.com/owa/auth/logon.aspx?</td>
 	<td></td>
@@ -52,16 +42,15 @@
 	<td></td>
 </tr>
 <tr>
-	<td>mouseOver</td>
-	<td>//span[.='${CurrentTime}']/../../div/span[contains(.,'Account Created')] | //span[.='${OneMinuteFromNow}']/../../div/span[contains(.,'Account Created')]/</td>
+	<td>waitForElementPresent</td>
+	<td>${Owa_EmailConfirmationLink}</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>//span[.='${CurrentTime}']/../../div/span[contains(.,'Account Created')]/../../../button</td>
-	<td></td>
+	<td>storeText</td>
+	<td>${Owa_EmailConfirmationLink}</td>
+	<td>ConfirmationLink</td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

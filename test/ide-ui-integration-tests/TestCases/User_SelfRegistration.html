@@ -66,6 +66,16 @@
 	<td>${PageBody}</td>
 	<td>*Registration Success*</td>
 </tr>
+<tr>
+	<td>store</td>
+	<td>javascript{var dates = new Date();var minutes = dates.getMinutes(); var hours = dates.getHours();if (minutes &lt; 10){minutes = '0' + minutes;}if (hours &lt; 10){hours = '0' + hours;} hours + ':' + minutes;}</td>
+	<td>CurrentTime</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>javascript{var dates = new Date();var minutes = dates.getMinutes() + 1; var hours = dates.getHours();if (minutes &gt; 59){hours = hours + 1;minutes = minutes - 60;} if (minutes &lt; 10){minutes = '0' + minutes;}if (hours &lt; 10){hours = '0' + hours;} hours + ':' + minutes;}</td>
+	<td>OneMinuteFromNow</td>
+</tr>
 </tbody></table>
 </body>
 </html>

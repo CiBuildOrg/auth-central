@@ -37,19 +37,19 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         /// <summary>
         ///     Creates a scope from user input
         /// </summary>
-        /// <param name="scope">Model containing user's scope details.</param>
+        /// <param name="newScope">Model containing user's scope details.</param>
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateScope(ScopeModel scope)
+        public async Task<IActionResult> CreateScope(ScopeModel newScope)
         {
-            Scope dupe = await _scopeService.Find(scope.Name);
+            Scope dupe = await _scopeService.Find(newScope.Name);
 
             if (dupe != null)
             {
-                ModelState.AddModelError("FindScope", $"A scope with name {scope.Name} already exists.");
+                ModelState.AddModelError("FindScope", $"A scope with name {newScope.Name} already exists.");
                 return RedirectToAction("Index");
             }
 
-            await _scopeService.Save(scope.IdsScope);
+            await _scopeService.Save(newScope.IdsScope);
 
             return RedirectToAction("Index");
         }

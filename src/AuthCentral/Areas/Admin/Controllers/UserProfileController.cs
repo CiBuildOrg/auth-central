@@ -41,6 +41,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
             if (user != null)
             {
+                bool canDeleteUsers = User.Claims.Any(claim => claim.Type == "fsw:testautomation" && claim.Value == "true");
                 return View(new UserProfileModel
                 {
                     Email = user.Email,
@@ -49,7 +50,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                     Organization = user.Claims.FirstOrDefault(c => c.Type == "fsw:organization")?.Value,
                     Department = user.Claims.FirstOrDefault(c => c.Type == "fsw:department")?.Value,
                     IsLoginAllowed = user.IsLoginAllowed,
-                    UserId = userId
+                    UserId = userId,
+                    CanDeleteUsers = canDeleteUsers
                 });
             }
             else

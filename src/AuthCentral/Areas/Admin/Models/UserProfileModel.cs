@@ -39,5 +39,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
         [Display(Name = "Login Allowed?")]
         public bool IsLoginAllowed { get; set; }
 
+        public bool CanDeleteUsers { get; set; } = false;
     }
 }

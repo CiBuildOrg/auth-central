@@ -72,7 +72,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 Flow = Flows.AuthorizationCode
             };
 
-            return View("Edit", client);
+            client.ClientSecrets.Add(new ClientSecret());
+            return View(client);
         }
 
         [HttpPost("[action]")]
@@ -194,6 +195,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                     defaultScopes.Add("offline_access");
                     defaultScopes.Add("fsw_platform");
                     client.AllowedScopes = defaultScopes;
+
+                    // The value must be hashed to work with IdentityServer3
+                    if(!String.IsNullOrWhiteSpace(client.ClientSecrets[0].Value))
+                    {
+                        client.ClientSecrets[0].Value = client.ClientSecrets[0].Value.Sha256();
+                    }
                 }
 
                 if (client.ClientId == null)

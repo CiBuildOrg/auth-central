@@ -169,6 +169,12 @@
 	<td>//button[.='Create Account']</td>
 	<td>Account_CreateAccountButton</td>
 </tr>
+<!--Home Page-->
+<tr>
+	<td>store</td>
+	<td>//dd/a[contains(@href,'mailto')]</td>
+	<td>HomePage_Email</td>
+</tr>
 <!--Edit User Page-->
 <tr>
 	<td>store</td>
@@ -277,11 +283,6 @@
 	<td>id=confirm</td>
 	<td>Owa_EmailConfirmationLink</td>
 </tr>
-<tr>
-	<td>open</td>
-	<td>/UserAccount/LogOut</td>
-	<td></td>
-</tr>
 <!--Account Details Page-->
 <tr>
 	<td>store</td>
@@ -338,6 +339,17 @@
 	<td>store</td>
 	<td>css=button</td>
 	<td>ChangePasswordButton</td>
+</tr>
+<!--Change Email Page-->
+<tr>
+	<td>store</td>
+	<td>id=NewEmail</td>
+	<td>ChangeEmail_NewEmail</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>css=button.btn.btn-primary</td>
+	<td>ChangeEmailButton</td>
 </tr>
 </tbody></table>
 </body>

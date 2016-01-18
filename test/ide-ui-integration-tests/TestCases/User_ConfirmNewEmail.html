@@ -3,58 +3,43 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="https://secure.dev-fsw.com/" />
-<title>User_LogIn</title>
+<link rel="selenium.base" href="https://auth1.local-fsw.com:44333" />
+<title>User_ConfirmEmail</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">User_LogIn</td></tr>
+<tr><td rowspan="1" colspan="3">User_ConfirmEmail</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>${env}/UserAccount/LogOut</td>
-	<td></td>
-</tr>
-<tr>
-	<td>open</td>
-	<td>${env}/account</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>${LoginButton}</td>
+	<td>${ConfirmationLink}</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>${LoginPage_Username}</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>500</td>
+	<td>${Account_Password}</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>${LoginPage_Username}</td>
-	<td>${NewUser_Username}</td>
+	<td>${Account_Password}</td>
+	<td>${NewUser_NewPassword}</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>${LoginPage_Password}</td>
-	<td>${NewUser_Password}</td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>${LoginPage_SignInButton}</td>
+	<td>clickAndWait</td>
+	<td>${ConfirmEmailButton}</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForText</td>
+	<td>assertText</td>
 	<td>${PageBody}</td>
-	<td>*Username*Email*</td>
+	<td>*Success*</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>${NewUser_NewEmail}</td>
+	<td>NewUser_Email</td>
 </tr>
 </tbody></table>
 </body>

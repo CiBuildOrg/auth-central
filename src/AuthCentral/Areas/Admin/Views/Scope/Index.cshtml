@@ -178,7 +178,7 @@
             <button class="btn btn-primary" onclick="$('#edit_@scope.Name').removeClass('hidden'); $('#show_@scope.Name').addClass('hidden'); $('#editScopeBtn_@scope.Name').addClass('hidden'); $('editScopeCancelBtn_@scope.Name').removeClass('hidden');" id="editScopeBtn_@scope.Name">Edit</button>
             @using (Html.BeginForm("RemoveScope", "Scope"))
             {
-                @Html.HiddenFor(model => scope.Name)
+                @Html.Hidden("scopeName", scope.Name)
                 <button class="btn btn-default" type="submit">Remove</button>
             }
         </div>

@@ -6,8 +6,8 @@
 	<div class="input-group">
     @Html.LabelFor(x=>x.Username, new {@class = "input-group-addon"})
     @Html.EditorFor(x => x.Username, new {htmlAttributes = new {@class = "form-control"}})     
-    @Html.ValidationMessageFor(x => x.Username)
-  </div>  
+  </div>
+  @Html.ValidationMessageFor(x => x.Username) 
 </div>
 }
 

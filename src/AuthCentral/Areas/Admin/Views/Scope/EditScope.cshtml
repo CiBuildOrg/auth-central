@@ -22,7 +22,7 @@
     <div class="form-group">
         <label asp-for="Required" class="col-sm-2 control-label"></label>
         <div class="col-sm-10">
-            <input asp-for="Required" class="form-control"/>
+            <input asp-for="Required" class="checkbox"/>
         </div>
     </div>
     <div class="form-group">
@@ -55,7 +55,7 @@
             <input asp-for="ShowInDiscoveryDocument" class="checkbox"/>
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group panel panel-footer">
         <button class="btn btn-primary" type="submit">Save</button>
         <button class="btn btn-default" type="button" onclick="$('#edit_@Model.Name').addClass('hidden'); $('#show_@Model.Name').removeClass('hidden'); $('#editScopeBtn_@Model.Name').removeClass('hidden');">Cancel</button>
     </div>

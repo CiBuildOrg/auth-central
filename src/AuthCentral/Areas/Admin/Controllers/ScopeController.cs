@@ -144,6 +144,18 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> RemoveScope(string scopeName)
+        {
+            var scope = await _scopeService.Find(scopeName);
+
+            if (scope == null)
+                return RedirectToAction("Index");
+
+            await _scopeService.Delete(scopeName);
+
+            return RedirectToAction("Index");
+        }
+
         /// <summary>
         /// Changes an existing claim in a scope.
         /// </summary>

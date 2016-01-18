@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Fsw.Enterprise.AuthCentral.Areas.Admin.Models;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 using IdentityServer3.Core.Models;
+using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
@@ -10,6 +11,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
     /// <summary>
     /// Controller to create, delete and edit everything about scopes.
     /// </summary>
+    [Authorize("FswAdmin")]
     [Area("Admin"), Route("[area]/[controller]")]
     public class ScopeController : Controller
     {

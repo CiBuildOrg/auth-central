@@ -3,36 +3,45 @@
     ViewBag.Title = "Register";
 }
 
-<div class="container">
-    <div class="row">
+<div class="row">
+    <div class="col-xs-12 text-center">
+        <h1>Create an Account</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+
         <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Registration</h3>
-            </div>
             <div class="panel-body">
                 @using (Html.BeginForm())
                 {
-                    @Html.AntiForgeryToken()
+                @Html.AntiForgeryToken()
 
-                    if (!Html.ViewData.ModelState.IsValid)
-                    {
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12">
-                                <div class="alert alert-danger">
-                                    @Html.ValidationSummary("Please correct the following errors")
-                                </div>
+                if (!Html.ViewData.ModelState.IsValid)
+                {
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="alert alert-danger">
+                            @Html.ValidationSummary("Please correct the following errors")
+                        </div>
+                    </div>
+                </div>
+                }
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <fieldset>
+                            @Html.EditorForModel()
+                            <div class="text-center">
+                                <button class="btn btn-primary">Create an Account</button>
                             </div>
-                        </div>
-                    }
-
-                    <fieldset>
-                        @Html.EditorForModel()
-                        <div class="form-group align-right">
-                            <button class="btn btn-primary">Register</button>
-                        </div>
-                    </fieldset>
+                        </fieldset>
+                    </div>
+                </div>
                 }
             </div>
         </div>
+
     </div>
 </div>

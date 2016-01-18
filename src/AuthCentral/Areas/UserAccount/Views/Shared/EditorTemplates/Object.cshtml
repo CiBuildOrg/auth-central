@@ -3,16 +3,17 @@
     {
         if (prop.ShowForEdit)
         {
-            <div class="form-group">
-                @if (prop.TemplateHint == "HiddenInput")
-                {
+
+            <div class="form-group template-inputs">
+                <div class="input-group">
+                    @if (prop.TemplateHint == "HiddenInput")
+                    {
                     @Html.Hidden(prop.PropertyName)
-                }
-                else
-                {
-                    @Html.Label(prop.DisplayName, null, new {@class = "control-label col-sm-2 text-right"})
+                    }
+                    else
+                    {
+                    @Html.Label(prop.DisplayName, null, new {@class = "input-group-addon"})
                     @:
-                    <div class="col-sm-10">
                         @if(prop.IsReadOnly)
                         {
                             @Html.Display(prop.PropertyName)
@@ -30,9 +31,10 @@
 
                             @Html.ValidationMessage(prop.PropertyName)
                         }
-                    </div>
-                }
+                    }
+                </div>
             </div>
+
         }
     }
 }

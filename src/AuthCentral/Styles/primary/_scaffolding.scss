@@ -21,7 +21,7 @@
 
 h1 {
 	margin-top: 0;
-	margin-bottom: $margin-large-vertical;
+	margin-bottom: $margin-large-vertical*2;
 	font-size: $font-size-h3;
 	color: lighten($gray-light, 15%);
 
@@ -35,6 +35,18 @@ h1 {
 
 		font-size: $font-size-h2 - 2;
 
+	}
+
+}
+
+
+// Forms
+
+.template-inputs {
+
+	input.form-control:not(:first-child):not(:last-child),
+	input.form-control:first-child {
+		border-radius: 0 $border-radius-large $border-radius-large 0;
 	}
 
 }

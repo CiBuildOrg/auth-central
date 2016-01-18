@@ -60,15 +60,7 @@
                 @await Html.PartialAsync("ViewScope", scope)
             </div>
             <div id="edit_@scope.Name" class="hidden">
-                @using (@Html.BeginForm("Edit", "Scope", FormMethod.Post, new {@class="form-horizontal"}))
-                {
-                    @Html.Hidden("scopeName", scope.Name);
-                    @Html.EditorFor(model => scope)
-                    <div class="form-group">
-                        <button class="btn btn-primary" type="submit">Save</button>
-                        <button class="btn btn-default" type="button" onclick="$('#edit_@scope.Name').addClass('hidden'); $('#show_@scope.Name').removeClass('hidden'); $('#editScopeBtn_@scope.Name').removeClass('hidden');">Cancel</button>
-                    </div>
-                }
+                @await Html.PartialAsync("EditScope", scope)
             </div>
             <div class="row">
                 <div class="panel panel-default col-sm-offset-1 col-md-offset-1">

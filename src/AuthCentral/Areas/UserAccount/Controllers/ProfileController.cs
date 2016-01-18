@@ -37,78 +37,79 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
                 ViewBag.Message = "The requested change was processed successfully.";
             }
             
-            HierarchicalUserAccount user = _userAccountService.GetByID(User.GetId());
+            UserProfileModel user = GetUserProfileModel();
 
             if (user != null)
             {
-                return View("Edit", new UserProfileModel
-                {
-                    Name = new UserNameModel
-                    {
-                        FamilyName = user.Claims.FirstOrDefault(c => c.Type == "family_name")?.Value,
-                        GivenName = user.Claims.FirstOrDefault(c => c.Type == "given_name")?.Value,
-                    },
-                    Email = user.Email,
-                    Organization = user.Claims.FirstOrDefault(c => c.Type == "fsw:organization")?.Value,
-                    Department = user.Claims.FirstOrDefault(c => c.Type == "fsw:department")?.Value
-                });
+                return View("Edit", user);
             }
-            return View("Edit");
+
+            return HttpBadRequest("Failed to find the logged in user.");
         }
         
         [ValidateAntiForgeryToken]
         [HttpPost("[action]")]
         public IActionResult ChangeName([Bind(Prefix = "Name")]UserNameModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var user = _userAccountService.GetByID(User.GetId());
-
-                _userAccountService.RemoveClaims(user.ID,
-                    new UserClaimCollection(user.Claims.Where(claim => claim.Type == "given_name"
-                                                                    || claim.Type == "family_name"
-                                                                    || claim.Type == "name")));
-                var claims = new UserClaimCollection();
-
-                claims.Add("given_name", model.GivenName);
-
-                claims.Add("family_name", model.FamilyName);
-
-                claims.Add("name", string.Join(" ",
-                    new string[] { model.GivenName, model.FamilyName }
-                   .Where(name => !string.IsNullOrWhiteSpace(name))));
-
-                _userAccountService.AddClaims(user.ID, claims);
-                return RedirectToAction("Edit", new { changed = true });
+                return CorrectErrors(BuildUserProfileModel(model), "name");
             }
 
-            return Edit(false);
+            var user = _userAccountService.GetByID(User.GetId());
+
+            _userAccountService.RemoveClaims(user.ID,
+                new UserClaimCollection(user.Claims.Where(claim => claim.Type == "given_name"
+                                                                || claim.Type == "family_name"
+                                                                || claim.Type == "name")));
+            var claims = new UserClaimCollection();
+
+            claims.Add("given_name", model.GivenName);
+
+            claims.Add("family_name", model.FamilyName);
+
+            claims.Add("name", string.Join(" ",
+                new string[] { model.GivenName, model.FamilyName }
+               .Where(name => !string.IsNullOrWhiteSpace(name))));
+
+            _userAccountService.AddClaims(user.ID, claims);
+            return RedirectToAction("Edit", new { changed = true });
+
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost("[action]")]
-        public IActionResult ChangePassword([Bind(Prefix = "Password")]ChangePasswordInputModel profile)
+        public IActionResult ChangePassword([Bind(Prefix = "Password")]ChangePasswordInputModel model)
         {
             if(!ModelState.IsValid)
             {
-                return Edit(false);
+                return CorrectErrors(BuildUserProfileModel(model), "password");
             }
 
             try
             {
                 var acct = _userAccountService.GetByID(User.GetId());
-                _userAccountService.ChangePassword(acct.ID, profile.OldPassword, profile.NewPassword);
+                _userAccountService.ChangePassword(acct.ID, model.OldPassword, model.NewPassword);
                 return RedirectToAction("Edit", new { changed = true });
             }
             catch (AuthenticationException)
             {
                 return new HttpUnauthorizedResult();
             }
-            catch (ValidationException ex)
-            {
-                ModelState.AddModelError("", ex.Message);
+            catch (ValidationException ex) {
+                // this is more fragile than I'd like, but I don't see another way to check this exception's cause
+                if(ex.ValidationResult.ErrorMessage == "Invalid old password.")
+                {
+                    ModelState.AddModelError("Password.OldPassword", ex.Message);
+                }
+                else
+                {
+                    ModelState.AddModelError("Password.NewPassword", ex.Message);
+                    ModelState.AddModelError("Password.NewPasswordConfirm", ex.Message);
+                }
             }
-            return View("SendPasswordReset");
+
+            return CorrectErrors(BuildUserProfileModel(model), "password");
         }
         
         [ValidateAntiForgeryToken]
@@ -117,7 +118,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Edit(false);
+                return CorrectErrors(BuildUserProfileModel(email), "email");
             }
 
             try
@@ -139,10 +140,59 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("Email", ex.Message);
             }
 
-            return Edit(false);
+            return CorrectErrors(BuildUserProfileModel(email), "email");
+        }
+
+        private UserProfileModel BuildUserProfileModel(ChangePasswordInputModel passwordModel)
+        {
+            var profile = GetUserProfileModel();
+            profile.Password = passwordModel;
+            return profile;
+        }
+
+        private UserProfileModel BuildUserProfileModel(UserNameModel nameModel)
+        {
+            var profile = GetUserProfileModel();
+            profile.Name = nameModel;
+            return profile;
+        }
+
+        private UserProfileModel BuildUserProfileModel(string emailAddress)
+        {
+            var profile = GetUserProfileModel();
+            profile.Email = emailAddress;
+            return profile;
+        }
+
+        private UserProfileModel GetUserProfileModel()
+        {
+            HierarchicalUserAccount user = _userAccountService.GetByID(User.GetId());
+
+            if (user != null)
+            {
+                return new UserProfileModel
+                {
+                    Name = new UserNameModel
+                    {
+                        FamilyName = user.Claims.FirstOrDefault(c => c.Type == "family_name")?.Value,
+                        GivenName = user.Claims.FirstOrDefault(c => c.Type == "given_name")?.Value,
+                    },
+                    Email = user.Email,
+                    Organization = user.Claims.FirstOrDefault(c => c.Type == "fsw:organization")?.Value,
+                    Department = user.Claims.FirstOrDefault(c => c.Type == "fsw:department")?.Value
+                };
+            }
+
+            return null;
+        }
+
+        private IActionResult CorrectErrors(UserProfileModel model, string section)
+        {
+            ViewBag.Expand = section;
+            return View("Edit", model);
         }
     }
 }

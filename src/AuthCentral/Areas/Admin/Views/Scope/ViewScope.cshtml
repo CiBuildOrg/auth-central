@@ -1,0 +1,18 @@
+﻿@model Fsw.Enterprise.AuthCentral.Areas.Admin.Models.ScopeModel
+
+<div class="row">
+    <label asp-for="ShowInDiscoveryDocument" class="col-md-3 text-right"></label>
+    <div class="col-md-1 text-left">@Model.ShowInDiscoveryDocument.ToString()</div>
+    <label asp-for="Emphasize" class="col-md-3 text-right"></label>
+    <div class="col-md-1 text-left">@Model.Emphasize.ToString()</div>
+    <label asp-for="Enabled" class="col-md-3 text-right"></label>
+    <div class="col-md-1 text-left">@Model.Enabled</div>
+</div>
+<div class="row">
+    <label asp-for="IncludeAllClaimsForUser" class="col-md-3 text-right"></label>
+    <div class="col-md-1 text-left">@Model.IncludeAllClaimsForUser.ToString()</div>
+    <label asp-for="Required" class="col-md-3 text-right"></label>
+    <div class="col-md-1 text-left">@Model.Required.ToString()</div>
+    <label asp-for="Type" class="col-md-3 text-right"></label>
+    <div class="col-md-1 text-left">@Model.Type</div>
+</div>

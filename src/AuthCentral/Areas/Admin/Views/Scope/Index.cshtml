@@ -57,29 +57,7 @@
                 <div class="col-md-12">@scope.Description</div>
             </div>
             <div id="show_@scope.Name">
-                <div class="row">
-                    <div class="col-md-3 text-right">
-                        <strong>Show in discovery</strong>
-                    </div>
-                    <div class="col-md-1 text-left">@scope.ShowInDiscoveryDocument.ToString()</div>
-                    <div class="col-md-3 text-right"><strong>Emphasize</strong>
-                    </div>
-                    <div class="col-md-1 text-left">@scope.Emphasize.ToString()</div>
-                    <div class="col-md-3 text-right"><strong>Enabled</strong>
-                    </div>
-                    <div class="col-md-1 text-left">@scope.Enabled</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3 text-right"><strong >Include all claims for users</strong>
-                    </div>
-                    <div class="col-md-1 text-left">@scope.IncludeAllClaimsForUser.ToString()</div>
-                    <div class="col-md-3 text-right"><strong >Required</strong>
-                    </div>
-                    <div class="col-md-1 text-left">@scope.Emphasize.ToString()</div>
-                    <div class="col-md-3 text-right"><strong >Type</strong>
-                    </div>
-                    <div class="col-md-1 text-left">@scope.Type</div>
-                </div>
+                @await Html.PartialAsync("ViewScope", scope)
             </div>
             <div id="edit_@scope.Name" class="hidden">
                 @using (@Html.BeginForm("Edit", "Scope", FormMethod.Post, new {@class="form-horizontal"}))

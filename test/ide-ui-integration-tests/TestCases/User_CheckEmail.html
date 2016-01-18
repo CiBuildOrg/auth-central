@@ -11,6 +11,12 @@
 <thead>
 <tr><td rowspan="1" colspan="3">User_CheckEmail</td></tr>
 </thead><tbody>
+<!--outlook behaves better when the email is in the inbox before you log in. So we'll give it a sec-->
+<tr>
+	<td>pause</td>
+	<td>10000</td>
+	<td></td>
+</tr>
 <tr>
 	<td>open</td>
 	<td>https://outlook.foodservicewarehouse.com/owa/auth/logon.aspx?</td>
@@ -37,8 +43,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>setTimeout</td>
+	<td>120000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//span[.='${CurrentTime}']/../../div/span[contains(.,'Account Created')] | //span[.='${OneMinuteFromNow}']/../../div/span[contains(.,'Account Created')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>setTimeout</td>
+	<td>30000</td>
 	<td></td>
 </tr>
 <tr>

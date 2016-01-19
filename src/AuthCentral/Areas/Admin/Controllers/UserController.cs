@@ -62,10 +62,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             {
                 try
                 {
-                    string password = PasswordGenerator.GeneratePasswordOfLength(16);
-                    HierarchicalUserAccount account = _userAccountService.CreateAccount(model.Username, password, model.Email);
-                    _userAccountService.SetConfirmedEmail(account.ID, model.Email);
-                    _userAccountService.ResetPassword(account.ID);
+                    HierarchicalUserAccount account = _userAccountService.CreateAccount(model.Username, model.Email);
                     AddClaims(account.ID, model);
 
                     return View("Success", model);

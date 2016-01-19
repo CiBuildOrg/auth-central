@@ -1,5 +1,6 @@
 ﻿using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
+using Fsw.Enterprise.AuthCentral.Crypto;
 using Fsw.Enterprise.AuthCentral.IdMgr.Events;
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,44 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
 {
     public class AdminUserAccountService<TAccount> : UserAccountService<TAccount> where TAccount : UserAccount
     {
+        EventBusUserAccountRepository<TAccount> repo;
 
-        public AdminUserAccountService(IUserAccountRepository<TAccount> repo) : base(repo) { }
-        public AdminUserAccountService(MembershipRebootConfiguration<TAccount> config, IUserAccountRepository<TAccount> repo) : base(config, repo) { }
-            
-        public override TAccount CreateAccount(string tenant, string username, string password, string email, Guid? id = null, DateTime? dateCreated = null, TAccount account = null, IEnumerable<Claim> claims = null)
+        public AdminUserAccountService(MembershipRebootConfiguration<TAccount> config, IUserAccountRepository<TAccount> repo) : base(config, repo)
         {
-            TAccount newAccount = base.CreateAccount(tenant, username, password, email, id, dateCreated, account, claims);
+            this.repo = new EventBusUserAccountRepository<TAccount>(this, repo, config.ValidationBus, config.EventBus);
+        }
+
+        public TAccount CreateAccount(string username, string email, Guid? id = null, DateTime? dateCreated = null, IEnumerable<Claim> claims = null)
+        {
+            return CreateAccount(null, username, email, id, dateCreated, null, claims);
+        }
+
+        public TAccount CreateAccount(string tenant, string username, string email, Guid? id = null, DateTime? dateCreated = null, TAccount account = null, IEnumerable<Claim> claims = null)
+        {
+            if (Configuration.EmailIsUsername)
+            {
+                Tracing.Verbose("[UserAccountService.CreateAccount] applying email is username");
+                username = email;
+            }
+
+            if (!Configuration.MultiTenant)
+            {
+                Tracing.Verbose("[UserAccountService.CreateAccount] applying default tenant");
+                tenant = Configuration.DefaultTenant;
+            }
+
+            Tracing.Information("[UserAccountService.CreateAccount] called: {0}, {1}, {2}", tenant, username, email);
+
+            account = account ?? CreateUserAccount();
+            Init(account, tenant, username, PasswordGenerator.GeneratePasswordOfLength(16), email, id, dateCreated, claims);
+
+            ValidateEmail(account, email);
+            ValidateUsername(account, username);
+            // ValidatePassword(account, password);
+            SetConfirmedEmail(account.ID, account.Email);
+            ResetPassword(account.ID);
+
+            Tracing.Verbose("[UserAccountService.CreateAccount] success");
 
             IEventSource source = this;
             IEnumerable<IEvent> events = source.GetEvents();
@@ -33,7 +65,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 new UserAccountCreatedByAdminEvent<TAccount> { VerificationKey = passwordResetEvent.VerificationKey };
             AddEvent(accountCreatedEvent);
 
-            return newAccount;
+            return account;
         }
     }
 }

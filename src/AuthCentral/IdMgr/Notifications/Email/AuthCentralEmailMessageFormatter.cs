@@ -133,8 +133,9 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email
             return bodyTemplate.ToString();
         }
 
-        // intentionally hide derrived type member
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
         protected string LoadBodyTemplate(UserAccountEvent<HierarchicalUserAccount> evt) {
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
             throw new NotImplementedException();
         }
 

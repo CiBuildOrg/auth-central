@@ -122,26 +122,20 @@
                 var $claimName = $editRow.find('.claim-name');
                 var $claimDesc = $editRow.find('.claim-desc');
                 var $claimInc = $editRow.find('.claim-include');
-                var $claimId = $editRow.find('#claimId');
-                var $scopeId = $editRow.find('#scope');
+                var $claimId = $editRow.find('#ClaimId');
+                var $scopeId = $editRow.find('#ScopeName');
+                var claimList = $editRow.parents('div.claim-list');
 
-                var data = {
-                    claim: {
-                        Name: $claimName.val(),
-                        Description: $claimDesc.val(),
-                        AlwaysIncludeInIdToken: $claimInc.is(':checked')
-                    },
-                    claimId: $claimId.val(),
-                    scope: $scopeId.val()
+                var claimModel = {
+                    Name: $claimName.val(),
+                    Description: $claimDesc.val(),
+                    AlwaysIncludeInIdToken: $claimInc.is(':checked'),
+                    ClaimId: $claimId.val(),
+                    ScopeName: $scopeId.val()
                 };
-                $.post('/admin/scope/editclaim/', data, function (msg) {
-                    var $showChildren = $showRow.children('td');
-                    $showChildren[0].textContent = $claimName.val();
-                    $showChildren[1].textContent = $claimDesc.val();
-                    $showChildren[2].textContent = $claimInc.is(':checked');
-                    $claimId.text = $claimName.val();
-                    $showRow.removeClass('hidden');
-                    $editRow.addClass('hidden');
+
+                $.post('/Admin/Scope/EditClaim/', claimModel, function(msg) {
+                    claimList.html(msg);
                 });
             });
 

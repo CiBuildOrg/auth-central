@@ -63,56 +63,14 @@
                 @await Html.PartialAsync("EditScope", scope)
             </div>
             <div class="row">
-                <div class="panel panel-default col-sm-offset-1 col-md-offset-1">
+                <div class="panel panel-default col-sm-offset-1">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" href="#claims_@scope.Name">Claims</a>
                         </h4>
                     </div>
                     <div id="claims_@scope.Name" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Claim</th>
-                                    <th>Description</th>
-                                    <th>Always Included in Token</th>
-                                    <th>Edit | Delete</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach (var claim in scope.Claims)
-                                {
-                                    string claimName = claim.Name;
-                                    string safeClaimName = claimName.Replace(':', '_');
-                                    string showRow = $"show_{scope.Name}_{safeClaimName}";
-                                    string editRow = $"edit_{scope.Name}_{safeClaimName}";
-                                    <tr id="@showRow" class="show-claim-row">
-                                        <td>@claim.Name</td>
-                                        <td>@claim.Description</td>
-                                        <td>@claim.AlwaysIncludeInIdToken.ToString()</td>
-                                        <td>
-                                            <button class="btn btn-primary" onclick="$(@showRow).addClass('hidden'); $(@editRow).removeClass('hidden');">Edit</button>
-                                            <button class="btn btn-default delete-claim" type="submit">Delete</button>
-                                        </td>
-                                    </tr>
-                                    <tr id="@editRow" class="hidden edit-claim-row">
-                                        <td>
-                                            @Html.EditorFor(model => claim.Name, new { htmlAttributes = new { @class = "claim-name" } })
-                                            @Html.Hidden("claimId", claimName)
-                                            @Html.Hidden("scope", scope.Name)
-                                        </td>
-                                        <td>@Html.EditorFor(model => claim.Description, new { htmlAttributes = new { @class = "claim-desc" } })</td>
-                                        <td>@Html.EditorFor(model => claim.AlwaysIncludeInIdToken, new { htmlAttributes = new { @class = "claim-include" } })</td>
-                                        <td>
-                                            <button class="btn btn-primary save" type="button">Save</button>
-                                            <button class="btn btn-default" type="button" onclick="$(@showRow).removeClass('hidden'); $(@editRow).addClass('hidden');">Cancel</button>
-                                        </td>
-                                    </tr>
-                                }
-                                </tbody>
-                            </table>
-                        </div>
+                        @await Html.PartialAsync("ScopeClaimList", scope);
                         <div class="panel-footer">
                             <button class="btn btn-default" data-toggle="modal" data-target="#addclaim_@scope.Name">Add</button>
                             <div id="addclaim_@scope.Name" class="modal fade" role="dialog">

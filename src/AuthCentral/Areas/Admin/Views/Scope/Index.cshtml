@@ -118,7 +118,6 @@
         $(function() {
             $('.edit-claim-row button.save').on('click', function(event) {
                 var $editRow = $(this).parents('tr');
-                var $showRow = $editRow.prev();
                 var $claimName = $editRow.find('.claim-name');
                 var $claimDesc = $editRow.find('.claim-desc');
                 var $claimInc = $editRow.find('.claim-include');

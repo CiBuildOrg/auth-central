@@ -22,6 +22,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
     [Area("Admin"), Route("[area]/[controller]")]
     public class ClientController : Controller
     {
+        private const int DEFAULT_PAGE_SIZE = 10;
         private const string CLIENT_COUNT_COOKIE_KEY = "idsrv.admin.clients.count";
         private IClientService _clientService;
 
@@ -31,7 +32,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(int page = 1, int pageSize = DEFAULT_PAGE_SIZE)
         {
             ClientPagingResult clientsPage = await this._clientService.GetPageAsync(page, pageSize);
             ClientListViewModel clientListViewModel = new ClientListViewModel(clientsPage, page, pageSize);
@@ -110,7 +111,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpPost("[action]/{clientId?}")]
-        public async Task<IActionResult> Disable(string clientId, int page = 1)
+        public async Task<IActionResult> Disable(string clientId, int page = 1, int pageSize = DEFAULT_PAGE_SIZE)
         {
             Client client = await _clientService.Find(clientId);
 
@@ -121,7 +122,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
                 return this.RedirectToAction("Index", "Client", new
                 {
-                    page = page
+                    page = page,
+                    pageSize = pageSize
                 });
             }
             else
@@ -132,7 +134,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpPost("[action]/{clientId?}")]
-        public async Task<IActionResult> Enable(string clientId, int page = 1)
+        public async Task<IActionResult> Enable(string clientId, int page = 1, int pageSize = DEFAULT_PAGE_SIZE)
         {
             Client client = await _clientService.Find(clientId);
 
@@ -143,7 +145,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
                 return RedirectToAction("Index", "Client", new
                 {
-                    page = page
+                    page = page,
+                    pageSize = pageSize
                 });
             }
             else

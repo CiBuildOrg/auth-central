@@ -10,7 +10,7 @@
                 }
                 else
                 {
-                    @Html.Label(prop.PropertyName, null, new { @class = "control-label col-sm-2" })
+                    @Html.Label(prop.GetDisplayName(), null, new { @class = "control-label col-sm-2" })
                     @:
                     <div class="col-sm-10">
                         @if (prop.IsReadOnly)

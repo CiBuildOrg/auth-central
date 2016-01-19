@@ -7,6 +7,7 @@ using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Microsoft.Extensions.PlatformAbstractions;
 using Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email;
+using Fsw.Enterprise.AuthCentral.IdMgr.Events;
 
 namespace Fsw.Enterprise.AuthCentral.IdMgr
 {
@@ -70,7 +71,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             var smtpMsgDelivery = new AuthCentralSmtpMessageDelivery(config, emailBodyType);
 
             newInstance.AddEventHandler(new DebuggerEventHandler<HierarchicalUserAccount>());
-            newInstance.AddEventHandler(new EmailAccountEventsHandler<HierarchicalUserAccount>(emailFormatter, smtpMsgDelivery));
+            newInstance.AddEventHandler(new AuthCentralEmailEventsHandler<HierarchicalUserAccount>(emailFormatter, smtpMsgDelivery));
             //newInstance.AddEventHandler(new TwilioSmsEventHandler(appinfo));
 
             return newInstance;

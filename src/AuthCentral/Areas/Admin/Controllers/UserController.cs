@@ -25,13 +25,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         EnvConfig _cfg;
 
         // Creates and updates accounts, finds single accounts by id or email
-        UserAccountService<HierarchicalUserAccount> _userAccountService;
+        AdminUserAccountService<HierarchicalUserAccount> _userAccountService;
 
         // Used for querying multiple user accounts
         IBulkUserRepository<HierarchicalUserAccount> _repository;
 
         public UserController(EnvConfig cfg, 
-            UserAccountService<HierarchicalUserAccount> userSvc, 
+            AdminUserAccountService<HierarchicalUserAccount> userSvc, 
             IBulkUserRepository<HierarchicalUserAccount> repository)
         {
             this._cfg = cfg;

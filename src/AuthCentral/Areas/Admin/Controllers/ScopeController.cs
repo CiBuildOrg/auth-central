@@ -165,26 +165,26 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         /// <param name="claimId">The original name of the claim.  Might be different in <paramref name="claim"/></param>
         /// <param name="scope">The name of the scope we're updating claims in.</param>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditClaim(ScopeClaim claim, string claimId, string scope)
+        public async Task<IActionResult> EditClaim(ScopeClaimModel claimModel)
         {
-            var claimScope = await _scopeService.Find(scope);
+            var claimScope = await _scopeService.Find(claimModel.ScopeName);
 
             if (claimScope == null)
             {
-                ModelState.AddModelError("FindScope", $"Scope with the name {scope} could not be found.");
+                ModelState.AddModelError("FindScope", $"Scope with the name {claimModel.ScopeName} could not be found.");
                 return RedirectToAction("Index");
             }
 
-            var claimToRemove = claimScope.Claims.SingleOrDefault(scopeClaim => scopeClaim.Name == claimId);
+            var claimToRemove = claimScope.Claims.SingleOrDefault(scopeClaim => scopeClaim.Name == claimModel.ClaimId);
 
             if (claimToRemove == default(ScopeClaim))
             {
-                ModelState.AddModelError("FindClaim", $"Claim with the name {claimId} was not found in the scope {scope}");
+                ModelState.AddModelError("FindClaim", $"Claim with the name {claimModel.ClaimId} was not found in the scope {claimModel.ScopeName}");
                 return RedirectToAction("Index");
             }
 
             int index = claimScope.Claims.IndexOf(claimToRemove);
-            claimScope.Claims[index] = claim;
+            claimScope.Claims[index] = claimModel.ScopeClaim;
             
             await _scopeService.Save(claimScope);
 

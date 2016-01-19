@@ -1,0 +1,32 @@
+﻿@model Fsw.Enterprise.AuthCentral.Areas.Admin.Models.ScopeClaimModel
+
+@{
+    string showRow = $"show_{Model.ScopeName}_{Model.SafeName}";
+    string editRow = $"edit_{Model.ScopeName}_{Model.SafeName}";
+}
+<tr id="@showRow" class="show-claim-row">
+    <td>@Model.Name</td>
+    <td>@Model.Description</td>
+    <td>@Model.AlwaysIncludeInIdToken.ToString()</td>
+    <td>
+        <button class="btn btn-primary" onclick="$(@showRow).addClass('hidden'); $(@editRow).removeClass('hidden');">Edit</button>
+        <button class="btn btn-default delete-claim" type="submit">Delete</button>
+    </td>
+</tr>
+<tr id="@editRow" class="hidden edit-claim-row">
+    <td>
+        <input asp-for="ScopeName"/>
+        <input asp-for="ClaimId"/>
+        <input asp-for="Name" class="claim-name"/>
+    </td>
+    <td>
+        <input asp-for="Description" class="claim-desc"/>
+    </td>
+    <td>
+        <input asp-for="AlwaysIncludeInIdToken" class="claim-include"/>
+    </td>
+    <td>
+        <button class="btn btn-primary save" type="button">Save</button>
+        <button class="btn btn-default" type="button" onclick="$(@showRow).removeClass('hidden'); $(@editRow).addClass('hidden');">Cancel</button>
+    </td>
+</tr>

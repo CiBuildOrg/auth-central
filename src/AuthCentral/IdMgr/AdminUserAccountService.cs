@@ -30,7 +30,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             source.Clear();
 
             UserAccountCreatedByAdminEvent<TAccount> accountCreatedEvent = 
-                new UserAccountCreatedByAdminEvent<TAccount> { Account = newAccount, VerificationKey = passwordResetEvent.VerificationKey };
+                new UserAccountCreatedByAdminEvent<TAccount> { VerificationKey = passwordResetEvent.VerificationKey };
             AddEvent(accountCreatedEvent);
 
             return newAccount;

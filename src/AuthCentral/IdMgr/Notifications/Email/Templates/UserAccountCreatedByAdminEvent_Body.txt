@@ -1,0 +1,10 @@
+﻿Hello {username}!
+
+An account was just created for you in FSW Auth Central. To finish setup, you must choose a password. You can do this by following the link below within 15 minutes of receipt of this e-mail:
+
+{confirmPasswordResetUrl}
+
+If 15 minutes has elapsed, you will need to reset your password.
+
+Thanks!
+{emailSignature}

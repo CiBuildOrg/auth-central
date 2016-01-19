@@ -187,8 +187,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             claimScope.Claims[index] = claimModel.ScopeClaim;
             
             await _scopeService.Save(claimScope);
+            
+            var scopeModel = new ScopeModel(claimScope);
 
-            return RedirectToAction("Index");
+            return PartialView("ScopeClaimList", scopeModel);
         }
     }
 }

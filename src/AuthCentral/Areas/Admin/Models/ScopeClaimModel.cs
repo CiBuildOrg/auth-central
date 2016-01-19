@@ -63,7 +63,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
         public string Description
         {
             get { return ScopeClaim.Description; }
-            set { ScopeClaim.Name = value; }
+            set { ScopeClaim.Description = value; }
         }
 
         /// <summary>

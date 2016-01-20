@@ -191,6 +191,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             
             var scopeModel = new ScopeModel(claimScope);
 
+            ModelState.Clear();
             PartialViewResult partialViewResult = PartialView("ScopeClaimList", scopeModel);
             return partialViewResult;
         }

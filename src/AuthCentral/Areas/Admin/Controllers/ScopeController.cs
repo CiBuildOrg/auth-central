@@ -129,7 +129,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             if (editScope == null)
             {
                 ModelState.AddModelError("FindScope",$"Scope with the name {scope} could not be found.");
-                return RedirectToAction("Index");
+                return PartialView("ScopeClaimList");
             }
 
             var claimToRemove = editScope.Claims.SingleOrDefault(scopeClaim => scopeClaim.Name == claim);
@@ -137,13 +137,14 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             if (claimToRemove == default(ScopeClaim))
             {
                 ModelState.AddModelError("FindClaim", $"Claim with the name {claim} was not found in the scope {scope}");
-                return RedirectToAction("Index");
+                return PartialView("ScopeClaimList");
             }
 
             editScope.Claims.Remove(claimToRemove);
             await _scopeService.Save(editScope);
+            var scopeModel = new ScopeModel(editScope);
 
-            return RedirectToAction("Index");
+            return PartialView("ScopeClaimList", scopeModel);
         }
 
         public async Task<IActionResult> RemoveScope(string scopeName)
@@ -172,7 +173,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             if (claimScope == null)
             {
                 ModelState.AddModelError("FindScope", $"Scope with the name {claimModel.ScopeName} could not be found.");
-                return RedirectToAction("Index");
+                return PartialView("ScopeClaimList");
             }
 
             var claimToRemove = claimScope.Claims.SingleOrDefault(scopeClaim => scopeClaim.Name == claimModel.ClaimId);
@@ -180,7 +181,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             if (claimToRemove == default(ScopeClaim))
             {
                 ModelState.AddModelError("FindClaim", $"Claim with the name {claimModel.ClaimId} was not found in the scope {claimModel.ScopeName}");
-                return RedirectToAction("Index");
+                return PartialView("ScopeClaimList");
             }
 
             int index = claimScope.Claims.IndexOf(claimToRemove);
@@ -190,7 +191,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             
             var scopeModel = new ScopeModel(claimScope);
 
-            return PartialView("ScopeClaimList", scopeModel);
+            PartialViewResult partialViewResult = PartialView("ScopeClaimList", scopeModel);
+            return partialViewResult;
         }
     }
 }

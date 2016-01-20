@@ -70,13 +70,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             if (claimScope == null)
             {
                 ModelState.AddModelError("AddClaim", $"Scope with the name {scope} could not be found");
-                return RedirectToAction("Index");
+                return PartialView("ScopeClaimList");
             }
 
             if (claimScope.Claims.Any(scopeClaim => scopeClaim.Name == claim))
             {
                 ModelState.AddModelError("AddClaim", $"Claim with name {claim} already exists for scope {scope}");
-                return RedirectToAction("Index");
+                return PartialView("ScopeClaimList", new ScopeModel(claimScope));
             }
 
             var newClaim = new ScopeClaim(claim);
@@ -85,7 +85,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
             await _scopeService.Save(claimScope);
 
-            return RedirectToAction("Index");
+            return PartialView("ScopeClaimList", new ScopeModel(claimScope));
         }
 
         /// <summary>

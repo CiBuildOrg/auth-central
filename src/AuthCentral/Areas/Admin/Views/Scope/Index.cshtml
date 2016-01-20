@@ -73,7 +73,7 @@
                         <div class="claim-list-static">
                             @Html.Partial("ScopeClaimList", scope)
                         </div>
-                        <div class="panel-footer">
+                        <div class="panel-footer claim-add-static">
                             <button class="btn btn-default" data-toggle="modal" data-target="#addclaim_@scope.Name">Add</button>
                             <div id="addclaim_@scope.Name" class="modal fade" role="dialog">
                                 <div class="modal-dialog">
@@ -164,12 +164,14 @@
 
             $('button.add-claim').on('click', function(event) {
                 var addDiv = $(this).parents('div.add-claim');
+                var addStatic = addDiv.parents('div.claim-add-static');
+                var listDiv = addStatic.prev('div.claim-list-static');
                 var scopeId = addDiv.find('input.add-claim-scope').val();
                 var claimId = addDiv.find('#newClaim').val();
                 var data = { scope: scopeId, claim: claimId };
 
                 $.post('/Admin/Scope/AddClaim/', data, function(msg) {
-
+                    listDiv.html(msg);
                 });
             });
         });

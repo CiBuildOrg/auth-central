@@ -140,13 +140,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
                 HierarchicalUserAccount account;
                 _userAccountService.VerifyEmailFromKey(model.Key, model.Password, out account);
                     
-                if(User.Identity.IsAuthenticated)
-                {
-                    // since we've changed the email, we need to re-issue the cookie that
-                    // contains the claims.
-                    _authSvc.SignIn(account);
-                }
-
                 return RedirectToAction("Success");
             }
             catch (ValidationException ex)

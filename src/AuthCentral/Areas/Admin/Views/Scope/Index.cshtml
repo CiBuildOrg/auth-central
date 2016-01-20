@@ -174,7 +174,7 @@
                     claimId: $claimId.val(),
                     scope: $scopeId.val()
                 };
-                $.post('/Admin/Scope/EditClaim/', data, function (msg) {
+                $.post('/admin/scope/editclaim/', data, function (msg) {
                     var $showChildren = $showRow.children('td');
                     $showChildren[0].textContent = $claimName.val();
                     $showChildren[1].textContent = $claimDesc.val();

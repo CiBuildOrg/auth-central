@@ -70,7 +70,9 @@
                         </h4>
                     </div>
                     <div id="claims_@scope.Name" class="panel-collapse collapse">
-                        @await Html.PartialAsync("ScopeClaimList", scope);
+                        <div class="claim-list-static">
+                            @Html.Partial("ScopeClaimList", scope)
+                        </div>
                         <div class="panel-footer">
                             <button class="btn btn-default" data-toggle="modal" data-target="#addclaim_@scope.Name">Add</button>
                             <div id="addclaim_@scope.Name" class="modal fade" role="dialog">
@@ -115,15 +117,15 @@
 
 @section scripts{
     <script type="text/javascript">
-        $(function() {
-            $('.edit-claim-row button.save').on('click', function(event) {
+        $(function () {
+            $('div.claim-list-static').on('click', 'button.edit-claim', function(event) {               
                 var $editRow = $(this).parents('tr');
                 var $claimName = $editRow.find('.claim-name');
                 var $claimDesc = $editRow.find('.claim-desc');
                 var $claimInc = $editRow.find('.claim-include');
                 var $claimId = $editRow.find('#ClaimId');
                 var $scopeId = $editRow.find('#ScopeName');
-                var claimList = $editRow.parents('div.claim-list');
+                var claimListStatic = $editRow.parents('div.claim-list-static');
 
                 var claimModel = {
                     Name: $claimName.val(),
@@ -133,23 +135,31 @@
                     ScopeName: $scopeId.val()
                 };
 
-                $.post('/Admin/Scope/EditClaim/', claimModel, function(msg) {
-                    claimList.html(msg);
+                $.ajax({
+                    url: '/Admin/Scope/EditClaim/',
+                    type: 'POST',
+                    data: claimModel
+                }).done(function (msg) {
+                    claimListStatic.html(msg);
                 });
             });
 
-            $('button.delete-claim').on('click', function(event) {
+            $('div.claim-list-static').on('click', 'button.delete-claim', function (event) {
                 var showRow = $(this).parents('tr.show-claim-row');
+                var claimList = showRow.parents('div.claim-list-static');
                 var editRow = showRow.next();
-                var scopeId = editRow.find('#scope');
-                var claimId = editRow.find('#claimId');
+                var scopeId = editRow.find('#ScopeName');
+                var claimId = editRow.find('#ClaimId');
 
                 var data = { scope: scopeId.val(), claim: claimId.val() };
 
-                $.post('/Admin/Scope/RemoveClaim/', data, function(msg) {
-                    //showRow.remove();
-                    //editRow.remove();
-                });
+                $.ajax({
+                    url: '/Admin/Scope/RemoveClaim',
+                    type: 'POST',
+                    data: data
+                }).done(function(msg) {
+                    claimList.html(msg);
+                }); 
             });
 
             $('button.add-claim').on('click', function(event) {

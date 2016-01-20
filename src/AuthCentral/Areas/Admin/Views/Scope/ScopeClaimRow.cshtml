@@ -1,8 +1,8 @@
 ﻿@model Fsw.Enterprise.AuthCentral.Areas.Admin.Models.ScopeClaimModel
 
 @{
-    string showRow = $"show_{Model.ScopeName}_{Model.SafeName}";
-    string editRow = $"edit_{Model.ScopeName}_{Model.SafeName}";
+    string showRow = $"show_{Model.SafeScopeName}_{Model.SafeName}";
+    string editRow = $"edit_{Model.SafeScopeName}_{Model.SafeName}";
 }
 <tr id="@showRow" class="show-claim-row">
     <td>@Model.Name</td>

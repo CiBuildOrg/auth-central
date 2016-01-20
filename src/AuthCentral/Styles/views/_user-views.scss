@@ -42,6 +42,7 @@
 				margin-top: $margin-small-vertical;
 				margin-bottom: $margin-large-vertical;
 		    font-size: $font-size-small - 1;
+		    text-align: right;
 		    color: $brand-danger;
 		    line-height: 1.2;
 			}
@@ -83,6 +84,7 @@
 			margin-top: $margin-small-vertical;
 			margin-bottom: $margin-large-vertical;
 	    font-size: $font-size-small - 1;
+	    text-align: right;
 	    color: $brand-danger;
 	    line-height: 1.2;
 		}
@@ -96,6 +98,19 @@
 
 .reset-password {
 
+	.panel {
+		margin-bottom: 0;
 
+		.input-group + span {
+			display: block;
+			margin-top: $margin-small-vertical;
+			margin-bottom: $margin-large-vertical;
+	    font-size: $font-size-small - 1;
+	    text-align: right;
+	    color: $brand-danger;
+	    line-height: 1.2;
+		}
+
+	}
 
 }

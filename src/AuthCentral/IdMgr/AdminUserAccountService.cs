@@ -40,30 +40,41 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
 
             Tracing.Information("[UserAccountService.CreateAccount] called: {0}, {1}, {2}", tenant, username, email);
 
+            IEventSource source = this;
+
             account = account ?? CreateUserAccount();
-            Init(account, tenant, username, PasswordGenerator.GeneratePasswordOfLength(16), email, id, dateCreated, claims);
+            string password = PasswordGenerator.GeneratePasswordOfLength(16);
+
+            Init(account, tenant, username, password, email, id, dateCreated, claims);
 
             ValidateEmail(account, email);
             ValidateUsername(account, username);
-            // ValidatePassword(account, password);
-            SetConfirmedEmail(account.ID, account.Email);
-            ResetPassword(account.ID);
+
+            var createdEvent = source.GetEvents().OfType<AccountCreatedEvent<TAccount>>().Single();
+
+            source.Clear();
+            repo.Add(account);
+
+            VerifyEmailFromKey(createdEvent.VerificationKey, password, out account);
+            ResetPassword(account);
 
             Tracing.Verbose("[UserAccountService.CreateAccount] success");
 
-            IEventSource source = this;
-            IEnumerable<IEvent> events = source.GetEvents();
-
             // Eventually, we could generate a verification key ourselves.
             // In the meantime, this will commandeer the key from the password reset event.
-            PasswordResetRequestedEvent<TAccount> passwordResetEvent = 
-                events.Single(e => e is PasswordResetRequestedEvent<TAccount>) as PasswordResetRequestedEvent<TAccount>;
+            var passwordResetEvent = source.GetEvents().OfType<PasswordResetRequestedEvent<TAccount>>().Single();
 
             source.Clear();
 
-            UserAccountCreatedByAdminEvent<TAccount> accountCreatedEvent = 
-                new UserAccountCreatedByAdminEvent<TAccount> { VerificationKey = passwordResetEvent.VerificationKey };
+            var accountCreatedEvent = new UserAccountCreatedByAdminEvent<TAccount>
+            {
+                Account =  account,
+                VerificationKey = passwordResetEvent.VerificationKey
+            };
+
+
             AddEvent(accountCreatedEvent);
+            repo.Update(account);
 
             return account;
         }

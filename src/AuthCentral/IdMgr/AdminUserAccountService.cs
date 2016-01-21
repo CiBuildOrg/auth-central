@@ -78,5 +78,13 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
 
             return account;
         }
+
+        public override void Update(TAccount account)
+        {
+            IEventSource source = this;
+            source.Clear();
+
+            base.Update(account);
+        }
     }
 }

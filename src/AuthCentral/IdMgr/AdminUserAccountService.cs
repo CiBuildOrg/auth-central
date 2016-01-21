@@ -1,12 +1,10 @@
 ﻿using BrockAllen.MembershipReboot;
-using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.Crypto;
 using Fsw.Enterprise.AuthCentral.IdMgr.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Fsw.Enterprise.AuthCentral.IdMgr
 {
@@ -43,38 +41,29 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             IEventSource source = this;
 
             account = account ?? CreateUserAccount();
-            string password = PasswordGenerator.GeneratePasswordOfLength(16);
 
-            Init(account, tenant, username, password, email, id, dateCreated, claims);
-
+            Init(account, tenant, username, PasswordGenerator.GeneratePasswordOfLength(16), email, id, dateCreated, claims);
             ValidateEmail(account, email);
             ValidateUsername(account, username);
-
-            var createdEvent = source.GetEvents().OfType<AccountCreatedEvent<TAccount>>().Single();
 
             source.Clear();
             repo.Add(account);
 
-            VerifyEmailFromKey(createdEvent.VerificationKey, password, out account);
-            ResetPassword(account);
+            SetConfirmedEmail(account.ID, email);
 
-            Tracing.Verbose("[UserAccountService.CreateAccount] success");
-
-            // Eventually, we could generate a verification key ourselves.
-            // In the meantime, this will commandeer the key from the password reset event.
-            var passwordResetEvent = source.GetEvents().OfType<PasswordResetRequestedEvent<TAccount>>().Single();
-
-            source.Clear();
+            // this is important, or we reset the IsAccountVerified flag to false in our update.
+            account = GetByID(account.ID);
 
             var accountCreatedEvent = new UserAccountCreatedByAdminEvent<TAccount>
             {
-                Account =  account,
-                VerificationKey = passwordResetEvent.VerificationKey
+                Account = account,
+                VerificationKey = SetVerificationKey(account, VerificationKeyPurpose.ResetPassword)
             };
-
 
             AddEvent(accountCreatedEvent);
             repo.Update(account);
+
+            Tracing.Verbose("[UserAccountService.CreateAccount] success");
 
             return account;
         }

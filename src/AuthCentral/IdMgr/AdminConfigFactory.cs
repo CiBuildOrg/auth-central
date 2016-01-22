@@ -2,7 +2,6 @@
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email;
-using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.Extensions.PlatformAbstractions;
 
@@ -11,7 +10,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
     /// <summary>
     /// Factory for creating new Admin-tool <see cref="MembershipRebootConfiguration{HierarchicalUserAccount}"/> objects.
     /// </summary>
-    public class AdminConfigFactory
+    public static class AdminConfigFactory
     {
         /// <summary>
         /// Creates a new instance of a <see cref="MembershipRebootConfiguration{HierarchicalUserAccount}"/> from all AuthCentral configuration sources.

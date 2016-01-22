@@ -71,10 +71,14 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
             services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null, null, config));
             services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
-            services.AddScoped<AdminUserAccountService<HierarchicalUserAccount>>();
             services.AddScoped(typeof(IUserAccountRepository<HierarchicalUserAccount>), typeof(MongoUserAccountRepository<HierarchicalUserAccount>));
             services.AddScoped<IBulkUserRepository<HierarchicalUserAccount>, MongoUserAccountRepository<HierarchicalUserAccount>>();
             services.AddScoped(provider => new MongoDatabase(config.DB.MembershipReboot));
+            services.AddScoped(
+                provider =>
+                    new AdminUserAccountService(AdminConfigFactory.Create(provider.GetService<IApplicationBuilder>(),
+                        provider.GetService<IApplicationEnvironment>(), config),
+                        provider.GetService<IUserAccountRepository<HierarchicalUserAccount>>()));
         }
 
         public static void AddAuthCentralDependencies(this IServiceCollection services, EnvConfig config)

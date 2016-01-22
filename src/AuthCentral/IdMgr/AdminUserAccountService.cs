@@ -3,26 +3,26 @@ using Fsw.Enterprise.AuthCentral.Crypto;
 using Fsw.Enterprise.AuthCentral.IdMgr.Events;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
+using BrockAllen.MembershipReboot.Hierarchical;
 
 namespace Fsw.Enterprise.AuthCentral.IdMgr
 {
-    public class AdminUserAccountService<TAccount> : UserAccountService<TAccount> where TAccount : UserAccount
+    public class AdminUserAccountService : UserAccountService<HierarchicalUserAccount>
     {
-        EventBusUserAccountRepository<TAccount> repo;
+        EventBusUserAccountRepository<HierarchicalUserAccount> repo;
 
-        public AdminUserAccountService(MembershipRebootConfiguration<TAccount> config, IUserAccountRepository<TAccount> repo) : base(config, repo)
+        public AdminUserAccountService(MembershipRebootConfiguration<HierarchicalUserAccount> config, IUserAccountRepository<HierarchicalUserAccount> repo) : base(config, repo)
         {
-            this.repo = new EventBusUserAccountRepository<TAccount>(this, repo, config.ValidationBus, config.EventBus);
+            this.repo = new EventBusUserAccountRepository<HierarchicalUserAccount>(this, repo, config.ValidationBus, config.EventBus);
         }
 
-        public TAccount CreateAccount(string username, string email, Guid? id = null, DateTime? dateCreated = null, IEnumerable<Claim> claims = null)
+        public HierarchicalUserAccount CreateAccount(string username, string email, Guid? id = null, DateTime? dateCreated = null, IEnumerable<Claim> claims = null)
         {
             return CreateAccount(null, username, email, id, dateCreated, null, claims);
         }
 
-        public TAccount CreateAccount(string tenant, string username, string email, Guid? id = null, DateTime? dateCreated = null, TAccount account = null, IEnumerable<Claim> claims = null)
+        public HierarchicalUserAccount CreateAccount(string tenant, string username, string email, Guid? id = null, DateTime? dateCreated = null, HierarchicalUserAccount account = null, IEnumerable<Claim> claims = null)
         {
             if (Configuration.EmailIsUsername)
             {
@@ -54,7 +54,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             // this is important, or we reset the IsAccountVerified flag to false in our update.
             account = GetByID(account.ID);
 
-            var accountCreatedEvent = new UserAccountCreatedByAdminEvent<TAccount>
+            var accountCreatedEvent = new UserAccountCreatedByAdminEvent<HierarchicalUserAccount>
             {
                 Account = account,
                 VerificationKey = SetVerificationKey(account, VerificationKeyPurpose.ResetPassword)
@@ -68,7 +68,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             return account;
         }
 
-        public override void Update(TAccount account)
+        public override void Update(HierarchicalUserAccount account)
         {
             IEventSource source = this;
             source.Clear();

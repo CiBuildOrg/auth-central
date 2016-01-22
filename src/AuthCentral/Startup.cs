@@ -21,6 +21,7 @@ namespace Fsw.Enterprise.AuthCentral
     public class Startup
     {
         private EnvConfig _config;
+        private IApplicationEnvironment _appEnv;
         public IConfigurationRoot Configuration { get; set; }
 
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
@@ -33,6 +34,7 @@ namespace Fsw.Enterprise.AuthCentral
         
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddInstance(_appEnv);
             services.AddSerilog(_config.IsDebug);
             services.AddDataProtection();
             services.AddMvc();

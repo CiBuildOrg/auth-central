@@ -8,46 +8,54 @@ using BrockAllen.MembershipReboot.Hierarchical;
 
 namespace Fsw.Enterprise.AuthCentral.IdMgr
 {
+    /// <summary>
+    /// A user account service for use by user admin tools.
+    /// </summary>
     public class AdminUserAccountService : UserAccountService<HierarchicalUserAccount>
     {
-        EventBusUserAccountRepository<HierarchicalUserAccount> repo;
-
+        /// <summary>
+        /// Creates a new instance of <see cref="AdminUserAccountService"/> with the given <paramref name="config"/> and user <paramref name="repo"/>
+        /// </summary>
+        /// <param name="config">The configuration containing events and validation.</param>
+        /// <param name="repo">The user repository in which to read / write user data.</param>
         public AdminUserAccountService(MembershipRebootConfiguration<HierarchicalUserAccount> config, IUserAccountRepository<HierarchicalUserAccount> repo) : base(config, repo)
         {
-            this.repo = new EventBusUserAccountRepository<HierarchicalUserAccount>(this, repo, config.ValidationBus, config.EventBus);
         }
 
+        /// <summary>
+        /// Creates a new account for a user by an admin.
+        /// </summary>
+        /// <param name="username">Username for the new user.</param>
+        /// <param name="email">New user's email address</param>
+        /// <param name="id">Unique identifier for the user.  Can be null and generated internally.</param>
+        /// <param name="dateCreated">Date the user was created. Can be null and set to the current date and time.</param>
+        /// <param name="claims">Claims the user will have upon creation.  Can be null.</param>
+        /// <returns>The account that has been created with udpated details.</returns>
+        /// <exception cref="NullReferenceException">account not succesfully created.</exception>
         public HierarchicalUserAccount CreateAccount(string username, string email, Guid? id = null, DateTime? dateCreated = null, IEnumerable<Claim> claims = null)
         {
             return CreateAccount(null, username, email, id, dateCreated, null, claims);
         }
 
+        /// <summary>
+        /// Creates a new account for a user by an admin.
+        /// </summary>
+        /// <param name="tenant">The user's tenant / membership group.</param>
+        /// <param name="username">Username for the new user.</param>
+        /// <param name="email">New user's email address</param>
+        /// <param name="id">Unique identifier for the user.  Can be null and generated internally.</param>
+        /// <param name="dateCreated">Date the user was created. Can be null and set to the current date and time.</param>
+        /// <param name="account">A <see cref="HierarchicalUserAccount"/> object with user data already pre-loaded or empty.  Can be null and a blank account will be created.</param>
+        /// <param name="claims">Claims the user will have upon creation.  Can be null.</param>
+        /// <returns>The account that has been created with udpated details.</returns>
+        /// <exception cref="NullReferenceException">account not succesfully created.</exception>
         public HierarchicalUserAccount CreateAccount(string tenant, string username, string email, Guid? id = null, DateTime? dateCreated = null, HierarchicalUserAccount account = null, IEnumerable<Claim> claims = null)
         {
-            if (Configuration.EmailIsUsername)
-            {
-                Tracing.Verbose("[UserAccountService.CreateAccount] applying email is username");
-                username = email;
-            }
+            base.CreateAccount(tenant, username, PasswordGenerator.GeneratePasswordOfLength(16), email, id, dateCreated,
+                account, claims);
 
-            if (!Configuration.MultiTenant)
-            {
-                Tracing.Verbose("[UserAccountService.CreateAccount] applying default tenant");
-                tenant = Configuration.DefaultTenant;
-            }
-
-            Tracing.Information("[UserAccountService.CreateAccount] called: {0}, {1}, {2}", tenant, username, email);
-
-            IEventSource source = this;
-
-            account = account ?? CreateUserAccount();
-
-            Init(account, tenant, username, PasswordGenerator.GeneratePasswordOfLength(16), email, id, dateCreated, claims);
-            ValidateEmail(account, email);
-            ValidateUsername(account, username);
-
-            source.Clear();
-            repo.Add(account);
+            if(account == null)
+                throw new NullReferenceException("account not succesfully created.");
 
             SetConfirmedEmail(account.ID, email);
 
@@ -61,19 +69,9 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             };
 
             AddEvent(accountCreatedEvent);
-            repo.Update(account);
-
-            Tracing.Verbose("[UserAccountService.CreateAccount] success");
+            Update(account);
 
             return account;
-        }
-
-        public override void Update(HierarchicalUserAccount account)
-        {
-            IEventSource source = this;
-            source.Clear();
-
-            base.Update(account);
         }
     }
 }

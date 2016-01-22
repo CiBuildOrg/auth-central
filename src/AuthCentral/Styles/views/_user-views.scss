@@ -69,3 +69,33 @@
 	}
 
 }
+
+
+// Create an Account (User)
+
+.create-account {
+
+	.panel {
+		margin-bottom: 0;
+
+		.input-group + span {
+			display: block;
+			margin-top: $margin-small-vertical;
+			margin-bottom: $margin-large-vertical;
+	    font-size: $font-size-small - 1;
+	    color: $brand-danger;
+	    line-height: 1.2;
+		}
+
+	}
+
+}
+
+
+// Reset Password Request Styles
+
+.reset-password {
+
+
+
+}

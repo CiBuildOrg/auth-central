@@ -58,6 +58,7 @@
             <div id="edit_@scope.Name" class="hidden">
                 @using (@Html.BeginForm("Edit", "Scope", FormMethod.Post, new {@class="form-horizontal"}))
                 {
+                    @Html.Hidden("scopeName", scope.Name);
                     @Html.EditorFor(model => scope)
                     <div class="form-group">
                         <button class="btn btn-primary" type="submit">Save</button>
@@ -174,7 +175,7 @@
                     claimId: $claimId.val(),
                     scope: $scopeId.val()
                 };
-                $.post('/Admin/Scope/EditClaim/', data, function (msg) {
+                $.post('/admin/scope/editclaim/', data, function (msg) {
                     var $showChildren = $showRow.children('td');
                     $showChildren[0].textContent = $claimName.val();
                     $showChildren[1].textContent = $claimDesc.val();

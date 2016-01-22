@@ -51,8 +51,22 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult Edit()
+        public async Task<IActionResult> Edit(string scopeName, ScopeModel scope)
         {
+            var editScope = await _scopeService.Find(scopeName);
+
+            if (editScope == null)
+            {
+                ModelState.AddModelError("FindScope", $"Scope with the name {scopeName} could not be found.");
+                return RedirectToAction("Index");
+            }
+
+            await _scopeService.Delete(scopeName);
+
+            scope.IdsScope.Claims = editScope.Claims;
+
+            await _scopeService.Save(scope.IdsScope);
+
             return RedirectToAction("Index");
         }
 

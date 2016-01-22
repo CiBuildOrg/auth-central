@@ -72,7 +72,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 Flow = Flows.AuthorizationCode
             };
 
-            return View("Edit", client);
+            client.ClientSecrets.Add(new ClientSecret());
+            return View(client);
         }
 
         [HttpPost("[action]")]
@@ -95,12 +96,17 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
 
         [HttpGet("[action]/{clientId?}")]
-        public async Task<IActionResult> Edit(string clientId)
+        public async Task<IActionResult> Edit(string clientId, bool success=false)
         {
             Client client = await _clientService.Find(clientId);
 
             if(client != null)
             {
+                if(success)
+                {
+                    ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} saved succesfully.", clientId);
+                }
+
                 return View(client);
             }
             else
@@ -166,48 +172,95 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         }
 
 
-        [HttpPost("[action]/{clientId}")]
+        [HttpPost("[action]")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Save(Client client)
         {
             if(ModelState.IsValid)
             {
-                var existingClient = await _clientService.Find(client.ClientId);
-                if(existingClient != null)
-                {
-                    // don't overwrite existing child items not part of the passed in client
-                    client.AllowedCorsOrigins = existingClient.AllowedCorsOrigins;
-                    client.AllowedCustomGrantTypes = existingClient.AllowedCustomGrantTypes;
-                    client.AllowedScopes = existingClient.AllowedScopes;
-                    client.Claims = existingClient.Claims;
-                    client.ClientSecrets = existingClient.ClientSecrets;
-                    client.IdentityProviderRestrictions = existingClient.IdentityProviderRestrictions;
-                    client.PostLogoutRedirectUris = existingClient.PostLogoutRedirectUris;
-                    client.RedirectUris = existingClient.RedirectUris;
-                }
-                else
-                {
-                    // set some FSW defaults for the new client
-                    var defaultScopes = new List<string>();
-                    defaultScopes.Add("openid");
-                    defaultScopes.Add("profile");
-                    defaultScopes.Add("offline_access");
-                    defaultScopes.Add("fsw_platform");
-                    client.AllowedScopes = defaultScopes;
-                }
+                await PersistClient(client);
 
-                if (client.ClientId == null)
-                {
-                    // default to client name and ID being the same
-                    client.ClientId = client.ClientName;
-                } 
-
-                await _clientService.Save(client);
+                return RedirectToAction("Edit", new { clientId = client.ClientId, success = true });
             }
-
-            ViewBag.Message = string.Format("The Auth Central Client {0} was successfully saved!", client.ClientName);
-            return RedirectToAction("Edit", new { clientId = client.ClientId });
+            else
+            {
+                ViewBag.Message = string.Format("ModelState is not valid. Try again or something");
+                return View("Edit", client);
+            }
         }
 
+        [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateNew(Client client)
+        {
+            if(ModelState.IsValid)
+            {
+                await PersistClient(client);
+
+                return RedirectToAction("Edit", new { clientId = client.ClientId });
+            }
+            else
+            {
+                ViewBag.Message = string.Format("ModelState is not valid. Try again or something");
+                return View("Create", client);
+            }
+        }
+
+
+        private async Task PersistClient(Client client)
+        {
+            if (client.ClientId == null)
+            {
+                // default to client name and ID being the same
+                client.ClientId = client.ClientName;
+            } 
+
+            var existingClient = await _clientService.Find(client.ClientId);
+            if(existingClient != null)
+            {
+                await UpdateExistingClient(client, existingClient);
+            }
+            else
+            {
+                await CreateNewClient(client);
+            }
+        }
+
+        private async Task UpdateExistingClient(Client modifiedClient, Client existingClient)
+        {
+            // don't overwrite existing child items not part of the passed in client
+            modifiedClient.AllowedCorsOrigins = existingClient.AllowedCorsOrigins;
+            modifiedClient.AllowedCustomGrantTypes = existingClient.AllowedCustomGrantTypes;
+            modifiedClient.AllowedScopes = existingClient.AllowedScopes;
+            modifiedClient.Claims = existingClient.Claims;
+            modifiedClient.ClientSecrets = existingClient.ClientSecrets;
+            modifiedClient.IdentityProviderRestrictions = existingClient.IdentityProviderRestrictions;
+            modifiedClient.PostLogoutRedirectUris = existingClient.PostLogoutRedirectUris;
+            modifiedClient.RedirectUris = existingClient.RedirectUris;
+
+            await _clientService.Save(modifiedClient);
+        }
+
+        private async Task CreateNewClient(Client newClient)
+        {
+            // set some FSW defaults for the new client
+            var defaultScopes = new List<string>();
+            defaultScopes.Add("openid");
+            defaultScopes.Add("profile");
+            defaultScopes.Add("offline_access");
+            defaultScopes.Add("fsw_platform");
+            newClient.AllowedScopes = defaultScopes;
+
+            if(!String.IsNullOrWhiteSpace(newClient.ClientSecrets[0].Value))
+            {
+                // per spec, client passwords must be hashed using SHA256
+                // the secret provided on the new client creation form has
+                // not been hashed yet, so we need to do it now before we
+                // store the client with all of it's child elements
+                newClient.ClientSecrets[0].Value = newClient.ClientSecrets[0].Value.Sha256();
+            }
+
+            await _clientService.Save(newClient);
+        }
     }
 }

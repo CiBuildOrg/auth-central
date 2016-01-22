@@ -51,7 +51,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
         /// <exception cref="NullReferenceException">account not succesfully created.</exception>
         public HierarchicalUserAccount CreateAccount(string tenant, string username, string email, Guid? id = null, DateTime? dateCreated = null, HierarchicalUserAccount account = null, IEnumerable<Claim> claims = null)
         {
-            base.CreateAccount(tenant, username, PasswordGenerator.GeneratePasswordOfLength(16), email, id, dateCreated,
+            account = base.CreateAccount(tenant, username, PasswordGenerator.GeneratePasswordOfLength(16), email, id, dateCreated,
                 account, claims);
 
             if(account == null)

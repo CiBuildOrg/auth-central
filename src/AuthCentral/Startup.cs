@@ -30,6 +30,7 @@ namespace Fsw.Enterprise.AuthCentral
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
             _config = new EnvConfig(Configuration);
+            _appEnv = appEnv;
         }
         
         public void ConfigureServices(IServiceCollection services)

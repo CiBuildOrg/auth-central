@@ -16,10 +16,9 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
         private static MembershipRebootSetup TheOneInstance;
         private static object InstanceLock = new object();
 
-        private MembershipRebootSetup(): base() { }
         private MembershipRebootSetup(SecuritySettings securitySettings) : base(securitySettings) { }
         
-        public static MembershipRebootSetup GetConfig(IApplicationBuilder app, IApplicationEnvironment appEnv, EnvConfig config)
+        public static MembershipRebootSetup GetConfig(IHttpContextAccessor contextAccessor, IApplicationEnvironment appEnv, EnvConfig config)
         {
             if(TheOneInstance == null)
             {
@@ -27,7 +26,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 {
                     if (TheOneInstance == null)
                     {
-                        TheOneInstance = CreateNewInstance(app, appEnv, config);
+                        TheOneInstance = CreateNewInstance(contextAccessor, appEnv, config);
                     }
                 }
             }
@@ -35,7 +34,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             return TheOneInstance;
         }
  
-        private static MembershipRebootSetup CreateNewInstance(IApplicationBuilder app, IApplicationEnvironment appEnv, EnvConfig config)
+        private static MembershipRebootSetup CreateNewInstance(IHttpContextAccessor contextAccessor, IApplicationEnvironment appEnv, EnvConfig config)
         {
             SecuritySettings securitySettings = new SecuritySettings();
 
@@ -58,7 +57,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             newInstance.ConfigurePasswordComplexity(minimumLength: 7, minimumNumberOfComplexityRules: 3);
 
             var appinfo = new AuthCentralAppInfo(
-                app,
+                contextAccessor,
                 "FSW Auth Central", 
                 "Copyright fsw.com 2015",
                 "UserAccount/Details", 
@@ -78,12 +77,10 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
         }
     }
 
-    internal class AuthCentralAppInfo : RelativePathApplicationInformation
+    internal sealed class AuthCentralAppInfo : RelativePathApplicationInformation
     {
-        IApplicationBuilder app;
-
         public AuthCentralAppInfo(
-            IApplicationBuilder app,
+            IHttpContextAccessor ctxAccessor,
             string appName,
             string emailSig,
             string relativeLoginUrl,
@@ -91,18 +88,14 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             string relativeCancelNewAccountUrl,
             string relativeConfirmPasswordResetUrl)
         {
-            this.app = app;
-            app.Use((ctx, next) =>
-            {
-                this.SetBaseUrl(GetApplicationBaseUrl(ctx));
-                return next();
-            });
-            this.ApplicationName = appName;
-            this.EmailSignature = emailSig;
-            this.RelativeLoginUrl = relativeLoginUrl;
-            this.RelativeCancelVerificationUrl = relativeCancelNewAccountUrl;
-            this.RelativeConfirmPasswordResetUrl = relativeConfirmPasswordResetUrl;
-            this.RelativeConfirmChangeEmailUrl = relativeConfirmChangeEmailUrl;
+            HttpContext ctx = ctxAccessor.HttpContext;
+            SetBaseUrl(GetApplicationBaseUrl(ctx));
+            ApplicationName = appName;
+            EmailSignature = emailSig;
+            RelativeLoginUrl = relativeLoginUrl;
+            RelativeCancelVerificationUrl = relativeCancelNewAccountUrl;
+            RelativeConfirmPasswordResetUrl = relativeConfirmPasswordResetUrl;
+            RelativeConfirmChangeEmailUrl = relativeConfirmChangeEmailUrl;
         }
 
         string GetApplicationBaseUrl(HttpContext ctx)

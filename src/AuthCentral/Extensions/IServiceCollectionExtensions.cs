@@ -11,6 +11,7 @@ using IdentityServer3.MembershipReboot;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using MongoDB.Driver;
@@ -67,7 +68,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
         public static void AddMembershipReboot(this IServiceCollection services, EnvConfig config)
         {
-            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>(), provider.GetService<IApplicationEnvironment>(), config));
+            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IHttpContextAccessor>(), provider.GetService<IApplicationEnvironment>(), config));
             services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
             services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null, null, config));
             services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
@@ -76,7 +77,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             services.AddScoped(provider => new MongoDatabase(config.DB.MembershipReboot));
             services.AddScoped(
                 provider =>
-                    new AdminUserAccountService(AdminConfigFactory.Create(provider.GetService<IApplicationBuilder>(),
+                    new AdminUserAccountService(AdminConfigFactory.Create(provider.GetService<IHttpContextAccessor>(),
                         provider.GetService<IApplicationEnvironment>(), config),
                         provider.GetService<IUserAccountRepository<HierarchicalUserAccount>>()));
         }

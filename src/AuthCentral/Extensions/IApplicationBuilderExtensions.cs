@@ -23,6 +23,8 @@ using Owin;
 
 using Fsw.Enterprise.AuthCentral.IdSvr;
 using Fsw.Enterprise.AuthCentral.MongoStore;
+using Microsoft.AspNet.Http;
+using CookieOptions = IdentityServer3.Core.Configuration.CookieOptions;
 
 namespace Fsw.Enterprise.AuthCentral.Extensions
 {
@@ -40,7 +42,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                 ViewService = new Registration<IViewService>(typeof(CustomViewService))
             };
 
-            idSvcFactory.ConfigureCustomUserService(app, config.DB.MembershipReboot, env, config);
+            idSvcFactory.ConfigureCustomUserService(app.ApplicationServices.GetService<IHttpContextAccessor>(), config.DB.MembershipReboot, env, config);
             idSvcFactory.Register(new Registration<IApplicationEnvironment>(env));
 
             var options = new IdentityServerOptions

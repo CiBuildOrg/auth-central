@@ -3,6 +3,7 @@ using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email;
 using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.Http;
 using Microsoft.Extensions.PlatformAbstractions;
 
 namespace Fsw.Enterprise.AuthCentral.IdMgr
@@ -15,11 +16,11 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
         /// <summary>
         /// Creates a new instance of a <see cref="MembershipRebootConfiguration{HierarchicalUserAccount}"/> from all AuthCentral configuration sources.
         /// </summary>
-        /// <param name="app">Self-hosted web server application builder.  Contains application root paths.</param>
+        /// <param name="contextAccessor">Self-hosted web server application builder.  Contains application root paths.</param>
         /// <param name="appEnv">Application environment. used for runtime paths.</param>
         /// <param name="config">AuthCentral environment variables.  Contains configurations loaded from config files and the running environment.</param>
         /// <returns>A new, filled <see cref="MembershipRebootConfiguration{HierarchicalUserAccount}"/> object.</returns>
-        public static MembershipRebootConfiguration<HierarchicalUserAccount> Create(IApplicationBuilder app, IApplicationEnvironment appEnv, EnvConfig config)
+        public static MembershipRebootConfiguration<HierarchicalUserAccount> Create(IHttpContextAccessor contextAccessor, IApplicationEnvironment appEnv, EnvConfig config)
         {
             SecuritySettings securitySettings = new SecuritySettings();
 
@@ -42,7 +43,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             newInstance.ConfigurePasswordComplexity(7, 3);
 
             var appinfo = new AuthCentralAppInfo(
-                app,
+                contextAccessor,
                 "FSW Auth Central",
                 "Copyright fsw.com 2015",
                 "UserAccount/Details",

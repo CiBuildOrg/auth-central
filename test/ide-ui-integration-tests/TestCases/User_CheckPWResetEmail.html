@@ -45,12 +45,12 @@
 <tr>
 	<td>type</td>
 	<td>${Owa_Username}</td>
-	<td>${NewUser_Email_Username}</td>
+	<td>${NewUser_NewEmail_Username}</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>${Owa_Password}</td>
-	<td>${NewUser_Email_Password}</td>
+	<td>${NewUser_NewEmail_Password}</td>
 </tr>
 <tr>
 	<td>pause</td>
@@ -69,7 +69,7 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//span[.='${CurrentTime}']/../../div/span[contains(.,'Account Created')] | //span[.='${OneMinuteFromNow}']/../../div/span[contains(.,'Account Created')]</td>
+	<td>//span[.='${CurrentTime}']/../../div/span[contains(.,'Password Reset')] | //span[.='${OneMinuteFromNow}']/../../div/span[contains(.,'Password Reset')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -79,13 +79,13 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>${Owa_EmailConfirmationLink}</td>
+	<td>${Owa_PasswordResetLink}</td>
 	<td></td>
 </tr>
 <tr>
-	<td>storeText</td>
-	<td>${Owa_EmailConfirmationLink}</td>
-	<td>ConfirmationLink</td>
+	<td>storeAttribute</td>
+	<td>${Owa_PasswordResetLink}@href</td>
+	<td>ResetLink</td>
 </tr>
 </tbody></table>
 </body>

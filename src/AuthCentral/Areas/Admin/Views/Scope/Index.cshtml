@@ -10,6 +10,32 @@
 <div class="page-header">
     <h1>Scope Administration</h1>
 </div>
+<div class="panel panel-default row">
+    <button class="btn btn-primary" data-toggle="modal" data-target="#createScope">Create New</button>
+    <div id="createScope" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Create Scope</h4>
+                </div>
+                <div class="modal-body">
+                    @using (Html.BeginForm("CreateScope", "Scope", FormMethod.Post, new {@class="form-horizontal"}))
+                    {
+                        var newScope = new ScopeModel();
+                        @Html.EditorFor(model => newScope)
+
+                        <button class="btn btn-primary" type="submit">Add</button>
+                        <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 @foreach (ScopeModel scope in Model.Scopes)
 {
     <div class="panel panel-default">

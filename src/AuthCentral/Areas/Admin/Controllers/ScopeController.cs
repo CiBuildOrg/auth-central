@@ -7,23 +7,59 @@ using Microsoft.AspNet.Mvc;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 {
+    /// <summary>
+    /// Controller to create, delete and edit everything about scopes.
+    /// </summary>
     [Area("Admin"), Route("[area]/[controller]")]
     public class ScopeController : Controller
     {
         private readonly IScopeService _scopeService;
 
+        /// <summary>
+        /// Creates a new instance of <see cref="ScopeController"/>.
+        /// </summary>
+        /// <param name="scopeService">The service used to find and edit <see cref="Scope"/> information.</param>
         public ScopeController(IScopeService scopeService)
         {
             _scopeService = scopeService;
         }
 
+        /// <summary>
+        /// Primary action for the scope controller.  Displays a list of scopes.
+        /// </summary>
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var model = new ScopeListModel(_scopeService.Get().Result);
+            var model = new ScopeListModel(await _scopeService.Get());
             return View(model);
         }
 
+        /// <summary>
+        ///     Creates a scope from user input
+        /// </summary>
+        /// <param name="newScope">Model containing user's scope details.</param>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateScope(ScopeModel newScope)
+        {
+            Scope dupe = await _scopeService.Find(newScope.Name);
+
+            if (dupe != null)
+            {
+                ModelState.AddModelError("FindScope", $"A scope with name {newScope.Name} already exists.");
+                return RedirectToAction("Index");
+            }
+
+            await _scopeService.Save(newScope.IdsScope);
+
+            return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Adds a new claim to a <paramref name="scope">specified scope</paramref>.
+        /// </summary>
+        /// <remarks>Fails if the scope does not exist; or if the scope already contains a claim with the given name.</remarks>
+        /// <param name="scope">Name of the scope to which we intend to add a claim.</param>
+        /// <param name="claim">Claim to add.</param>
         [HttpPost("[action]")]
         public async Task<IActionResult> AddClaim(string scope, string claim)
         {
@@ -50,6 +86,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Edit an existing scope.
+        /// </summary>
+        /// <remarks>Fails if the <paramref name="scopeName">specified scope</paramref> doesn't exist</remarks>
+        /// <param name="scopeName">Original name of the scope.</param>
+        /// <param name="scope"></param>
+        /// <returns></returns>
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit(string scopeName, ScopeModel scope)
         {

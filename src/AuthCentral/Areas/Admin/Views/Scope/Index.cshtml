@@ -86,7 +86,7 @@
                                             <h4 class="modal-title">Add Claim</h4>
                                         </div>
                                         <div class="modal-body add-claim">
-                                            <form asp-anti-forgery="true" action="" id="addClaimForm">
+                                            <form asp-action="AddClaim" asp-anti-forgery="true" id="addClaimForm">
                                                 <input type="hidden" class="add-claim-scope" value="@scope.Name" id="scopeToAddClaim" />
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2" for="newClaim">Claim:</label>

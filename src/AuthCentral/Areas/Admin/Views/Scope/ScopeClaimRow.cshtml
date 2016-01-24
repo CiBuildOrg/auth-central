@@ -9,8 +9,8 @@
     <td>@Model.Description</td>
     <td>@Model.AlwaysIncludeInIdToken.ToString()</td>
     <td>
-        <button class="btn btn-primary" onclick="$(@showRow).addClass('hidden'); $(@editRow).removeClass('hidden');">Edit</button>
-        <button class="btn btn-default delete-claim" type="submit">Delete</button>
+        <button class="btn btn-primary" onclick="$(@showRow).addClass('hidden'); $(@editRow).removeClass('hidden');" type="button">Edit</button>
+        <button class="btn btn-default delete-claim" type="button">Delete</button>
     </td>
 </tr>
 <tr id="@editRow" class="hidden edit-claim-row">

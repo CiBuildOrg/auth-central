@@ -95,7 +95,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         /// <param name="scopeName">Original name of the scope.</param>
         /// <param name="scope"></param>
         /// <returns></returns>
-        [HttpPost("[action]")]
+        [HttpPost("[action]"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string scopeName, ScopeModel scope)
         {
             var editScope = await _scopeService.Find(scopeName);

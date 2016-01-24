@@ -40,7 +40,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         ///     Creates a scope from user input
         /// </summary>
         /// <param name="newScope">Model containing user's scope details.</param>
-        [HttpPost("[action]")]
+        [HttpPost("[action]"), ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateScope(ScopeModel newScope)
         {
             Scope dupe = await _scopeService.Find(newScope.Name);

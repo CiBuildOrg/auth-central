@@ -26,6 +26,7 @@
                     {
                         var newScope = new ScopeModel();
                         @Html.EditorFor(model => newScope)
+                        @Html.AntiForgeryToken()
 
                         <button class="btn btn-primary" type="submit">Add</button>
                         <button class="btn btn-default" data-dismiss="modal">Cancel</button>

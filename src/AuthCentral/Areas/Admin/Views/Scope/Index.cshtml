@@ -86,15 +86,17 @@
                                             <h4 class="modal-title">Add Claim</h4>
                                         </div>
                                         <div class="modal-body add-claim">
-                                            <input type="hidden" class="add-claim-scope" value="@scope.Name" id="scopeToAddClaim"/>
-                                            <div class="form-group">
-                                                <label class="control-label col-sm-2" for="newClaim">Claim:</label>
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="newClaim" placeholder="claim_to_add_to_scope"/>
+                                            <form asp-anti-forgery="true" action="" id="addClaimForm">
+                                                <input type="hidden" class="add-claim-scope" value="@scope.Name" id="scopeToAddClaim" />
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2" for="newClaim">Claim:</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" class="form-control" id="newClaim" placeholder="claim_to_add_to_scope" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <button class="btn btn-primary add-claim" data-dismiss="modal">Add</button>
-                                            <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                <button class="btn btn-primary add-claim" data-dismiss="modal">Add</button>
+                                                <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                            </form>
                                         </div>
                                     </div>
 

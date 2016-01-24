@@ -62,7 +62,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         /// <remarks>Fails if the scope does not exist; or if the scope already contains a claim with the given name.</remarks>
         /// <param name="scope">Name of the scope to which we intend to add a claim.</param>
         /// <param name="claim">Claim to add.</param>
-        [HttpPost("[action]")]
+        [HttpPost("[action]"), ValidateAntiForgeryToken]
         public async Task<IActionResult> AddClaim(string scope, string claim)
         {
             var claimScope = await _scopeService.Find(scope);

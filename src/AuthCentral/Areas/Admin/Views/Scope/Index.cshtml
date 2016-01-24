@@ -119,8 +119,8 @@
 
 @section scripts{
     <script type="text/javascript">
-        $(function () {
-            $('div.claim-list-static').on('click', 'button.edit-claim', function(event) {               
+        $(function() {
+            $('div.claim-list-static').on('click', 'button.edit-claim', function(event) {
                 var $editRow = $(this).parents('tr');
                 var $claimName = $editRow.find('.claim-name');
                 var $claimDesc = $editRow.find('.claim-desc');
@@ -128,6 +128,8 @@
                 var $claimId = $editRow.find('#ClaimId');
                 var $scopeId = $editRow.find('#ScopeName');
                 var claimListStatic = $editRow.parents('div.claim-list-static');
+                var form = $editRow.parents('form.claim-list');
+                var token = form.find("input[name='__RequestVerificationToken']");
 
                 var claimModel = {
                     Name: $claimName.val(),
@@ -137,23 +139,30 @@
                     ScopeName: $scopeId.val()
                 };
 
+                var data = {
+                    __RequestVerificationToken: token.val(),
+                    claimModel: claimModel
+                };
+
                 $.ajax({
                     url: '/Admin/Scope/EditClaim/',
                     type: 'POST',
-                    data: claimModel
-                }).done(function (msg) {
+                    data: data
+                }).done(function(msg) {
                     claimListStatic.html(msg);
                 });
             });
 
-            $('div.claim-list-static').on('click', 'button.delete-claim', function (event) {
+            $('div.claim-list-static').on('click', 'button.delete-claim', function(event) {
                 var showRow = $(this).parents('tr.show-claim-row');
                 var claimList = showRow.parents('div.claim-list-static');
                 var editRow = showRow.next();
                 var scopeId = editRow.find('#ScopeName');
                 var claimId = editRow.find('#ClaimId');
+                var form = editRow.parents('form.claim-list');
+                var token = form.find("input[name='__RequestVerificationToken']");
 
-                var data = { scope: scopeId.val(), claim: claimId.val() };
+                var data = { __RequestVerificationToken: token.val(), scope: scopeId.val(), claim: claimId.val() };
 
                 $.ajax({
                     url: '/Admin/Scope/RemoveClaim',
@@ -161,7 +170,7 @@
                     data: data
                 }).done(function(msg) {
                     claimList.html(msg);
-                }); 
+                });
             });
 
             $('button.add-claim').on('click', function(event) {
@@ -170,7 +179,14 @@
                 var listDiv = addStatic.prev('div.claim-list-static');
                 var scopeId = addDiv.find('input.add-claim-scope').val();
                 var claimId = addDiv.find('#newClaim').val();
-                var data = { scope: scopeId, claim: claimId };
+                var form = addDiv.find('#addClaimForm');
+                var token = form.find("input[name='__RequestVerificationToken']");
+
+                var data = {
+                    __RequestVerificationToken: token.val(),
+                    scope: scopeId,
+                    claim: claimId
+                };
 
                 $.post('/Admin/Scope/AddClaim/', data, function(msg) {
                     listDiv.html(msg);

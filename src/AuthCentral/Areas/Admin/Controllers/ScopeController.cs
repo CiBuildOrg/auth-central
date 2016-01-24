@@ -147,6 +147,11 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             return PartialView("ScopeClaimList", scopeModel);
         }
 
+        /// <summary>
+        /// Deletes the given scope from the store.
+        /// </summary>
+        /// <param name="scopeName">Unique name / ID of the scope</param>
+        [HttpPost("[action]"), ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveScope(string scopeName)
         {
             var scope = await _scopeService.Find(scopeName);

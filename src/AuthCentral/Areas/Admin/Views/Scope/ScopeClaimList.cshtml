@@ -3,20 +3,22 @@
 @model ScopeModel
 
 <div class="panel-body claim-list">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Claim</th>
-            <th>Description</th>
-            <th>Always Included in Token</th>
-            <th>Edit | Delete</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (ScopeClaim claim in Model.Claims)
-        {
-            @await Html.PartialAsync("ScopeClaimRow", new ScopeClaimModel(Model.Name, claim))
-        }
-        </tbody>
-    </table>
+    <form asp-anti-forgery="true" action="" class="claim-list">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Claim</th>
+                    <th>Description</th>
+                    <th>Always Included in Token</th>
+                    <th>Edit | Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ScopeClaim claim in Model.Claims)
+                {
+                    @await Html.PartialAsync("ScopeClaimRow", new ScopeClaimModel(Model.Name, claim))
+                }
+            </tbody>
+        </table>
+    </form>
 </div>

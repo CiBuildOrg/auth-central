@@ -121,7 +121,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         /// <param name="scope">Unique identifier for the scope.</param>
         /// <param name="claim">Unique identifier for the claim.</param>
         /// <returns></returns>
-        [HttpPost("[action]")]
+        [HttpPost("[action]"), ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveClaim(string scope, string claim)
         {
             var editScope = await _scopeService.Find(scope);
@@ -165,7 +165,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         /// <param name="claim">The <see cref="ScopeClaim"/> with all its (possibly changed) values.</param>
         /// <param name="claimId">The original name of the claim.  Might be different in <paramref name="claim"/></param>
         /// <param name="scope">The name of the scope we're updating claims in.</param>
-        [HttpPost("[action]")]
+        [HttpPost("[action]"), ValidateAntiForgeryToken]
         public async Task<IActionResult> EditClaim(ScopeClaimModel claimModel)
         {
             var claimScope = await _scopeService.Find(claimModel.ScopeName);

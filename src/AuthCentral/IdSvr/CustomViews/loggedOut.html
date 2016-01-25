@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html ng-app="app" ng-controller="LayoutCtrl">
+
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>{siteName}</title>
@@ -9,58 +10,33 @@
     <link rel="stylesheet" href="/assets/main.css">
     <!-- endbuild -->
 
-
-
 </head>
+
 <body lang="en">
-<!--
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-header">
-            <span class="navbar-brand">{siteName}</span>
-        </div>
-        <ul class="nav navbar-nav" ng-show="model.currentUser" ng-cloak>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{model.currentUser}} <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li><a href="{{model.logoutUrl}}">Logout</a></li>
-                    <li class="divider" ng-show="model.loginWithDifferentAccountUrl"></li>
-                    <li><a href="{{model.loginWithDifferentAccountUrl}}" ng-show="model.loginWithDifferentAccountUrl">Login With Different Account</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
 
-    <div class="container">
-        <div class="page-header">
-            <h1>This is a custom view</h1>
-        </div>
-    </div>
--->
+    <div class="container logout">
 
-    <div class="container">
-        <div  class="col-md-2 col-sm-2">&nbsp;</div>
-        <div  class="col-md-2 col-sm-2">
-            <img title="FSW" src="https://fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg" alt="FSW Image" />
-        </div>
-        <div  class="col-md-2 col-sm-2">&nbsp;</div>
-    </div>
-    <br />
-    <br />
-
-    <div class='container page-loggedOut' ng-cloak>
-        <div class="page-header">
-            <h1>
-<!--                Logout
--->                <small>You are now logged out</small>
-            </h1>
-            <div ng-show="model.redirectUrl">
-                Click <a ng-href="{{model.redirectUrl}}">here</a> to return to the
-                <span ng-bind="model.clientName"></span> application.
+        <div class="row">
+            <div  class="col-xs-12 text-center">
+                <img title="FSW" src="https://fsw-res.cloudinary.com/image/upload/v1452553297/logos/fsw-logo.svg" alt="FSW" class="fsw-logo">
             </div>
-            <iframe class="signout" ng-repeat="url in model.iFrameUrls" ng-src="{{url}}"></iframe>
         </div>
+
+        <div class="row" ng-cloak>
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 text-center">
+                <h1>You are now logged out</h1>
+                <div ng-show="model.redirectUrl">
+                    Click <a ng-href="{{model.redirectUrl}}">here</a> to return to the
+                    <span ng-bind="model.clientName"></span> application.
+                </div>
+                <!-- Not sure what this is
+                <iframe class="signout" ng-repeat="url in model.iFrameUrls" ng-src="{{url}}"></iframe> -->
+            </div>
+        </div>
+
     </div>
 
+    <!-- Scripty Things -->
     <script id='modelJson' type='application/json'>
         {model}
     </script>
@@ -69,6 +45,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
     <script src="/libs/encoder/encoder.min.js"></script>
     <script src="/idsrvr.js"></script>
+
 </body>
+
 </html>
 

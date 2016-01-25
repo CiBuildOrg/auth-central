@@ -40,7 +40,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         ///     Creates a scope from user input
         /// </summary>
         /// <param name="newScope">Model containing user's scope details.</param>
-        [HttpPost("[action]")]
+        [HttpPost("[action]"), ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateScope(ScopeModel newScope)
         {
             Scope dupe = await _scopeService.Find(newScope.Name);
@@ -62,7 +62,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         /// <remarks>Fails if the scope does not exist; or if the scope already contains a claim with the given name.</remarks>
         /// <param name="scope">Name of the scope to which we intend to add a claim.</param>
         /// <param name="claim">Claim to add.</param>
-        [HttpPost("[action]")]
+        [HttpPost("[action]"), ValidateAntiForgeryToken]
         public async Task<IActionResult> AddClaim(string scope, string claim)
         {
             var claimScope = await _scopeService.Find(scope);
@@ -70,13 +70,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             if (claimScope == null)
             {
                 ModelState.AddModelError("AddClaim", $"Scope with the name {scope} could not be found");
-                return RedirectToAction("Index");
+                return PartialView("ScopeClaimList");
             }
 
             if (claimScope.Claims.Any(scopeClaim => scopeClaim.Name == claim))
             {
                 ModelState.AddModelError("AddClaim", $"Claim with name {claim} already exists for scope {scope}");
-                return RedirectToAction("Index");
+                return PartialView("ScopeClaimList", new ScopeModel(claimScope));
             }
 
             var newClaim = new ScopeClaim(claim);
@@ -85,7 +85,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
             await _scopeService.Save(claimScope);
 
-            return RedirectToAction("Index");
+            return PartialView("ScopeClaimList", new ScopeModel(claimScope));
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         /// <param name="scopeName">Original name of the scope.</param>
         /// <param name="scope"></param>
         /// <returns></returns>
-        [HttpPost("[action]")]
+        [HttpPost("[action]"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string scopeName, ScopeModel scope)
         {
             var editScope = await _scopeService.Find(scopeName);
@@ -121,7 +121,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         /// <param name="scope">Unique identifier for the scope.</param>
         /// <param name="claim">Unique identifier for the claim.</param>
         /// <returns></returns>
-        [HttpPost("[action]")]
+        [HttpPost("[action]"), ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveClaim(string scope, string claim)
         {
             var editScope = await _scopeService.Find(scope);
@@ -129,7 +129,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             if (editScope == null)
             {
                 ModelState.AddModelError("FindScope",$"Scope with the name {scope} could not be found.");
-                return RedirectToAction("Index");
+                return PartialView("ScopeClaimList");
             }
 
             var claimToRemove = editScope.Claims.SingleOrDefault(scopeClaim => scopeClaim.Name == claim);
@@ -137,15 +137,21 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             if (claimToRemove == default(ScopeClaim))
             {
                 ModelState.AddModelError("FindClaim", $"Claim with the name {claim} was not found in the scope {scope}");
-                return RedirectToAction("Index");
+                return PartialView("ScopeClaimList");
             }
 
             editScope.Claims.Remove(claimToRemove);
             await _scopeService.Save(editScope);
+            var scopeModel = new ScopeModel(editScope);
 
-            return RedirectToAction("Index");
+            return PartialView("ScopeClaimList", scopeModel);
         }
 
+        /// <summary>
+        /// Deletes the given scope from the store.
+        /// </summary>
+        /// <param name="scopeName">Unique name / ID of the scope</param>
+        [HttpPost("[action]"), ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveScope(string scopeName)
         {
             var scope = await _scopeService.Find(scopeName);
@@ -164,31 +170,35 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         /// <param name="claim">The <see cref="ScopeClaim"/> with all its (possibly changed) values.</param>
         /// <param name="claimId">The original name of the claim.  Might be different in <paramref name="claim"/></param>
         /// <param name="scope">The name of the scope we're updating claims in.</param>
-        [HttpPost("[action]")]
-        public async Task<IActionResult> EditClaim(ScopeClaim claim, string claimId, string scope)
+        [HttpPost("[action]"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditClaim(ScopeClaimModel claimModel)
         {
-            var claimScope = await _scopeService.Find(scope);
+            var claimScope = await _scopeService.Find(claimModel.ScopeName);
 
             if (claimScope == null)
             {
-                ModelState.AddModelError("FindScope", $"Scope with the name {scope} could not be found.");
-                return RedirectToAction("Index");
+                ModelState.AddModelError("FindScope", $"Scope with the name {claimModel.ScopeName} could not be found.");
+                return PartialView("ScopeClaimList");
             }
 
-            var claimToRemove = claimScope.Claims.SingleOrDefault(scopeClaim => scopeClaim.Name == claimId);
+            var claimToRemove = claimScope.Claims.SingleOrDefault(scopeClaim => scopeClaim.Name == claimModel.ClaimId);
 
             if (claimToRemove == default(ScopeClaim))
             {
-                ModelState.AddModelError("FindClaim", $"Claim with the name {claimId} was not found in the scope {scope}");
-                return RedirectToAction("Index");
+                ModelState.AddModelError("FindClaim", $"Claim with the name {claimModel.ClaimId} was not found in the scope {claimModel.ScopeName}");
+                return PartialView("ScopeClaimList");
             }
 
             int index = claimScope.Claims.IndexOf(claimToRemove);
-            claimScope.Claims[index] = claim;
+            claimScope.Claims[index] = claimModel.ScopeClaim;
             
             await _scopeService.Save(claimScope);
+            
+            var scopeModel = new ScopeModel(claimScope);
 
-            return RedirectToAction("Index");
+            ModelState.Clear();
+            PartialViewResult partialViewResult = PartialView("ScopeClaimList", scopeModel);
+            return partialViewResult;
         }
     }
 }

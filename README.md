@@ -63,7 +63,7 @@ At this point, you should be all set to run the app from visual studio.  Be sure
 
 1. dnu restore
 2. dnu build
-3. dnx web
+3. dnx web 
 
 To watch for style changes and automatically rebuild the stylesheets, use `gulp watch`.
 

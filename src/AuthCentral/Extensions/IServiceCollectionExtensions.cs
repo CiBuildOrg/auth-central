@@ -67,7 +67,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             services.AddScoped(provider => new MongoDatabase(config.DB.MembershipReboot));
             services.AddScoped(
                 provider =>
-                    new AdminUserAccountService(AdminConfigFactory.Create(provider.GetService<IHttpContextAccessor>(),
+                    new AdminUserAccountService(MembershipRebootConfigFactory.Create(provider.GetService<IHttpContextAccessor>(),
                         provider.GetService<IApplicationEnvironment>(), config),
                         provider.GetService<IUserAccountRepository<HierarchicalUserAccount>>()));
         }

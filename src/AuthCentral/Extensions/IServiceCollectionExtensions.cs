@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using MongoDB.Driver;
 using Serilog;
+using System.Security.Claims;
 using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
 
 namespace Fsw.Enterprise.AuthCentral.Extensions
@@ -58,18 +59,27 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
         public static void AddMembershipReboot(this IServiceCollection services, EnvConfig config)
         {
-            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IHttpContextAccessor>(), provider.GetService<IApplicationEnvironment>(), config));
-            services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
-            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null, null, config));
+            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider =>
+            {
+                var contextAccessor = provider.GetService<IHttpContextAccessor>();
+                ClaimsPrincipal principal = contextAccessor.HttpContext.User;
+                if(principal.Claims.GetValue("fsw:authcentral:admin") == "true")
+                {
+                    return MembershipRebootConfigFactory.GetAdminConfig(provider.GetService<IApplicationEnvironment>(), config);
+                }
+                else
+                {
+                    return MembershipRebootConfigFactory.GetDefaultConfig(provider.GetService<IApplicationEnvironment>(), config);
+                }
+            });
+
             services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
+
             services.AddScoped(typeof(IUserAccountRepository<HierarchicalUserAccount>), typeof(MongoUserAccountRepository<HierarchicalUserAccount>));
             services.AddScoped<IBulkUserRepository<HierarchicalUserAccount>, MongoUserAccountRepository<HierarchicalUserAccount>>();
+            
+            services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
             services.AddScoped(provider => new MongoDatabase(config.DB.MembershipReboot));
-            services.AddScoped(
-                provider =>
-                    new AdminUserAccountService(MembershipRebootConfigFactory.Create(provider.GetService<IHttpContextAccessor>(),
-                        provider.GetService<IApplicationEnvironment>(), config),
-                        provider.GetService<IUserAccountRepository<HierarchicalUserAccount>>()));
         }
 
         public static void AddAuthCentralDependencies(this IServiceCollection services, EnvConfig config)

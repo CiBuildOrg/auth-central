@@ -25,13 +25,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         EnvConfig _cfg;
 
         // Creates and updates accounts, finds single accounts by id or email
-        AdminUserAccountService _userAccountService;
+        UserAccountService<HierarchicalUserAccount> _userAccountService;
 
         // Used for querying multiple user accounts
         IBulkUserRepository<HierarchicalUserAccount> _repository;
 
         public UserController(EnvConfig cfg, 
-            AdminUserAccountService userSvc, 
+            UserAccountService<HierarchicalUserAccount> userSvc,
             IBulkUserRepository<HierarchicalUserAccount> repository)
         {
             this._cfg = cfg;
@@ -62,7 +62,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             {
                 try
                 {
-                    HierarchicalUserAccount account = _userAccountService.CreateAccount(model.Username, model.Email);
+                    HierarchicalUserAccount account = _userAccountService.CreateAccount(model.Username, PasswordGenerator.GeneratePasswordOfLength(16), model.Email);
+                    _userAccountService.SetConfirmedEmail(account.ID, account.Email);
+                    _userAccountService.ResetPassword(account.ID);
                     AddClaims(account.ID, model);
 
                     return View("Success", model);

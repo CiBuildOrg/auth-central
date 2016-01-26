@@ -2,8 +2,8 @@
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email;
-using Microsoft.AspNet.Http;
 using Microsoft.Extensions.PlatformAbstractions;
+using Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers;
 
 namespace Fsw.Enterprise.AuthCentral.IdMgr
 {
@@ -12,19 +12,88 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
     /// </summary>
     public static class MembershipRebootConfigFactory
     {
-        /// <summary>
-        /// Creates a new instance of a <see cref="MembershipRebootConfiguration{HierarchicalUserAccount}"/> from all AuthCentral configuration sources.
-        /// </summary>
-        /// <param name="contextAccessor">Self-hosted web server application builder.  Contains application root paths.</param>
-        /// <param name="appEnv">Application environment. used for runtime paths.</param>
-        /// <param name="config">AuthCentral environment variables.  Contains configurations loaded from config files and the running environment.</param>
-        /// <returns>A new, filled <see cref="MembershipRebootConfiguration{HierarchicalUserAccount}"/> object.</returns>
-        public static MembershipRebootConfiguration<HierarchicalUserAccount> Create(IHttpContextAccessor contextAccessor, IApplicationEnvironment appEnv, EnvConfig config)
+        private static MembershipRebootSetup DefaultInstance;
+        private static MembershipRebootSetup AdminInstance;
+
+        private static object InstanceLock = new object();
+        internal static MembershipRebootSetup GetDefaultConfig(IApplicationEnvironment appEnv, EnvConfig config)
+        {
+            if (DefaultInstance == null)
+            {
+                lock (InstanceLock)
+                {
+                    if (DefaultInstance == null)
+                    {
+                        DefaultInstance = CreateDefaultInstance(appEnv, config);
+                    }
+                }
+            }
+
+            return DefaultInstance;
+        }
+
+        internal static MembershipRebootSetup GetAdminConfig(IApplicationEnvironment appEnv, EnvConfig config)
+        {
+            if (AdminInstance == null)
+            {
+                lock (InstanceLock)
+                {
+                    if (AdminInstance == null)
+                    {
+                        AdminInstance = CreateAdminInstance(appEnv, config);
+                    }
+                }
+            }
+
+            return AdminInstance;
+        }
+
+        private static MembershipRebootSetup CreateDefaultInstance(IApplicationEnvironment appEnv, EnvConfig config)
         {
             SecuritySettings securitySettings = new SecuritySettings();
+            MembershipRebootSetup newInstance = GetDefaultConfigInstance(config.Uri.IssuerUri, securitySettings);
+            AuthCentralAppInfo appInfo = BuildAppInfo(config.Uri.IssuerUri);
 
-            var newInstance = new MembershipRebootConfiguration<HierarchicalUserAccount>(securitySettings)
+            var emailBodyType = AuthCentralSmtpMessageDelivery.MsgBodyTypes.MultipartAlternativeAsJson;
+            var emailFormatter = new AuthCentralEmailMessageFormatter(appEnv, appInfo, emailBodyType);
+            var smtpMsgDelivery = new AuthCentralSmtpMessageDelivery(config, emailBodyType);
+
+            newInstance.AddEventHandler(new DefaultEmailEventHandler(emailFormatter, smtpMsgDelivery));
+            newInstance.AddEventHandler(new UserEmailEventHandler(emailFormatter, smtpMsgDelivery));
+            
+            return newInstance;
+        }
+
+        private static MembershipRebootSetup CreateAdminInstance(IApplicationEnvironment appEnv, EnvConfig config)
+        {
+            SecuritySettings securitySettings = new SecuritySettings();
+            MembershipRebootSetup newInstance = GetDefaultConfigInstance(config.Uri.IssuerUri, securitySettings);
+            AuthCentralAppInfo appInfo = BuildAppInfo(config.Uri.IssuerUri);
+
+            var emailBodyType = AuthCentralSmtpMessageDelivery.MsgBodyTypes.MultipartAlternativeAsJson;
+            var emailFormatter = new AuthCentralEmailMessageFormatter(appEnv, appInfo, emailBodyType);
+
+            emailFormatter.BodyTemplateNameResolverOverrides.Add(
+                typeof(PasswordResetRequestedEvent<HierarchicalUserAccount>), 
+                (evt, extension) => "AccountCreatedAdminEvent_Body." + extension
+            );
+
+            emailFormatter.SubjectTemplateNameResolverOverrides.Add(
+                typeof(PasswordResetRequestedEvent<HierarchicalUserAccount>),
+                evt => "AccountCreatedEvent_Subject.txt"
+            );
+
+            var smtpMsgDelivery = new AuthCentralSmtpMessageDelivery(config, emailBodyType);            
+            newInstance.AddEventHandler(new DefaultEmailEventHandler(emailFormatter, smtpMsgDelivery));
+
+            return newInstance;
+        }
+
+        private static MembershipRebootSetup GetDefaultConfigInstance(string baseUrl, SecuritySettings securitySettings)
+        {
+            var newInstance = new MembershipRebootSetup
             {
+                SecuritySettings = securitySettings,
                 MultiTenant = false, // allow more than one tenant
                 DefaultTenant = "fsw", // default tenant name used when no tenant is specified (used when MultiTenant is false)
                 UsernamesUniqueAcrossTenants = true, // username must be unique across all tenants (normally username is only unique within each tenant)
@@ -39,25 +108,26 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 VerificationKeyLifetime = new TimeSpan(0, 20, 0) // password reset, change email, & change mobile verfication key lifetime
             };
 
-            newInstance.ConfigurePasswordComplexity(7, 3);
+            newInstance.ConfigurePasswordComplexity(minimumLength: 7, minimumNumberOfComplexityRules: 3);
+            
+            newInstance.AddEventHandler(new DebuggerEventHandler<HierarchicalUserAccount>());
 
-            var appinfo = new AuthCentralAppInfo(
-                contextAccessor,
+            return newInstance;
+        }
+
+        private static AuthCentralAppInfo BuildAppInfo(string baseUrl)
+        {
+            return new AuthCentralAppInfo(
+                baseUrl,
                 "FSW Auth Central",
                 "Copyright fsw.com 2015",
                 "UserAccount/Details",
                 "UserAccount/ChangeEmail/Confirm/",
                 "UserAccount/Register/Cancel/",
                 "UserAccount/PasswordReset/Confirm/");
-
-            var emailBodyType = AuthCentralSmtpMessageDelivery.MsgBodyTypes.MultipartAlternativeAsJson;
-            var emailFormatter = new AuthCentralEmailMessageFormatter(appEnv, appinfo, emailBodyType);
-            var smtpMsgDelivery = new AuthCentralSmtpMessageDelivery(config, emailBodyType);
-
-            newInstance.AddEventHandler(new DebuggerEventHandler<HierarchicalUserAccount>());
-            newInstance.AddEventHandler(new AdminEmailEventsHandler(emailFormatter, smtpMsgDelivery));
-
-            return newInstance;
         }
+
     }
 }
+
+

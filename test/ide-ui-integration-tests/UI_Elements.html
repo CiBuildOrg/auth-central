@@ -351,6 +351,102 @@
 	<td>css=button.btn.btn-primary</td>
 	<td>ChangeEmailButton</td>
 </tr>
+<!--Clients Page-->
+<tr>
+	<td>store</td>
+	<td>link=+ Create a New Client</td>
+	<td>CreateClientButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=ClientId</td>
+	<td>Client_Id</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=ClientName</td>
+	<td>Client_Name</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=ClientUri</td>
+	<td>Client_Uri</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=ClientSecrets_0__Value</td>
+	<td>Client_Secret_Value</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=RedirectUris_0</td>
+	<td>Client_RedirectUri</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=PostLogoutRedirectUris_0</td>
+	<td>Client_PostLogoutRedirectUri</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>css=input.btn.btn-success</td>
+	<td>CreateButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>css=input.btn.btn-warning</td>
+	<td>Client_DeleteButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Client Secrets</td>
+	<td>Client_ClientSecretsTab</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Create Secret</td>
+	<td>CreateSecretButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=ClientClaims_0__Type</td>
+	<td>Client_Claim_Type</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=ClientClaims_0__Value</td>
+	<td>Client_Claim_Value</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Claims</td>
+	<td>Client_ClaimsTab</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Create Claim</td>
+	<td>CreateClaimButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//dt[contains(.,'Type')]/following-sibling::dd[contains(.,'${NewClient_Claim_Type}')]/following-sibling::dt[contains(.,'Value')]/following-sibling::dd[contains(.,'${NewClient_Claim_Value}')]/..</td>
+	<td>Client_Claim_InList</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Allowed Scopes</td>
+	<td>Client_AllowedScopesTab</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//input[@value='']</td>
+	<td>Client_Scope_NewScope</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>${Client_Scope_NewScope}/../../following-sibling::div/input[@value='Save']</td>
+	<td>NewClient_SaveButton</td>
+</tr>
 </tbody></table>
 </body>
 </html>

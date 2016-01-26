@@ -41,6 +41,13 @@ namespace Fsw.Enterprise.AuthCentral
             services.AddAuthCentralDependencies(_config);
             services.AddIdentityServer(_config.DB.IdentityServer3);
             services.TryAddTransient<IBuildPaginationLinks, PaginationLinkBuilder>();
+            services.ConfigureRouting( routeOptions => {
+                // All generated URL's should append a trailing slash.
+                routeOptions.AppendTrailingSlash = true;
+
+                // All generated URL's should be lower-case.
+                routeOptions.LowercaseUrls = true;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory, StoreSettings idSvrStoreSettings)
@@ -68,7 +75,7 @@ namespace Fsw.Enterprise.AuthCentral
             {
                 ids.UseIdentityServer(env, _config, idSvrStoreSettings);
             });
-            
+
             app.UseMvc();
         }
     }

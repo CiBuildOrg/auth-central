@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="/assets/vendor.css">
     <link rel="stylesheet" href="/assets/main.css">
     <!-- endbuild -->
+
+
 </head>
 
 <body lang="en">
@@ -20,7 +22,7 @@
             </div>
         </div>
 
-        <div class="row page-header">
+        <div class="row">
             <div class="col-xs-12 text-center">
                 <h1>Client Application Permissions</h1>
             </div>
@@ -47,28 +49,30 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="permissions">
-                            <div ng-repeat="client in model.clients" class="row">
-                                <div class="col-xs-12 col-sm-8">
-                                    <div>{{client.clientName}}</div>
-                                    <div ng-show="client.identityPermissions">
-                                        <div>Identity Permissions</div>
-                                        <ul>
-                                            <li ng-repeat="permission in client.identityPermissions" ng-bind="permission.displayName"></li>
-                                        </ul>
+                            <div ng-repeat="client in model.clients" class="panel panel-default revoke-group">
+                                <div class="panel-body">
+                                    <div>
+                                        <div>{{client.clientName}}</div>
+                                        <div ng-show="client.identityPermissions">
+                                            <div>Identity Permissions</div>
+                                            <ul>
+                                                <li ng-repeat="permission in client.identityPermissions" ng-bind="permission.displayName"></li>
+                                            </ul>
+                                        </div>
+                                        <div ng-show="client.resourcePermissions">
+                                            <div>Resource Permissions</div>
+                                            <ul>
+                                                <li ng-repeat="permission in client.resourcePermissions" ng-bind="permission.displayName"></li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <div ng-show="client.resourcePermissions">
-                                        <div>Resource Permissions</div>
-                                        <ul>
-                                            <li ng-repeat="permission in client.resourcePermissions" ng-bind="permission.displayName"></li>
-                                        </ul>
+                                    <div class="text-center">
+                                        <form name="form" method="post" action="{{model.revokePermissionUrl}}" class="consent-form">
+                                            <anti-forgery-token token="model.antiForgery"></anti-forgery-token>
+                                            <input type="hidden" name="clientId" value="{{client.clientId}}">
+                                            <button class="btn btn-danger">Revoke Access</button>
+                                        </form>
                                     </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4">
-                                    <form name="form" method="post" action="{{model.revokePermissionUrl}}" class="consent-form">
-                                        <anti-forgery-token token="model.antiForgery"></anti-forgery-token>
-                                        <input type="hidden" name="clientId" value="{{client.clientId}}">
-                                        <button class="btn btn-danger">Revoke Access</button>
-                                    </form>
                                 </div>
                             </div>
                         </div>

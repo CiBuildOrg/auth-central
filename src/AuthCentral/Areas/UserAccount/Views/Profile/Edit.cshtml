@@ -62,7 +62,7 @@
 
                 @* Turn this off if the user has already verified their account *@
                 <div class="alert alert-info">
-                    Please <strong><a href="/UserAccount/Register/Verify">confirm your email address</a></strong>. Confirmation is required before you will be able to make any further changes to your account.
+                    Please <strong>@Html.ActionLink("confirm your email address", "Verify", "Register", new { area = "UserAccount" }, null)</strong>. Confirmation is required before you will be able to make any further changes to your account.
                 </div>
             </div>
         </div>

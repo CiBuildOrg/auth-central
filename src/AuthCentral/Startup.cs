@@ -46,7 +46,7 @@ namespace Fsw.Enterprise.AuthCentral
             services.TryAddTransient<IBuildPaginationLinks, PaginationLinkBuilder>();
         }
 
-        public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory, StoreSettings idSvrStoreSettings)
+        public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory, IHttpContextAccessor contextAccessor, StoreSettings idSvrStoreSettings)
         {
             app.ConfigureLoggers(logFactory, _config.IsDebug);
             logFactory.AddSerilog();

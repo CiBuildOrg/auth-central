@@ -18,7 +18,12 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>${Header_ChangeEmail}</td>
+	<td>${Header_AccountDetails}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>${AccountDetails_Email_Edit}</td>
 	<td></td>
 </tr>
 <tr>
@@ -28,13 +33,13 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>${ChangeEmailButton}</td>
+	<td>${ChangeEmail_SaveButton}</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertText</td>
 	<td>${PageBody}</td>
-	<td>*Change Email Success*</td>
+	<td>*Email Successfully Changed*</td>
 </tr>
 <tr>
 	<td>store</td>
@@ -46,7 +51,6 @@
 	<td>javascript{var dates = new Date();var minutes = dates.getMinutes() + 1; var hours = dates.getHours();if (minutes &gt; 59){hours = hours + 1;minutes = minutes - 60;} if (minutes &lt; 10){minutes = '0' + minutes;} hours + ':' + minutes;}</td>
 	<td>OneMinuteFromNow</td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

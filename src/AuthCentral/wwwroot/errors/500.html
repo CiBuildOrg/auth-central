@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>{siteName}</title>
+    <title>500 Error</title>
 
     <!-- build:css -->
     <link rel="stylesheet" href="/assets/vendor.css">
@@ -24,10 +24,12 @@
 
         <div class="row" ng-cloak>
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 text-center">
-                <h1>You are now logged out</h1>
-                <div ng-show="model.redirectUrl">
-                    Click <a ng-href="{{model.redirectUrl}}">here</a> to return to the
-                    <span ng-bind="model.clientName"></span> application.
+                <h1>500 Error</h1>
+                <div class="panel panel-defaul">
+                	<div class="panel-body">
+                		<p class="text-fsw">Sorry. Something seems to have gone wrong. Please go back and try again.</p>
+                		<a href="/">Return to Auth Central</a>
+                	</div>
                 </div>
                 <!-- Not sure what this is
                 <iframe class="signout" ng-repeat="url in model.iFrameUrls" ng-src="{{url}}"></iframe> -->
@@ -49,4 +51,3 @@
 </body>
 
 </html>
-

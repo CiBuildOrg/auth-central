@@ -1,6 +1,8 @@
-// Login Styles
+// Login/Logout Styles
 
-.login {
+.login,
+.logout,
+.permissions {
 
 	.fsw-logo {
 		width: 175px;
@@ -19,6 +21,22 @@
 
 		.fsw-logo {
 			margin: $margin-large-vertical*7 auto $margin-large-vertical*3;
+		}
+
+	}
+
+}
+
+.permissions {
+
+	ul {
+		margin-bottom: 0;
+	}
+
+	.revoke-group {
+
+		button {
+			margin-top: $margin-large-vertical*2;
 		}
 
 	}

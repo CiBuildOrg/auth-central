@@ -1,11 +1,53 @@
 ﻿<!DOCTYPE html>
-<html>
+<html ng-app="app" ng-controller="LayoutCtrl">
+
 <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>404 Not Found</title>
+
+    <!-- build:css -->
+    <link rel="stylesheet" href="/assets/vendor.css">
+    <link rel="stylesheet" href="/assets/main.css">
+    <!-- endbuild -->
+
 </head>
-<body>
-    <h1>Not Found</h1>
-    This is a FSW custom error page for 404 errors. These can happen if someone requests a resource (URL) that doesn't exist.
+
+<body lang="en">
+
+    <div class="container logout">
+
+        <div class="row">
+            <div  class="col-xs-12 text-center">
+                <img title="FSW" src="https://fsw-res.cloudinary.com/image/upload/v1452553297/logos/fsw-logo.svg" alt="FSW" class="fsw-logo">
+            </div>
+        </div>
+
+        <div class="row" ng-cloak>
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 text-center">
+                <h1>404 Not Found</h1>
+                <div class="panel panel-defaul">
+                	<div class="panel-body">
+                		<p class="text-fsw">The page your were looking for doesn’t exist.</p>
+                		<a href="/">Return to Auth Central</a>
+                	</div>
+                </div>
+                <!-- Not sure what this is
+                <iframe class="signout" ng-repeat="url in model.iFrameUrls" ng-src="{{url}}"></iframe> -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripty Things -->
+    <script id='modelJson' type='application/json'>
+        {model}
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
+    <script src="/libs/encoder/encoder.min.js"></script>
+    <script src="/idsrvr.js"></script>
+
 </body>
+
 </html>

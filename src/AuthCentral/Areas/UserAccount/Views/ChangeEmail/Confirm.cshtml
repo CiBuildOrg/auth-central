@@ -5,35 +5,43 @@
     ViewBag.Title = "Confirm Email";
 }
 
-<div class="container">
-    <div class="page-header">
-        <h2>@ViewBag.Title</h2>
+<div class="row">
+    <div class="col-xs-12 text-center">
+        <h1>Confirm Email Address</h1>
     </div>
 </div>
 
-<div class="container page-login">
-    <div class="row">
-        <div class="col-md-6 col-sm-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">@ViewBag.Title</h3>
-                </div>
-                <div class="panel-body">
-                    @using (Html.BeginForm("Confirm", "ChangeEmail", null, FormMethod.Post, null))
-                    {
-                        @Html.ValidationSummary("Error")
-                        @Html.AntiForgeryToken()
+<div class="row email-confirm">
+    <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
 
-                        <fieldset>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Confirm", "ChangeEmail", null, FormMethod.Post, null))
+                        {
+                        if (!Html.ViewData.ModelState.IsValid)
+                        {
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="alert alert-danger">
+                                    @Html.ValidationSummary("Please correct the following errors")
+                                </div>
+                            </div>
+                        </div>
+                        }
+                        @Html.AntiForgeryToken()
+                        <p>Please enter the password associated with your account to confirm your email address. Confirmation is required before you will be able to make any further changes to your account.</p>
+                        <fieldset class="text-center">
                             @Html.EditorForModel()
 
-                            <div class="form-group">
-                                <button class="btn btn-primary">Confirm Email</button>
-                            </div>
+                            <button class="btn btn-primary">Confirm Email</button>
                         </fieldset>
-                    }
+                        }
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </div>

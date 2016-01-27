@@ -12,112 +12,103 @@
 
 
 </head>
-<body lang="en">
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-header">
-            <span class="navbar-brand">{siteName}</span>
-        </div>
-        <ul class="nav navbar-nav" ng-show="model.currentUser" ng-cloak>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{model.currentUser}} <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li><a href="{{model.logoutUrl}}">Logout</a></li>
-                    <li class="divider" ng-show="model.loginWithDifferentAccountUrl"></li>
-                    <li><a href="{{model.loginWithDifferentAccountUrl}}" ng-show="model.loginWithDifferentAccountUrl">Login With Different Account</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
 
-        <div class="container">
-            <div class="page-header">
-                <h1>This is a custom view</h1>
+<body lang="en">
+
+    <div class='container permissions' ng-cloak>
+
+        <div class="row">
+            <div  class="col-xs-12 text-center">
+                <img title="FSW" src="https://fsw-res.cloudinary.com/image/upload/v1452553297/logos/fsw-logo.svg" alt="FSW" class="fsw-logo">
             </div>
         </div>
 
-    <div class='container page-consent' ng-cloak>
-        <div class="row page-header">
-            <div class="col-sm-10">
-                <div class="client-logo" ng-show="model.clientLogoUrl"><img ng-src="{{model.clientLogoUrl}}"></div>
+        <div class="row">
+            <div class="col-xs-12 text-center">
                 <h1>
                     {{model.clientName}}
-                    <small>is requesting your permission</small>
+                    <small>is Requesting Your Permission</small>
                 </h1>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+
                 <div ng-show="model.errorMessage" class="alert alert-danger">
                     <strong>Error:</strong>
                     {{model.errorMessage}}
                 </div>
-                <form name="form" method="post" action="{{model.consentUrl}}" class="consent-form">
+
+                <form name="form" method="post" action="{{model.consentUrl}}">
                     <anti-forgery-token token="model.antiForgery"></anti-forgery-token>
 
-                    <div>Uncheck the permissions you do not wish to grant.</div>
+                    <p class="text-fsw text-center">Uncheck the permissions you do not wish to grant.</p>
 
-                    <div class="panel panel-default consent-buttons" ng-show="model.identityScopes">
+                    <div class="panel panel-default" ng-show="model.identityScopes">
                         <div class="panel-heading">
-                            <span class="glyphicon glyphicon-user"></span>
+                            <span class="fa fa-user"></span>
                             Personal Information
                         </div>
-                        <ul class="list-group">
-                            <li ng-repeat="scope in model.identityScopes" class="list-group-item">
-                                <label>
-                                    <input class="consent-scopecheck" type="checkbox" name="scopes" id="scopes_{{scope.name}}" value="{{scope.name}}" ng-model="scope.selected" ng-disabled="scope.required" />
-                                    <strong>{{scope.displayName}}</strong>
-                                    <span ng-show="scope.emphasize" class="glyphicon glyphicon-exclamation-sign"></span>
-                                </label>
-                                <span ng-show="scope.required"><em>(required)</em></span>
-                                <div class="consent-description" ng-show="scope.description">
-                                    <label for="scopes_{{scope.name}}">{{scope.description}}</label>
-                                </div>
-                            </li>
-                        </ul>
+                        <div class="panel-body">
+                            <ul class="list-group">
+                                <li ng-repeat="scope in model.identityScopes" class="list-group-item">
+                                    <label>
+                                        <input class="consent-scopecheck" type="checkbox" name="scopes" id="scopes_{{scope.name}}" value="{{scope.name}}" ng-model="scope.selected" ng-disabled="scope.required" />
+                                        {{scope.displayName}}
+                                        <span ng-show="scope.required"><em>(required)</em></span>
+                                    </label>
+                                    <div ng-show="scope.description">
+                                        <label for="scopes_{{scope.name}}">{{scope.description}}</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
                     <div class="panel panel-default" ng-show="model.resourceScopes">
                         <div class="panel-heading">
-                            <span class="glyphicon glyphicon-tasks"></span>
+                            <span class="fa fa-key"></span>
                             Application Access
                         </div>
                         <ul class="list-group">
                             <li ng-repeat="scope in model.resourceScopes" class="list-group-item">
                                 <label>
-                                    <input class="consent-scopecheck" type="checkbox" name="scopes" value="{{scope.name}}" ng-model="scope.selected" ng-disabled="scope.required" />
-                                    <strong>{{scope.displayName}}</strong>
-                                    <span ng-show="scope.emphasize" class="glyphicon glyphicon-exclamation-sign"></span>
-                                </label>
-                                <span ng-show="scope.required"><em>(required)</em></span>
-                                <div class="consent-description" ng-show="scope.description">
+                                    <input type="checkbox" name="scopes" value="{{scope.name}}" ng-model="scope.selected" ng-disabled="scope.required" />
+                                    {{scope.displayName}}
                                     <span ng-show="scope.required"><em>(required)</em></span>
+                                </label>
+                                <div ng-show="scope.description">
                                     <label for="scopes_{{scope.name}}">{{scope.description}}</label>
                                 </div>
                             </li>
                         </ul>
                     </div>
 
-                    <div class="consent-remember" ng-show="model.allowRememberConsent">
+                    <div ng-show="model.allowRememberConsent">
                         <label>
                             <input class="consent-scopecheck" type="checkbox" name="RememberConsent" value="true" ng-model="model.rememberConsent" />
-                            <strong>Remember My Decision</strong>
+                            Remember My Decision
                         </label>
                     </div>
 
-                    <div class="consent-buttons">
+                    <div>
                         <button name="button" value="yes" class="btn btn-primary" autofocus>Yes, Allow</button>
                         <button name="button" value="no" class="btn">No, Do Not Allow</button>
-                        <a class="pull-right btn btn-default" target="_blank" ng-show="model.clientUrl" ng-href="{{model.clientUrl}}">
-                            <span class="glyphicon glyphicon-info-sign"></span>
-                            <strong>{{model.clientName}}</strong>
+                        <a class="pull-right btn btn-info what-is" target="_blank" ng-show="model.clientUrl" ng-href="{{model.clientUrl}}">
+                            <span class="fa fa-question"></span>
+                            {{model.clientName}}
                         </a>
                     </div>
+
                 </form>
+
             </div>
         </div>
+
     </div>
 
+    <!-- Scripty Things -->
     <script id='modelJson' type='application/json'>
         {model}
     </script>
@@ -126,5 +117,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
     <script src="/libs/encoder/encoder.min.js"></script>
     <script src="/idsrvr.js"></script>
+
 </body>
+
 </html>

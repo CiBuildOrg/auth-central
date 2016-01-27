@@ -2,9 +2,9 @@
 //
 //## Gray and brand colors for use across Bootstrap.
 
-$gray:                   lighten($gray-base, 34.5%) !default; // #555
-$gray-light:             lighten($gray-base, 45.7%) !default; // #777
-$gray-lighter:           lighten($gray-base, 83.5%) !default; // #ddd
+$gray:                   lighten($gray-base, 34.5%); // #555
+$gray-light:             lighten($gray-base, 45.7%); // #777
+$gray-lighter:           lighten($gray-base, 83.5%); // #ddd
 
 $brand-fsw:              #ff8200; // FSW Orange (mj)
 $brand-primary:          #0085b2; // FSW Blue
@@ -107,10 +107,20 @@ $input-border-focus:             $brand-primary;
 //## Define colors for form feedback states and, by default, alerts.
 
 $state-success-text:             darken($brand-success, 5%);
+$state-success-bg:               #d4fffe;
+$state-success-border:           darken(adjust-hue($state-success-bg, -10), 5%);
+
+$state-info-text:                #31708f;
+$state-info-bg:                  #d9edf7;
+$state-info-border:              darken(adjust-hue($state-info-bg, -10), 7%);
 
 $state-primary-text:             $brand-primary;
 $state-primary-bg:               #cef3ff;
 $state-primary-border:           darken(adjust-hue($state-primary-bg, -5), 20%);
+
+$state-warning-text:             #8a6d3b;
+$state-warning-bg:               #fcf8e3;
+$state-warning-border:           darken(adjust-hue($state-warning-bg, -10), 5%);
 
 $state-fsw-text:                 darken(adjust-hue($brand-fsw, -5), 5%);
 $state-fsw-bg:                   #ffe9d2;
@@ -118,3 +128,37 @@ $state-fsw-border:               darken(adjust-hue($state-fsw-bg, -10), 5%);
 
 $state-danger-text:              $brand-danger;
 $state-danger-bg:                #ffdde0;
+$state-danger-border:            darken(adjust-hue($state-danger-bg, -10), 5%);
+
+
+//== Alerts
+//
+//## Define alert colors, border radius, and padding.
+
+$alert-padding:               15px;
+$alert-border-radius:         $border-radius-base;
+$alert-link-font-weight:      bold;
+
+$alert-success-bg:            $state-success-bg;
+$alert-success-text:          $state-success-text;
+$alert-success-border:        $state-success-border;
+
+$alert-info-bg:               $state-info-bg;
+$alert-info-text:             $state-info-text;
+$alert-info-border:           $state-info-border;
+
+$alert-primary-bg:            $state-primary-bg;
+$alert-primary-text:          $state-primary-text;
+$alert-primary-border:        $state-primary-border;
+
+$alert-warning-bg:            $state-warning-bg;
+$alert-warning-text:          $state-warning-text;
+$alert-warning-border:        $state-warning-border;
+
+$alert-fsw-bg:                $state-fsw-bg;
+$alert-fsw-text:              $state-fsw-text;
+$alert-fsw-border:            $state-fsw-border;
+
+$alert-danger-bg:             $state-danger-bg;
+$alert-danger-text:           $state-danger-text;
+$alert-danger-border:         $state-danger-border;

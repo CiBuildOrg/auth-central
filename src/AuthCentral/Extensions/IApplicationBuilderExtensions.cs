@@ -153,19 +153,29 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
                         var idToken = new JwtSecurityToken(context.TokenEndpointResponse.IdToken);
                         var token = new JwtSecurityToken(context.TokenEndpointResponse.AccessToken);
+
+                        // get resource claims from auth token
                         IEnumerable<Claim> claims = token.Claims.Where(c => c.Type != "iss" &&
                                                                             c.Type != "aud" &&
                                                                             c.Type != "nbf" &&
                                                                             c.Type != "exp" &&
                                                                             c.Type != "iat" &&
+                                                                            c.Type != "amr" &&
+                                                                            c.Type != "jti" &&
                                                                             c.Type != "nonce" &&
                                                                             c.Type != "c_hash" &&
                                                                             c.Type != "at_hash");
 
+                        // get identity claims from identity token
                         claims = claims.Concat(idToken.Claims.Where(c =>    c.Type != "iss" &&
                                                                             c.Type != "aud" &&
                                                                             c.Type != "nbf" &&
                                                                             c.Type != "exp" &&
+                                                                            c.Type != "jti" &&
+                                                                            c.Type != "amr" &&
+                                                                            c.Type != "sub" &&
+                                                                            c.Type != "idp" &&
+                                                                            c.Type != "auth_time" &&
                                                                             c.Type != "iat" &&
                                                                             c.Type != "nonce" &&
                                                                             c.Type != "c_hash" &&

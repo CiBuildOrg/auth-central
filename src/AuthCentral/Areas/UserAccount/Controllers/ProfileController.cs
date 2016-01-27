@@ -10,6 +10,7 @@ using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
 using Fsw.Enterprise.AuthCentral.Extensions;
 using System.Security.Authentication;
 using System.ComponentModel.DataAnnotations;
+using Fsw.Enterprise.AuthCentral.IdMgr;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,9 +23,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
         private UserAccountService<HierarchicalUserAccount> _userAccountService;
         private AuthenticationService<HierarchicalUserAccount> _authSvc;
 
-        public ProfileController(UserAccountService<HierarchicalUserAccount> accountSvc, AuthenticationService<HierarchicalUserAccount> authSvc)
+        public ProfileController(DefaultUserAccountServiceContainer container, AuthenticationService<HierarchicalUserAccount> authSvc)
         {
-            this._userAccountService = accountSvc;
+            this._userAccountService = container.Service;
             this._authSvc = authSvc;
         }
 

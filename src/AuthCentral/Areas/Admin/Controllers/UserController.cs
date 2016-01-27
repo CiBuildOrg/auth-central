@@ -31,11 +31,11 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         IBulkUserRepository<HierarchicalUserAccount> _repository;
 
         public UserController(EnvConfig cfg, 
-            UserAccountService<HierarchicalUserAccount> userSvc,
+            AdminUserAccountServiceContainer container,
             IBulkUserRepository<HierarchicalUserAccount> repository)
         {
             this._cfg = cfg;
-            this._userAccountService = userSvc;
+            this._userAccountService = container.Service;
             this._repository = repository;
         }
 

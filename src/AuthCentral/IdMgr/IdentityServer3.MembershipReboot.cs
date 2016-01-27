@@ -27,29 +27,30 @@ using IdentityServer3.Core.Extensions;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
 using IdentityServer3.Core.Services.Default;
+using BrockAllen.MembershipReboot.Hierarchical;
+using Fsw.Enterprise.AuthCentral.IdMgr;
 
 namespace IdentityServer3.MembershipReboot
 {
-    public class MembershipRebootUserService<TAccount> : UserServiceBase
-        where TAccount : UserAccount
+    public class MembershipRebootUserService : UserServiceBase
     {
         public string DisplayNameClaimType { get; set; }
 
-        protected readonly UserAccountService<TAccount> userAccountService;
+        protected readonly UserAccountService<HierarchicalUserAccount> userAccountService;
         
-        public MembershipRebootUserService(UserAccountService<TAccount> userAccountService)
+        public MembershipRebootUserService(DefaultUserAccountServiceContainer container)
         {
-            if (userAccountService == null) throw new ArgumentNullException("userAccountService");
+            if (container == null) throw new ArgumentNullException("container");
 
-            this.userAccountService = userAccountService;
+            this.userAccountService = container.Service;
         }
 
         public override Task GetProfileDataAsync(ProfileDataRequestContext ctx)
         {
-            var subject = ctx.Subject;
-            var requestedClaimTypes = ctx.RequestedClaimTypes;
+            ClaimsPrincipal subject = ctx.Subject;
+            IEnumerable<string> requestedClaimTypes = ctx.RequestedClaimTypes;
 
-            var acct = userAccountService.GetByID(subject.GetSubjectId().ToGuid());
+            HierarchicalUserAccount acct = userAccountService.GetByID(subject.GetSubjectId().ToGuid());
             if (acct == null)
             {
                 throw new ArgumentException("Invalid subject identifier");
@@ -66,7 +67,7 @@ namespace IdentityServer3.MembershipReboot
             return Task.FromResult(0);
         }
 
-        protected virtual IEnumerable<Claim> GetClaimsFromAccount(TAccount account)
+        protected virtual IEnumerable<Claim> GetClaimsFromAccount(HierarchicalUserAccount account)
         {
             var claims = new List<Claim>{
                 new Claim(Constants.ClaimTypes.Subject, GetSubjectForAccount(account)),
@@ -93,7 +94,7 @@ namespace IdentityServer3.MembershipReboot
             return claims;
         }
 
-        protected virtual string GetSubjectForAccount(TAccount account)
+        protected virtual string GetSubjectForAccount(HierarchicalUserAccount account)
         {
             return account.ID.ToString("D");
         }
@@ -114,7 +115,7 @@ namespace IdentityServer3.MembershipReboot
                 ?? acct.Username;
         }
 
-        protected virtual Task<IEnumerable<Claim>> GetClaimsForAuthenticateResultAsync(TAccount account)
+        protected virtual Task<IEnumerable<Claim>> GetClaimsForAuthenticateResultAsync(HierarchicalUserAccount account)
         {
             return Task.FromResult((IEnumerable<Claim>)null);
         }
@@ -129,7 +130,7 @@ namespace IdentityServer3.MembershipReboot
 
             try
             {
-                TAccount account;
+                HierarchicalUserAccount account;
                 if (ValidateLocalCredentials(username, password, message, out account))
                 {
                     result = await PostAuthenticateLocalAsync(account, message);
@@ -165,7 +166,7 @@ namespace IdentityServer3.MembershipReboot
             ctx.AuthenticateResult = result;
         }
 
-        protected virtual Task<AuthenticateResult> PostAuthenticateLocalAsync(TAccount account, SignInMessage message)
+        protected virtual Task<AuthenticateResult> PostAuthenticateLocalAsync(HierarchicalUserAccount account, SignInMessage message)
         {
             return Task.FromResult<AuthenticateResult>(null);
         }
@@ -181,7 +182,7 @@ namespace IdentityServer3.MembershipReboot
         /// <param name="account">If credentials are valid, returns the user's account.</param>
         /// <returns><c>true</c> if the user's credentials are valid for their tenant; otherwise <c>false</c></returns>
         protected virtual bool ValidateLocalCredentials(string username, string password, SignInMessage message,
-            out TAccount account)
+            out HierarchicalUserAccount account)
         {
             string tenant = string.IsNullOrWhiteSpace(message.Tenant)
                 ? userAccountService.Configuration.DefaultTenant
@@ -244,15 +245,15 @@ namespace IdentityServer3.MembershipReboot
             return await SignInFromExternalProviderAsync(user.ID, provider);
         }
 
-        protected virtual Task<TAccount> TryGetExistingUserFromExternalProviderClaimsAsync(string provider, IEnumerable<Claim> claims)
+        protected virtual Task<HierarchicalUserAccount> TryGetExistingUserFromExternalProviderClaimsAsync(string provider, IEnumerable<Claim> claims)
         {
-            return Task.FromResult<TAccount>(null);
+            return Task.FromResult<HierarchicalUserAccount>(null);
         }
 
-        protected virtual Task<TAccount> InstantiateNewAccountFromExternalProviderAsync(string provider, string providerId, IEnumerable<Claim> claims)
+        protected virtual Task<HierarchicalUserAccount> InstantiateNewAccountFromExternalProviderAsync(string provider, string providerId, IEnumerable<Claim> claims)
         {
             // we'll let the default creation happen, but can override to initialize properties if needed
-            return Task.FromResult<TAccount>(null);
+            return Task.FromResult<HierarchicalUserAccount>(null);
         }
 
         protected virtual async Task<AuthenticateResult> AccountCreatedFromExternalProviderAsync(Guid accountID, string provider, string providerId, IEnumerable<Claim> claims)

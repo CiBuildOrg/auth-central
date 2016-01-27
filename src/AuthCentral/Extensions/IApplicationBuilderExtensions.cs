@@ -28,6 +28,8 @@ using CookieOptions = IdentityServer3.Core.Configuration.CookieOptions;
 
 namespace Fsw.Enterprise.AuthCentral.Extensions
 {
+    using BrockAllen.MembershipReboot;
+    using IdMgr;
     using Microsoft.Extensions.PlatformAbstractions;
     using DataProtectionProviderDelegate = Func<string[], Tuple<Func<byte[], byte[]>, Func<byte[], byte[]>>>;
     using DataProtectionTuple = Tuple<Func<byte[], byte[]>, Func<byte[], byte[]>>;
@@ -36,7 +38,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
     {
         public static void UseIdentityServer(this IApplicationBuilder app, IApplicationEnvironment env, EnvConfig config, StoreSettings idSvrStoreSettings)
         {
-            var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
+            var usrSrv = new Registration<IUserService, MembershipRebootUserService>();
             var idSvcFactory = new ServiceFactory(usrSrv, idSvrStoreSettings)
             {
                 ViewService = new Registration<IViewService>(typeof(CustomViewService))
@@ -44,6 +46,16 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
             idSvcFactory.ConfigureCustomUserService(config.DB.MembershipReboot, env, config);
             idSvcFactory.Register(new Registration<IApplicationEnvironment>(env));
+            idSvcFactory.Register(
+                new Registration<DefaultUserAccountServiceContainer>(resolver =>
+                    new DefaultUserAccountServiceContainer
+                    {
+                        Service = new UserAccountService<HierarchicalUserAccount>(
+                            MembershipRebootConfigFactory.GetDefaultConfig(env, config),
+                            resolver.Resolve<IUserAccountRepository<HierarchicalUserAccount>>())
+                    }
+                )
+            );
 
             var options = new IdentityServerOptions
             {

@@ -59,21 +59,27 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
         public static void AddMembershipReboot(this IServiceCollection services, EnvConfig config)
         {
-            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider =>
+            // any middleware or component that uses DI to inject an instance of UserAccountService<HierarchicalUserAccount>
+            // should instead depend on either AdminUserAccountServiceContainer, or DefaultUserAccountServiceContainer
+            services.AddScoped(provider =>
             {
-                var contextAccessor = provider.GetService<IHttpContextAccessor>();
-                ClaimsPrincipal principal = contextAccessor.HttpContext.User;
-                if(principal.Claims.GetValue("fsw:authcentral:admin") == "true")
+                MembershipRebootSetup setup = MembershipRebootConfigFactory.GetAdminConfig(provider.GetService<IApplicationEnvironment>(), config);
+                var repository = provider.GetRequiredService<IUserAccountRepository<HierarchicalUserAccount>>();
+                return new AdminUserAccountServiceContainer
                 {
-                    return MembershipRebootConfigFactory.GetAdminConfig(provider.GetService<IApplicationEnvironment>(), config);
-                }
-                else
-                {
-                    return MembershipRebootConfigFactory.GetDefaultConfig(provider.GetService<IApplicationEnvironment>(), config);
-                }
+                    Service = new UserAccountService<HierarchicalUserAccount>(setup, repository)
+                };
             });
 
-            services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
+            services.AddScoped(provider =>
+            {
+                MembershipRebootSetup setup = MembershipRebootConfigFactory.GetDefaultConfig(provider.GetService<IApplicationEnvironment>(), config);
+                var repository = provider.GetRequiredService<IUserAccountRepository<HierarchicalUserAccount>>();
+                return new DefaultUserAccountServiceContainer
+                {
+                    Service = new UserAccountService<HierarchicalUserAccount>(setup, repository)
+                };
+            });
 
             services.AddScoped(typeof(IUserAccountRepository<HierarchicalUserAccount>), typeof(MongoUserAccountRepository<HierarchicalUserAccount>));
             services.AddScoped<IBulkUserRepository<HierarchicalUserAccount>, MongoUserAccountRepository<HierarchicalUserAccount>>();

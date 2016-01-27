@@ -50,10 +50,10 @@
           "npm install"
       ],
       "prebuild": [
-          "gulp build"
+          "node ./node_modules/bin/gulp.js build"
       ],
       "prepack": [
-          "gulp build"
+          "node ./node_modules/bin/gulp.js build"
       ]
   },
 

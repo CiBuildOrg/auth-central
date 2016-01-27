@@ -121,10 +121,10 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 baseUrl,
                 "FSW Auth Central",
                 "Copyright fsw.com 2015",
-                "UserAccount/Details",
-                "UserAccount/ChangeEmail/Confirm/",
-                "UserAccount/Register/Cancel/",
-                "UserAccount/PasswordReset/Confirm/");
+                "useraccount/details",
+                "useraccount/changeemail/confirm/",
+                "useraccount/register/cancel/",
+                "useraccount/passwordreset/confirm/");
         }
 
     }

@@ -48,7 +48,6 @@
   "scripts": {
       "postrestore": [
           "npm install"
-          ,"npm install -g gulp"
       ],
       "prebuild": [
           "gulp build"

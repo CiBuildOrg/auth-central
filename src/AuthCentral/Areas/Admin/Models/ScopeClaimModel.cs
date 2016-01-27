@@ -46,12 +46,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
         /// <summary>
         /// Name of the scope so that it can be used in javascript.
         /// </summary>
-        public string SafeScopeName => ScopeName.Replace(':', '_');
+        public string SafeScopeName => ScopeName.Replace(':', '_').Replace('-', '_');
 
         /// <summary>
         /// Name of the claim so that it can be used in javascript.
         /// </summary>
-        public string SafeName => Name.Replace(':', '_');
+        public string SafeName => Name.Replace(':', '_').Replace('-', '_');
 
         /// <summary>
         /// Name of the claim.

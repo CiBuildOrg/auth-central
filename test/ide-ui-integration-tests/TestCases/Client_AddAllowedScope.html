@@ -4,38 +4,29 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="https://secure.dev-fsw.com/" />
-<title>Client_AssertCorrectAllowedScopes</title>
+<title>Client_AddAllowedScope</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Client_AssertCorrectAllowedScopes</td></tr>
+<tr><td rowspan="1" colspan="3">Client_AddAllowedScope</td></tr>
 </thead><tbody>
 <tr>
+	<td>type</td>
+	<td>${Client_Scope_NewScope}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Client_Scope_NewScope}</td>
+	<td>${NewClient_Scope}</td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
-	<td>${Client_AllowedScopesTab}</td>
+	<td>${NewClient_SaveButton}</td>
 	<td></td>
 </tr>
-<tr>
-	<td>assertElementPresent</td>
-	<td>//input[@value='openid']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertElementPresent</td>
-	<td>//input[@value='profile']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertElementPresent</td>
-	<td>//input[@value='offline_access']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertElementPresent</td>
-	<td>//input[@value='fsw_platform']</td>
-	<td></td>
-</tr>
+
 </tbody></table>
 </body>
 </html>

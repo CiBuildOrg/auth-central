@@ -439,8 +439,13 @@
 </tr>
 <tr>
 	<td>store</td>
-	<td>//input[@value='']</td>
+	<td>//input[@value=''][not(contains(@id,'original'))]</td>
 	<td>Client_Scope_NewScope</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//input[@value='${NewClient_Scope}'][contains(@id,'original')]</td>
+	<td>Client_Scope_NewScope_Saved</td>
 </tr>
 <tr>
 	<td>store</td>

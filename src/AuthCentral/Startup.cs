@@ -13,7 +13,6 @@ using Microsoft.Extensions.PlatformAbstractions;
 
 using Fsw.Enterprise.AuthCentral.Extensions;
 using Fsw.Enterprise.AuthCentral.Health;
-using Fsw.Enterprise.AuthCentral.IdMgr;
 using Fsw.Enterprise.AuthCentral.MongoStore;
 
 namespace Fsw.Enterprise.AuthCentral
@@ -30,12 +29,10 @@ namespace Fsw.Enterprise.AuthCentral
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
             _config = new EnvConfig(Configuration);
-            _appEnv = appEnv;
         }
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddInstance(_appEnv);
             services.AddSerilog(_config.IsDebug);
             services.AddDataProtection();
             services.AddMvc();
@@ -53,7 +50,7 @@ namespace Fsw.Enterprise.AuthCentral
             });
         }
 
-        public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory, IHttpContextAccessor contextAccessor, StoreSettings idSvrStoreSettings)
+        public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory, StoreSettings idSvrStoreSettings)
         {
             app.ConfigureLoggers(logFactory, _config.IsDebug);
             logFactory.AddSerilog();

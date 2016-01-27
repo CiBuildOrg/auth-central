@@ -8,7 +8,7 @@ using Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers;
 namespace Fsw.Enterprise.AuthCentral.IdMgr
 {
     /// <summary>
-    /// Factory for creating new Admin-tool <see cref="MembershipRebootConfiguration{HierarchicalUserAccount}"/> objects.
+    /// Factory for creating new <see cref="MembershipRebootConfiguration{HierarchicalUserAccount}"/> objects.
     /// </summary>
     public static class MembershipRebootConfigFactory
     {

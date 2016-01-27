@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using IdentityServer3.Core.Models;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Security.Application;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
 {
@@ -46,12 +47,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
         /// <summary>
         /// Name of the scope so that it can be used in javascript.
         /// </summary>
-        public string SafeScopeName => ScopeName.Replace(':', '_').Replace('-', '_');
+        public string SafeScopeName => Encoder.HtmlAttributeEncode(ScopeName);
 
         /// <summary>
         /// Name of the claim so that it can be used in javascript.
         /// </summary>
-        public string SafeName => Name.Replace(':', '_').Replace('-', '_');
+        public string SafeName => Encoder.HtmlAttributeEncode(Name);
 
         /// <summary>
         /// Name of the claim.

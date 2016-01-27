@@ -24,6 +24,7 @@
         <!-- endbuild -->
 
 
+
     </head>
 
     <body>
@@ -54,7 +55,7 @@
                             <li>@Html.ActionLink("Account Details", "Edit", "Profile", new { area = "UserAccount" }, null)</li>
                             <li><a href="/auth/permissions" target="_blank">Application Permissions</a></li>
 
-                            @if(!User.HasClaim("email_verified") || User.Claims.First(claim => claim.Type == "email_verified").Value != "true")
+                            @if(!User.HasClaim("email_verified", "true"))
                             {
                             	<li>@Html.ActionLink("Confirm Your Email Account", "Verify", "Register", new { area = "UserAccount" }, null)</li>
                             }

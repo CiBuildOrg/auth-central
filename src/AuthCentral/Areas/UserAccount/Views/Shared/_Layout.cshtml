@@ -44,25 +44,21 @@
                         <ul class="dropdown-menu">
                             @if (isAdmin)
                             {
-                            <li>@Html.ActionLink("Clients", "Index", "Client", new { area = "Admin" }, null)</li>
-                            <li>@Html.ActionLink("Scopes", "Index", "Client", new { area = "Admin" }, null)</li>
-                            <li>@Html.ActionLink("User Lookup", "Index", "User", new { area = "Admin" }, null)</li>
-                            <li class="bottom-border">@Html.ActionLink("Create Account", "Create", "User", new { area = "Admin" }, null)</li>
+                            <li>@Html.ActionLink("Manage Users", "Index", "User", new { area = "Admin" }, null)</li>
+                            <li>@Html.ActionLink("Manage Clients", "Index", "Client", new { area = "Admin" }, null)</li>
+                            <li>@Html.ActionLink("Manage Scopes", "Index", "Client", new { area = "Admin" }, null)</li>
+                            <li class="bottom-border"><a href="/auth/.well-known/openid-configuration" target="_blank">Discovery Document</a></li>
                             }   
                             @if (User.Identity.IsAuthenticated)
                             {
                             <li>@Html.ActionLink("Account Details", "Edit", "Profile", new { area = "UserAccount" }, null)</li>
-                            @if(User.HasClaim("email_verified") && User.Claims.First(claim => claim.Type == "email_verified").Value == "true")
+                            <li><a href="/auth/permissions" target="_blank">Application Permissions</a></li>
+
+                            @if(!User.HasClaim("email_verified") || User.Claims.First(claim => claim.Type == "email_verified").Value != "true")
                             {
-                                <li>@Html.ActionLink("No Need to Verify Your Email Account", "Verify", "Register", new { area = "UserAccount" }, null)</li>
-                            }
-                            else
-                            {
-                                <li>@Html.ActionLink("Verify Your Email Account", "Verify", "Register", new { area = "UserAccount" }, null)</li>
+                            	<li>@Html.ActionLink("Confirm Your Email Account", "Verify", "Register", new { area = "UserAccount" }, null)</li>
                             }
 
-                            <li>@Html.ActionLink("Change Email", "Index", "ChangeEmail", new { area = "UserAccount" }, null)</li>
-                            <li>@Html.ActionLink("Change Password", "Index", "ChangePassword", new {area = "UserAccount"}, null)</li>
                             <li class="logout">@Html.ActionLink("Logout", "Logout", "Home", new { area = "UserAccount" }, null)</li>
                             }
                             else

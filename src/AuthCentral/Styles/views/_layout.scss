@@ -51,14 +51,14 @@ header {
 
 	.dropdown-menu {
     top: 35px;
-    right: 0;
+    right: 15px;
   	left: auto;
     min-width: 160px;
     margin: 0;
     padding: 0;
     background-color: #fff;
     border: none;
-    border-radius: 0 0 0 $border-radius-base;
+    border-radius: 0 0 $border-radius-base $border-radius-base;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.175);
 
     li {

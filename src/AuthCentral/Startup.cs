@@ -20,7 +20,6 @@ namespace Fsw.Enterprise.AuthCentral
     public class Startup
     {
         private EnvConfig _config;
-        private IApplicationEnvironment _appEnv;
         public IConfigurationRoot Configuration { get; set; }
 
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)

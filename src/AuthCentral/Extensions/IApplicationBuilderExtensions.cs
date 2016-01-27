@@ -86,7 +86,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                     StyleSrc = config.Csp.StyleSrc,
                     FontSrc = config.Csp.FontSrc
                 },
-                EnableWelcomePage = true
+                EnableWelcomePage = false
             };
             
             app.UseOwin(addToPipeline =>

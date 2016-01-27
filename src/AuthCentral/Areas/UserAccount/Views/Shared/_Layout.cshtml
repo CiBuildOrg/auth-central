@@ -52,7 +52,15 @@
                             @if (User.Identity.IsAuthenticated)
                             {
                             <li>@Html.ActionLink("Account Details", "Edit", "Profile", new { area = "UserAccount" }, null)</li>
-                            <li>@Html.ActionLink("Verify Your Email Account", "Verify", "Register", new { area = "UserAccount" }, null)</li>
+                            @if(User.HasClaim("email_verified") && User.Claims.First(claim => claim.Type == "email_verified").Value == "true")
+                            {
+                                <li>@Html.ActionLink("No Need to Verify Your Email Account", "Verify", "Register", new { area = "UserAccount" }, null)</li>
+                            }
+                            else
+                            {
+                                <li>@Html.ActionLink("Verify Your Email Account", "Verify", "Register", new { area = "UserAccount" }, null)</li>
+                            }
+
                             <li>@Html.ActionLink("Change Email", "Index", "ChangeEmail", new { area = "UserAccount" }, null)</li>
                             <li>@Html.ActionLink("Change Password", "Index", "ChangePassword", new {area = "UserAccount"}, null)</li>
                             <li class="logout">@Html.ActionLink("Logout", "Logout", "Home", new { area = "UserAccount" }, null)</li>

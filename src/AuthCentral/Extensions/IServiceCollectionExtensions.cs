@@ -56,9 +56,11 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
         public static void AddMembershipReboot(this IServiceCollection services, EnvConfig config)
         {
-            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>(), provider.GetService<IApplicationEnvironment>(), config));
             services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
             services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null, provider.GetService<IApplicationEnvironment>(), config));
+            services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
+            services.AddScoped<IUserAccountRepository<HierarchicalUserAccount>, TestUserRepository>();
+            services.AddScoped<AuthenticationService<HierarchicalUserAccount>, MongoAuthenticationService>();
         }
 
         public static void AddAuthCentralDependencies(this IServiceCollection services, EnvConfig config)

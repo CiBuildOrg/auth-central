@@ -60,10 +60,14 @@
                 <p>Hello, <span>@Model.Name.GivenName</span>!</p>
                 <p>From here you can view and edit all of your primary account information.</p>
 
-                @* Turn this off if the user has already verified their account *@
-                <div class="alert alert-info">
-                    Please <strong>@Html.ActionLink("confirm your email address", "Verify", "Register", new { area = "UserAccount" }, null)</strong>. Confirmation is required before you will be able to make any further changes to your account.
-                </div>
+                @if(!User.HasClaim("email_verified", "true"))
+                {
+                    @* Turn this off if the user has already verified their account *@
+                    <div class="alert alert-info">
+                        Please <strong>@Html.ActionLink("confirm your email address", "Verify", "Register", new { area = "UserAccount" }, null)</strong>. Confirmation is required before you will be able to make any further changes to your account.
+                    </div>
+                }
+
             </div>
         </div>
 

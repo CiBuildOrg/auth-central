@@ -1,4 +1,5 @@
-﻿using BrockAllen.MembershipReboot;
+﻿using System;
+using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Microsoft.Extensions.Logging;
 
@@ -42,7 +43,12 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
 
         public void Handle(PasswordResetRequestedEvent<HierarchicalUserAccount> evt)
         {
-            Process(evt, new { evt.VerificationKey });
+            Process(evt,
+                new
+                {
+                    evt.VerificationKey,
+                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)
+                });
         }
 
         public void Handle(PasswordChangedEvent<HierarchicalUserAccount> evt)
@@ -72,7 +78,12 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
 
         public void Handle(AccountReopenedEvent<HierarchicalUserAccount> evt)
         {
-            Process(evt, new { evt.VerificationKey });
+            Process(evt,
+                new
+                {
+                    evt.VerificationKey,
+                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)
+                });
         }
 
         public void Handle(UsernameChangedEvent<HierarchicalUserAccount> evt)
@@ -82,12 +93,25 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
 
         public void Handle(EmailChangeRequestedEvent<HierarchicalUserAccount> evt)
         {
-            Process(evt, new { evt.OldEmail, evt.NewEmail, evt.VerificationKey });
+            Process(evt,
+                new
+                {
+                    evt.OldEmail,
+                    evt.NewEmail,
+                    evt.VerificationKey,
+                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)
+                });
         }
 
         public void Handle(EmailChangedEvent<HierarchicalUserAccount> evt)
         {
-            Process(evt, new { evt.OldEmail, evt.VerificationKey });
+            Process(evt,
+                new
+                {
+                    evt.OldEmail,
+                    evt.VerificationKey,
+                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)
+                });
         }
 
         public void Handle(MobilePhoneChangedEvent<HierarchicalUserAccount> evt)

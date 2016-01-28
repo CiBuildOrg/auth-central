@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Fsw.Enterprise.AuthCentral.Areas.Admin.Models;
 using System.Security.Claims;
+using Fsw.Enterprise.AuthCentral.IdMgr;
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
@@ -20,10 +21,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         EnvConfig _cfg;
         UserAccountService<HierarchicalUserAccount> _userAccountService;
 
-        public UserClaimController(EnvConfig cfg, UserAccountService<HierarchicalUserAccount> userSvc)
+        public UserClaimController(EnvConfig cfg, DefaultUserAccountServiceContainer container)
         {
             this._cfg = cfg;
-            this._userAccountService = userSvc;
+            this._userAccountService = container.Service;
         }
 
         [HttpGet("[action]/{userId}")]

@@ -21,9 +21,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
     {
         readonly UserAccountService<HierarchicalUserAccount> userAccountService;
 
-        public ChangePasswordController(MongoAuthenticationService authSvc)
+        public ChangePasswordController(DefaultUserAccountServiceContainer container)
         {
-            this.userAccountService = authSvc.UserAccountService;
+            this.userAccountService = container.Service;
         }
 
  

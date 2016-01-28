@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-﻿using System.Security.Authentication;
+using System.Security.Authentication;
 using System.ComponentModel.DataAnnotations;
 
 using BrockAllen.MembershipReboot;
@@ -11,6 +11,7 @@ using Microsoft.AspNet.Authorization;
 
 using Fsw.Enterprise.AuthCentral.Extensions;
 using Fsw.Enterprise.AuthCentral.Areas.UserAccount.Models;
+using Fsw.Enterprise.AuthCentral.IdMgr;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
 {
@@ -26,10 +27,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.UserAccount.Controllers
         /// <summary>
         /// Instantiates a new instance of the <see cref="RegisterController"/>
         /// </summary>
-        /// <param name="authSvc">Active instance of the user account service against which new users can be registered.</param>
-        public RegisterController(UserAccountService<HierarchicalUserAccount> authSvc)
+        /// <param name="container">A non-null user account service container against which new users can be registered.</param>
+        public RegisterController(DefaultUserAccountServiceContainer container)
         {
-            _userAccountService = authSvc;
+            _userAccountService = container.Service;
         }
 
         /// <summary>

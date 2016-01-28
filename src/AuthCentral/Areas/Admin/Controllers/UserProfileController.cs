@@ -7,6 +7,7 @@ using Microsoft.AspNet.Authorization;
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.Areas.Admin.Models;
+using Fsw.Enterprise.AuthCentral.IdMgr;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,9 +19,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
     {
         private UserAccountService<HierarchicalUserAccount> _userAccountService;
 
-        public UserProfileController(UserAccountService<HierarchicalUserAccount> svc)
+        // Even though this is an admin area, we don't need AdminUserAccountServiceContainer as long as this does not create accounts
+        public UserProfileController(DefaultUserAccountServiceContainer container)
         {
-            this._userAccountService = svc;
+            this._userAccountService = container.Service;
         }
 
         [HttpGet("[action]/{userId?}")]

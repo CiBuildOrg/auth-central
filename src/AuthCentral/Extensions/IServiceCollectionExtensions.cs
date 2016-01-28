@@ -1,20 +1,18 @@
 ﻿using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.IdMgr;
-using Fsw.Enterprise.AuthCentral.IdSvr;
 using Fsw.Enterprise.AuthCentral.MongoDb;
 using Fsw.Enterprise.AuthCentral.MongoStore;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
-using IdentityServer3.Core.Configuration;
-using IdentityServer3.Core.Services;
-using IdentityServer3.MembershipReboot;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using MongoDB.Driver;
 using Serilog;
+using System.Security.Claims;
 using MongoDatabase = Fsw.Enterprise.AuthCentral.MongoDb.MongoDatabase;
 
 namespace Fsw.Enterprise.AuthCentral.Extensions
@@ -26,15 +24,9 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             StoreSettings idSvrStoreSettings = StoreSettings.DefaultSettings();
             idSvrStoreSettings.ConnectionString = idsConnectionString;
             idSvrStoreSettings.Database = MongoUrl.Create(idSvrStoreSettings.ConnectionString).DatabaseName;
-            services.AddInstance<StoreSettings>(idSvrStoreSettings);
-            services.AddInstance<IClientService>(AdminServiceFactory.CreateClientService(idSvrStoreSettings));
-            services.AddInstance<IScopeService>(AdminServiceFactory.CreateScopeService(idSvrStoreSettings));
-            services.AddScoped<ServiceFactory>(svc => new ServiceFactory(new Registration<IUserService>()));
-            var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
-            var idSvcfactory = new ServiceFactory(usrSrv, idSvrStoreSettings)
-            {
-                ViewService = new Registration<IViewService>(typeof(CustomViewService))
-            };
+            services.AddInstance(idSvrStoreSettings);
+            services.AddInstance(AdminServiceFactory.CreateClientService(idSvrStoreSettings));
+            services.AddInstance(AdminServiceFactory.CreateScopeService(idSvrStoreSettings));
         }
 
         public static void AddAuthorizationPolicies(this IServiceCollection services)
@@ -67,12 +59,32 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
         public static void AddMembershipReboot(this IServiceCollection services, EnvConfig config)
         {
-            services.AddScoped(provider => MembershipRebootSetup.GetConfig(provider.GetService<IApplicationBuilder>(), provider.GetService<IApplicationEnvironment>(), config));
-            services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
-            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null, null, config));
-            services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
+            // any middleware or component that uses DI to inject an instance of UserAccountService<HierarchicalUserAccount>
+            // should instead depend on either AdminUserAccountServiceContainer, or DefaultUserAccountServiceContainer
+            services.AddScoped(provider =>
+            {
+                MembershipRebootSetup setup = MembershipRebootConfigFactory.GetAdminConfig(provider.GetService<IApplicationEnvironment>(), config);
+                var repository = provider.GetRequiredService<IUserAccountRepository<HierarchicalUserAccount>>();
+                return new AdminUserAccountServiceContainer
+                {
+                    Service = new UserAccountService<HierarchicalUserAccount>(setup, repository)
+                };
+            });
+
+            services.AddScoped(provider =>
+            {
+                MembershipRebootSetup setup = MembershipRebootConfigFactory.GetDefaultConfig(provider.GetService<IApplicationEnvironment>(), config);
+                var repository = provider.GetRequiredService<IUserAccountRepository<HierarchicalUserAccount>>();
+                return new DefaultUserAccountServiceContainer
+                {
+                    Service = new UserAccountService<HierarchicalUserAccount>(setup, repository)
+                };
+            });
+
             services.AddScoped(typeof(IUserAccountRepository<HierarchicalUserAccount>), typeof(MongoUserAccountRepository<HierarchicalUserAccount>));
             services.AddScoped<IBulkUserRepository<HierarchicalUserAccount>, MongoUserAccountRepository<HierarchicalUserAccount>>();
+            
+            services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
             services.AddScoped(provider => new MongoDatabase(config.DB.MembershipReboot));
         }
 

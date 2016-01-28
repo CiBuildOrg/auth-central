@@ -7,6 +7,8 @@ It will be helpful for you to confirm this new email address by following this l
 
 {confirmChangeEmailUrl}
 
+Please note that this verification email will expire on {VerificationExpiration} Mountain Time.
+
 Thanks!
 
 {emailSignature}

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="https://secure.dev-fsw.com/" />
+<title>User_SelfRegistration</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">User_SelfRegistration</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>${env}/UserAccount/LogOut</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>${env}/account</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>${RegisterNowButton}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Account_Username}</td>
+	<td>${NewUser_Username}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Account_Email}</td>
+	<td>${NewUser_Email}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Account_FirstName}</td>
+	<td>${NewUser_FirstName}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Account_LastName}</td>
+	<td>${NewUser_LastName}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Account_Password}</td>
+	<td>${NewUser_Password}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Account_ConfirmPassword}</td>
+	<td>${NewUser_Password}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>${CreateAnAccountButton}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>${PageBody}</td>
+	<td>*Registration Success*</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>javascript{var dates = new Date();var minutes = dates.getMinutes(); var hours = dates.getHours();if (minutes &lt; 10){minutes = '0' + minutes;}hours + ':' + minutes;}</td>
+	<td>CurrentTime</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>javascript{var dates = new Date();var minutes = dates.getMinutes() + 1; var hours = dates.getHours();if (minutes &gt; 59){hours = hours + 1;minutes = minutes - 60;} if (minutes &lt; 10){minutes = '0' + minutes;} hours + ':' + minutes;}</td>
+	<td>OneMinuteFromNow</td>
+</tr>
+</tbody></table>
+</body>
+</html>

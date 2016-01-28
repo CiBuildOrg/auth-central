@@ -4,6 +4,48 @@
     ViewBag.Title = "Edit Profile";
 }
 
+<script type="text/javascript">
+    function showNameForm() {
+        $('#nameText').hide();
+        $('#nameForm').show();
+        $('#emailText').show();
+        $('#emailForm').hide();
+        $('#passwordText').show();
+        $('#passwordForm').hide();
+    }
+    function showEmailForm() {
+        $('#nameText').show();
+        $('#nameForm').hide();
+        $('#emailText').hide();
+        $('#emailForm').show();
+        $('#passwordText').show();
+        $('#passwordForm').hide();
+    }
+    function showPasswordForm() {
+        $('#nameText').show();
+        $('#nameForm').hide();
+        $('#emailText').show();
+        $('#emailForm').hide();
+        $('#passwordText').hide();
+        $('#passwordForm').show();
+    }
+    @if(ViewBag.Expand == "password")
+    {
+        @:$(showPasswordForm);
+    }
+
+
+    @if(ViewBag.Expand == "email")
+    {
+        @:$(showEmailForm);
+    }
+
+    @if(ViewBag.Expand == "name")
+    {
+        @:$(showNameForm);
+    }
+</script>
+
 <div class="row">
     <div class="col-xs-12 text-center">
         <h1>Account Details</h1>
@@ -11,12 +53,17 @@
 </div>
 
 <div class="row account-details">
-    <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+    <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
 
         <div class="row greeting">
             <div class="col-xs-12">
                 <p>Hello, <span>@Model.Name.GivenName</span>!</p>
                 <p>From here you can view and edit all of your primary account information.</p>
+
+                @* Turn this off if the user has already verified their account *@
+                <div class="alert alert-info">
+                    Please <strong>@Html.ActionLink("confirm your email address", "Verify", "Register", new { area = "UserAccount" }, null)</strong>. Confirmation is required before you will be able to make any further changes to your account.
+                </div>
             </div>
         </div>
 
@@ -48,7 +95,7 @@
                                                 @Model.Name.Name
                                             </div>
                                             <div class="col-xs-4 text-right">
-                                                <a href="#" onclick="$('#nameText').hide();$('#nameForm').show();">edit</a>
+                                                <a href="#" onclick="showNameForm();">edit</a>
                                             </div>
                                         </div>
                                     </div>
@@ -86,7 +133,7 @@
                                                 @Model.Email
                                             </div>
                                             <div class="col-xs-4 text-right">
-                                                <a href="#" onclick="$('#emailText').hide();$('#emailForm').show();">edit</a>
+                                                <a href="#" onclick="showEmailForm();">edit</a>
                                             </div>
                                         </div>
                                     </div>
@@ -120,7 +167,7 @@
                                                 **************
                                             </div>
                                             <div class="col-xs-4 text-right">
-                                                <a href="#" onclick="$('#passwordText').hide();$('#passwordForm').show();">edit</a>
+                                                <a href="#" onclick="showPasswordForm();">edit</a>
                                             </div>
                                         </div>
                                     </div>

@@ -34,7 +34,7 @@ header {
 		float: right;
 		width: 50px;
     height: 50px;
-    margin: -15px;
+    margin: -15px 0;
 		background-color: $gray-base;
 		font-size: $font-size-h3 - 2;
 		text-align: center;
@@ -51,14 +51,14 @@ header {
 
 	.dropdown-menu {
     top: 35px;
-    right: 0;
+    right: 15px;
   	left: auto;
     min-width: 160px;
     margin: 0;
     padding: 0;
     background-color: #fff;
     border: none;
-    border-radius: 0 0 0 $border-radius-base;
+    border-radius: 0 0 $border-radius-base $border-radius-base;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.175);
 
     li {
@@ -82,8 +82,15 @@ header {
 	    &:last-child {
 
     		a {
-    			background-color: $gray-lighter;
     			border-radius: 0 0 0 $border-radius-base;
+    		}
+
+    	}
+
+    	&.logout {
+
+    		a {
+    			background-color: $gray-lighter;
     			color: $gray-dark;
 
     			&:hover {
@@ -125,7 +132,8 @@ header {
 //Content Classes
 
 .body-content {
-	margin-top: $margin-large-vertical*6.5;
+	margin-top: $margin-large-vertical*7;
+	margin-bottom: $margin-large-vertical*4;
 
 	@media only screen and (min-width:768px) {
 

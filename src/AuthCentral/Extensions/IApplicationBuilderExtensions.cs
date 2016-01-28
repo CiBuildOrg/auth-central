@@ -172,6 +172,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             if (isDebug)
             {
                 loggerFactory.MinimumLevel = LogLevel.Verbose;
+                app.UseDeveloperExceptionPage();
             }
             else
             {

@@ -24,6 +24,11 @@
 </tr>
 <tr>
 	<td>store</td>
+	<td>//button[.='Create an Account']</td>
+	<td>CreateAnAccountButton</td>
+</tr>
+<tr>
+	<td>store</td>
 	<td>id=username</td>
 	<td>LoginPage_Username</td>
 </tr>
@@ -36,6 +41,26 @@
 	<td>store</td>
 	<td>//button[.='Sign In']</td>
 	<td>LoginPage_SignInButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//button[.='Confirm Email']</td>
+	<td>ConfirmEmailButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//input[@value='Save']</td>
+	<td>SaveButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Forgot Password?</td>
+	<td>ForgotPassword</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>css=button.btn.btn-primary</td>
+	<td>SubmitButton</td>
 </tr>
 <!--All Pages-->
 <tr>
@@ -50,28 +75,38 @@
 </tr>
 <tr>
 	<td>store</td>
-	<td>link=User Lookup</td>
-	<td>Header_UserLookup</td>
+	<td>link=Manage Users</td>
+	<td>Header_ManageUsers</td>
 </tr>
 <tr>
 	<td>store</td>
-	<td>link=Create Account</td>
-	<td>Header_CreateAccount</td>
+	<td>link=Create User »</td>
+	<td>CreateUserButton</td>
 </tr>
 <tr>
 	<td>store</td>
-	<td>link=Clients</td>
-	<td>Header_Clients</td>
+	<td>link=Manage Clients</td>
+	<td>Header_ManageClients</td>
 </tr>
 <tr>
 	<td>store</td>
-	<td>link=Scopes</td>
-	<td>Header_Scopes</td>
+	<td>link=Manage Scopes</td>
+	<td>Header_ManageScopes</td>
 </tr>
 <tr>
 	<td>store</td>
 	<td>link=Logout</td>
 	<td>Header_Logout</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Account Details</td>
+	<td>Header_AccountDetails</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Confirm Your Email Account</td>
+	<td>Header_ConfirmYourEmailAccount </td>
 </tr>
 <!--Create Account Page-->
 <tr>
@@ -134,6 +169,12 @@
 	<td>//button[.='Create Account']</td>
 	<td>Account_CreateAccountButton</td>
 </tr>
+<!--Home Page-->
+<tr>
+	<td>store</td>
+	<td>//dd/a[contains(@href,'mailto')]</td>
+	<td>HomePage_Email</td>
+</tr>
 <!--Edit User Page-->
 <tr>
 	<td>store</td>
@@ -190,10 +231,15 @@
 	<td>//input[@value='${NewUser_ClaimType}']/../../../following-sibling::div/div/input</td>
 	<td>Account_NewClaim_DeleteButton</td>
 </tr>
+<tr>
+	<td>store</td>
+	<td>id=delete</td>
+	<td>Account_DeleteButton</td>
+</tr>
 <!--User Lookup Page-->
 <tr>
 	<td>store</td>
-	<td>//a[.='${NewUser_Email}']/../../td/form/input[@value='Delete']</td>
+	<td>//a[.='${AdminUser_Email}']/../../td/form/input[@value='Delete']</td>
 	<td>NewUser_DeleteButton</td>
 </tr>
 <tr>
@@ -211,15 +257,104 @@
 	<td>css=button.btn.btn-primary</td>
 	<td>EmailSearchButton</td>
 </tr>
+<!--Outlook Web App-->
 <tr>
-	<td>open</td>
-	<td>/UserAccount/LogOut</td>
-	<td></td>
+	<td>store</td>
+	<td>id=username</td>
+	<td>Owa_Username</td>
 </tr>
 <tr>
-	<td>open</td>
-	<td>/account</td>
-	<td></td>
+	<td>store</td>
+	<td>id=password</td>
+	<td>Owa_Password</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>css=span.signinTxt</td>
+	<td>Owa_SignInButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//div[@class='_lv_O']/span</td>
+	<td>Owa_EmailTimeStamp</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=confirm</td>
+	<td>Owa_EmailConfirmationLink</td>
+</tr>
+<!--Account Details Page-->
+<tr>
+	<td>store</td>
+	<td>//div[@id='nameText']/div/div</td>
+	<td>AccountDetails_Name</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//div[@id='emailText']/div/div</td>
+	<td>AccountDetails_Email</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//div[@id='nameText']/div/div/a[.='edit']</td>
+	<td>AccountDetails_Name_Edit</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//div[@id='emailText']/div/div/a[.='edit']</td>
+	<td>AccountDetails_Email_Edit</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//div[@id='passwordText']/div/div/a[.='edit']</td>
+	<td>AccountDetails_Password_Edit</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=Name_GivenName</td>
+	<td>AccountDetails_FirstName</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=Name_FamilyName</td>
+	<td>AccountDetails_LastName</td>
+</tr>
+<!--Change Password Page-->
+<tr>
+	<td>store</td>
+	<td>id=Password_OldPassword</td>
+	<td>ChangePassword_CurrentPassword</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=Password_NewPassword</td>
+	<td>ChangePassword_NewPassword</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=Password_NewPasswordConfirm</td>
+	<td>ChangePassword_ConfirmNewPassword</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//input[@value='Change Password'] | //button[.='Change Password']</td>
+	<td>ChangePasswordButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=here</td>
+	<td>HereButton</td>
+</tr>
+<!--Change Email Page-->
+<tr>
+	<td>store</td>
+	<td>id=Email</td>
+	<td>ChangeEmail_NewEmail</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>xpath=(//input[@value='Save'])[2]</td>
+	<td>ChangeEmail_SaveButton</td>
 </tr>
 </tbody></table>
 </body>

@@ -18,86 +18,83 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
 
     public class ScopeModel
     {
-        private readonly Scope _scope;
+        internal readonly Scope IdsScope;
 
         public ScopeModel()
         {
-            _scope = new Scope();
+            IdsScope = new Scope();
         }
 
         public ScopeModel(Scope scope)
         {
-            _scope = scope;
+            IdsScope = scope;
         }
 
         public bool Enabled
         {
-            get { return _scope.Enabled; }
-            set { _scope.Enabled = value; }
+            get { return IdsScope.Enabled; }
+            set { IdsScope.Enabled = value; }
         }
 
         public string Name
         {
-            get { return _scope.Name; }
-            set { _scope.Name = value; }
+            get { return IdsScope.Name; }
+            set { IdsScope.Name = value; }
         }
 
         [Display(Name = "Display Name")]
         public string DisplayName
         {
-            get { return _scope.DisplayName; }
-            set { _scope.DisplayName = value; }
+            get { return IdsScope.DisplayName; }
+            set { IdsScope.DisplayName = value; }
         }
 
         public string Description
         {
-            get { return _scope.Description; }
-            set { _scope.Description = value; }
+            get { return IdsScope.Description; }
+            set { IdsScope.Description = value; }
         }
 
         public bool Required
         {
-            get { return _scope.Required; }
-            set { _scope.Required = value; }
+            get { return IdsScope.Required; }
+            set { IdsScope.Required = value; }
         }
 
         public bool Emphasize
         {
-            get { return _scope.Emphasize; }
-            set { _scope.Emphasize = value; }
+            get { return IdsScope.Emphasize; }
+            set { IdsScope.Emphasize = value; }
         }
 
         public ScopeType Type
         {
-            get { return _scope.Type; }
-            set { _scope.Type = value; }
+            get { return IdsScope.Type; }
+            set { IdsScope.Type = value; }
         }
 
-        public List<ScopeClaim> Claims
-        {
-            get { return _scope.Claims; }
-            set { _scope.Claims = value; }
-        }
+        [ReadOnly(true)]
+        public IEnumerable<ScopeClaim> Claims => IdsScope.Claims;
 
         [Display(Name = "Include all claims for users")]
         public bool IncludeAllClaimsForUser
         {
-            get { return _scope.IncludeAllClaimsForUser; }
-            set { _scope.IncludeAllClaimsForUser = value; }
+            get { return IdsScope.IncludeAllClaimsForUser; }
+            set { IdsScope.IncludeAllClaimsForUser = value; }
         }
 
         [Display(Name = "Claims Rule")]
         public string ClaimsRule
         {
-            get { return _scope.ClaimsRule; }
-            set { _scope.ClaimsRule = value; }
+            get { return IdsScope.ClaimsRule; }
+            set { IdsScope.ClaimsRule = value; }
         }
 
         [Display(Name = "Show in Discovery Doc")]
         public bool ShowInDiscoveryDocument
         {
-            get { return _scope.ShowInDiscoveryDocument; }
-            set { _scope.ShowInDiscoveryDocument = value; }
+            get { return IdsScope.ShowInDiscoveryDocument; }
+            set { IdsScope.ShowInDiscoveryDocument = value; }
         }
     }
 }

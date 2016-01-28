@@ -1,0 +1,113 @@
+﻿@using IdentityServer3.Core.Models;
+@model IdentityServer3.Core.Models.Client
+@{
+
+    Layout = "~/Areas/Admin/Views/Shared/_ClientAdminLayout.cshtml";
+    ViewBag.Title = "Edit Client";
+
+}
+
+@using (Html.BeginForm("CreateNew", "Client", new { clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @id="create-form", @class = "form-horizontal"} )) 
+{   
+   @Html.AntiForgeryToken()
+   @Html.HiddenFor(model => model.RequireConsent)
+   @Html.HiddenFor(model => model.AllowRememberConsent)
+   @Html.HiddenFor(model => model.Flow)
+   @Html.HiddenFor(model => model.AllowClientCredentialsOnly)
+   @Html.HiddenFor(model => model.AllowAccessToAllScopes)
+   @Html.HiddenFor(model => model.IdentityTokenLifetime)
+   @Html.HiddenFor(model => model.AccessTokenLifetime)
+   @Html.HiddenFor(model => model.AuthorizationCodeLifetime)
+   @Html.HiddenFor(model => model.AbsoluteRefreshTokenLifetime)
+   @Html.HiddenFor(model => model.SlidingRefreshTokenLifetime)
+   @Html.HiddenFor(model => model.AllowAccessToAllScopes)
+   @Html.HiddenFor(model => model.RefreshTokenUsage)
+   @Html.HiddenFor(model => model.UpdateAccessTokenClaimsOnRefresh)
+   @Html.HiddenFor(model => model.RefreshTokenExpiration)
+   @Html.HiddenFor(model => model.AccessTokenType)
+   @Html.HiddenFor(model => model.EnableLocalLogin)
+   @Html.HiddenFor(model => model.IncludeJwtId)
+   @Html.HiddenFor(model => model.AlwaysSendClientClaims)
+   @Html.HiddenFor(model => model.PrefixClientClaims)
+   @Html.HiddenFor(model => model.AllowAccessToAllCustomGrantTypes)
+   @Html.HiddenFor(model => model.AllowAccessToAllCustomGrantTypes)
+
+   <div class="form-group">
+       <div class="col-md-offset-2 col-md-2">
+           <input type="button" value="Create" class="btn btn-success" onclick="javascript: document.forms['create-form'].submit();" />
+       </div>
+       <div class="col-md-6"></div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.ClientId, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @if(!String.IsNullOrWhiteSpace(Model.ClientId))
+           {
+                @Html.TextBoxFor(model => model.ClientId, new { @class="form-control",  @placeholder="new_application_clientid", @disabled="disabled" })
+           }
+           else
+           {
+                @Html.TextBoxFor(model => model.ClientId, new {@class="form-control",  @placeholder="new_application_clientid"})
+           }
+           @Html.ValidationMessageFor(model => model.ClientId)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.ClientName, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.ClientName, new {@class="form-control",  @placeholder="New Application"})
+           @Html.ValidationMessageFor(model => model.ClientName)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.ClientUri, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.ClientUri, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ClientUri)
+       </div>
+   </div>
+
+   <div class="form-group">
+       @Html.LabelFor(model => model.LogoUri, new { @class = "control-label col-md-2" })
+       <div class="col-md-10">
+           @Html.TextBoxFor(model => model.LogoUri, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.LogoUri)
+       </div>
+   </div>
+   
+   <div class="row well well-lg" style="padding:0px">
+       <div class="col-sm-12 col-md-12 col-lg-12">
+           <div class="row" >
+               <label class="control-label col-md-6"> Client Secret </label>
+               <div class="col-md-6" align="right"> &nbsp; </div>
+           </div>
+           <div class="row" style="margin-top: 15px; margin-bottom: 15px;">
+               @Html.EditorFor(model => model.ClientSecrets)
+           </div>
+       </div>
+   </div>
+
+   <div class="form-group">
+      <label class="control-label col-md-2" for="RedirectUris_0">Redirect Uri</label>
+      <div col-md-10>
+          <input type="url" class="form-control" id="RedirectUris_0" name="RedirectUris[0]" placeholder="http://new-app.fsw.com/" />
+      </div>
+   </div>
+ 
+   <div class="form-group">
+      <label class="control-label col-md-2" for="PostLogoutRedirectUris_0">Post Logout Redirect Uri</label>
+      <div col-md-10>
+          <input type="url" class="form-control" id="PostLogoutRedirectUris_0" name="PostLogoutRedirectUris[0]" placeholder="http://new-app.fsw.com/" />
+      </div>
+   </div>
+ 
+   <div class="form-group">
+       <div class="col-md-offset-2 col-md-2">
+           <input type="button" value="create" class="btn btn-success" onclick="javascript: document.forms['create-form'].submit();" />
+       </div>
+   </div>
+}
+<hr />

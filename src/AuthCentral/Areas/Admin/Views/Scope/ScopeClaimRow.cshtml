@@ -1,0 +1,28 @@
+﻿@model Fsw.Enterprise.AuthCentral.Areas.Admin.Models.ScopeClaimModel
+
+<tr class="show-claim-row">
+    <td>@Model.Name</td>
+    <td>@Model.Description</td>
+    <td>@Model.AlwaysIncludeInIdToken.ToString()</td>
+    <td>
+        <button class="btn btn-primary show-edit-claim" type="button">Edit</button>
+        <button class="btn btn-default delete-claim" type="button">Delete</button>
+    </td>
+</tr>
+<tr class="hidden edit-claim-row">
+    <td>
+        <input asp-for="ScopeName"/>
+        <input asp-for="ClaimId"/>
+        <input asp-for="Name" class="claim-name"/>
+    </td>
+    <td>
+        <input asp-for="Description" class="claim-desc"/>
+    </td>
+    <td>
+        <input asp-for="AlwaysIncludeInIdToken" class="claim-include"/>
+    </td>
+    <td>
+        <button class="btn btn-primary edit-claim" type="button">Save</button>
+        <button class="btn btn-default show-show-claim" type="button">Cancel</button>
+    </td>
+</tr>

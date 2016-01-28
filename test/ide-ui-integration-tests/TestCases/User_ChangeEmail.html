@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="https://secure.dev-fsw.com/" />
+<title>User_ChangeEmail</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">User_ChangeEmail</td></tr>
+</thead><tbody>
+<tr>
+	<td>click</td>
+	<td>${Header_Dropdown}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>${Header_AccountDetails}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>${AccountDetails_Email_Edit}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${ChangeEmail_NewEmail}</td>
+	<td>${NewUser_NewEmail}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>${ChangeEmail_SaveButton}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>${PageBody}</td>
+	<td>*Email Successfully Changed*</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>javascript{var dates = new Date();var minutes = dates.getMinutes(); var hours = dates.getHours();if (minutes &lt; 10){minutes = '0' + minutes;}hours + ':' + minutes;}</td>
+	<td>CurrentTime</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>javascript{var dates = new Date();var minutes = dates.getMinutes() + 1; var hours = dates.getHours();if (minutes &gt; 59){hours = hours + 1;minutes = minutes - 60;} if (minutes &lt; 10){minutes = '0' + minutes;} hours + ':' + minutes;}</td>
+	<td>OneMinuteFromNow</td>
+</tr>
+</tbody></table>
+</body>
+</html>

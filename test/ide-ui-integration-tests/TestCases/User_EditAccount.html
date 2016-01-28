@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="https://auth1.local-fsw.com:44333" />
+<title>User_EditAccount</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">User_EditAccount</td></tr>
+</thead><tbody>
+<tr>
+	<td>click</td>
+	<td>${Header_Dropdown}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>${Header_AccountDetails}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>${AccountDetails_Name_Edit}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${AccountDetails_FirstName}</td>
+	<td>${NewUser_FirstName}${Random}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${AccountDetails_LastName}</td>
+	<td>${NewUser_LastName}${Random}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>${SaveButton}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>${AccountDetails_Name}</td>
+	<td>${NewUser_FirstName}${Random} ${NewUser_LastName}${Random}</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

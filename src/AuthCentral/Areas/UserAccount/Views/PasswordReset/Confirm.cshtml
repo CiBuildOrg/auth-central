@@ -4,29 +4,43 @@
     ViewBag.Title = "Change Password";
 }
 
-<div class="container page-login">
-    <div class="row">
-        <div class="col-md-6 col-sm-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">@ViewBag.Title</h3>
-                </div>
-                <div class="panel-body">
-                    @using (Html.BeginForm())
-                    {
-                        @Html.ValidationSummary("Please correct the following errors")
-                        @Html.AntiForgeryToken()
+<div class="row">
+    <div class="col-xs-12 text-center">
+        <h1>Create a New Password</h1>
+    </div>
+</div>
 
-                        <fieldset>
+<div class="row new-password">
+    <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @using (Html.BeginForm())
+                        {
+                        if (!Html.ViewData.ModelState.IsValid)
+                        {
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="alert alert-danger">
+                                    @Html.ValidationSummary("Please correct the following errors")
+                                </div>
+                            </div>
+                        </div>
+                        }
+                        @Html.AntiForgeryToken()
+                        <p>Please enter a new password for your FSW Account.</p>
+                        <fieldset class="text-center">
                             @Html.EditorForModel()
 
-                            <div class="form-group">
-                                <button class="btn btn-primary">Change Password</button>
-                            </div>
+                            <button class="btn btn-primary">Change Password</button>
                         </fieldset>
-                    }
+                        }
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </div>

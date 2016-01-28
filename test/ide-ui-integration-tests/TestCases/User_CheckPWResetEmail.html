@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="https://secure.dev-fsw.com/" />
+<title>User_CheckEmail</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">User_CheckEmail</td></tr>
+</thead><tbody>
+<!--outlook behaves better when the email is in the inbox before you log in. So we'll give it a sec-->
+<tr>
+	<td>pause</td>
+	<td>10000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>https://outlook.foodservicewarehouse.com/owa/auth/logon.aspx?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>${Owa_Username}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Owa_Username}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Owa_Password}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Owa_Username}</td>
+	<td>${NewUser_NewEmail_Username}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>${Owa_Password}</td>
+	<td>${NewUser_NewEmail_Password}</td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>${Owa_SignInButton}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>setTimeout</td>
+	<td>120000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//span[.='${CurrentTime}']/../../div/span[contains(.,'Password Reset')] | //span[.='${OneMinuteFromNow}']/../../div/span[contains(.,'Password Reset')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>setTimeout</td>
+	<td>30000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>${Owa_EmailConfirmationLink}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeAttribute</td>
+	<td>${Owa_EmailConfirmationLink}@href</td>
+	<td>ResetLink</td>
+</tr>
+</tbody></table>
+</body>
+</html>

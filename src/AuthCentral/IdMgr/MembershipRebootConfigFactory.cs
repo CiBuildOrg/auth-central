@@ -59,7 +59,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             var emailFormatter = new AuthCentralEmailMessageFormatter(appEnv, appInfo, emailBodyType);
             var smtpMsgDelivery = new AuthCentralSmtpMessageDelivery(config, emailBodyType);
 
-            newInstance.AddEventHandler(new DefaultEmailEventHandler(loggerFactory, emailFormatter, smtpMsgDelivery));
+            newInstance.AddEventHandler(new DefaultEmailEventHandler(loggerFactory, emailFormatter, smtpMsgDelivery, newInstance));
             newInstance.AddEventHandler(new UserEmailEventHandler(loggerFactory, emailFormatter, smtpMsgDelivery));
             
             return newInstance;
@@ -85,7 +85,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             );
 
             var smtpMsgDelivery = new AuthCentralSmtpMessageDelivery(config, emailBodyType);            
-            newInstance.AddEventHandler(new DefaultEmailEventHandler(loggerFactory, emailFormatter, smtpMsgDelivery));
+            newInstance.AddEventHandler(new DefaultEmailEventHandler(loggerFactory, emailFormatter, smtpMsgDelivery, newInstance));
 
             return newInstance;
         }

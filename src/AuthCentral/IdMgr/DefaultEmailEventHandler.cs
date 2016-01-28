@@ -24,17 +24,20 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
         IEventHandler<LinkedAccountRemovedEvent<HierarchicalUserAccount>>
     {
         private ILogger _logger;
+        private readonly MembershipRebootConfiguration<HierarchicalUserAccount> _config;
 
-        public DefaultEmailEventHandler(ILoggerFactory loggerFactory, IMessageFormatter<HierarchicalUserAccount> messageFormatter)
+        public DefaultEmailEventHandler(ILoggerFactory loggerFactory, IMessageFormatter<HierarchicalUserAccount> messageFormatter, MembershipRebootConfiguration<HierarchicalUserAccount> config)
             : base(messageFormatter)
         {
             _logger = loggerFactory.CreateLogger(this.GetType().ToString());
+            _config = config;
         }
 
-        public DefaultEmailEventHandler(ILoggerFactory loggerFactory, IMessageFormatter<HierarchicalUserAccount> messageFormatter, IMessageDelivery messageDelivery)
+        public DefaultEmailEventHandler(ILoggerFactory loggerFactory, IMessageFormatter<HierarchicalUserAccount> messageFormatter, IMessageDelivery messageDelivery, MembershipRebootConfiguration<HierarchicalUserAccount> config)
             : base(messageFormatter, messageDelivery)
         {
             _logger = loggerFactory.CreateLogger(this.GetType().ToString());
+            _config = config;
         }
 
         public void Handle(PasswordResetRequestedEvent<HierarchicalUserAccount> evt)
@@ -115,6 +118,19 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
         public void Handle(LinkedAccountRemovedEvent<HierarchicalUserAccount> evt)
         {
             Process(evt, new { evt.LinkedAccount.ProviderName });
+        }
+
+        private DateTime? VerificationExpirationTimestamp(DateTime? verificationSent)
+        {
+            if (!verificationSent.HasValue)
+                return null;
+
+            DateTime sent = verificationSent.Value;
+            TimeZoneInfo mountainZone = TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time");
+
+            sent = TimeZoneInfo.ConvertTime(sent.ToUniversalTime(), TimeZoneInfo.Utc, mountainZone);
+
+            return sent.Add(_config.VerificationKeyLifetime);
         }
     }
 }

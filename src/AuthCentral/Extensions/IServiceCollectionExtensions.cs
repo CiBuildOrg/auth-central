@@ -7,10 +7,12 @@ using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using MongoDB.Driver;
 using Serilog;
+using System.Security.Claims;
 
 namespace Fsw.Enterprise.AuthCentral.Extensions
 {
@@ -56,11 +58,31 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
         public static void AddMembershipReboot(this IServiceCollection services, EnvConfig config)
         {
-            services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
-            services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootSetup.GetConfig(null, provider.GetService<IApplicationEnvironment>(), config));
-            services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
+            // any middleware or component that uses DI to inject an instance of UserAccountService<HierarchicalUserAccount>
+            // should instead depend on either AdminUserAccountServiceContainer, or DefaultUserAccountServiceContainer
+            services.AddScoped(provider =>
+            {
+                MembershipRebootSetup setup = MembershipRebootConfigFactory.GetAdminConfig(provider.GetService<IApplicationEnvironment>(), config);
+                var repository = provider.GetRequiredService<IUserAccountRepository<HierarchicalUserAccount>>();
+                return new AdminUserAccountServiceContainer
+                {
+                    Service = new UserAccountService<HierarchicalUserAccount>(setup, repository)
+                };
+            });
+
+            services.AddScoped(provider =>
+            {
+                MembershipRebootSetup setup = MembershipRebootConfigFactory.GetDefaultConfig(provider.GetService<IApplicationEnvironment>(), config);
+                var repository = provider.GetRequiredService<IUserAccountRepository<HierarchicalUserAccount>>();
+                return new DefaultUserAccountServiceContainer
+                {
+                    Service = new UserAccountService<HierarchicalUserAccount>(setup, repository)
+                };
+            });
+
             services.AddScoped<IUserAccountRepository<HierarchicalUserAccount>, TestUserRepository>();
             services.AddScoped<AuthenticationService<HierarchicalUserAccount>, MongoAuthenticationService>();
+            services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         public static void AddAuthCentralDependencies(this IServiceCollection services, EnvConfig config)

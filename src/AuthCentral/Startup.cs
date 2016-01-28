@@ -10,11 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions; // Yes, really.
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.AspNet.Http;
-using Fsw.Enterprise.AuthCentral.IdMgr;
-using Fsw.Enterprise.AuthCentral.Health;
+using Microsoft.Extensions.PlatformAbstractions;
 using Fsw.Enterprise.AuthCentral.MongoStore;
+using Fsw.Enterprise.AuthCentral.Health;
 
 namespace Fsw.Enterprise.AuthCentral
 {
@@ -57,7 +56,6 @@ namespace Fsw.Enterprise.AuthCentral
             logFactory.AddProvider(new LogCentral.MicrosoftFramework.LoggingProvider(_config.Log4NetConfigPath));
             app.UseMiddleware<LogCentral.MicrosoftFramework.LogMiddleware>();
 
-            MembershipRebootSetup.GetConfig(app, env, _config); // Create the singleton to get around MVC DI container limitations
             app.UseStatusCodePagesWithReExecute("/errors/{0}.html");
             app.UseCookieAuthentication(options =>
             {

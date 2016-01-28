@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using BrockAllen.MembershipReboot.Hierarchical;
 using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Services;
 using IdentityServer3.Core.Services.Default;
@@ -25,7 +24,7 @@ namespace Fsw.Enterprise.AuthCentral.Testing
 {
     class Factory
     {
-        public static IdentityServerServiceFactory Configure(Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>> usrSrv)
+        public static IdentityServerServiceFactory Configure(Registration<IUserService, MembershipRebootUserService> usrSrv)
         {
             var scopeStore = new InMemoryScopeStore(Scopes.Get());
             var clientStore = new InMemoryClientStore(Clients.Get());

@@ -105,7 +105,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 PasswordResetFrequency = 0, // number of days before passwords should be reset - 0 means never
                 AccountLockoutFailedLoginAttempts = 5,  // lock user out after 5 failed attempts
                 AccountLockoutDuration = new TimeSpan(0, 10, 0), // lock user out for 10 minutes
-                VerificationKeyLifetime = new TimeSpan(0, 20, 0) // password reset, change email, & change mobile verfication key lifetime
+                VerificationKeyLifetime = new TimeSpan(2, 0, 0) // password reset, change email, & change mobile verfication key lifetime
             };
 
             newInstance.ConfigurePasswordComplexity(minimumLength: 7, minimumNumberOfComplexityRules: 3);

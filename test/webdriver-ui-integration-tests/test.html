@@ -1,0 +1,392 @@
+﻿<?xml version="1.0" encoding="utf-8"?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html>
+  <head>
+    <title>xUnit.net Test Results</title>
+    <style type="text/css">
+          body { font-family: Calibri, Verdana, Arial, sans-serif; background-color: White; color: Black; }
+          h2,h3,h4,h5 { margin: 0; padding: 0; }
+          h3 { font-weight: normal; }
+          h4 { margin: 0.5em 0; }
+          h5 { font-weight: normal; font-style: italic; margin-bottom: 0.75em; }
+          h6 { font-size: 0.9em; font-weight: bold; margin: 0.5em 0 0 0.75em; padding: 0; }
+          pre,table { font-family: Consolas; font-size: 0.8em; margin: 0 0 0 1em; padding: 0; }
+          table { padding-bottom: 0.25em; }
+          th { padding: 0 0.5em; border-right: 1px solid #bbb; text-align: left; }
+          td { padding-left: 0.5em; }
+          .divided { border-top: solid 1px #f0f5fa; padding-top: 0.5em; }
+          .row, .altrow { padding: 0.1em 0.3em; }
+          .row { background-color: #f0f5fa; }
+          .altrow { background-color: #e1ebf4; }
+          .success, .failure, .skipped { font-family: Arial Unicode MS; font-weight: normal; float: left; width: 1em; display: block; }
+          .success { color: #0c0; }
+          .failure { color: #c00; }
+          .skipped { color: #cc0; }
+          .timing { float: right; }
+          .indent { margin: 0.25em 0 0.5em 2em; }
+          .clickable { cursor: pointer; }
+          .testcount { font-size: 85%; }
+        </style>
+    <script language="javascript">
+          function ToggleClass(id) {
+            var elem = document.getElementById(id);
+            if (elem.style.display == "none") {
+              elem.style.display = "block";
+            }
+            else {
+              elem.style.display = "none";
+            }
+          }
+        </script>
+  </head>
+  <body>
+    <h3 class="divided">
+      <b>Assemblies Run</b>
+    </h3>
+    <div>C:\FswGit\qa-space-party\QA.SpaceParty\bin\Debug\Tests.DLL</div>
+    <h3 class="divided">
+      <b>Summary</b>
+    </h3>
+    <div>
+          Tests run: <a href="#all"><b>43</b></a>  
+          
+            Failures: <a href="#failures"><b>1</b></a>,
+          
+            Skipped: <a href="#skipped"><b>1</b></a>,
+          
+          Run time: <b>198.601s</b></div>
+    <br />
+    <h2>
+      <a id="failures" />Failed tests
+          </h2>
+    <div class="row">
+      <span class="timing">9.3876867s
+        </span>
+      <span class="failure">✘</span>
+       Sort on Clearance<br clear="all" /><pre>System.InvalidOperationException : Element is not clickable at point (51.5, 6.4166717529296875). Other element would receive the click: &lt;div class="col-xs-4 fsw-logo"&gt;&lt;/div&gt;\nCommand duration or timeout: 255 milliseconds\nBuild info: version: '2.49.1', revision: '7203e46', time: '2016-01-21 17:35:35'\nSystem info: host: 'STG-FswSolr1', ip: '10.0.48.22', os.name: 'Windows Server 2012', os.arch: 'amd64', os.version: '6.2', java.version: '1.8.0_66'\nDriver info: org.openqa.selenium.firefox.FirefoxDriver\nCapabilities [{applicationCacheEnabled=true, rotatable=false, handlesAlerts=true, databaseEnabled=true, version=30.0, platform=WINDOWS, browserConnectionEnabled=true, nativeEvents=false, acceptSslCerts=true, webStorageEnabled=true, locationContextEnabled=true, browserName=firefox, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]\nSession ID: 07d5b4a1-5146-48fb-8460-8cbee18e7a51</pre><pre>   at OpenQA.Selenium.Remote.RemoteWebDriver.UnpackAndThrowOnError(Response errorResponse)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.Remote.RemoteWebElement.Click()
+   at ComplexPageObjects.FSW_com.Search.SearchPage.ApplyFilterByName(String filterName, String filterValue, Boolean yesNo, Boolean useList, Int32 index) in C:\FswGit\qa-space-party\ComplexPageObjects\FSW_com\Search\SearchPage.cs:line 53
+   at Tests.FSW.com.Search.FilterSearchTests.SortByClearance() in C:\FswGit\qa-space-party\QA.SpaceParty\FSW.com\Search\FilterSearchTests.cs:line 48</pre></div>
+    <br />
+    <h2>
+      <a id="skipped" />Skipped tests
+          </h2>
+    <div class="row">
+      <span class="timing">Skipped</span>
+      <span class="skipped">❢</span>
+       Sort by Sale<br clear="all" /></div>
+    <br />
+    <h2>
+      <a id="all" />All tests
+        </h2>
+    <h5>Click test class name to expand/collapse test details</h5>
+    <h3>
+      <span class="timing">81.368s
+            </span>
+      <span class="clickable" onclick="ToggleClass('classID0EBAAC')" ondblclick="ToggleClass('classID0EBAAC')">
+        <span class="success">✔</span>
+               QA.SpaceParty.FSW.com.PDP.ProductDetailTests
+               <span class="testcount">
+                (9 tests)
+              </span></span>
+      <br clear="all" />
+    </h3>
+    <div class="indent" style="display: none;" id="classID0EBAAC">
+      <div class="row">
+        <span class="timing">5.9088868s
+        </span>
+        <span class="success">✔</span>
+       Map Pricing tests(mapType: AddToCart, loggedIn: False)<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">7.1145816s
+        </span>
+        <span class="success">✔</span>
+       Map Pricing tests(mapType: AddToCart, loggedIn: True)<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">6.7535265s
+        </span>
+        <span class="success">✔</span>
+       Map Pricing tests(mapType: EmailNoStrikeThrough, loggedIn: False)<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">8.0052424s
+        </span>
+        <span class="success">✔</span>
+       Map Pricing tests(mapType: EmailNoStrikeThrough, loggedIn: True)<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">6.7791865s
+        </span>
+        <span class="success">✔</span>
+       Map Pricing tests(mapType: EmailStrikeThrough, loggedIn: False)<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">6.297321s
+        </span>
+        <span class="success">✔</span>
+       Map Pricing tests(mapType: EmailStrikeThrough, loggedIn: True)<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">5.5697174s
+        </span>
+        <span class="success">✔</span>
+       Map Pricing tests(mapType: InstantRebate, loggedIn: False)<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">5.7458296s
+        </span>
+        <span class="success">✔</span>
+       Map Pricing tests(mapType: InstantRebate, loggedIn: True)<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">29.1933152s
+        </span>
+        <span class="success">✔</span>
+       More From Manufacturer<br clear="all" /></div>
+    </div>
+    <h3>
+      <span class="timing">188.317s
+            </span>
+      <span class="clickable" onclick="ToggleClass('classID0EY')" ondblclick="ToggleClass('classID0EY')">
+        <span class="success">✔</span>
+               Tests.FSW.com.FilterPageTests.FilterPageTests
+               <span class="testcount">
+                (11 tests)
+              </span></span>
+      <br clear="all" />
+    </h3>
+    <div class="indent" style="display: none;" id="classID0EY">
+      <div class="row">
+        <span class="timing">5.689661s
+        </span>
+        <span class="success">✔</span>
+       check that page size is set correctly(pageSize: 12)<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">4.112471s
+        </span>
+        <span class="success">✔</span>
+       check that page size is set correctly(pageSize: 24)<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">5.7071282s
+        </span>
+        <span class="success">✔</span>
+       check that page size is set correctly(pageSize: 48)<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">36.5222487s
+        </span>
+        <span class="success">✔</span>
+       MapTypes Display correctly(mapType: AddToCart, loggedIn: False)<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">22.3484968s
+        </span>
+        <span class="success">✔</span>
+       MapTypes Display correctly(mapType: AddToCart, loggedIn: True)<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">24.7234266s
+        </span>
+        <span class="success">✔</span>
+       MapTypes Display correctly(mapType: EmailNoStrikeThrough, loggedIn: False)<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">27.936775s
+        </span>
+        <span class="success">✔</span>
+       MapTypes Display correctly(mapType: EmailNoStrikeThrough, loggedIn: True)<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">12.2284066s
+        </span>
+        <span class="success">✔</span>
+       MapTypes Display correctly(mapType: EmailStrikeThrough, loggedIn: False)<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">16.8697104s
+        </span>
+        <span class="success">✔</span>
+       MapTypes Display correctly(mapType: EmailStrikeThrough, loggedIn: True)<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">14.3452781s
+        </span>
+        <span class="success">✔</span>
+       MapTypes Display correctly(mapType: InstantRebate, loggedIn: False)<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">17.8336168s
+        </span>
+        <span class="success">✔</span>
+       MapTypes Display correctly(mapType: InstantRebate, loggedIn: True)<br clear="all" /></div>
+    </div>
+    <h3>
+      <span class="timing">24.542s
+            </span>
+      <span class="clickable" onclick="ToggleClass('classID0EYE')" ondblclick="ToggleClass('classID0EYE')">
+        <span class="success">✔</span>
+               Tests.FSW.com.Home.HomePageTests
+               <span class="testcount">
+                (5 tests)
+              </span></span>
+      <br clear="all" />
+    </h3>
+    <div class="indent" style="display: none;" id="classID0EYE">
+      <div class="row">
+        <span class="timing">4.9916788s
+        </span>
+        <span class="success">✔</span>
+       Assert Home page adds exist(ad: Banner)<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">2.3779538s
+        </span>
+        <span class="success">✔</span>
+       Assert Home page adds exist(ad: SuperHero)<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">9.2585173s
+        </span>
+        <span class="success">✔</span>
+       Assert that Home Page Decks exist(deck: Equipment)<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">4.6994896s
+        </span>
+        <span class="success">✔</span>
+       Assert that Home Page Decks exist(deck: Kitchen)<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">3.2146624s
+        </span>
+        <span class="success">✔</span>
+       Assert that Home Page Decks exist(deck: Sale)<br clear="all" /></div>
+    </div>
+    <h3>
+      <span class="timing">8.968s
+            </span>
+      <span class="clickable" onclick="ToggleClass('classID0E5BAC')" ondblclick="ToggleClass('classID0E5BAC')">
+        <span class="success">✔</span>
+               Tests.FSW.com.NavBar.NavigationBarTests
+               <span class="testcount">
+                (2 tests)
+              </span></span>
+      <br clear="all" />
+    </h3>
+    <div class="indent" style="display: none;" id="classID0E5BAC">
+      <div class="row">
+        <span class="timing">6.4003205s
+        </span>
+        <span class="success">✔</span>
+       MegaMenu opens<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">2.5672373s
+        </span>
+        <span class="success">✔</span>
+       Open Live Chat<br clear="all" /></div>
+    </div>
+    <h3>
+      <span class="timing">44.532s
+            </span>
+      <span class="clickable" onclick="ToggleClass('classID0EHH')" ondblclick="ToggleClass('classID0EHH')">
+        <span class="success">✔</span>
+               Tests.FSW.com.Search.AutoSuggestTests
+               <span class="testcount">
+                (3 tests)
+              </span></span>
+      <br clear="all" />
+    </h3>
+    <div class="indent" style="display: none;" id="classID0EHH">
+      <div class="row">
+        <span class="timing">5.2930257s
+        </span>
+        <span class="success">✔</span>
+       AutoSuggest shows up<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">20.1757492s
+        </span>
+        <span class="success">✔</span>
+       Clicking on page autosuggest takes user to page<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">19.0628628s
+        </span>
+        <span class="success">✔</span>
+       Clicking on sku takes user to that sku<br clear="all" /></div>
+    </div>
+    <h3>
+      <span class="timing">66.824s
+            </span>
+      <span class="clickable" onclick="ToggleClass('classID0E4F')" ondblclick="ToggleClass('classID0E4F')">
+        <span class="failure">✘</span>
+               Tests.FSW.com.Search.FilterSearchTests
+               <span class="testcount">
+                (5 tests)
+              </span></span>
+      <br clear="all" />
+    </h3>
+    <div class="indent" id="classID0E4F">
+      <div class="row">
+        <span class="timing">14.7965085s
+        </span>
+        <span class="success">✔</span>
+       Sort by Department<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">15.963647s
+        </span>
+        <span class="success">✔</span>
+       Sort by Free Shipping<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">26.6764212s
+        </span>
+        <span class="success">✔</span>
+       Sort by FSW Direct<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">Skipped</span>
+        <span class="skipped">❢</span>
+       Sort by Sale<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">9.3876867s
+        </span>
+        <span class="failure">✘</span>
+       Sort on Clearance<br clear="all" /><pre>System.InvalidOperationException : Element is not clickable at point (51.5, 6.4166717529296875). Other element would receive the click: &lt;div class="col-xs-4 fsw-logo"&gt;&lt;/div&gt;\nCommand duration or timeout: 255 milliseconds\nBuild info: version: '2.49.1', revision: '7203e46', time: '2016-01-21 17:35:35'\nSystem info: host: 'STG-FswSolr1', ip: '10.0.48.22', os.name: 'Windows Server 2012', os.arch: 'amd64', os.version: '6.2', java.version: '1.8.0_66'\nDriver info: org.openqa.selenium.firefox.FirefoxDriver\nCapabilities [{applicationCacheEnabled=true, rotatable=false, handlesAlerts=true, databaseEnabled=true, version=30.0, platform=WINDOWS, browserConnectionEnabled=true, nativeEvents=false, acceptSslCerts=true, webStorageEnabled=true, locationContextEnabled=true, browserName=firefox, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]\nSession ID: 07d5b4a1-5146-48fb-8460-8cbee18e7a51</pre><pre>   at OpenQA.Selenium.Remote.RemoteWebDriver.UnpackAndThrowOnError(Response errorResponse)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.Remote.RemoteWebElement.Click()
+   at ComplexPageObjects.FSW_com.Search.SearchPage.ApplyFilterByName(String filterName, String filterValue, Boolean yesNo, Boolean useList, Int32 index) in C:\FswGit\qa-space-party\ComplexPageObjects\FSW_com\Search\SearchPage.cs:line 53
+   at Tests.FSW.com.Search.FilterSearchTests.SortByClearance() in C:\FswGit\qa-space-party\QA.SpaceParty\FSW.com\Search\FilterSearchTests.cs:line 48</pre></div>
+    </div>
+    <h3>
+      <span class="timing">104.338s
+            </span>
+      <span class="clickable" onclick="ToggleClass('classID0EBD')" ondblclick="ToggleClass('classID0EBD')">
+        <span class="success">✔</span>
+               Tests.FSW.com.Search.ManufacturerSearchTests
+               <span class="testcount">
+                (8 tests)
+              </span></span>
+      <br clear="all" />
+    </h3>
+    <div class="indent" style="display: none;" id="classID0EBD">
+      <div class="row">
+        <span class="timing">14.8274599s
+        </span>
+        <span class="success">✔</span>
+       Searching for manufacturer and sku should return product form them(manufacturer: "Dexter-Russell")<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">11.1426947s
+        </span>
+        <span class="success">✔</span>
+       Searching for manufacturer and sku should return product form them(manufacturer: "Manitowoc")<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">23.8236945s
+        </span>
+        <span class="success">✔</span>
+       Searching for manufacturer and sku should return product form them(manufacturer: "True")<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">14.2186607s
+        </span>
+        <span class="success">✔</span>
+       Searching for manufacturer should return products from them(searchValue: "10 Strawberry Street")<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">9.1833761s
+        </span>
+        <span class="success">✔</span>
+       Searching for manufacturer should return products from them(searchValue: "Dexter-Russell")<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">12.7238203s
+        </span>
+        <span class="success">✔</span>
+       Searching for manufacturer should return products from them(searchValue: "Ice-O-Matic")<br clear="all" /></div>
+      <div class="row">
+        <span class="timing">9.2257072s
+        </span>
+        <span class="success">✔</span>
+       Searching for manufacturer should return products from them(searchValue: "Manitowoc")<br clear="all" /></div>
+      <div class="altrow">
+        <span class="timing">9.1922637s
+        </span>
+        <span class="success">✔</span>
+       Searching for manufacturer should return products from them(searchValue: "True")<br clear="all" /></div>
+    </div>
+  </body>
+</html>

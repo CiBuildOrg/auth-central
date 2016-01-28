@@ -12,37 +12,45 @@
 
 <div class="row reset-password">
     <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">@ViewBag.Title</h3>
-            </div>
-            <div class="panel-body">
-                @using (Html.BeginForm())
-                {
-                @Html.AntiForgeryToken()
+        
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @using (Html.BeginForm())
+                        {
+                        @Html.AntiForgeryToken()
 
-                if (!Html.ViewData.ModelState.IsValid)
-                {
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12">
-                            <div class="alert alert-danger">
-                                @Html.ValidationSummary("Please correct the following errors")
+                        if (!Html.ViewData.ModelState.IsValid)
+                        {
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="alert alert-danger">
+                                    @Html.ValidationSummary("Please correct the following errors")
+                                </div>
                             </div>
                         </div>
+                        }
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <p>Please enter the email address associated with your FSW Account and we will send you a link to reset your password.</p>
+                                <fieldset class="text-center">
+                                    @Html.EditorForModel()
+                                    <button class="btn btn-primary">Submit</button>
+                                </fieldset>
+                            </div>
+                        </div>
+                        }
                     </div>
-                }
-
-                <fieldset>
-
-                    @Html.EditorForModel()
-
-                    <div class="form-group">
-                        <button class="btn btn-primary">Submit</button>
-                    </div>
-
-                </fieldset>
-                }
+                </div>
             </div>
         </div>
+
+        <div class="row help-text">
+            <div class="col-xs-12">
+                <p><strong>Need Help?</strong> If you having trouble resetting your password, or you believe you may have used an incorrect email address to create your account, please call an FSW Customer Service Representative Toll Free at <span class="text-fsw">1-877-877-5655</span> or email <a href="mailto:support@fsw.com">support@fsw.com</a> (for emplyees).
+            </div>
+        </div>
+
     </div>
 </div>

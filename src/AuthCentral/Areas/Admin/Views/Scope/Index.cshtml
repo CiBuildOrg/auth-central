@@ -192,6 +192,22 @@
                     listDiv.html(msg);
                 });
             });
+
+            $('div.claim-list-static').on('click', 'button.show-edit-claim', function(event) {
+                var showRow = $(this).parents('tr.show-claim-row');
+                var editRow = showRow.next('tr.edit-claim-row');
+
+                showRow.addClass('hidden');
+                editRow.removeClass('hidden');
+            });
+
+            $('div.claim-list-static').on('click', 'button.show-show-claim', function(event) {
+                var editRow = $(this).parents('tr.edit-claim-row');
+                var showRow = editRow.prev('tr.show-claim-row');
+
+                showRow.removeClass('hidden');
+                editRow.addClass('hidden');
+            });
         });
     </script>
 }

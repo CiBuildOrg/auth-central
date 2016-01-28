@@ -25,6 +25,12 @@ h1 {
 	font-size: $font-size-h3;
 	color: lighten($gray-light, 15%);
 
+	small {
+		display: block;
+		margin-top: $margin-small-vertical;
+		color: lighten($gray-light, 10%);
+	}
+
 	@media only screen and (min-width:768px) {
 
 		margin-bottom: $margin-large-vertical*3;

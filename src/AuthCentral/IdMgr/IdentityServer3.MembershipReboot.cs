@@ -147,6 +147,10 @@ namespace IdentityServer3.MembershipReboot
                 {
                     if (account != null)
                     {
+                        if (userAccountService.Configuration.RequireAccountVerification && !account.IsAccountVerified)
+                        {
+                            result = new AuthenticateResult("Account must be verified");
+                        }
                         if (!account.IsLoginAllowed)
                         {
                             result = new AuthenticateResult("Account is not allowed to login");

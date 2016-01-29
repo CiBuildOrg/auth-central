@@ -47,7 +47,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
                 new
                 {
                     evt.VerificationKey,
-                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)
+                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)?.ToString("G")
                 });
         }
 
@@ -82,7 +82,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
                 new
                 {
                     evt.VerificationKey,
-                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)
+                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)?.ToString("G")
                 });
         }
 
@@ -99,7 +99,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
                     evt.OldEmail,
                     evt.NewEmail,
                     evt.VerificationKey,
-                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)
+                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)?.ToString("G")
                 });
         }
 
@@ -110,7 +110,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
                 {
                     evt.OldEmail,
                     evt.VerificationKey,
-                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)
+                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)?.ToString("G")
                 });
         }
 

@@ -82,6 +82,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
             services.AddScoped<IUserAccountRepository<HierarchicalUserAccount>, TestUserRepository>();
             services.AddScoped<AuthenticationService<HierarchicalUserAccount>, MongoAuthenticationService>();
+            services.AddScoped<MongoAuthenticationService, MongoAuthenticationService>();
             services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
         }
 

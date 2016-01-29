@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using Microsoft.Extensions.Logging;
@@ -43,11 +44,14 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
 
         public void Handle(PasswordResetRequestedEvent<HierarchicalUserAccount> evt)
         {
+            DateTime verificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent);
+            
             Process(evt,
                 new
                 {
                     evt.VerificationKey,
-                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)?.ToString("G")
+                    VerificationExpiration = verificationExpiration.ToString("MMMM d, yyyy a\\t h:mm tt"),
+                    VerificationExpirationTimezone = GetTimeZone(verificationExpiration)
                 });
         }
 
@@ -78,11 +82,14 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
 
         public void Handle(AccountReopenedEvent<HierarchicalUserAccount> evt)
         {
+            DateTime verificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent);
+
             Process(evt,
                 new
                 {
                     evt.VerificationKey,
-                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)?.ToString("G")
+                    VerificationExpiration = verificationExpiration.ToString("MMMM d, yyyy a\\t h:mm tt"),
+                    VerificationExpirationTimezone = GetTimeZone(verificationExpiration)
                 });
         }
 
@@ -93,24 +100,31 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
 
         public void Handle(EmailChangeRequestedEvent<HierarchicalUserAccount> evt)
         {
+            DateTime verificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent);
+
             Process(evt,
                 new
                 {
                     evt.OldEmail,
                     evt.NewEmail,
                     evt.VerificationKey,
-                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)?.ToString("G")
+                    VerificationExpiration = verificationExpiration.ToString("MMMM d, yyyy a\\t h:mm tt"),
+                    VerificationExpirationTimezone = GetTimeZone(verificationExpiration)
+
                 });
         }
 
         public void Handle(EmailChangedEvent<HierarchicalUserAccount> evt)
         {
+            DateTime verificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent);
+
             Process(evt,
                 new
                 {
                     evt.OldEmail,
                     evt.VerificationKey,
-                    VerificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent)?.ToString("G")
+                    VerificationExpiration = verificationExpiration.ToString("MMMM d, yyyy a\\t h:mm tt"),
+                    VerificationExpirationTimezone = GetTimeZone(verificationExpiration)
                 });
         }
 
@@ -144,10 +158,13 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
             Process(evt, new { evt.LinkedAccount.ProviderName });
         }
 
-        private DateTime? VerificationExpirationTimestamp(DateTime? verificationSent)
+        private DateTime VerificationExpirationTimestamp(DateTime? verificationSent)
         {
             if (!verificationSent.HasValue)
-                return null;
+            {
+                // TODO: Log as error.
+                return DateTime.Now;
+            }
 
             DateTime sent = verificationSent.Value;
             TimeZoneInfo mountainZone = TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time");
@@ -155,6 +172,11 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
             sent = TimeZoneInfo.ConvertTime(sent.ToUniversalTime(), TimeZoneInfo.Utc, mountainZone);
 
             return sent.Add(_config.VerificationKeyLifetime);
+        }
+
+        private string GetTimeZone(DateTime date)
+        {
+            return date.IsDaylightSavingTime() ? "Mountain Daylight Time" : "Mountain Standard Time";
         }
     }
 }

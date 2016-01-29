@@ -4,7 +4,7 @@ using System;
 
 namespace Fsw.Enterprise.AuthCentral.Webdriver.Core
 {
-    public class TestFixture : IDisposable
+    public abstract class TestFixtureBase : IDisposable
     {
         private IWebDriver _driver;
 
@@ -25,6 +25,10 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.Core
 
                 return _driver;
             }
+            protected set
+            {
+                _driver = value;
+            }
         }
 
         /// <summary>
@@ -34,23 +38,16 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.Core
         /// </summary>
         /// <param name="url">http://www.stg-fsw.com</param>
         /// <param name="timeOutInSeconds">5</param>
-        public void SetUp(IWebDriver driver, string url = "http://www.dev-fsw.com", int timeOutInSeconds = 3)
+        public void SetUp(string url = "http://www.dev-fsw.com", int timeOutInSeconds = 3)
         {
-            if(driver == null)
-            {
-                throw new ArgumentNullException();
-            }
-            _driver = driver;
-
-            _driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(timeOutInSeconds));
-            _driver.Manage().Window.Maximize();
+            Driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(timeOutInSeconds));
+            Driver.Manage().Window.Maximize();
 
             //Clean up from the previous test. We don't currently store anything in local storage, so cookies are enough.
-            _driver.Manage().Cookies.DeleteAllCookies();
-            _driver.Navigate().GoToUrl(url);
+            Driver.Manage().Cookies.DeleteAllCookies();
+            Driver.Navigate().GoToUrl(url);
         }
 
-        bool disposed = false;
         public void Dispose()
         {
             Dispose(true);
@@ -58,18 +55,20 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.Core
         }
         protected virtual void Dispose(bool disposing)
         {
-            if (disposed)
-            {
-                return;
-            }
             if (disposing)
             {
-                if (_driver != null)
+                if (Driver != null)
                 {
-                    _driver.Dispose();
+                    try
+                    {
+                        Driver.Dispose();
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
                 }
             }
-            disposed = true;
         }
     }
 }

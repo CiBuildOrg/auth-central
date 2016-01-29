@@ -108,13 +108,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Core\ChromeTestFixture.cs" />
     <Compile Include="Core\Helpers\CookieHelpers.cs" />
     <Compile Include="Core\Helpers\DriverHelpers.cs" />
     <Compile Include="Core\Helpers\NumberHelpers.cs" />
     <Compile Include="Core\Helpers\StringHelpers.cs" />
     <Compile Include="Core\PageObjectBase.cs" />
     <Compile Include="Core\TestClassBase.cs" />
-    <Compile Include="Core\TestFixture.cs" />
+    <Compile Include="Core\FirefoxTestFixture.cs" />
+    <Compile Include="Core\TestFixtureBase.cs" />
     <Compile Include="Tests\Google\GoogleExampleTestChromeLauncher.cs" />
     <Compile Include="Tests\Google\GoogleExampleTests.cs" />
     <Compile Include="Tests\Google\GoogleExampleTestsFirefoxLauncher.cs" />

@@ -9,7 +9,7 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.Core
     {
         public ChromeTestFixture()
         {
-            this.Driver = new ChromeDriver(@"C:\git\auth-central\test\webdriver-ui-integration-tests\Drivers");
+            this.Driver = new ChromeDriver(this.GetDriverDir());
         }
     }
 }

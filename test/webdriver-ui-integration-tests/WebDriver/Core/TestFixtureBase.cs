@@ -13,7 +13,7 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.Core
             get
             {
                 //Sadly this will have to wait until we can find a way to only fire an event on an UnhandledException.
-                //Currently it will fire the event on any exception which is not idea because some times we catch those and just swallow them
+                //Currently it will fire the event on any exception which is not ideal because some times we catch those and just swallow them
                 //for the sake of iteration of collections.
                 // We may be able to use this for logging though, so whenever a button is clicked, or a field filled out we can log that.
 
@@ -69,6 +69,12 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.Core
                     }
                 }
             }
+        }
+
+        protected virtual string GetDriverDir()
+        {
+            // TODO: compute directory
+            return @"C:\git\auth-central\test\webdriver-ui-integration-tests\Drivers";
         }
     }
 }

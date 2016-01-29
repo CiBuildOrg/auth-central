@@ -21,6 +21,10 @@ namespace Fsw.Enterprise.AuthCentral
             public static string UriPort = "AUTHCENTRAL_URI_PORT";
             public static string SmtpHost = "AUTHCENTRAL_SMTP_HOST";
             public static string SmtpFrom = "AUTHCENTRAL_SMTP_FROM";
+            public static string SmtpPort = "AUTHCENTRAL_SMTP_PORT";
+            public static string SmtpEnableSsl = "AUTHCENTRAL_SMTP_ENABLESSL";
+            public static string SmtpUsername = "AUTHCENTRAL_SMTP_USERNAME";
+            public static string SmtpPassword = "AUTHCENTRAL_SMTP_PASSWORD";
             public static string UriServiceRoot = "AUTHCENTRAL_URI_SERVICEROOT";
             public static string CertStoreName = "AUTHCENTRAL_CERT_STORENAME";
             public static string CertThumbprint = "AUTHCENTRAL_CERT_THUMBPRINT";
@@ -218,6 +222,14 @@ namespace Fsw.Enterprise.AuthCentral
                     return _root.Get<string>(EnvVars.SmtpFrom);
                 } 
             }
+
+            public int Port => _root.Get<int>(EnvVars.SmtpPort);
+
+            public bool EnableSsl => _root.Get<bool>(EnvVars.SmtpEnableSsl);
+
+            public string Username => _root.Get<string>(EnvVars.SmtpUsername);
+
+            public string Password => _root.Get<string>(EnvVars.SmtpPassword);
         }
 
 

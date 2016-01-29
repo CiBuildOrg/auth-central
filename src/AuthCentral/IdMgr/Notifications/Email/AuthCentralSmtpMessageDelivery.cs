@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Text;
 using System.Net.Mime;
 using System.Net.Mail;
@@ -41,6 +42,14 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email
             {
                 smtp.Host = Config.Smtp.Host;
                 smtp.Timeout = SmtpTimeout;
+
+                if (Config.Smtp.Port > 0)
+                    smtp.Port = Config.Smtp.Port;
+
+                smtp.EnableSsl = Config.Smtp.EnableSsl;
+
+                if (!string.IsNullOrEmpty(Config.Smtp.Username + Config.Smtp.Password))
+                    smtp.Credentials = new NetworkCredential(Config.Smtp.Username, Config.Smtp.Password);
 
                 try
                 {

@@ -23,9 +23,13 @@ using Owin;
 
 using Fsw.Enterprise.AuthCentral.IdSvr;
 using Fsw.Enterprise.AuthCentral.MongoStore;
+using Microsoft.AspNet.Http;
+using CookieOptions = IdentityServer3.Core.Configuration.CookieOptions;
 
 namespace Fsw.Enterprise.AuthCentral.Extensions
 {
+    using BrockAllen.MembershipReboot;
+    using IdMgr;
     using Microsoft.Extensions.PlatformAbstractions;
     using DataProtectionProviderDelegate = Func<string[], Tuple<Func<byte[], byte[]>, Func<byte[], byte[]>>>;
     using DataProtectionTuple = Tuple<Func<byte[], byte[]>, Func<byte[], byte[]>>;
@@ -34,14 +38,24 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
     {
         public static void UseIdentityServer(this IApplicationBuilder app, IApplicationEnvironment env, EnvConfig config, StoreSettings idSvrStoreSettings)
         {
-            var usrSrv = new Registration<IUserService, MembershipRebootUserService<HierarchicalUserAccount>>();
+            var usrSrv = new Registration<IUserService, MembershipRebootUserService>();
             var idSvcFactory = new ServiceFactory(usrSrv, idSvrStoreSettings)
             {
                 ViewService = new Registration<IViewService>(typeof(CustomViewService))
             };
 
-            idSvcFactory.ConfigureCustomUserService(app, config.DB.MembershipReboot, env, config);
+            idSvcFactory.ConfigureCustomUserService(config.DB.MembershipReboot, env, config);
             idSvcFactory.Register(new Registration<IApplicationEnvironment>(env));
+            idSvcFactory.Register(
+                new Registration<DefaultUserAccountServiceContainer>(resolver =>
+                    new DefaultUserAccountServiceContainer
+                    {
+                        Service = new UserAccountService<HierarchicalUserAccount>(
+                            MembershipRebootConfigFactory.GetDefaultConfig(env, config),
+                            resolver.Resolve<IUserAccountRepository<HierarchicalUserAccount>>())
+                    }
+                )
+            );
 
             var options = new IdentityServerOptions
             {
@@ -86,7 +100,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                     StyleSrc = config.Csp.StyleSrc,
                     FontSrc = config.Csp.FontSrc
                 },
-                EnableWelcomePage = true
+                EnableWelcomePage = false
             };
             
             app.UseOwin(addToPipeline =>
@@ -122,10 +136,20 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                 options.ResponseType = OpenIdConnectResponseTypes.Code;
                 options.Scope.Add("fsw_platform");
                 options.Scope.Add("profile");
+                options.Scope.Add("email");
                 options.Scope.Add("openid");
 
                 options.Events = new OpenIdConnectEvents
                 {
+                    OnRedirectToEndSessionEndpoint = context =>
+                    {
+                        // set the post logout redirect uri, otherwise the
+                        // first stored value associated with our client is use (not 
+                        // always what we want)
+                        context.Options.PostLogoutRedirectUri = config.Uri.IssuerUri;
+                        return Task.FromResult(0);
+                    },
+
                     OnRedirectToAuthenticationEndpoint = context =>
                     {
                         if (context.HttpContext.User.Identity.IsAuthenticated && context.ProtocolMessage.RequestType != OpenIdConnectRequestType.LogoutRequest)
@@ -141,15 +165,35 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                     {
                         var id = new ClaimsIdentity("application", "given_name", "role");
 
+                        var idToken = new JwtSecurityToken(context.TokenEndpointResponse.IdToken);
                         var token = new JwtSecurityToken(context.TokenEndpointResponse.AccessToken);
+
+                        // get resource claims from auth token
                         IEnumerable<Claim> claims = token.Claims.Where(c => c.Type != "iss" &&
                                                                             c.Type != "aud" &&
                                                                             c.Type != "nbf" &&
                                                                             c.Type != "exp" &&
                                                                             c.Type != "iat" &&
+                                                                            c.Type != "amr" &&
+                                                                            c.Type != "jti" &&
                                                                             c.Type != "nonce" &&
                                                                             c.Type != "c_hash" &&
                                                                             c.Type != "at_hash");
+
+                        // get identity claims from identity token
+                        claims = claims.Concat(idToken.Claims.Where(c =>    c.Type != "iss" &&
+                                                                            c.Type != "aud" &&
+                                                                            c.Type != "nbf" &&
+                                                                            c.Type != "exp" &&
+                                                                            c.Type != "jti" &&
+                                                                            c.Type != "amr" &&
+                                                                            c.Type != "sub" &&
+                                                                            c.Type != "idp" &&
+                                                                            c.Type != "auth_time" &&
+                                                                            c.Type != "iat" &&
+                                                                            c.Type != "nonce" &&
+                                                                            c.Type != "c_hash" &&
+                                                                            c.Type != "at_hash"));
 
                         string expiration = token.Claims.First(c => c.Type == "exp").Value;
 

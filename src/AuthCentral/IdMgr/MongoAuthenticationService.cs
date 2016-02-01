@@ -13,12 +13,12 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
     {
         readonly HttpContext _context;
 
-        public MongoAuthenticationService(UserAccountService<HierarchicalUserAccount> userService, IHttpContextAccessor ctxAccessor) : base(userService)
+        public MongoAuthenticationService(DefaultUserAccountServiceContainer container, IHttpContextAccessor ctxAccessor) : base(container.Service)
         {
             _context = ctxAccessor.HttpContext;
         }
 
-        public MongoAuthenticationService(UserAccountService<HierarchicalUserAccount> userService, ClaimsAuthenticationManager claimsAuthenticationManager, IHttpContextAccessor ctxAccessor) : base(userService, claimsAuthenticationManager)
+        public MongoAuthenticationService(DefaultUserAccountServiceContainer container, ClaimsAuthenticationManager claimsAuthenticationManager, IHttpContextAccessor ctxAccessor) : base(container.Service, claimsAuthenticationManager)
         {
             _context = ctxAccessor.HttpContext;
         }

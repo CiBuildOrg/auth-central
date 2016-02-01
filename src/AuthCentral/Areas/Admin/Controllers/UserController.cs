@@ -31,11 +31,11 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         IBulkUserRepository<HierarchicalUserAccount> _repository;
 
         public UserController(EnvConfig cfg, 
-            UserAccountService<HierarchicalUserAccount> userSvc, 
+            AdminUserAccountServiceContainer container,
             IBulkUserRepository<HierarchicalUserAccount> repository)
         {
             this._cfg = cfg;
-            this._userAccountService = userSvc;
+            this._userAccountService = container.Service;
             this._repository = repository;
         }
 
@@ -62,9 +62,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             {
                 try
                 {
-                    string password = PasswordGenerator.GeneratePasswordOfLength(16);
-                    HierarchicalUserAccount account = _userAccountService.CreateAccount(model.Username, password, model.Email);
-                    _userAccountService.SetConfirmedEmail(account.ID, model.Email);
+                    HierarchicalUserAccount account = _userAccountService.CreateAccount(model.Username, PasswordGenerator.GeneratePasswordOfLength(16), model.Email);
+                    _userAccountService.SetConfirmedEmail(account.ID, account.Email);
                     _userAccountService.ResetPassword(account.ID);
                     AddClaims(account.ID, model);
 

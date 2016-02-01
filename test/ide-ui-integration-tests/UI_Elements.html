@@ -52,6 +52,16 @@
 	<td>//input[@value='Save']</td>
 	<td>SaveButton</td>
 </tr>
+<tr>
+	<td>store</td>
+	<td>link=Forgot Password?</td>
+	<td>ForgotPassword</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>css=button.btn.btn-primary</td>
+	<td>SubmitButton</td>
+</tr>
 <!--All Pages-->
 <tr>
 	<td>store</td>
@@ -65,23 +75,23 @@
 </tr>
 <tr>
 	<td>store</td>
-	<td>link=User Lookup</td>
-	<td>Header_UserLookup</td>
+	<td>link=Manage Users</td>
+	<td>Header_ManageUsers</td>
 </tr>
 <tr>
 	<td>store</td>
-	<td>link=Create Account</td>
-	<td>Header_CreateAccount</td>
+	<td>link=Create User »</td>
+	<td>CreateUserButton</td>
 </tr>
 <tr>
 	<td>store</td>
-	<td>link=Clients</td>
-	<td>Header_Clients</td>
+	<td>link=Manage Clients</td>
+	<td>Header_ManageClients</td>
 </tr>
 <tr>
 	<td>store</td>
-	<td>link=Scopes</td>
-	<td>Header_Scopes</td>
+	<td>link=Manage Scopes</td>
+	<td>Header_ManageScopes</td>
 </tr>
 <tr>
 	<td>store</td>
@@ -95,18 +105,8 @@
 </tr>
 <tr>
 	<td>store</td>
-	<td>link=Verify Your Email Account</td>
-	<td>Header_VerifyYourEmailAccount</td>
-</tr>
-<tr>
-	<td>store</td>
-	<td>link=Change Email</td>
-	<td>Header_ChangeEmail</td>
-</tr>
-<tr>
-	<td>store</td>
-	<td>link=Change Password</td>
-	<td>Header_ChangePassword</td>
+	<td>link=Confirm Your Email Account</td>
+	<td>Header_ConfirmYourEmailAccount </td>
 </tr>
 <!--Create Account Page-->
 <tr>
@@ -322,34 +322,39 @@
 <!--Change Password Page-->
 <tr>
 	<td>store</td>
-	<td>id=OldPassword</td>
+	<td>id=Password_OldPassword</td>
 	<td>ChangePassword_CurrentPassword</td>
 </tr>
 <tr>
 	<td>store</td>
-	<td>id=NewPassword</td>
+	<td>id=Password_NewPassword</td>
 	<td>ChangePassword_NewPassword</td>
 </tr>
 <tr>
 	<td>store</td>
-	<td>id=NewPasswordConfirm</td>
+	<td>id=Password_NewPasswordConfirm</td>
 	<td>ChangePassword_ConfirmNewPassword</td>
 </tr>
 <tr>
 	<td>store</td>
-	<td>css=button</td>
+	<td>//input[@value='Change Password'] | //button[.='Change Password']</td>
 	<td>ChangePasswordButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=here</td>
+	<td>HereButton</td>
 </tr>
 <!--Change Email Page-->
 <tr>
 	<td>store</td>
-	<td>id=NewEmail</td>
+	<td>id=Email</td>
 	<td>ChangeEmail_NewEmail</td>
 </tr>
 <tr>
 	<td>store</td>
-	<td>css=button.btn.btn-primary</td>
-	<td>ChangeEmailButton</td>
+	<td>xpath=(//input[@value='Save'])[2]</td>
+	<td>ChangeEmail_SaveButton</td>
 </tr>
 <!--Clients Page-->
 <tr>

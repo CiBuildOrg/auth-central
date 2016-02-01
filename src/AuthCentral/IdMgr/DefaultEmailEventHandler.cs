@@ -25,8 +25,8 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
         IEventHandler<LinkedAccountAddedEvent<HierarchicalUserAccount>>,
         IEventHandler<LinkedAccountRemovedEvent<HierarchicalUserAccount>>
     {
-        private ILogger _logger;
         private readonly MembershipRebootConfiguration<HierarchicalUserAccount> _config;
+        private readonly ILogger _logger;
 
         public DefaultEmailEventHandler(ILoggerFactory loggerFactory, IMessageFormatter<HierarchicalUserAccount> messageFormatter, MembershipRebootConfiguration<HierarchicalUserAccount> config)
             : base(messageFormatter)
@@ -44,14 +44,14 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
 
         public void Handle(PasswordResetRequestedEvent<HierarchicalUserAccount> evt)
         {
-            DateTime verificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent);
+            DateTime verificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent, evt);
             
             Process(evt,
                 new
                 {
                     evt.VerificationKey,
                     VerificationExpiration = verificationExpiration.ToString("MMMM d, yyyy a\\t h:mm tt"),
-                    VerificationExpirationTimezone = GetTimeZone(verificationExpiration)
+                    VerificationExpirationTimezone = GetTimeZoneName(verificationExpiration)
                 });
         }
 
@@ -82,14 +82,14 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
 
         public void Handle(AccountReopenedEvent<HierarchicalUserAccount> evt)
         {
-            DateTime verificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent);
+            DateTime verificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent, evt);
 
             Process(evt,
                 new
                 {
                     evt.VerificationKey,
                     VerificationExpiration = verificationExpiration.ToString("MMMM d, yyyy a\\t h:mm tt"),
-                    VerificationExpirationTimezone = GetTimeZone(verificationExpiration)
+                    VerificationExpirationTimezone = GetTimeZoneName(verificationExpiration)
                 });
         }
 
@@ -100,7 +100,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
 
         public void Handle(EmailChangeRequestedEvent<HierarchicalUserAccount> evt)
         {
-            DateTime verificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent);
+            DateTime verificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent, evt);
 
             Process(evt,
                 new
@@ -109,14 +109,14 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
                     evt.NewEmail,
                     evt.VerificationKey,
                     VerificationExpiration = verificationExpiration.ToString("MMMM d, yyyy a\\t h:mm tt"),
-                    VerificationExpirationTimezone = GetTimeZone(verificationExpiration)
+                    VerificationExpirationTimezone = GetTimeZoneName(verificationExpiration)
 
                 });
         }
 
         public void Handle(EmailChangedEvent<HierarchicalUserAccount> evt)
         {
-            DateTime verificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent);
+            DateTime verificationExpiration = VerificationExpirationTimestamp(evt.Account.VerificationKeySent, evt);
 
             Process(evt,
                 new
@@ -124,7 +124,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
                     evt.OldEmail,
                     evt.VerificationKey,
                     VerificationExpiration = verificationExpiration.ToString("MMMM d, yyyy a\\t h:mm tt"),
-                    VerificationExpirationTimezone = GetTimeZone(verificationExpiration)
+                    VerificationExpirationTimezone = GetTimeZoneName(verificationExpiration)
                 });
         }
 
@@ -158,11 +158,11 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
             Process(evt, new { evt.LinkedAccount.ProviderName });
         }
 
-        private DateTime VerificationExpirationTimestamp(DateTime? verificationSent)
+        private DateTime VerificationExpirationTimestamp(DateTime? verificationSent, UserAccountEvent<HierarchicalUserAccount> accountEvent)
         {
             if (!verificationSent.HasValue)
             {
-                // TODO: Log as error.
+                _logger.LogError($"VerificationSent not set for account {accountEvent.Account.ID}.  Verification set for {accountEvent.Account.VerificationPurpose}.");
                 return DateTime.Now;
             }
 
@@ -174,7 +174,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
             return sent.Add(_config.VerificationKeyLifetime);
         }
 
-        private string GetTimeZone(DateTime date)
+        private string GetTimeZoneName(DateTime date)
         {
             return date.IsDaylightSavingTime() ? "Mountain Daylight Time" : "Mountain Standard Time";
         }

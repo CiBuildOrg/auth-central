@@ -4,9 +4,8 @@ using Fsw.Enterprise.AuthCentral.MongoDb;
 using IdentityServer3.Core.Configuration;
 
 using Fsw.Enterprise.AuthCentral.IdMgr;
-using Microsoft.AspNet.Http;
-using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 
 namespace Fsw.Enterprise.AuthCentral.Extensions
 {

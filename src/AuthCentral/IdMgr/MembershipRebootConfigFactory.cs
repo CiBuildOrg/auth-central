@@ -120,7 +120,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             return new AuthCentralAppInfo(
                 baseUrl,
                 "FSW Auth Central",
-                "Copyright fsw.com 2015",
+                "Problems? Call customer service toll-free at 1-877-877-5655.",
                 "useraccount/details",
                 "useraccount/changeemail/confirm/",
                 "useraccount/register/cancel/",

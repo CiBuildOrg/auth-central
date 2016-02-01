@@ -2,8 +2,10 @@
 
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
-using OpenQA.Selenium.Support.UI;
+
 using Fsw.Enterprise.AuthCentral.Webdriver.Core;
+using Fsw.Enterprise.AuthCentral.Webdriver.Core.Extensions;
+using System.Collections.ObjectModel;
 
 namespace Fsw.Enterprise.AuthCentral.Webdriver.ExampleTests.GoogleHome
 {
@@ -19,10 +21,12 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.ExampleTests.GoogleHome
             PageFactory.InitElements(driver, _googleHomeUI);
         }
 
-        public void Search(string searchTerm)
+        public ReadOnlyCollection<IWebElement> Search(string searchTerm, string expectedLinkText)
         {
             this._googleHomeUI.SearchInputBox.SendKeys(searchTerm);
-            this._googleHomeUI.SearchInputBox.Submit();
+            this._googleHomeUI.SearchButton.Click();
+
+            return this.Driver.FindElements(By.PartialLinkText(expectedLinkText));
         }
 
     }

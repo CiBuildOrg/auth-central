@@ -5,14 +5,15 @@ using Xunit;
 using Fsw.Enterprise.AuthCentral.Webdriver.Core;
 using Fsw.Enterprise.AuthCentral.Webdriver.Core.Extensions;
 using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium;
 
 namespace Fsw.Enterprise.AuthCentral.Webdriver.ExampleTests.GoogleHome
 {
-    public abstract class GoogleExampleTestsBase : TestClassBase
+    public abstract class GoogleExampleTestsMain : TestClassBase
     {
         private GoogleHomePage _page;
         private TestFixtureBase _fixture;
-        private const string URL = "https://www.google.com/";
+        private const string URL = "https://duckduckgo.com/";
 
         public TestFixtureBase Fixture
         {
@@ -54,7 +55,7 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.ExampleTests.GoogleHome
         ///     but the reference to TestFixutre will persist.
         /// </summary>
         /// <param name="fixture"></param>
-        protected GoogleExampleTestsBase(TestFixtureBase fixture)
+        protected GoogleExampleTestsMain(TestFixtureBase fixture)
         {
             this.Fixture = fixture;
             this.Fixture.SetUp(URL);
@@ -69,8 +70,8 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.ExampleTests.GoogleHome
         [Fact]
         public void CanSearchForStuff()
         {
-            this.Page.Search("Hello GoogleHome!");
-            this.Fixture.Driver.GoToPage("Https://www.google.com/");
+            var results = this.Page.Search("Hello World", "HelloWorld");
+            Assert.NotEmpty(results);
         }
     }
 }

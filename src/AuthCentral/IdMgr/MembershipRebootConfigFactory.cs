@@ -121,7 +121,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 baseUrl,
                 "FSW Auth Central",
                 "Problems? Call customer service toll-free at 1-877-877-5655.",
-                "useraccount/details",
+                "useraccount/profile",
                 "useraccount/changeemail/confirm/",
                 "useraccount/register/cancel/",
                 "useraccount/passwordreset/confirm/");

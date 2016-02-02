@@ -121,7 +121,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 baseUrl,
                 "FSW Auth Central",
                 "Copyright fsw.com 2015",
-                "useraccount/details",
+                "useraccount/profile",
                 "useraccount/changeemail/confirm/",
                 "useraccount/register/cancel/",
                 "useraccount/passwordreset/confirm/");

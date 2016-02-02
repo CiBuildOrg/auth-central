@@ -4,6 +4,7 @@ using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email;
 using Microsoft.Extensions.PlatformAbstractions;
 using Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers;
+using Microsoft.Extensions.Logging;
 
 namespace Fsw.Enterprise.AuthCentral.IdMgr
 {
@@ -16,7 +17,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
         private static MembershipRebootSetup AdminInstance;
 
         private static object InstanceLock = new object();
-        internal static MembershipRebootSetup GetDefaultConfig(IApplicationEnvironment appEnv, EnvConfig config)
+        internal static MembershipRebootSetup GetDefaultConfig(IApplicationEnvironment appEnv, ILoggerFactory loggerFactory, EnvConfig config)
         {
             if (DefaultInstance == null)
             {
@@ -24,7 +25,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 {
                     if (DefaultInstance == null)
                     {
-                        DefaultInstance = CreateDefaultInstance(appEnv, config);
+                        DefaultInstance = CreateDefaultInstance(appEnv, loggerFactory, config);
                     }
                 }
             }
@@ -32,7 +33,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             return DefaultInstance;
         }
 
-        internal static MembershipRebootSetup GetAdminConfig(IApplicationEnvironment appEnv, EnvConfig config)
+        internal static MembershipRebootSetup GetAdminConfig(IApplicationEnvironment appEnv, ILoggerFactory loggerFactory, EnvConfig config)
         {
             if (AdminInstance == null)
             {
@@ -40,7 +41,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
                 {
                     if (AdminInstance == null)
                     {
-                        AdminInstance = CreateAdminInstance(appEnv, config);
+                        AdminInstance = CreateAdminInstance(appEnv, loggerFactory, config);
                     }
                 }
             }
@@ -48,7 +49,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             return AdminInstance;
         }
 
-        private static MembershipRebootSetup CreateDefaultInstance(IApplicationEnvironment appEnv, EnvConfig config)
+        private static MembershipRebootSetup CreateDefaultInstance(IApplicationEnvironment appEnv, ILoggerFactory loggerFactory, EnvConfig config)
         {
             SecuritySettings securitySettings = new SecuritySettings();
             MembershipRebootSetup newInstance = GetDefaultConfigInstance(config.Uri.IssuerUri, securitySettings);
@@ -58,13 +59,13 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             var emailFormatter = new AuthCentralEmailMessageFormatter(appEnv, appInfo, emailBodyType);
             var smtpMsgDelivery = new AuthCentralSmtpMessageDelivery(config, emailBodyType);
 
-            newInstance.AddEventHandler(new DefaultEmailEventHandler(emailFormatter, smtpMsgDelivery));
-            newInstance.AddEventHandler(new UserEmailEventHandler(emailFormatter, smtpMsgDelivery));
+            newInstance.AddEventHandler(new DefaultEmailEventHandler(loggerFactory, emailFormatter, smtpMsgDelivery));
+            newInstance.AddEventHandler(new UserEmailEventHandler(loggerFactory, emailFormatter, smtpMsgDelivery));
             
             return newInstance;
         }
 
-        private static MembershipRebootSetup CreateAdminInstance(IApplicationEnvironment appEnv, EnvConfig config)
+        private static MembershipRebootSetup CreateAdminInstance(IApplicationEnvironment appEnv, ILoggerFactory loggerFactory, EnvConfig config)
         {
             SecuritySettings securitySettings = new SecuritySettings();
             MembershipRebootSetup newInstance = GetDefaultConfigInstance(config.Uri.IssuerUri, securitySettings);
@@ -84,7 +85,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             );
 
             var smtpMsgDelivery = new AuthCentralSmtpMessageDelivery(config, emailBodyType);            
-            newInstance.AddEventHandler(new DefaultEmailEventHandler(emailFormatter, smtpMsgDelivery));
+            newInstance.AddEventHandler(new DefaultEmailEventHandler(loggerFactory, emailFormatter, smtpMsgDelivery));
 
             return newInstance;
         }

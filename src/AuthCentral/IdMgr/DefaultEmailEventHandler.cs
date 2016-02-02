@@ -1,5 +1,6 @@
 ﻿using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
+using Microsoft.Extensions.Logging;
 
 namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
 {
@@ -22,13 +23,19 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
         IEventHandler<LinkedAccountAddedEvent<HierarchicalUserAccount>>,
         IEventHandler<LinkedAccountRemovedEvent<HierarchicalUserAccount>>
     {
-        public DefaultEmailEventHandler(IMessageFormatter<HierarchicalUserAccount> messageFormatter)
-            : base(messageFormatter)
-        { }
+        private ILogger _logger;
 
-        public DefaultEmailEventHandler(IMessageFormatter<HierarchicalUserAccount> messageFormatter, IMessageDelivery messageDelivery)
+        public DefaultEmailEventHandler(ILoggerFactory loggerFactory, IMessageFormatter<HierarchicalUserAccount> messageFormatter)
+            : base(messageFormatter)
+        {
+            _logger = loggerFactory.CreateLogger(this.GetType().ToString());
+        }
+
+        public DefaultEmailEventHandler(ILoggerFactory loggerFactory, IMessageFormatter<HierarchicalUserAccount> messageFormatter, IMessageDelivery messageDelivery)
             : base(messageFormatter, messageDelivery)
-        { }
+        {
+            _logger = loggerFactory.CreateLogger(this.GetType().ToString());
+        }
 
         public void Handle(PasswordResetRequestedEvent<HierarchicalUserAccount> evt)
         {

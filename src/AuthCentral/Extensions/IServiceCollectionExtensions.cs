@@ -9,6 +9,7 @@ using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 using MongoDB.Driver;
 using Serilog;
@@ -63,7 +64,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             // should instead depend on either AdminUserAccountServiceContainer, or DefaultUserAccountServiceContainer
             services.AddScoped(provider =>
             {
-                MembershipRebootSetup setup = MembershipRebootConfigFactory.GetAdminConfig(provider.GetService<IApplicationEnvironment>(), config);
+                MembershipRebootSetup setup = MembershipRebootConfigFactory.GetAdminConfig(provider.GetService<IApplicationEnvironment>(), provider.GetRequiredService<ILoggerFactory>(), config);
                 var repository = provider.GetRequiredService<IUserAccountRepository<HierarchicalUserAccount>>();
                 return new AdminUserAccountServiceContainer
                 {
@@ -73,7 +74,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
             services.AddScoped(provider =>
             {
-                MembershipRebootSetup setup = MembershipRebootConfigFactory.GetDefaultConfig(provider.GetService<IApplicationEnvironment>(), config);
+                MembershipRebootSetup setup = MembershipRebootConfigFactory.GetDefaultConfig(provider.GetService<IApplicationEnvironment>(), provider.GetRequiredService<ILoggerFactory>(), config);
                 var repository = provider.GetRequiredService<IUserAccountRepository<HierarchicalUserAccount>>();
                 return new DefaultUserAccountServiceContainer
                 {

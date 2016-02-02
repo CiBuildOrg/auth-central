@@ -1,5 +1,6 @@
 ﻿using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
+using Microsoft.Extensions.Logging;
 
 namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
 {
@@ -8,13 +9,19 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr.Notifications.Email.EventHandlers
         IEventHandler<EmailVerifiedEvent<HierarchicalUserAccount>>,
         IEventHandler<AccountCreatedEvent<HierarchicalUserAccount>>
     {
-        public UserEmailEventHandler(IMessageFormatter<HierarchicalUserAccount> messageFormatter)
+        private ILogger _logger;
+        
+        public UserEmailEventHandler(ILoggerFactory loggerFactory, IMessageFormatter<HierarchicalUserAccount> messageFormatter)
             : base(messageFormatter)
-        { }
+        {
+            _logger = loggerFactory.CreateLogger(this.GetType().ToString());
+        }
 
-        public UserEmailEventHandler(IMessageFormatter<HierarchicalUserAccount> messageFormatter, IMessageDelivery messageDelivery)
+        public UserEmailEventHandler(ILoggerFactory loggerFactory, IMessageFormatter<HierarchicalUserAccount> messageFormatter, IMessageDelivery messageDelivery)
             : base(messageFormatter, messageDelivery)
-        { }
+        {
+            _logger = loggerFactory.CreateLogger(this.GetType().ToString());
+        }
         
         public void Handle(AccountCreatedEvent<HierarchicalUserAccount> evt)
         {

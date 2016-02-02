@@ -35,7 +35,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
     public static class IApplicationBuilderExtensions
     {
-        public static void UseIdentityServer(this IApplicationBuilder app, IApplicationEnvironment env, EnvConfig config, StoreSettings idSvrStoreSettings)
+        public static void UseIdentityServer(this IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory loggerFactory, EnvConfig config, StoreSettings idSvrStoreSettings)
         {
             var usrSrv = new Registration<IUserService, MembershipRebootUserService>();
             var idSvcFactory = new ServiceFactory(usrSrv, idSvrStoreSettings)
@@ -43,14 +43,14 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                 ViewService = new Registration<IViewService>(typeof(CustomViewService))
             };
 
-            idSvcFactory.ConfigureCustomUserService(config.DB.MembershipReboot, env, config);
+            idSvcFactory.ConfigureCustomUserService(config.DB.MembershipReboot, env, loggerFactory, config);
             idSvcFactory.Register(new Registration<IApplicationEnvironment>(env));
             idSvcFactory.Register(
                 new Registration<DefaultUserAccountServiceContainer>(resolver =>
                     new DefaultUserAccountServiceContainer
                     {
                         Service = new UserAccountService<HierarchicalUserAccount>(
-                            MembershipRebootConfigFactory.GetDefaultConfig(env, config),
+                            MembershipRebootConfigFactory.GetDefaultConfig(env, loggerFactory, config),
                             resolver.Resolve<IUserAccountRepository<HierarchicalUserAccount>>())
                     }
                 )

@@ -18,7 +18,8 @@ var paths = {
     lib: "./wwwroot/libs",
     assets: "./wwwroot/assets",
     customSass: "./Styles",
-    sharedLayouts: './Areas/UserAccount/Views/Shared'
+    sharedLayouts: './Areas/UserAccount/Views/Shared',
+    errorPages: "./wwwroot/errors"
 };
 
 gulp.task('bower', function () {
@@ -126,16 +127,29 @@ gulp.task('build', ['css', 'fonts'], function() {
     )
 		.pipe(gulp.dest(paths.sharedLayouts));
 
-  // inject into the custom views
+    // inject into the custom views
 	gulp.src(customViews)
 		.pipe(replace(
       {
-        'css': cssFiles,
-        'js': jsFiles
+          'css': cssFiles,
+          'js': jsFiles
       },
       {
-			  keepBlockTags: true 
+          keepBlockTags: true
       })
     )
 		.pipe(gulp.dest(paths.idSvrCustomViews));
+
+    // inject into the error pages
+    gulp.src(paths.errorPages)
+		.pipe(replace(
+      {
+          'css': cssFiles,
+          'js': jsFiles
+      },
+      {
+          keepBlockTags: true
+      })
+    )
+		.pipe(gulp.dest(paths.errorPages));
 });

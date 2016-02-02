@@ -15,6 +15,7 @@ namespace Fsw.Enterprise.AuthCentral.Testing
             factory.Register(new Registration<UserAccount, HierarchicalUserAccount>());
             factory.Register(new Registration<MembershipRebootConfiguration<HierarchicalUserAccount>>(x => MembershipRebootConfigFactory.GetDefaultConfig(appEnvironment, config)));
             factory.Register(new Registration<IUserAccountRepository<HierarchicalUserAccount>, TestUserRepository>());
+            factory.Register(new Registration<IBulkUserRepository<HierarchicalUserAccount>, TestBulkUserRepository>());
             factory.Register(new Registration<UserAccountService<HierarchicalUserAccount>>());
         }
 
@@ -23,6 +24,7 @@ namespace Fsw.Enterprise.AuthCentral.Testing
             services.AddScoped<MembershipRebootConfiguration<HierarchicalUserAccount>>(provider => MembershipRebootConfigFactory.GetDefaultConfig(env, config));
             services.AddScoped<UserAccountService<HierarchicalUserAccount>>();
             services.AddScoped(typeof(IUserAccountRepository<HierarchicalUserAccount>), typeof(TestUserRepository));
+            services.AddScoped<IBulkUserRepository<HierarchicalUserAccount>, TestBulkUserRepository>();
             services.AddScoped<MongoAuthenticationService>();
         }
     }

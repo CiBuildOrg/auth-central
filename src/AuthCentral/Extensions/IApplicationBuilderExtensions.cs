@@ -12,8 +12,10 @@ using Microsoft.AspNet.Authentication.OpenIdConnect;
 using Microsoft.AspNet.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
+using BrockAllen.MembershipReboot;
 using BrockAllen.MembershipReboot.Hierarchical;
 using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Services;
@@ -21,16 +23,14 @@ using IdentityServer3.MembershipReboot;
 using Owin;
 
 using Fsw.Enterprise.AuthCentral.IdSvr;
-using Fsw.Enterprise.AuthCentral.MongoStore;
 using Fsw.Enterprise.AuthCentral.Testing;
-using Microsoft.AspNet.Http;
+using Fsw.Enterprise.AuthCentral.MongoStore;
+using Fsw.Enterprise.AuthCentral.IdMgr;
+
 using CookieOptions = IdentityServer3.Core.Configuration.CookieOptions;
 
 namespace Fsw.Enterprise.AuthCentral.Extensions
 {
-    using BrockAllen.MembershipReboot;
-    using IdMgr;
-    using Microsoft.Extensions.PlatformAbstractions;
     using DataProtectionProviderDelegate = Func<string[], Tuple<Func<byte[], byte[]>, Func<byte[], byte[]>>>;
     using DataProtectionTuple = Tuple<Func<byte[], byte[]>, Func<byte[], byte[]>>;
 

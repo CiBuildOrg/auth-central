@@ -19,7 +19,7 @@ using IdentityServer3.Core.Models;
 
 namespace Fsw.Enterprise.AuthCentral.Testing
 {
-    public class Scopes
+    internal static class Scopes
     {
         public static IEnumerable<Scope> Get()
         {

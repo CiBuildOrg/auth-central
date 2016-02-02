@@ -6,7 +6,7 @@ using BrockAllen.MembershipReboot.Hierarchical;
 
 namespace Fsw.Enterprise.AuthCentral.Testing
 {
-    public class TestUserRepository : IUserAccountRepository<HierarchicalUserAccount>
+    internal class TestUserRepository : IUserAccountRepository<HierarchicalUserAccount>
     {
         private class TestUser : HierarchicalUserAccount
         {

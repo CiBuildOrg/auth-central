@@ -22,7 +22,7 @@ using IdentityServer3.MembershipReboot;
 
 namespace Fsw.Enterprise.AuthCentral.Testing
 {
-    class Factory
+    static class Factory
     {
         public static IdentityServerServiceFactory Configure(Registration<IUserService, MembershipRebootUserService> usrSrv)
         {

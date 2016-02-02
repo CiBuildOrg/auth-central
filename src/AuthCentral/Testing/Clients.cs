@@ -4,7 +4,7 @@ using IdentityServer3.Core.Models;
 
 namespace Fsw.Enterprise.AuthCentral.Testing
 {
-    public class Clients
+    internal static class Clients
     {
         public static List<Client> Get()
         {

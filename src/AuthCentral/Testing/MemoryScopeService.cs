@@ -6,7 +6,7 @@ using IdentityServer3.Core.Models;
 
 namespace Fsw.Enterprise.AuthCentral.Testing
 {
-    public class MemoryScopeService : IScopeService
+    internal class MemoryScopeService : IScopeService
     {
         private static readonly Dictionary<string, Scope> Scopes = Testing.Scopes.Get()
             .ToDictionary(scope => scope.Name);

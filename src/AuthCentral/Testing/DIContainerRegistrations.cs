@@ -8,7 +8,7 @@ using Microsoft.Extensions.PlatformAbstractions;
 
 namespace Fsw.Enterprise.AuthCentral.Testing
 {
-    public static class DIContainerRegistrations
+    internal static class DiContainerRegistrations
     {
         public static void ConfigureTestUserService(this IdentityServerServiceFactory factory, IApplicationBuilder app, IApplicationEnvironment appEnvironment, EnvConfig config)
         {

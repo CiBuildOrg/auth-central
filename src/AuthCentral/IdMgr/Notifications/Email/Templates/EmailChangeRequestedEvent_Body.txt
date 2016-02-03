@@ -11,6 +11,8 @@ If this was in error or not requested then click to cancel the request:
 
 {cancelVerificationUrl}
 
+Please note that this verification email will expire on {VerificationExpiration} {VerificationExpirationTimezone}.
+
 Thanks!
 
 {emailSignature}

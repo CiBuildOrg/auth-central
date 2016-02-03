@@ -1,10 +1,8 @@
-﻿using Fsw.Enterprise.AuthCentral.Areas.Admin.Models;
-using IdentityServer3.Core.Models;
+﻿using IdentityServer3.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
 {
@@ -28,9 +26,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
         public DateTimeOffset? SecretExpiration { get; set; }
         [Required]
         public string SecretType { get; set; }
-
-        // calling this "ToNewClient" to clarify that this is only for clients while they are being created.
-        // Normally you would not want to reinitialize the list of secrets.
+        
+        /// <summary>
+        /// Builds a new <see cref="IdentityServer3.Core.Models.Client"/> for use in client creation.
+        /// This method will reset client secrets to only the one described in this object.
+        /// To preserve your existing client secret(s), use <see cref="ClientModel.ToClient"/> instead.
+        /// </summary>
+        /// <returns>A <see cref="IdentityServer3.Core.Models.Client"/> object with the relevant fields populated.</returns>
         public Client ToNewClient()
         {
             Client client = base.ToClient();

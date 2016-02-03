@@ -29,13 +29,14 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
         
         /// <summary>
         /// Builds a new <see cref="IdentityServer3.Core.Models.Client"/> for use in client creation.
-        /// This method will reset client secrets to only the one described in this object.
-        /// To preserve your existing client secret(s), use <see cref="ClientModel.ToClient"/> instead.
+        /// This method will reset client secrets to only the one described in this object, and reset the flow to AuthorizationCode.
+        /// To preserve the existing client's secret(s) and flow, use <see cref="ClientModel.ToClient"/> instead.
         /// </summary>
         /// <returns>A <see cref="IdentityServer3.Core.Models.Client"/> object with the relevant fields populated.</returns>
         public Client ToNewClient()
         {
             Client client = base.ToClient();
+            client.Flow = Flows.AuthorizationCode;
             client.ClientSecrets = new List<Secret> {
                 new ClientSecret
                 {

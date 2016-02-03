@@ -66,7 +66,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             var client = new ClientCreateModel
             {
                 LogoUri = "https://fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg",
-                SecretExpiration = new DateTimeOffset(DateTime.UtcNow.AddYears(1));
+                SecretExpiration = new DateTimeOffset(DateTime.UtcNow.AddYears(1))
             };
 
             return View(client);

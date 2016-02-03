@@ -1,5 +1,5 @@
-﻿@using IdentityServer3.Core.Models;
-@model IdentityServer3.Core.Models.Client
+﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models;
+@model ClientModel
 @{
 
     Layout = "~/Areas/Admin/Views/Shared/_ClientAdminLayout.cshtml";
@@ -10,27 +10,6 @@
 @using (Html.BeginForm("CreateNew", "Client", new { clientId = Model.ClientId, area = "Admin" }, FormMethod.Post, new { @id="create-form", @class = "form-horizontal"} )) 
 {   
    @Html.AntiForgeryToken()
-   @Html.HiddenFor(model => model.RequireConsent)
-   @Html.HiddenFor(model => model.AllowRememberConsent)
-   @Html.HiddenFor(model => model.Flow)
-   @Html.HiddenFor(model => model.AllowClientCredentialsOnly)
-   @Html.HiddenFor(model => model.AllowAccessToAllScopes)
-   @Html.HiddenFor(model => model.IdentityTokenLifetime)
-   @Html.HiddenFor(model => model.AccessTokenLifetime)
-   @Html.HiddenFor(model => model.AuthorizationCodeLifetime)
-   @Html.HiddenFor(model => model.AbsoluteRefreshTokenLifetime)
-   @Html.HiddenFor(model => model.SlidingRefreshTokenLifetime)
-   @Html.HiddenFor(model => model.AllowAccessToAllScopes)
-   @Html.HiddenFor(model => model.RefreshTokenUsage)
-   @Html.HiddenFor(model => model.UpdateAccessTokenClaimsOnRefresh)
-   @Html.HiddenFor(model => model.RefreshTokenExpiration)
-   @Html.HiddenFor(model => model.AccessTokenType)
-   @Html.HiddenFor(model => model.EnableLocalLogin)
-   @Html.HiddenFor(model => model.IncludeJwtId)
-   @Html.HiddenFor(model => model.AlwaysSendClientClaims)
-   @Html.HiddenFor(model => model.PrefixClientClaims)
-   @Html.HiddenFor(model => model.AllowAccessToAllCustomGrantTypes)
-   @Html.HiddenFor(model => model.AllowAccessToAllCustomGrantTypes)
 
    <div class="form-group">
        <div class="col-md-offset-2 col-md-2">
@@ -85,24 +64,58 @@
                <div class="col-md-6" align="right"> &nbsp; </div>
            </div>
            <div class="row" style="margin-top: 15px; margin-bottom: 15px;">
-               @Html.EditorFor(model => model.ClientSecrets)
+
+               <div class="form-group">
+                   @Html.LabelFor(model => model.SecretValue, new { @class = "control-label col-md-2" })
+                   <div class="col-md-10">
+                       @Html.TextBoxFor(model => model.SecretValue, new { @class = "form-control" })
+                       @Html.ValidationMessageFor(model => model.SecretValue)
+                   </div>
+               </div>
+
+               <div class="form-group">
+                   @Html.LabelFor(model => model.SecretDescription, new { @class = "control-label col-md-2" })
+                   <div class="col-md-10">
+                       @Html.TextBoxFor(model => model.SecretDescription, new { @class = "form-control" })
+                       @Html.ValidationMessageFor(model => model.SecretDescription)
+                   </div>
+               </div>
+
+               <div class="form-group">
+                   @Html.LabelFor(model => model.SecretExpiration, new { @class = "control-label col-md-2" })
+                   <div class="col-md-10">
+                       @Html.TextBoxFor(model => model.SecretExpiration, new { @class = "form-control" })
+                       @Html.ValidationMessageFor(model => model.SecretExpiration)
+                   </div>
+               </div>
+
+               <div class="form-group">
+                   @Html.LabelFor(model => model.SecretType, new { @class = "control-label col-md-2" })
+                   <div class="col-md-10">
+                       @Html.TextBoxFor(model => model.SecretType, new { @class = "form-control" })
+                       @Html.ValidationMessageFor(model => model.SecretType)
+                   </div>
+               </div>
+
            </div>
        </div>
    </div>
 
-   <div class="form-group">
-      <label class="control-label col-md-2" for="RedirectUris_0">Redirect Uri</label>
-      <div col-md-10>
-          <input type="url" class="form-control" id="RedirectUris_0" name="RedirectUris[0]" placeholder="http://new-app.fsw.com/" />
-      </div>
-   </div>
- 
-   <div class="form-group">
-      <label class="control-label col-md-2" for="PostLogoutRedirectUris_0">Post Logout Redirect Uri</label>
-      <div col-md-10>
-          <input type="url" class="form-control" id="PostLogoutRedirectUris_0" name="PostLogoutRedirectUris[0]" placeholder="http://new-app.fsw.com/" />
-      </div>
-   </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.RedirectUri, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.RedirectUri, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.LogoUri)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PostLogoutUri, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.PostLogoutUri, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.LogoUri)
+        </div>
+    </div>
  
    <div class="form-group">
        <div class="col-md-offset-2 col-md-2">

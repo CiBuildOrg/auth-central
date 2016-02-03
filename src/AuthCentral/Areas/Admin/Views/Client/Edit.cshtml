@@ -1,4 +1,4 @@
-﻿@model IdentityServer3.Core.Models.Client
+﻿@model Fsw.Enterprise.AuthCentral.Areas.Admin.Models.ClientModel
 @{
     Layout = "~/Areas/Admin/Views/Shared/_ClientAdminLayout.cshtml";
     ViewBag.Title = "Edit Client";
@@ -59,162 +59,162 @@
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.RequireConsent, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.RequireConsent, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.CheckBoxFor(model => model.RequireConsent, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.RequireConsent)
+           @Html.CheckBoxFor(model => model.ExistingClient.RequireConsent, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.RequireConsent)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.AllowRememberConsent, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.AllowRememberConsent, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.CheckBoxFor(model => model.AllowRememberConsent, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.AllowRememberConsent)
+           @Html.CheckBoxFor(model => model.ExistingClient.AllowRememberConsent, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.AllowRememberConsent)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.Flow, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.Flow, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.TextBoxFor(model => model.Flow, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.Flow)
+           @Html.TextBoxFor(model => model.ExistingClient.Flow, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.Flow)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.AllowClientCredentialsOnly, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.AllowClientCredentialsOnly, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.CheckBoxFor(model => model.AllowClientCredentialsOnly, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.AllowClientCredentialsOnly)
+           @Html.CheckBoxFor(model => model.ExistingClient.AllowClientCredentialsOnly, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.AllowClientCredentialsOnly)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.AllowAccessToAllScopes, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.AllowAccessToAllScopes, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.CheckBoxFor(model => model.AllowAccessToAllScopes, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.AllowAccessToAllScopes)
+           @Html.CheckBoxFor(model => model.ExistingClient.AllowAccessToAllScopes, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.AllowAccessToAllScopes)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.IdentityTokenLifetime, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.IdentityTokenLifetime, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.TextBoxFor(model => model.IdentityTokenLifetime, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.IdentityTokenLifetime)
+           @Html.TextBoxFor(model => model.ExistingClient.IdentityTokenLifetime, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.IdentityTokenLifetime)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.AccessTokenLifetime, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.AccessTokenLifetime, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.TextBoxFor(model => model.AccessTokenLifetime, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.AccessTokenLifetime)
+           @Html.TextBoxFor(model => model.ExistingClient.AccessTokenLifetime, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.AccessTokenLifetime)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.AuthorizationCodeLifetime, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.AuthorizationCodeLifetime, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.TextBoxFor(model => model.AuthorizationCodeLifetime, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.AuthorizationCodeLifetime)
+           @Html.TextBoxFor(model => model.ExistingClient.AuthorizationCodeLifetime, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.AuthorizationCodeLifetime)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.AbsoluteRefreshTokenLifetime, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.AbsoluteRefreshTokenLifetime, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.TextBoxFor(model => model.AbsoluteRefreshTokenLifetime, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.AbsoluteRefreshTokenLifetime)
+           @Html.TextBoxFor(model => model.ExistingClient.AbsoluteRefreshTokenLifetime, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.AbsoluteRefreshTokenLifetime)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.SlidingRefreshTokenLifetime, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.SlidingRefreshTokenLifetime, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.TextBoxFor(model => model.SlidingRefreshTokenLifetime, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.SlidingRefreshTokenLifetime)
+           @Html.TextBoxFor(model => model.ExistingClient.SlidingRefreshTokenLifetime, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.SlidingRefreshTokenLifetime)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.AllowAccessToAllScopes, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.AllowAccessToAllScopes, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.CheckBoxFor(model => model.AllowAccessToAllScopes, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.AllowAccessToAllScopes)
+           @Html.CheckBoxFor(model => model.ExistingClient.AllowAccessToAllScopes, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.AllowAccessToAllScopes)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.RefreshTokenUsage, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.RefreshTokenUsage, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.TextBoxFor(model => model.RefreshTokenUsage, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.RefreshTokenUsage)
+           @Html.TextBoxFor(model => model.ExistingClient.RefreshTokenUsage, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.RefreshTokenUsage)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.UpdateAccessTokenClaimsOnRefresh, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.UpdateAccessTokenClaimsOnRefresh, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.CheckBoxFor(model => model.UpdateAccessTokenClaimsOnRefresh, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.UpdateAccessTokenClaimsOnRefresh)
+           @Html.CheckBoxFor(model => model.ExistingClient.UpdateAccessTokenClaimsOnRefresh, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.UpdateAccessTokenClaimsOnRefresh)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.RefreshTokenExpiration, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.RefreshTokenExpiration, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.TextBoxFor(model => model.RefreshTokenExpiration, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.RefreshTokenExpiration)
+           @Html.TextBoxFor(model => model.ExistingClient.RefreshTokenExpiration, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.RefreshTokenExpiration)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.AccessTokenType, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.AccessTokenType, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.TextBoxFor(model => model.AccessTokenType, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.AccessTokenType)
+           @Html.TextBoxFor(model => model.ExistingClient.AccessTokenType, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.AccessTokenType)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.EnableLocalLogin, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.EnableLocalLogin, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.CheckBoxFor(model => model.EnableLocalLogin, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.EnableLocalLogin)
+           @Html.CheckBoxFor(model => model.ExistingClient.EnableLocalLogin, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.EnableLocalLogin)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.IncludeJwtId, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.IncludeJwtId, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.CheckBoxFor(model => model.IncludeJwtId, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.IncludeJwtId)
+           @Html.CheckBoxFor(model => model.ExistingClient.IncludeJwtId, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.IncludeJwtId)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.AlwaysSendClientClaims, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.AlwaysSendClientClaims, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.CheckBoxFor(model => model.AlwaysSendClientClaims, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.AlwaysSendClientClaims)
+           @Html.CheckBoxFor(model => model.ExistingClient.AlwaysSendClientClaims, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.AlwaysSendClientClaims)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.PrefixClientClaims, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.PrefixClientClaims, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.CheckBoxFor(model => model.PrefixClientClaims, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.PrefixClientClaims)
+           @Html.CheckBoxFor(model => model.ExistingClient.PrefixClientClaims, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.PrefixClientClaims)
        </div>
    </div>
 
    <div class="form-group">
-       @Html.LabelFor(model => model.AllowAccessToAllCustomGrantTypes, new { @class = "control-label col-md-2" })
+       @Html.LabelFor(model => model.ExistingClient.AllowAccessToAllCustomGrantTypes, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
-           @Html.CheckBoxFor(model => model.AllowAccessToAllCustomGrantTypes, new {@class="form-control"})
-           @Html.ValidationMessageFor(model => model.AllowAccessToAllCustomGrantTypes)
+           @Html.CheckBoxFor(model => model.ExistingClient.AllowAccessToAllCustomGrantTypes, new {@class="form-control"})
+           @Html.ValidationMessageFor(model => model.ExistingClient.AllowAccessToAllCustomGrantTypes)
        </div>
    </div>
 

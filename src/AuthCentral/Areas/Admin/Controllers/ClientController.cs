@@ -63,37 +63,13 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         [HttpGet("[action]")]
         public IActionResult Create()
         {
-            var client = new Client() {
-                UpdateAccessTokenClaimsOnRefresh = true,
-                PrefixClientClaims = false,
-                AlwaysSendClientClaims = true,
-                RequireConsent = false,
-                LogoUri = "https://fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg",
-                Flow = Flows.AuthorizationCode
+            var client = new ClientCreateModel
+            {
+                LogoUri = "https://fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg"
             };
 
-            client.ClientSecrets.Add(new ClientSecret());
             return View(client);
         }
-
-        [HttpPost("[action]")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Client client)
-        {
-            Client existingClient = await _clientService.Find(client.ClientId);
-
-            if(existingClient == null)
-            {
-                return await this.Save(client);
-            }
-            else
-            {
-                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} already exists.  Please use a different and unique clientId.", client.ClientId);
-                return View("Edit", client);
-            }
- 
-        }
-
 
         [HttpGet("[action]/{clientId?}")]
         public async Task<IActionResult> Edit(string clientId, bool success=false)
@@ -107,7 +83,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                     ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} saved succesfully.", clientId);
                 }
 
-                return View(client);
+                return View(new ClientModel(client));
             }
             else
             {
@@ -174,36 +150,53 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
         [HttpPost("[action]")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Save(Client client)
+        public async Task<IActionResult> Save(ClientModel model)
         {
             if(ModelState.IsValid)
             {
-                await PersistClient(client);
+                await PersistClient(model.ToClient());
 
-                return RedirectToAction("Edit", new { clientId = client.ClientId, success = true });
+                return RedirectToAction("Edit", new { clientId = model.ClientId, success = true });
             }
             else
             {
                 ViewBag.Message = string.Format("ModelState is not valid. Try again or something");
-                return View("Edit", client);
+                return View("Edit", model);
             }
         }
 
         [HttpPost("[action]")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateNew(Client client)
+        public async Task<IActionResult> CreateNew(ClientCreateModel model)
         {
-            if(ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await PersistClient(client);
+                ViewBag.Message = string.Format("Please correct the validation errors below.", model.ClientId);
+                return View("Create", model);
+            }
 
-                return RedirectToAction("Edit", new { clientId = client.ClientId });
-            }
-            else
+            Client existingClient = await _clientService.Find(model.ClientId);
+
+            if (existingClient != null)
             {
-                ViewBag.Message = string.Format("ModelState is not valid. Try again or something");
-                return View("Create", client);
+                ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} already exists.  Please use a different and unique clientId.", model.ClientId);
+                return View("Create", model);
             }
+
+            Client client = model.ToNewClient();
+
+            if (!String.IsNullOrWhiteSpace(model.RedirectUri))
+            {
+                client.RedirectUris.Add(model.RedirectUri);
+            }
+
+            if (!String.IsNullOrWhiteSpace(model.PostLogoutUri))
+            {
+                client.PostLogoutRedirectUris.Add(model.PostLogoutUri);
+            }
+
+            await PersistClient(client);
+            return RedirectToAction("Edit", model);
         }
 
 

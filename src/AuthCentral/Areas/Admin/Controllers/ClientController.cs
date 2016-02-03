@@ -65,7 +65,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         {
             var client = new ClientCreateModel
             {
-                LogoUri = "https://fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg"
+                LogoUri = "https://fsw-res-1.cloudinary.com/d_noimage.jpg,h_69,w_160,c_fill/logos/fsw-logo.svg",
+                SecretExpiration = new DateTimeOffset(DateTime.UtcNow.AddYears(1));
             };
 
             return View(client);
@@ -252,6 +253,31 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 // store the client with all of it's child elements
                 newClient.ClientSecrets[0].Value = newClient.ClientSecrets[0].Value.Sha256();
             }
+
+            // don't save empty redirect uri's
+            int count = newClient.RedirectUris.Count;
+            if(count > 0) {
+                for(int i = count-1; i>=0; i--)
+                {
+                    if(String.IsNullOrWhiteSpace(newClient.RedirectUris[i]))
+                    {
+                        newClient.RedirectUris.RemoveAt(i);
+                    }
+                }
+            }
+
+            // don't save empty postLogoutRedirect uri's
+            count = newClient.PostLogoutRedirectUris.Count;
+            if(count > 0) {
+                for(int i = count-1; i>=0; i--)
+                {
+                    if(String.IsNullOrWhiteSpace(newClient.PostLogoutRedirectUris[i]))
+                    {
+                        newClient.PostLogoutRedirectUris.RemoveAt(i);
+                    }
+                }
+            }
+
 
             await _clientService.Save(newClient);
         }

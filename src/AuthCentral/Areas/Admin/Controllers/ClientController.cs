@@ -57,7 +57,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 this.Response.Cookies.Append(CLIENT_COUNT_COOKIE_KEY, clientListViewModel.TotalItemCount.ToString());
             }
 
-            return View(clientListViewModel);
+            return View("Index", clientListViewModel);
         }
 
         [HttpGet("[action]")]
@@ -112,7 +112,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
             else
             {
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
-                return View("Index", ViewBag);
+                return await Index();
             }
         }
 

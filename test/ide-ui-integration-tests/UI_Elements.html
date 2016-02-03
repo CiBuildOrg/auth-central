@@ -445,7 +445,7 @@
 <tr>
 	<td>store</td>
 	<td>//input[@value=''][not(contains(@id,'original'))]</td>
-	<td>Client_Scope_NewScope</td>
+	<td>NewInput_Field</td>
 </tr>
 <tr>
 	<td>store</td>
@@ -454,8 +454,58 @@
 </tr>
 <tr>
 	<td>store</td>
-	<td>${Client_Scope_NewScope}/../../following-sibling::div/input[@value='Save']</td>
-	<td>NewClient_SaveButton</td>
+	<td>${NewInputField}/../../following-sibling::div/input[@value='Save']</td>
+	<td>NewInput_SaveButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Client Admin Home</td>
+	<td>Client_ClientAdminHomeTab</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>id=clientId</td>
+	<td>Client_IdSearch</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>css=button.btn.btn-primary</td>
+	<td>SearchButton</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Uri's</td>
+	<td>Client_UrisDropdown</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Redirect Uri's</td>
+	<td>Client_RedirectUris</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//input[@value='${NewClient_RedirectUri}']</td>
+	<td>Client_RedirectUris_ExistingUri</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//input[@value='${NewClient_NewUri}'][contains(@id,'original')]</td>
+	<td>Client_NewUri_Saved</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>//input[@value='${NewClient_PostLogoutRedirectUri}']</td>
+	<td>Client_LogoutUris_ExistingUri</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Logout Uri's</td>
+	<td>Client_LogoutUris</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>link=Allowed CORS Origins</td>
+	<td>Client_AllowedCorsOrigins</td>
 </tr>
 </tbody></table>
 </body>

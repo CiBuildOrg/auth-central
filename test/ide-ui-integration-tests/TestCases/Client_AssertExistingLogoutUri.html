@@ -4,28 +4,29 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="https://secure.dev-fsw.com/" />
-<title>Client_AddAllowedScope</title>
+<title>Client_AssertExistingLogoutUri</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Client_AddAllowedScope</td></tr>
+<tr><td rowspan="1" colspan="3">Client_AssertExistingLogoutUri</td></tr>
 </thead><tbody>
 <tr>
-	<td>type</td>
-	<td>${NewInput_Field}</td>
-	<td>${NewClient_Scope}</td>
+	<td>click</td>
+	<td>${Client_UrisDropdown}</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>${NewClient_SaveButton}</td>
+	<td>${Client_LogoutUris}</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertElementPresent</td>
-	<td>${Client_Scope_NewScope_Saved}</td>
+	<td>${Client_LogoutUris_ExistingUri}</td>
 	<td></td>
 </tr>
+
 </tbody></table>
 </body>
 </html>

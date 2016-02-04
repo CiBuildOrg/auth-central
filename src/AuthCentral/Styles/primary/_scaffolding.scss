@@ -57,6 +57,13 @@ h1 {
 
 }
 
+.field-validation-error {
+    font-size: $font-size-small - 1;
+	text-align: right;
+	color: $brand-danger;
+	line-height: 1.2;
+}
+
 
 // Color Classes
 

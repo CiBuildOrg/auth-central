@@ -19,7 +19,7 @@ var paths = {
     assets: "./wwwroot/assets",
     customSass: "./Styles",
     sharedLayouts: './Areas/UserAccount/Views/Shared',
-    errorPages: "./wwwroot/errors"
+    errorPages: './wwwroot/errors'
 };
 
 gulp.task('bower', function () {
@@ -138,11 +138,11 @@ gulp.task('build', ['css', 'fonts'], function() {
           keepBlockTags: true
       })
     )
-		.pipe(gulp.dest(paths.idSvrCustomViews));
+	.pipe(gulp.dest(paths.idSvrCustomViews));
 
     // inject into the error pages
-    gulp.src(paths.errorPages)
-		.pipe(replace(
+    gulp.src(paths.errorPages + '/*.*')
+	  .pipe(replace(
       {
           'css': cssFiles,
           'js': jsFiles
@@ -151,5 +151,5 @@ gulp.task('build', ['css', 'fonts'], function() {
           keepBlockTags: true
       })
     )
-		.pipe(gulp.dest(paths.errorPages));
+	.pipe(gulp.dest(paths.errorPages));
 });

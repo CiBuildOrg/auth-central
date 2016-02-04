@@ -16,6 +16,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
             SecretDescription = client.ClientSecrets.FirstOrDefault()?.Description;
             SecretExpiration = client.ClientSecrets.FirstOrDefault()?.Expiration;
             SecretType = client.ClientSecrets.FirstOrDefault()?.Type;
+            RedirectUri = client.RedirectUris.FirstOrDefault();
+            PostLogoutUri = client.PostLogoutRedirectUris.FirstOrDefault();
         }
 
         [Required]
@@ -26,7 +28,11 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
         public DateTimeOffset? SecretExpiration { get; set; }
         [Required]
         public string SecretType { get; set; }
-        
+        [Required,Url]
+        public string RedirectUri { get; set; }
+        [Required,Url]
+        public string PostLogoutUri { get; set; }
+
         /// <summary>
         /// Builds a new <see cref="IdentityServer3.Core.Models.Client"/> for use in client creation.
         /// This method will reset client secrets to only the one described in this object, and reset the flow to AuthorizationCode.
@@ -36,6 +42,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
         public Client ToNewClient()
         {
             Client client = base.ToClient();
+            client.RedirectUris.Add(RedirectUri);
+            client.PostLogoutRedirectUris.Add(PostLogoutUri);
             client.Flow = Flows.AuthorizationCode;
             client.ClientSecrets = new List<Secret> {
                 new ClientSecret

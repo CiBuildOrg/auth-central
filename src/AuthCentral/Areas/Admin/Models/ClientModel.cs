@@ -15,9 +15,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
         [Required]
         public string LogoUri { get; set; }
 
-        public string RedirectUri { get; set; }
-        public string PostLogoutUri { get; set; }
-
         public Client ExistingClient { get; set; }
 
         public ClientModel() : base() { }
@@ -29,8 +26,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
             ClientName = client.ClientName;
             ClientUri = client.ClientUri;
             LogoUri = client.LogoUri;
-            RedirectUri = client.RedirectUris.FirstOrDefault();
-            PostLogoutUri = client.PostLogoutRedirectUris.FirstOrDefault();
         }
 
         public virtual Client ToClient()

@@ -105,7 +105,7 @@
         @Html.LabelFor(model => model.RedirectUri, new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.TextBoxFor(model => model.RedirectUri, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.LogoUri)
+            @Html.ValidationMessageFor(model => model.RedirectUri)
         </div>
     </div>
 
@@ -113,7 +113,7 @@
         @Html.LabelFor(model => model.PostLogoutUri, new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.TextBoxFor(model => model.PostLogoutUri, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.LogoUri)
+            @Html.ValidationMessageFor(model => model.PostLogoutUri)
         </div>
     </div>
  

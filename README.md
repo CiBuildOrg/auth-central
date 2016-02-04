@@ -55,7 +55,7 @@ In order to run the application, some setup is required...
 5. At this point you will need an entry in your hosts file.  As an administrator, open notepad.exe.  The hosts file is 
    located at `c:\Windows\System32\drivers\etc\hosts`. Add the following entry:
 
-        127.0.0.1	localhost auth1.local-fsw.com
+		127.0.0.1	localhost auth1.local-fsw.com secure.local-fsw.com
 
 At this point, you should be all set to run the app from visual studio.  Be sure to select the `web` command from the dropdown (not `iisexpress`)
 

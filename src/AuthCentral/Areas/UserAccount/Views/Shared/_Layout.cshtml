@@ -47,7 +47,7 @@
                             {
                             <li>@Html.ActionLink("Manage Users", "Index", "User", new { area = "Admin" }, null)</li>
                             <li>@Html.ActionLink("Manage Clients", "Index", "Client", new { area = "Admin" }, null)</li>
-                            <li>@Html.ActionLink("Manage Scopes", "Index", "Client", new { area = "Admin" }, null)</li>
+                            <li>@Html.ActionLink("Manage Scopes", "Index", "Scope", new { area = "Admin" }, null)</li>
                             <li class="bottom-border"><a href="/auth/.well-known/openid-configuration" target="_blank">Discovery Document</a></li>
                             }   
                             @if (User.Identity.IsAuthenticated)

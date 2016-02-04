@@ -72,7 +72,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 Flow = Flows.AuthorizationCode
             };
 
-            client.ClientSecrets.Add(new ClientSecret());
+            var secret = new ClientSecret();
+            secret.Expiration = new DateTimeOffset(DateTime.UtcNow.AddYears(1));
+            client.ClientSecrets.Add(secret);
             return View(client);
         }
 
@@ -195,6 +197,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         {
             if(ModelState.IsValid)
             {
+
                 await PersistClient(client);
 
                 return RedirectToAction("Edit", new { clientId = client.ClientId });
@@ -259,6 +262,31 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 // store the client with all of it's child elements
                 newClient.ClientSecrets[0].Value = newClient.ClientSecrets[0].Value.Sha256();
             }
+
+            // don't save empty redirect uri's
+            int count = newClient.RedirectUris.Count;
+            if(count > 0) {
+                for(int i = count-1; i>=0; i--)
+                {
+                    if(String.IsNullOrWhiteSpace(newClient.RedirectUris[i]))
+                    {
+                        newClient.RedirectUris.RemoveAt(i);
+                    }
+                }
+            }
+
+            // don't save empty postLogoutRedirect uri's
+            count = newClient.PostLogoutRedirectUris.Count;
+            if(count > 0) {
+                for(int i = count-1; i>=0; i--)
+                {
+                    if(String.IsNullOrWhiteSpace(newClient.PostLogoutRedirectUris[i]))
+                    {
+                        newClient.PostLogoutRedirectUris.RemoveAt(i);
+                    }
+                }
+            }
+
 
             await _clientService.Save(newClient);
         }

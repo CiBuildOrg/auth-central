@@ -49,11 +49,11 @@ namespace Fsw.Enterprise.AuthCentral
             });
         }
 
-        public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory logFactory, StoreSettings idSvrStoreSettings)
+        public void Configure(IApplicationBuilder app, IApplicationEnvironment env, ILoggerFactory loggerFactory, StoreSettings idSvrStoreSettings)
         {
-            app.ConfigureLoggers(logFactory, _config.IsDebug);
-            logFactory.AddSerilog();
-            logFactory.AddProvider(new LogCentral.MicrosoftFramework.LoggingProvider(_config.Log4NetConfigPath));
+            app.ConfigureLoggers(loggerFactory, _config.IsDebug);
+            loggerFactory.AddSerilog();
+            loggerFactory.AddProvider(new LogCentral.MicrosoftFramework.LoggingProvider(_config.Log4NetConfigPath));
             app.UseMiddleware<LogCentral.MicrosoftFramework.LogMiddleware>();
 
             app.UseStatusCodePagesWithReExecute("/errors/{0}.html");
@@ -67,11 +67,11 @@ namespace Fsw.Enterprise.AuthCentral
             app.UseOpenIdConnectAuthentication(_config);
             app.UseIISPlatformHandler();
             app.UseStaticFiles();
-            HealthChecker.ScheduleHealthCheck(_config, logFactory);
+            HealthChecker.ScheduleHealthCheck(_config, loggerFactory);
 
             app.Map(_config.Uri.AuthorityMapPath, ids =>
             {
-                ids.UseIdentityServer(env, _config, idSvrStoreSettings);
+                ids.UseIdentityServer(env, loggerFactory, _config, idSvrStoreSettings);
             });
 
             app.UseMvc();

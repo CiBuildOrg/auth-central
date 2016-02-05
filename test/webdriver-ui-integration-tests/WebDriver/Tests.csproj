@@ -96,6 +96,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Tests\AuthCentral\AuthCentralTestsMain.cs" />
     <Compile Include="Core\ChromeTestFixture.cs" />
     <Compile Include="Core\Extensions\IWebDriverExtensions.cs" />
     <Compile Include="Core\Extensions\StringExtensions.cs" />
@@ -104,6 +105,9 @@
     <Compile Include="Core\TestClassBase.cs" />
     <Compile Include="Core\FirefoxTestFixture.cs" />
     <Compile Include="Core\TestFixtureBase.cs" />
+    <Compile Include="Tests\AuthCentral\AuthCentralTestsBootstrap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\LoginPage.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\LoginPageUIElementMap.cs" />
     <Compile Include="Tests\GoogleHome\GoogleExampleTestsBootstrap.cs" />
     <Compile Include="Tests\GoogleHome\GoogleExampleTestsMain.cs" />
     <Compile Include="Tests\GoogleHome\GoogleHomePage.cs" />

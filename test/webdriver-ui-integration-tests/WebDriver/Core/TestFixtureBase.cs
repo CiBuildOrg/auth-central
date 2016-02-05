@@ -37,9 +37,9 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.Core
         /// This also deletes all cookies and sets the Archer cookie.
         /// SetUp is called at the beginning of every test, 
         /// </summary>
-        /// <param name="url">http://www.stg-fsw.com</param>
+        /// <param name="url">https://secure.stg-fsw.com</param>
         /// <param name="timeOutInSeconds">5</param>
-        public void SetUp(string url = "http://www.dev-fsw.com", int timeOutInSeconds = 3)
+        public void SetUp(string url = "https://secure.dev-fsw.com", int timeOutInSeconds = 3)
         {
             Driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(timeOutInSeconds));
             Driver.Manage().Window.Maximize();

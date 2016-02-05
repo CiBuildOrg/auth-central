@@ -176,9 +176,9 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 return View("Create", model);
             }
 
-            Client existingClient = await _clientService.Find(model.ClientId);
+            model.ExistingClient = await _clientService.Find(model.ClientId);
 
-            if (existingClient != null)
+            if (model.ExistingClient != null)
             {
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} already exists.  Please use a different and unique clientId.", model.ClientId);
                 return View("Create", model);

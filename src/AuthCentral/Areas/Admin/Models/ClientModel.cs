@@ -10,18 +10,20 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
         public string ClientId { get; set; }
         [Required]
         public string ClientName { get; set; }
-        [Required]
+        [Required,Url]
         public string ClientUri { get; set; }
         [Required]
         public string LogoUri { get; set; }
 
         public Client ExistingClient { get; set; }
 
-        public ClientModel() : base() { }
+        public ClientModel() : base() {
+            ExistingClient = new Client();
+        }
         
-        public ClientModel(Client client) : this()
+        public ClientModel(Client client) : base()
         {
-            ExistingClient = client;
+            ExistingClient = client ?? new Client();
             ClientId = client.ClientId;
             ClientName = client.ClientName;
             ClientUri = client.ClientUri;
@@ -30,6 +32,10 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Models
 
         public virtual Client ToClient()
         {
+            if(ExistingClient == null)
+            {
+                ExistingClient = new Client();
+            }
             ExistingClient.ClientId = this.ClientId;
             ExistingClient.ClientName = this.ClientName;
             ExistingClient.ClientUri = this.ClientUri;

@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using System;
+using System.IO;
 
 namespace Fsw.Enterprise.AuthCentral.Webdriver.Core
 {
@@ -73,8 +74,7 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.Core
 
         protected virtual string GetDriverDir()
         {
-            // TODO: compute directory
-            return @"C:\git\auth-central\test\webdriver-ui-integration-tests\Drivers";
+            return Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\..\\..\\Drivers"));
         }
     }
 }

@@ -158,11 +158,11 @@ namespace Fsw.Enterprise.AuthCentral.Testing
                     },
                     RedirectUris = new List<string>
                     {
-                      "https://auth1.local-fsw.com:44333/signin-oidc"
+                      "https://secure.local-fsw.com:44333/signin-oidc"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                      "https://auth1.local-fsw.com:44333/UserAccount"
+                      "https://secure.local-fsw.com:44333/UserAccount"
                     },
                     RefreshTokenExpiration = TokenExpiration.Absolute,
                     RefreshTokenUsage = TokenUsage.OneTimeOnly,

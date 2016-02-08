@@ -32,7 +32,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var model = new ScopeListModel(await _scopeService.Get());
+            var model = new ScopeListModel(await _scopeService.Get(false));
             return View(model);
         }
 

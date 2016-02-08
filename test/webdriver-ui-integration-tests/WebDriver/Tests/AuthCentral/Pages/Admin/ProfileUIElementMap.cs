@@ -3,7 +3,7 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages
 {
-    class AdminProfileUIElementMap
+    class AdminProfileUIElementMap : UserListUIElementMap
     {
         [FindsBy(How = How.Id, Using = "GivenName")]
         public IWebElement FirstNameBox;

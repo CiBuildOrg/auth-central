@@ -3,7 +3,7 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages
 {
-    class AdminUsersUIElementMap
+    class UserListUIElementMap
     {
         [FindsBy(How = How.LinkText, Using = "Create User »")]
         public IWebElement CreateUserButton;
@@ -13,7 +13,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages
         public IWebElement EmailSearchButton;
         [FindsBy(How = How.XPath, Using = "//a[.='${AdminUser_Email}']/../../td/form/input[@value='Delete']")]
         public IWebElement NewUserDeleteButton;
-        [FindsBy(How = How.XPath, Using = "//input[@value='Delete']")];
+        [FindsBy(How = How.XPath, Using = "//input[@value='Delete']")]
         public IWebElement DeleteButtons;
     }
 }

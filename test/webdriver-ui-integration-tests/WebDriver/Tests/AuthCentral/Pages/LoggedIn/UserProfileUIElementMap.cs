@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages
 {
-    class UserProfileUIElementMap : LoggedInPageUIElementMap
+    class UserProfileUIElementMap : AdminUserUIElementMap
     {
         [FindsBy(How = How.XPath, Using = "//div[@id='nameText']/div/div")]
         public IWebElement NameDiv;
@@ -31,6 +31,8 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages
         public IWebElement NewPasswordBox;
         [FindsBy(How = How.Id, Using = "Password_NewPasswordConfirm")]
         public IWebElement NewPasswordConfirmBox;
+        [FindsBy(How = How.XPath, Using = "//input[@value='Change Password'] | //button[.='Change Password']")]
+        public IWebElement ChangePasswordButton;
 
         [FindsBy(How = How.Id, Using = "Email")]
         public IWebElement EmailBox;

@@ -29,7 +29,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn
             _profileUI.LastNameBox.Clear();
             _profileUI.LastNameBox.SendKeys(lastName);
             _profileUI.NameSaveButton.Click();
-            return new ProfilePage(Driver);
+            return this;
         }
     }
 }

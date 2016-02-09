@@ -97,6 +97,14 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Tests\AuthCentral\AuthCentralTestsMain.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\ClientClaimsUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\ClientListUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\ClientSecretsUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\CreateUserClaimUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\EditClientUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\NewClientUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\UserClaimsUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Tests\Login\LoginTests.cs" />
     <Compile Include="Core\ChromeTestFixture.cs" />
     <Compile Include="Core\Extensions\IWebDriverExtensions.cs" />
     <Compile Include="Core\Extensions\StringExtensions.cs" />
@@ -106,8 +114,18 @@
     <Compile Include="Core\FirefoxTestFixture.cs" />
     <Compile Include="Core\TestFixtureBase.cs" />
     <Compile Include="Tests\AuthCentral\AuthCentralTestsBootstrap.cs" />
-    <Compile Include="Tests\AuthCentral\Pages\LoginPage.cs" />
-    <Compile Include="Tests\AuthCentral\Pages\LoginPageUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\UserUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\AdminUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\NewUserUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\ProfileUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\UserListUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\LoggedIn\LoggedInUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Public\LoginPage.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Public\LoginUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\LoggedIn\ProfilePage.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Public\RegisterUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\LoggedIn\ProfileUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\Tests\Profile\ProfileTests.cs" />
     <Compile Include="Tests\GoogleHome\GoogleExampleTestsBootstrap.cs" />
     <Compile Include="Tests\GoogleHome\GoogleExampleTestsMain.cs" />
     <Compile Include="Tests\GoogleHome\GoogleHomePage.cs" />

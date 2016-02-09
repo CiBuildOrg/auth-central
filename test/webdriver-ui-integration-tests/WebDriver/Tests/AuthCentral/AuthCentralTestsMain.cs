@@ -1,17 +1,28 @@
 ﻿using Fsw.Enterprise.AuthCentral.Webdriver.Core;
-using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages;
+using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn;
+using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Public;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
 using Xunit;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral
 {
-    public abstract class AuthCentralTestsMain : TestClassBase
+    public abstract partial class AuthCentralTestsMain : TestClassBase
     {
-        private LoginPage _page;
-        private TestFixtureBase _fixture;
         private const string URL = "https://secure.dev-fsw.com";
+        private TestFixtureBase _fixture;
+        private LoginPage _page;
 
+        public AuthCentralTestsMain(TestFixtureBase fixture)
+        {
+            this.Fixture = fixture;
+            this.Fixture.SetUp(URL);
+
+            Page = new LoginPage(fixture.Driver);
+            Wait = new WebDriverWait(fixture.Driver, GetTimeout());
+        }
+        
         public TestFixtureBase Fixture
         {
             get
@@ -44,31 +55,6 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral
 
                 _page = value;
             }
-        }
-
-        /// <summary>
-        ///     Everything in this constructor will be called before every test
-        /// 	and then we can call a setup method here which will be called before every test, 
-        ///     but the reference to TestFixture will persist.
-        /// </summary>
-        /// <param name="fixture"></param>
-        protected AuthCentralTestsMain(TestFixtureBase fixture)
-        {
-            this.Fixture = fixture;
-            this.Fixture.SetUp(URL);
-
-            Page = new LoginPage(fixture.Driver);
-            Wait = new WebDriverWait(fixture.Driver, GetTimeout());
-        }
-
-        /// <summary>
-        ///     The following test loosely follows the Page Object driven test described here : https://code.google.com/p/selenium/wiki/PageObjects
-        /// </summary>
-        [Fact]
-        public void CanLogin()
-        {
-            var results = this.Page.Login("jburbage", "");
-            Assert.NotEmpty(results);
         }
     }
 }

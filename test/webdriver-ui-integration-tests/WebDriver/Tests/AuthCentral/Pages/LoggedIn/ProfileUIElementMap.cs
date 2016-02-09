@@ -1,14 +1,9 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages
+namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn
 {
-    class UserProfileUIElementMap : AdminUserUIElementMap
+    class ProfileUIElementMap : UserUIElementMap
     {
         [FindsBy(How = How.XPath, Using = "//div[@id='nameText']/div/div")]
         public IWebElement NameDiv;
@@ -37,7 +32,13 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages
         [FindsBy(How = How.Id, Using = "Email")]
         public IWebElement EmailBox;
 
+        [FindsBy(How = How.CssSelector, Using = "div#nameForm input[type=submit]")]
+        public IWebElement NameSaveButton;
+
         [FindsBy(How = How.XPath, Using = "(//input[@value='Save'])[2]")]
-        public IWebElement SaveButton;
+        public IWebElement EmailSaveButton;
+
+        [FindsBy(How = How.CssSelector, Using = "div.col-xs-12.text-center > h1")]
+        public IWebElement AccountDetailsHeader;
     }
 }

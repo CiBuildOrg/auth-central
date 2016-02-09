@@ -3,7 +3,7 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
 {
-    class AdminCreateUserClaimUIElementMap
+    class CreateUserClaimUIElementMap
     {
         [FindsBy(How = How.XPath, Using = "//input[contains(@id,\"Type\")]")]
         public IWebElement ClaimTypeBox;

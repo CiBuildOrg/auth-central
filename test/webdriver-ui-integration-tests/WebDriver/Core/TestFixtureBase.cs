@@ -41,6 +41,7 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.Core
         /// <param name="timeOutInSeconds">5</param>
         public void SetUp(string url = "https://secure.dev-fsw.com", int timeOutInSeconds = 3)
         {
+            Driver.Navigate().GoToUrl("https://secure.dev-fsw.com/useraccount/logout");
             Driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(timeOutInSeconds));
             Driver.Manage().Window.Maximize();
 

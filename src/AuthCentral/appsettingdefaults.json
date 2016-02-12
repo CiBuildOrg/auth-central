@@ -1,4 +1,5 @@
 {
+  "AUTHCENTRAL_DP_SHARED_KEYSTORE_DIR": "\\\\fswfs\\FSW\\AuthCentral",
   "AUTHCENTRAL_URI_SCHEME": "https",
   "AUTHCENTRAL_URI_HOST": "auth1.local-fsw.com",
   "AUTHCENTRAL_URI_PORT": "44333",

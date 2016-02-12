@@ -58,7 +58,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
 
             var options = new IdentityServerOptions
             {
-                SiteName = "FSW",
+                SiteName = config.AppName,
                 PublicOrigin = config.Uri.IssuerUri,
                 SigningCertificate = Certificate.Get(config.Cert.StoreName, config.Cert.Thumbprint),
                 IssuerUri = config.Uri.IssuerUri,

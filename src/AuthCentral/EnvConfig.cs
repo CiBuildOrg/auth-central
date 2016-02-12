@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
+using System.IO;
 
 namespace Fsw.Enterprise.AuthCentral
 {
     public class EnvConfig
     {
+        private DpConfig _dp;
         private UriConfig _uri;
         private CspConfig _csp;
         private CertConfig _cert;
@@ -14,6 +16,7 @@ namespace Fsw.Enterprise.AuthCentral
         private IConfigurationRoot _root;
 
         private static class EnvVars {
+            public static string DpSharedKeystoreDir = "AUTHCENTRAL_DP_SHARED_KEYSTORE_DIR";
             public static string DbMembershipReboot = "AUTHCENTRAL_DB_MEMBERSHIPREBOOT";
             public static string DbIdentityServer3 = "AUTHCENTRAL_DB_IDENTITYSERVER3";
             public static string UriScheme = "AUTHCENTRAL_URI_SCHEME";
@@ -41,6 +44,12 @@ namespace Fsw.Enterprise.AuthCentral
             this._db = new DatabaseConfig(root);
             this._client = new ClientConfig(root);
             this._smtp = new SmtpConfig(root);
+            this._dp = new DpConfig(root, AppName);
+        }
+
+        public string AppName
+        {
+            get { return "FSW Auth Central"; }
         }
 
         public CspConfig Csp {
@@ -49,6 +58,10 @@ namespace Fsw.Enterprise.AuthCentral
 
         public CertConfig Cert {
             get { return this._cert; }
+        }
+
+        public DpConfig DataProtection {
+            get { return this._dp; }
         }
 
         public SmtpConfig Smtp {
@@ -279,6 +292,43 @@ namespace Fsw.Enterprise.AuthCentral
             }
 
          }
+        public class DpConfig
+        {
+            private IConfigurationRoot _root;
+            private string _appName;
+
+            public DpConfig(IConfigurationRoot root, string appName)
+            {
+                _root = root;
+                _appName = appName;
+            }
+
+            public string AppName {
+                get
+                {
+                    return _appName;
+                }
+            }
+
+            public string SharedKeystoreDir
+            { 
+                get 
+                {
+                    // Use in a directory specific to the thumbprint being used
+                    return Path.Combine(_root.Get<string>(EnvVars.DpSharedKeystoreDir), CertificateThumbprint);
+                } 
+            }
+
+            public string CertificateThumbprint 
+            { 
+                get 
+                {
+                    return _root.Get<string>(EnvVars.CertThumbprint);
+                } 
+            }
+
+         }
+
 
     }
 }

@@ -60,7 +60,7 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
             {
                 SiteName = config.AppName,
                 PublicOrigin = config.Uri.IssuerUri,
-                SigningCertificate = Certificate.Get(config.Cert.StoreName, config.Cert.Thumbprint),
+                SigningCertificate = Crypto.Certificate.Get(config.Cert.StoreName, config.Cert.Thumbprint),
                 IssuerUri = config.Uri.IssuerUri,
                 RequireSsl = true,
                 LoggingOptions = new LoggingOptions()

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Fsw.Enterprise.AuthCentral
 {
@@ -315,15 +316,17 @@ namespace Fsw.Enterprise.AuthCentral
                 get 
                 {
                     // Use in a directory specific to the thumbprint being used
-                    return Path.Combine(_root.Get<string>(EnvVars.DpSharedKeystoreDir), CertificateThumbprint);
+                    return Path.Combine(_root.Get<string>(EnvVars.DpSharedKeystoreDir), Certificate.Thumbprint);
                 } 
             }
 
-            public string CertificateThumbprint 
+            public X509Certificate2 Certificate
             { 
                 get 
                 {
-                    return _root.Get<string>(EnvVars.CertThumbprint);
+                    string store =_root.Get<string>(EnvVars.CertStoreName); 
+                    string thumbprint = _root.Get<string>(EnvVars.CertThumbprint);
+                    return Crypto.Certificate.Get(store, thumbprint);
                 } 
             }
 

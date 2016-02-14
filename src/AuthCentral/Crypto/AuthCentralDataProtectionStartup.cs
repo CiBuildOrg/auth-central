@@ -63,7 +63,7 @@ namespace Fsw.Enterprise.AuthCentral.Crypto
             {
                 dataProtectionConfiguration.SetApplicationName(config.DataProtection.AppName);
                 dataProtectionConfiguration.PersistKeysToFileSystem(new DirectoryInfo(config.DataProtection.SharedKeystoreDir));
-                dataProtectionConfiguration.ProtectKeysWithCertificate(config.DataProtection.CertificateThumbprint);
+                dataProtectionConfiguration.ProtectKeysWithCertificate(config.DataProtection.Certificate);
             });
         }
     }

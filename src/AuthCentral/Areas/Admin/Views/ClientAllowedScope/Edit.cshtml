@@ -1,4 +1,5 @@
 ﻿@using Fsw.Enterprise.AuthCentral.Areas.Admin.Models
+@using IdentityServer3.Core.Models
 @model ClientChildListContainer<string>
 
 @{
@@ -15,7 +16,7 @@
         <div class="form-group">
            <div>
                <input type="hidden" class="form-control" id="originalAllowedScope_@i" name="originalAllowedScope" placeholder="openid" value="@Model.ChildList[i]">
-               <input type="text" class="form-control" id="allowedScope_@i" name="allowedScope" placeholder="openid" value="@Model.ChildList[i]">
+               @Html.DropDownList($"allowedScope_{i}", (ViewBag.ScopeList as IEnumerable<Scope>)?.Select(scope => new SelectListItem {Value = scope.Name, Text = scope.Name}))
            </div>
         </div>
         <div class="form-group">

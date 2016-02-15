@@ -53,7 +53,7 @@ namespace Fsw.Enterprise.AuthCentral
             });
             services.ConfigureAntiforgery(c =>
             {
-                c.CookieName = "fsw.xsrf";
+                c.CookieName = "fsw.authcentral.xsrf";
             });
         }
 

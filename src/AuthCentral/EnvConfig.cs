@@ -45,7 +45,7 @@ namespace Fsw.Enterprise.AuthCentral
             this._db = new DatabaseConfig(root);
             this._client = new ClientConfig(root);
             this._smtp = new SmtpConfig(root);
-            this._dp = new DpConfig(root, AppName);
+            this._dp = new DpConfig(root, this._cert, AppName);
         }
 
         public string AppName
@@ -297,11 +297,13 @@ namespace Fsw.Enterprise.AuthCentral
         {
             private IConfigurationRoot _root;
             private string _appName;
+            private CertConfig _certConfig;
 
-            public DpConfig(IConfigurationRoot root, string appName)
+            internal DpConfig(IConfigurationRoot root, CertConfig certConfig, string appName)
             {
                 _root = root;
                 _appName = appName;
+                _certConfig = certConfig;
             }
 
             public string AppName {
@@ -316,19 +318,26 @@ namespace Fsw.Enterprise.AuthCentral
                 get 
                 {
                     // Use in a directory specific to the thumbprint being used
-                    return Path.Combine(_root.Get<string>(EnvVars.DpSharedKeystoreDir), Certificate.Thumbprint);
+                    return Path.Combine(_root.Get<string>(EnvVars.DpSharedKeystoreDir), this.CertThumbprint);
                 } 
             }
 
-            public X509Certificate2 Certificate
+            public string CertStoreName
             { 
                 get 
                 {
-                    string store =_root.Get<string>(EnvVars.CertStoreName); 
-                    string thumbprint = _root.Get<string>(EnvVars.CertThumbprint);
-                    return Crypto.Certificate.Get(store, thumbprint);
+                    return _certConfig.StoreName;
                 } 
             }
+
+            public string CertThumbprint
+            { 
+                get 
+                {
+                    return _certConfig.Thumbprint;
+                } 
+            }
+
 
          }
 

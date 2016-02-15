@@ -10,6 +10,7 @@ using Microsoft.AspNet.DataProtection.SystemWeb;
 using Microsoft.AspNet.DataProtection.Repositories;
 using Microsoft.AspNet.DataProtection.KeyManagement;
 using Microsoft.AspNet.DataProtection;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Fsw.Enterprise.AuthCentral.Crypto
 {
@@ -34,16 +35,6 @@ namespace Fsw.Enterprise.AuthCentral.Crypto
 
         public override void ConfigureServices(IServiceCollection services)
         {
-//            services.AddSingleton<IXmlRepository>(xmlRepo =>
-//            {
-//                var appDir = new DirectoryInfo(Environment.CurrentDirectory);
-//                return new FileSystemXmlRepository(appDir);
-//            });
-//            KeyManagementOptions kmo = new KeyManagementOptions();
-//            kmo.AutoGenerateKeys = false;
-//            kmo.
-//            EnvConfig config = services.
-
             // we do this to ensure cookie and anti-forgery keys can be
             // encrypted/decrypted on any machine in the cluster to allow
             // for stateless loadbalancing algorithms (which scale better, 
@@ -61,9 +52,15 @@ namespace Fsw.Enterprise.AuthCentral.Crypto
 
             return new Action<DataProtectionConfiguration>(dataProtectionConfiguration =>
             {
+                string certStoreName = config.DataProtection.CertStoreName;
+                string certThumbprint = config.DataProtection.CertThumbprint;
+                Console.WriteLine("DataProtection.CertStoreName: " + certStoreName);
+                Console.WriteLine("DataProtection.CertThumbprint: " + certThumbprint);
+                X509Certificate2 sharedDpCert = Certificate.Get(certStoreName, certThumbprint);
+
                 dataProtectionConfiguration.SetApplicationName(config.DataProtection.AppName);
                 dataProtectionConfiguration.PersistKeysToFileSystem(new DirectoryInfo(config.DataProtection.SharedKeystoreDir));
-                dataProtectionConfiguration.ProtectKeysWithCertificate(config.DataProtection.Certificate);
+                dataProtectionConfiguration.ProtectKeysWithCertificate(sharedDpCert);
             });
         }
     }

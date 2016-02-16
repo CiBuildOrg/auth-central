@@ -18,7 +18,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.Public
         public IWebElement CreateAccountLink;
         [FindsBy(How = How.XPath, Using = "//button[.='Sign In']")]
         public IWebElement SignInButton;
-        [FindsBy(How = How.ClassName, Using = "alert alert-danger ng-binding")]
+        [FindsBy(How = How.ClassName, Using = "alert-danger")]
         public IWebElement ErrorMessage;
     }
 }

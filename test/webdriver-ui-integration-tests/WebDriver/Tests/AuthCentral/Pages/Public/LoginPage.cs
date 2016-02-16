@@ -15,6 +15,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Public
             _loginUI = new LoginUIElementMap();
             PageFactory.InitElements(driver, _loginUI);
         }
+        public LoginUIElementMap Map { get { return _loginUI; } }
 
         public ProfilePage Login(string username, string password)
         {

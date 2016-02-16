@@ -130,11 +130,8 @@
     </None>
     <None Include="Vars\dev.bat" />
     <None Include="Vars\prod.bat" />
-  </ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Vars\stage.bat" />
-  <ItemGroup />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -4,7 +4,7 @@ using OpenQA.Selenium.Support.PageObjects;
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.Public
 
 {
-    class LoginUIElementMap
+    public class LoginUIElementMap
     {
         [FindsBy(How = How.Id, Using = "username")]
         public IWebElement UsernameBox;
@@ -18,5 +18,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.Public
         public IWebElement CreateAccountLink;
         [FindsBy(How = How.XPath, Using = "//button[.='Sign In']")]
         public IWebElement SignInButton;
+        [FindsBy(How = How.ClassName, Using = "alert alert-danger ng-binding")]
+        public IWebElement ErrorMessage;
     }
 }

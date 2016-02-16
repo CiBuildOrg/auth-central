@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="EnvConfig.cs" />
     <Compile Include="Tests\AuthCentral\AuthCentralTestsMain.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\UserListPage.cs" />
     <Compile Include="Tests\AuthCentral\Tests\Login\LoginTests.cs" />
     <Compile Include="Core\ChromeTestFixture.cs" />
     <Compile Include="Core\Extensions\IWebDriverExtensions.cs" />
@@ -130,12 +131,10 @@
     <None Include="Vars\dev.bat" />
     <None Include="Vars\prod.bat" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tests\AuthCentral\Pages\Admin\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Vars\stage.bat" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

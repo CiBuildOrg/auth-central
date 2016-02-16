@@ -20,5 +20,28 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral
             Assert.True(profilePage.Map.AccountDetailsHeader.Displayed);
             Assert.Equal("Account Details", profilePage.Map.AccountDetailsHeader.Text);
         }
+        [Fact(DisplayName = "Log in as admin")]
+        public void Login_AsAdmin()
+        {
+            ProfilePage page = Page.Login("AutomationUser", "fs19!t?3h2@");
+            Assert.True(page.Map.AccountDetailsHeader.Displayed);
+            Assert.Equal("Account Details", page.Map.AccountDetailsHeader.Text);
+        }
+        [Fact(DisplayName = "Log in with wrong password")]
+        public void Login_WrongPassword_Fails()
+        {
+            Page.Login("AutomationUser", "badPW");
+            var FailedPage = new LoginPage(_fixture.Driver);
+            Assert.True(FailedPage.Map.ErrorMessage.Displayed);
+            Assert.Contains("Invalid username or password", FailedPage.Map.ErrorMessage.Text);
+        }
+        [Fact(DisplayName = "Log in with wrong username")]
+        public void Login_WrongUsername_Fails()
+        {
+            Page.Login("AutomationLoser", "fs19!t?3h2@");
+            var FailedPage = new LoginPage(_fixture.Driver);
+            Assert.True(FailedPage.Map.ErrorMessage.Displayed);
+            Assert.Contains("Invalid username or password", FailedPage.Map.ErrorMessage.Text);
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral
         [Fact(DisplayName = "Change Name")]
         public void NameChange_ValidInput_ChangesName()
         {
-            ProfilePage profilePage = Page.Login("exampleuser", "FSWis#1")
+            ProfilePage profilePage = Page.Login(_config.AdminUser, _config.AdminPassword)
                                           .ExpandNameForm()
                                           .UpdateName("Example", "User");
 

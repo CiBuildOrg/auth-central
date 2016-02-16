@@ -16,7 +16,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral
         [Fact(DisplayName = "Log in and load profile")]
         public void Login_CorrectCredentials_Succeeds()
         {
-            ProfilePage profilePage = Page.Login("exampleuser", "FSWis#1");
+            ProfilePage profilePage = Page.Login(_config.AdminUser, _config.AdminPassword);
             Assert.True(profilePage.Map.AccountDetailsHeader.Displayed);
             Assert.Equal("Account Details", profilePage.Map.AccountDetailsHeader.Text);
         }

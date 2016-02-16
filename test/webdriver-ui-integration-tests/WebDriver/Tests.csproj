@@ -85,6 +85,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="EnvConfig.cs" />
     <Compile Include="Tests\AuthCentral\AuthCentralTestsMain.cs" />
     <Compile Include="Tests\AuthCentral\Tests\Login\LoginTests.cs" />
     <Compile Include="Core\ChromeTestFixture.cs" />
@@ -126,9 +127,14 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Vars\dev.bat" />
+    <None Include="Vars\prod.bat" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tests\AuthCentral\Pages\Admin\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Vars\stage.bat" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

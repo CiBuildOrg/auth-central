@@ -19,6 +19,10 @@ namespace Fsw.Enterprise.AuthCentral
         private static class EnvVars {
             public static string DpSharedKeystoreDir = "AUTHCENTRAL_DP_SHARED_KEYSTORE_DIR";
             public static string DpCertThumbprint = "AUTHCENTRAL_DP_CERT_THUMBPRINT";
+            public static string JwksCertStore = "AUTHCENTRAL_JWKS_CERT_STORENAME";
+            public static string JwksCertThumbprint = "AUTHCENTRAL_JWKS_CERT_THUMBPRINT";
+            public static string JwksSecondaryCertStore = "AUTHCENTRAL_JWKS_CERT2_STORENAME";
+            public static string JwksSecondaryCertThumbprint = "AUTHCENTRAL_JWKS_CERT2_THUMBPRINT";
             public static string DbMembershipReboot = "AUTHCENTRAL_DB_MEMBERSHIPREBOOT";
             public static string DbIdentityServer3 = "AUTHCENTRAL_DB_IDENTITYSERVER3";
             public static string UriScheme = "AUTHCENTRAL_URI_SCHEME";
@@ -27,8 +31,6 @@ namespace Fsw.Enterprise.AuthCentral
             public static string SmtpHost = "AUTHCENTRAL_SMTP_HOST";
             public static string SmtpFrom = "AUTHCENTRAL_SMTP_FROM";
             public static string UriServiceRoot = "AUTHCENTRAL_URI_SERVICEROOT";
-            public static string CertStoreName = "AUTHCENTRAL_CERT_STORENAME";
-            public static string CertThumbprint = "AUTHCENTRAL_CERT_THUMBPRINT";
             public static string DebugMode = "AUTHCENTRAL_DEBUG_MODE";
             public static string ClientId = "AUTHCENTRAL_CLIENT_ID";
             public static string ClientSecret = "AUTHCENTRAL_CLIENT_SECRET";
@@ -193,21 +195,37 @@ namespace Fsw.Enterprise.AuthCentral
                 _root = root;
             }
 
-            public string StoreName
+            public string JwksCertStoreName
             {
                 get
                 {
-                    return _root.Get<string>(EnvVars.CertStoreName);
+                    return _root.Get<string>(EnvVars.JwksCertStore);
                 }
             }
 
-            public string Thumbprint 
+            public string JwksCertThumbprint 
             { 
                 get 
                 {
-                    return _root.Get<string>(EnvVars.CertThumbprint);
+                    return _root.Get<string>(EnvVars.JwksCertThumbprint);
                 } 
             }
+            public string JwksSecondaryCertStoreName
+            {
+                get
+                {
+                    return _root.Get<string>(EnvVars.JwksSecondaryCertStore);
+                }
+            }
+
+           public string JwksSecondaryCertThumbprint 
+            { 
+                get 
+                {
+                    return _root.Get<string>(EnvVars.JwksSecondaryCertThumbprint);
+                } 
+            }
+  
         }
 
         public class SmtpConfig

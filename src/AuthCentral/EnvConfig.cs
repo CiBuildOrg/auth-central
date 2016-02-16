@@ -18,6 +18,7 @@ namespace Fsw.Enterprise.AuthCentral
 
         private static class EnvVars {
             public static string DpSharedKeystoreDir = "AUTHCENTRAL_DP_SHARED_KEYSTORE_DIR";
+            public static string DpCertThumbprint = "AUTHCENTRAL_DP_CERT_THUMBPRINT";
             public static string DbMembershipReboot = "AUTHCENTRAL_DB_MEMBERSHIPREBOOT";
             public static string DbIdentityServer3 = "AUTHCENTRAL_DB_IDENTITYSERVER3";
             public static string UriScheme = "AUTHCENTRAL_URI_SCHEME";
@@ -326,7 +327,9 @@ namespace Fsw.Enterprise.AuthCentral
             { 
                 get 
                 {
-                    return _certConfig.StoreName;
+                    // must be installed in the personal cert store on the
+                    // local machine
+                    return "MY";
                 } 
             }
 
@@ -334,7 +337,9 @@ namespace Fsw.Enterprise.AuthCentral
             { 
                 get 
                 {
-                    return _certConfig.Thumbprint;
+                    // must be installed in the personal cert store on the
+                    // local machine
+                    return _root.Get<string>(EnvVars.DpCertThumbprint);
                 } 
             }
 

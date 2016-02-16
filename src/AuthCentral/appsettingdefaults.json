@@ -1,7 +1,8 @@
 {
   "AUTHCENTRAL_DP_SHARED_KEYSTORE_DIR": "\\\\fswfs\\FSW\\AuthCentral",
+  "AUTHCENTRAL_DP_CERT_THUMBPRINT": "?4cb8caa5381fee84a54c2a4ce32997edb5a17c0f",
   "AUTHCENTRAL_URI_SCHEME": "https",
-  "AUTHCENTRAL_URI_HOST": "auth1.local-fsw.com",
+  "AUTHCENTRAL_URI_HOST": "secure.local-fsw.com",
   "AUTHCENTRAL_URI_PORT": "44333",
   "AUTHCENTRAL_URI_SERVICEROOT": "/",
   "AUTHCENTRAL_SMTP_HOST": "obm.foodservicewarehouse.com",

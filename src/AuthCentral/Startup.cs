@@ -37,6 +37,7 @@ namespace Fsw.Enterprise.AuthCentral
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSerilog(_config.IsDebug);
+            services.AddDataProtection();
             services.ConfigureDataProtection(AuthCentralDataProtectionStartup.GetConfiguration(_config));
             services.AddMvc();
             services.AddMembershipReboot(_config);

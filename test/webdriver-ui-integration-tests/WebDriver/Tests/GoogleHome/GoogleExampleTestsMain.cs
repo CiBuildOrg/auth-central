@@ -67,7 +67,7 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.ExampleTests.GoogleHome
         /// <summary>
         ///     The following test loosely follows the Page Object driven test described here : https://code.google.com/p/selenium/wiki/PageObjects
         /// </summary>
-        [Fact]
+        // [Fact]
         public void CanSearchForStuff()
         {
             var results = this.Page.Search("Hello World", "HelloWorld");

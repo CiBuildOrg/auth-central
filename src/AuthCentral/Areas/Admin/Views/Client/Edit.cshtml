@@ -20,6 +20,14 @@
        <dev class="col-md-10"></dev>
    </div>
 
+    <div class="form-group">
+        @Html.LabelFor(model => model.ExistingClient.Enabled, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.CheckBoxFor(model => model.ExistingClient.Enabled, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ExistingClient.Enabled)
+        </div>
+    </div>
+
    <div class="form-group">
        @Html.LabelFor(model => model.ClientId, new { @class = "control-label col-md-2" })
        <div class="col-md-10">
@@ -88,14 +96,6 @@
        <div class="col-md-10">
            @Html.CheckBoxFor(model => model.ExistingClient.AllowClientCredentialsOnly, new {@class= "checkbox" })
            @Html.ValidationMessageFor(model => model.ExistingClient.AllowClientCredentialsOnly)
-       </div>
-   </div>
-
-   <div class="form-group">
-       @Html.LabelFor(model => model.ExistingClient.AllowAccessToAllScopes, new { @class = "control-label col-md-2" })
-       <div class="col-md-10">
-           @Html.CheckBoxFor(model => model.ExistingClient.AllowAccessToAllScopes, new {@class= "checkbox" })
-           @Html.ValidationMessageFor(model => model.ExistingClient.AllowAccessToAllScopes)
        </div>
    </div>
 

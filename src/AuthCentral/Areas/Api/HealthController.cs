@@ -11,7 +11,7 @@ using Microsoft.AspNet.Authorization;
 namespace Fsw.Enterprise.AuthCentral.Areas.Api.Controllers
 {
     [Area("Api")]
-    [Route("[controller]"), Route("[area]")]
+    [Route("[area]"), Route("")]
     public class HealthController : Controller
     {
         private ILogger _logger;

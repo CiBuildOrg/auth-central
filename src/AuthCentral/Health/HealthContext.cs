@@ -12,26 +12,64 @@ namespace Fsw.Enterprise.AuthCentral.Health
         public const string Warning = "yellow";
         public const string Good = "green";
 
-        private static string _currentStatus = Good;
-        private static object _currentStatusLock = new object();
+        private static string _idsDbStatus = Good;
+        private static object _idsDbStatusLock = new object();
+
+        private static string _idmDbStatus = Good;
+        private static object _idmDbStatusLock = new object();
 
         public static string CurrentStatus {
             get
             {
-                return _currentStatus;
+                if (IdmDbStatus == Bad || IdsDbStatus == Bad)
+                {
+                    return Bad;
+                }
+                else if (IdmDbStatus == Warning || IdsDbStatus == Warning)
+                {
+                    return Warning;
+                }
+                else
+                {
+                    return Good;
+                }
+            }
+        }
+
+        public static string IdmDbStatus
+        {
+            get
+            {
+                return _idmDbStatus;
             }
             set
             {
-                if(value != _currentStatus)
+                if (value != _idmDbStatus)
                 {
-                    lock (_currentStatusLock)
+                    lock (_idmDbStatusLock)
                     {
-                        _currentStatus = value;
+                        _idmDbStatus = value;
                     }
                 }
-           }
+            }
         }
-
+        public static string IdsDbStatus
+        {
+            get
+            {
+                return _idsDbStatus;
+            }
+            set
+            {
+                if (value != _idsDbStatus)
+                {
+                    lock (_idsDbStatusLock)
+                    {
+                        _idsDbStatus = value;
+                    }
+                }
+            }
+        }
 
     }
 }

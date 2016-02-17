@@ -34,7 +34,8 @@ namespace Fsw.Enterprise.AuthCentral.Health
             // TODO: trace log correctly
             logger.LogInformation("Checking Health... ");
 
-            HealthContext.CurrentStatus = CheckUserDatabaseStatus(config);
+            HealthContext.IdmDbStatus = CheckUserDatabaseStatus(config);
+            HealthContext.IdsDbStatus = CheckIdServerDatabaseStatus(config);
 
             logger.LogInformation(HealthContext.CurrentStatus + Environment.NewLine);
         }
@@ -45,6 +46,10 @@ namespace Fsw.Enterprise.AuthCentral.Health
             Console.WriteLine("An error happened with a scheduled task: " + e.ExceptionObject);
         }
 
+        private static string CheckIdServerDatabaseStatus(EnvConfig config)
+        {
+            return HealthContext.Good;
+        }
 
         private static string CheckUserDatabaseStatus(EnvConfig config)
         {

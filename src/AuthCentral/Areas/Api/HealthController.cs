@@ -1,17 +1,22 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using Fsw.Enterprise.AuthCentral.Health;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.AspNet.Authorization;
 
 namespace Fsw.Enterprise.AuthCentral.Areas.Api.Controllers
 {
     [Area("Api")]
-    [Route("[controller]"), Route("[area]/[controller]")]
+    [Route("[controller]"), Route("[area]")]
     public class HealthController : Controller
     {
         private ILogger _logger;
+        private IApplicationEnvironment _app;
+        private IRuntimeEnvironment _runtime;
         private static ProjectInfo _project;
 
         
@@ -36,15 +41,17 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Api.Controllers
             }
         }
 
-        public HealthController(ILoggerFactory factory)
+        public HealthController(ILoggerFactory factory, IApplicationEnvironment app, IRuntimeEnvironment runtime)
         {
             _logger = factory.CreateLogger(this.GetType().ToString());
+            _app = app;
+            _runtime = runtime;
         }
-        
-        [HttpGet]
-        public StatusResource Health()
+
+        [HttpGet("[action]")]
+        public HealthResource Health()
         {
-            var status = new StatusResource();
+            var status = new HealthResource();
             status.AppName = _project.Name;
             status.Version = _project.Version;
             status.Status = HealthContext.CurrentStatus;
@@ -52,12 +59,51 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Api.Controllers
             return status;
         }
 
-        public class StatusResource
+        [Authorize]
+        [HttpGet("[action]")]
+        public StatusResource Status()
+        {
+            var status = new StatusResource();
+            status.Health = Health();
+            status.Runtime = _runtime;
+            status.App = _app;
+            status.Dependencies = new List<DependencyResource>()
+            {
+                new DependencyResource
+                {
+                    AppName = "Identity Server Database",
+                    Status = HealthContext.IdsDbStatus
+                },
+                new DependencyResource
+                {
+                    AppName = "Identity Manager Database",
+                    Status = HealthContext.IdmDbStatus
+                },
+            };
+            return status;
+        }
+
+        public class HealthResource
         {
             public string AppName { get; set; }
             public string Version { get; set; }
             public string Status { get; set; }
             public string Commit { get; set; }
+        }
+
+        public class StatusResource
+        {
+            public IEnumerable<DependencyResource> Dependencies { get; set; }
+            public HealthResource Health { get; set; }
+            public IRuntimeEnvironment Runtime { get; set; }
+            public IApplicationEnvironment App { get; set; }
+            public string MachineName { get { return Environment.MachineName; } }
+        }
+
+        public class DependencyResource
+        {
+            public string AppName { get; set; }
+            public string Status { get; set; }
         }
 
         internal class ProjectInfo

@@ -15,10 +15,15 @@ using Fsw.Enterprise.AuthCentral.Extensions;
 using Fsw.Enterprise.AuthCentral.Health;
 using Fsw.Enterprise.AuthCentral.MongoStore;
 using Fsw.Enterprise.AuthCentral.IdMgr;
-using BrockAllen.MembershipReboot.Hierarchical;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
-using BrockAllen.MembershipReboot;
 using Fsw.Enterprise.AuthCentral.Crypto;
+
+using BrockAllen.MembershipReboot;
+using BrockAllen.MembershipReboot.Hierarchical;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace Fsw.Enterprise.AuthCentral
 {
@@ -43,7 +48,16 @@ namespace Fsw.Enterprise.AuthCentral
             services.AddSerilog(_config.IsDebug);
             services.AddDataProtection();
             services.ConfigureDataProtection(AuthCentralDataProtectionStartup.GetConfiguration(_config));
-            services.AddMvc();
+            
+            services.AddMvc().AddJsonOptions(jsonOptions =>
+            {
+                jsonOptions.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                jsonOptions.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                jsonOptions.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Populate;
+                jsonOptions.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
+                jsonOptions.SerializerSettings.Converters.Add(new StringEnumConverter());
+            });
+
             services.AddMembershipReboot(_config);
             services.AddAuthorizationPolicies();
             services.AddAuthCentralDependencies(_config);

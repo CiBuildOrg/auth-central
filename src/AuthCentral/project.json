@@ -12,6 +12,7 @@
     "Fsw.LogCentral.MicrosoftFramework": "1.0.0-rc1-final-148",
     "IdentityServer3": "2.1.1",
     "IdentityServer3.MembershipReboot": "2.0.0",
+    "Microsoft.AspNet.DataProtection.SystemWeb": "1.0.0-rc1-final",
     "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
     "Microsoft.AspNet.Authentication.OpenIdConnect": "1.0.0-rc1-final",
     "Microsoft.AspNet.Authorization": "1.0.0-rc1-final",

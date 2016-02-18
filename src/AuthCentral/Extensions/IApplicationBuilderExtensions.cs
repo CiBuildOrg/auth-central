@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 
 using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authentication.Cookies;
@@ -55,11 +56,18 @@ namespace Fsw.Enterprise.AuthCentral.Extensions
                 )
             );
 
+            X509Certificate2 secondarySigningCertificate = null;
+            if(!string.IsNullOrWhiteSpace(config.Cert.JwksSecondaryCertStoreName) && !string.IsNullOrWhiteSpace(config.Cert.JwksSecondaryCertThumbprint))
+            {
+                secondarySigningCertificate = Crypto.Certificate.Get(config.DataProtection.CertStoreName, config.DataProtection.CertThumbprint);
+            }
+
             var options = new IdentityServerOptions
             {
-                SiteName = "FSW",
+                SiteName = config.AppName,
                 PublicOrigin = config.Uri.IssuerUri,
-                SigningCertificate = Certificate.Get(config.Cert.StoreName, config.Cert.Thumbprint),
+                SigningCertificate = Crypto.Certificate.Get(config.Cert.JwksCertStoreName, config.Cert.JwksCertThumbprint),
+                SecondarySigningCertificate = secondarySigningCertificate,
                 IssuerUri = config.Uri.IssuerUri,
                 RequireSsl = true,
                 LoggingOptions = new LoggingOptions()

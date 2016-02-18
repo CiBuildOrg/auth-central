@@ -17,7 +17,7 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
 
-namespace Fsw.Enterprise.AuthCentral.IdSvr
+namespace Fsw.Enterprise.AuthCentral.Crypto
 {
     static class Certificate
     {

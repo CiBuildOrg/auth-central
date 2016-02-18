@@ -14,6 +14,7 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Fsw.Enterprise.AuthCentral.Extensions;
 using Fsw.Enterprise.AuthCentral.Health;
 using Fsw.Enterprise.AuthCentral.MongoStore;
+using Fsw.Enterprise.AuthCentral.Crypto;
 
 namespace Fsw.Enterprise.AuthCentral
 {
@@ -24,16 +25,20 @@ namespace Fsw.Enterprise.AuthCentral
 
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
-            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true);
+            var builder = new ConfigurationBuilder().AddJsonFile("appsettingdefaults.json", optional: true);
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
             _config = new EnvConfig(Configuration);
+
+            // BUGBUG: This could be a problem, depending on the order things get loaded
+            AuthCentralDataProtectionStartup.AuthCentralEnvConfig = _config;
         }
         
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSerilog(_config.IsDebug);
             services.AddDataProtection();
+            services.ConfigureDataProtection(AuthCentralDataProtectionStartup.GetConfiguration(_config));
             services.AddMvc();
             services.AddMembershipReboot(_config);
             services.AddAuthorizationPolicies();
@@ -46,6 +51,10 @@ namespace Fsw.Enterprise.AuthCentral
 
                 // All generated URL's should be lower-case.
                 routeOptions.LowercaseUrls = true;
+            });
+            services.ConfigureAntiforgery(c =>
+            {
+                c.CookieName = "fsw.authcentral.xsrf";
             });
         }
 

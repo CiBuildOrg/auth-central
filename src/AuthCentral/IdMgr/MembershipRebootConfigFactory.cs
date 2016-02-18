@@ -53,7 +53,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
         {
             SecuritySettings securitySettings = new SecuritySettings();
             MembershipRebootSetup newInstance = GetDefaultConfigInstance(config.Uri.IssuerUri, securitySettings);
-            AuthCentralAppInfo appInfo = BuildAppInfo(config.Uri.IssuerUri);
+            AuthCentralAppInfo appInfo = BuildAppInfo(config.Uri.IssuerUri, config.AppName);
 
             var emailBodyType = AuthCentralSmtpMessageDelivery.MsgBodyTypes.MultipartAlternativeAsJson;
             var emailFormatter = new AuthCentralEmailMessageFormatter(appEnv, appInfo, emailBodyType);
@@ -69,7 +69,7 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
         {
             SecuritySettings securitySettings = new SecuritySettings();
             MembershipRebootSetup newInstance = GetDefaultConfigInstance(config.Uri.IssuerUri, securitySettings);
-            AuthCentralAppInfo appInfo = BuildAppInfo(config.Uri.IssuerUri);
+            AuthCentralAppInfo appInfo = BuildAppInfo(config.Uri.IssuerUri, config.AppName);
 
             var emailBodyType = AuthCentralSmtpMessageDelivery.MsgBodyTypes.MultipartAlternativeAsJson;
             var emailFormatter = new AuthCentralEmailMessageFormatter(appEnv, appInfo, emailBodyType);
@@ -116,11 +116,11 @@ namespace Fsw.Enterprise.AuthCentral.IdMgr
             return newInstance;
         }
 
-        private static AuthCentralAppInfo BuildAppInfo(string baseUrl)
+        private static AuthCentralAppInfo BuildAppInfo(string baseUrl, string appName)
         {
             return new AuthCentralAppInfo(
                 baseUrl,
-                "FSW Auth Central",
+                appName,
                 "Problems? Call customer service toll-free at 1-877-877-5655.",
                 "useraccount/profile",
                 "useraccount/changeemail/confirm/",

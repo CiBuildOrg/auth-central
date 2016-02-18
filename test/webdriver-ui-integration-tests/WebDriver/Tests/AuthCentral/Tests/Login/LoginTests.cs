@@ -20,10 +20,17 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral
             Assert.True(profilePage.Map.AccountDetailsHeader.Displayed);
             Assert.Equal("Account Details", profilePage.Map.AccountDetailsHeader.Text);
         }
-        [Fact(DisplayName = "Log in as admin")]
-        public void Login_AsAdmin()
+        [Fact(DisplayName = "Log in as admin with username")]
+        public void Login_Admin_Username()
         {
             ProfilePage page = Page.Login("AutomationUser", "fs19!t?3h2@");
+            Assert.True(page.Map.AccountDetailsHeader.Displayed);
+            Assert.Equal("Account Details", page.Map.AccountDetailsHeader.Text);
+        }
+        [Fact(DisplayName = "Log in as admin with email")]
+        public void Login_Admin_Email()
+        {
+            ProfilePage page = Page.Login("fswautomation@gmail.com", "fs19!t?3h2@");
             Assert.True(page.Map.AccountDetailsHeader.Displayed);
             Assert.Equal("Account Details", page.Map.AccountDetailsHeader.Text);
         }

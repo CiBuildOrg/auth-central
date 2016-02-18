@@ -14,6 +14,10 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Fsw.Enterprise.AuthCentral.Extensions;
 using Fsw.Enterprise.AuthCentral.Health;
 using Fsw.Enterprise.AuthCentral.MongoStore;
+using Fsw.Enterprise.AuthCentral.IdMgr;
+using BrockAllen.MembershipReboot.Hierarchical;
+using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
+using BrockAllen.MembershipReboot;
 
 namespace Fsw.Enterprise.AuthCentral
 {
@@ -67,7 +71,10 @@ namespace Fsw.Enterprise.AuthCentral
             app.UseOpenIdConnectAuthentication(_config);
             app.UseIISPlatformHandler();
             app.UseStaticFiles();
-            HealthChecker.ScheduleHealthCheck(_config, loggerFactory);
+            AdminUserAccountServiceContainer container = app.ApplicationServices.GetService<AdminUserAccountServiceContainer>();
+            UserAccountService<HierarchicalUserAccount> idmRepo = container.Service;
+            IClientService idsRepo = app.ApplicationServices.GetService<IClientService>();
+            HealthChecker.ScheduleHealthCheck(_config, loggerFactory, idsRepo, idmRepo);
 
             app.Map(_config.Uri.AuthorityMapPath, ids =>
             {

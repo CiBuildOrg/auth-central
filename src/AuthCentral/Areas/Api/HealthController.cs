@@ -71,12 +71,12 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Api.Controllers
             {
                 new DependencyResource
                 {
-                    AppName = "Identity Server Database",
+                    Name = "Identity Server Database",
                     Status = HealthContext.IdsDbStatus
                 },
                 new DependencyResource
                 {
-                    AppName = "Identity Manager Database",
+                    Name = "Identity Manager Database",
                     Status = HealthContext.IdmDbStatus
                 },
             };
@@ -102,7 +102,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Api.Controllers
 
         public class DependencyResource
         {
-            public string AppName { get; set; }
+            public string Name { get; set; }
             public string Status { get; set; }
         }
 

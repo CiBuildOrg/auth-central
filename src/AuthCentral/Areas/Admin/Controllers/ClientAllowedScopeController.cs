@@ -81,7 +81,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
  
             model.ChildList.Add("");
 
-            return View("Edit", model);
+            return RedirectToAction("Edit", new {clientId});
         }
 
         [HttpPost("[action]/{clientId}")]
@@ -89,7 +89,6 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
         public async Task<IActionResult> Save(string clientId, string originalAllowedScope, string allowedScope)
         {
             //TODO: validate??
-
             Client client = await _clientService.Find(clientId);
 
             if(client == null)
@@ -136,8 +135,8 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
 
             // cheating way to include an empty for on the view page
             model.ChildList.Add("");
-            
-            return View("Edit", model);
+
+            return RedirectToAction("Edit", new {clientId});
         }
 
     }

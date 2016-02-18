@@ -1,10 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Fsw.Enterprise.AuthCentral
 {
     public class EnvConfig
     {
+        private DpConfig _dp;
         private UriConfig _uri;
         private CspConfig _csp;
         private CertConfig _cert;
@@ -14,6 +17,12 @@ namespace Fsw.Enterprise.AuthCentral
         private IConfigurationRoot _root;
 
         private static class EnvVars {
+            public static string DpSharedKeystoreDir = "AUTHCENTRAL_DP_SHARED_KEYSTORE_DIR";
+            public static string DpCertThumbprint = "AUTHCENTRAL_DP_CERT_THUMBPRINT";
+            public static string JwksCertStore = "AUTHCENTRAL_JWKS_CERT_STORENAME";
+            public static string JwksCertThumbprint = "AUTHCENTRAL_JWKS_CERT_THUMBPRINT";
+            public static string JwksSecondaryCertStore = "AUTHCENTRAL_JWKS_CERT2_STORENAME";
+            public static string JwksSecondaryCertThumbprint = "AUTHCENTRAL_JWKS_CERT2_THUMBPRINT";
             public static string DbMembershipReboot = "AUTHCENTRAL_DB_MEMBERSHIPREBOOT";
             public static string DbIdentityServer3 = "AUTHCENTRAL_DB_IDENTITYSERVER3";
             public static string UriScheme = "AUTHCENTRAL_URI_SCHEME";
@@ -22,8 +31,6 @@ namespace Fsw.Enterprise.AuthCentral
             public static string SmtpHost = "AUTHCENTRAL_SMTP_HOST";
             public static string SmtpFrom = "AUTHCENTRAL_SMTP_FROM";
             public static string UriServiceRoot = "AUTHCENTRAL_URI_SERVICEROOT";
-            public static string CertStoreName = "AUTHCENTRAL_CERT_STORENAME";
-            public static string CertThumbprint = "AUTHCENTRAL_CERT_THUMBPRINT";
             public static string DebugMode = "AUTHCENTRAL_DEBUG_MODE";
             public static string ClientId = "AUTHCENTRAL_CLIENT_ID";
             public static string ClientSecret = "AUTHCENTRAL_CLIENT_SECRET";
@@ -41,6 +48,12 @@ namespace Fsw.Enterprise.AuthCentral
             this._db = new DatabaseConfig(root);
             this._client = new ClientConfig(root);
             this._smtp = new SmtpConfig(root);
+            this._dp = new DpConfig(root, this._uri, AppName);
+        }
+
+        public string AppName
+        {
+            get { return "FSW Auth Central"; }
         }
 
         public CspConfig Csp {
@@ -49,6 +62,10 @@ namespace Fsw.Enterprise.AuthCentral
 
         public CertConfig Cert {
             get { return this._cert; }
+        }
+
+        public DpConfig DataProtection {
+            get { return this._dp; }
         }
 
         public SmtpConfig Smtp {
@@ -178,21 +195,37 @@ namespace Fsw.Enterprise.AuthCentral
                 _root = root;
             }
 
-            public string StoreName
+            public string JwksCertStoreName
             {
                 get
                 {
-                    return _root.Get<string>(EnvVars.CertStoreName);
+                    return _root.Get<string>(EnvVars.JwksCertStore);
                 }
             }
 
-            public string Thumbprint 
+            public string JwksCertThumbprint 
             { 
                 get 
                 {
-                    return _root.Get<string>(EnvVars.CertThumbprint);
+                    return _root.Get<string>(EnvVars.JwksCertThumbprint);
                 } 
             }
+            public string JwksSecondaryCertStoreName
+            {
+                get
+                {
+                    return _root.Get<string>(EnvVars.JwksSecondaryCertStore);
+                }
+            }
+
+           public string JwksSecondaryCertThumbprint 
+            { 
+                get 
+                {
+                    return _root.Get<string>(EnvVars.JwksSecondaryCertThumbprint);
+                } 
+            }
+  
         }
 
         public class SmtpConfig
@@ -279,6 +312,58 @@ namespace Fsw.Enterprise.AuthCentral
             }
 
          }
+        public class DpConfig
+        {
+            private IConfigurationRoot _root;
+            private string _appName;
+            private UriConfig _uriConfig;
+
+            internal DpConfig(IConfigurationRoot root, UriConfig uriConfig, string appName)
+            {
+                _root = root;
+                _appName = appName;
+                _uriConfig = uriConfig;
+            }
+
+            public string AppName {
+                get
+                {
+                    return _appName;
+                }
+            }
+
+            public string SharedKeystoreDir
+            { 
+                get 
+                {
+                    // Use in a directory specific to the thumbprint being used
+                    return Path.Combine(_root.Get<string>(EnvVars.DpSharedKeystoreDir), _uriConfig.Host, this.CertThumbprint);
+                } 
+            }
+
+            public string CertStoreName
+            { 
+                get 
+                {
+                    // must be installed in the personal cert store on the
+                    // local machine
+                    return "MY";
+                } 
+            }
+
+            public string CertThumbprint
+            { 
+                get 
+                {
+                    // must be installed in the personal cert store on the
+                    // local machine
+                    return _root.Get<string>(EnvVars.DpCertThumbprint);
+                } 
+            }
+
+
+         }
+
 
     }
 }

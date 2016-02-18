@@ -12,6 +12,7 @@ using IdentityServer3.Core.Services;
 using Fsw.Enterprise.AuthCentral.Areas.Admin.Models;
 using Fsw.Enterprise.AuthCentral.MongoStore.Admin;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Mvc.Rendering;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,18 +24,21 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
     {
         
         private IClientService _clientService;
+        private readonly IScopeService _scopeService;
 
-        public ClientAllowedScopeController(IClientService clientService)
+        public ClientAllowedScopeController(IClientService clientService, IScopeService scopeService)
         {
             this._clientService = clientService;
+            _scopeService = scopeService;
         }
 
         [HttpGet("[action]/{clientId}")]
         public async Task<IActionResult> Edit(string clientId)
         {
             Client client = await _clientService.Find(clientId);
+            ViewBag.ScopeList = await _scopeService.Get(false);
 
-            if(client == null)
+            if (client == null)
             {
                 ViewBag.Message = string.Format("The Auth Central Client with ClientId {0} could not be found.", clientId);
                 return RedirectToAction("Edit");

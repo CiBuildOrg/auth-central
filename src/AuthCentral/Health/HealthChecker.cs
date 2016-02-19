@@ -22,9 +22,9 @@ namespace Fsw.Enterprise.AuthCentral.Health
         {
             ILogger logger = logFactory.CreateLogger(typeof(HealthChecker).ToString());
             var r = new Registry();
-            r.Schedule(() =>
+            r.Schedule(async() =>
             {
-                CheckHealth(config, logger, clientService, userAccountService);
+                await CheckHealth(config, logger, clientService, userAccountService);
             }).ToRunNow().AndEvery(30).Seconds();
 
             TaskManager.UnobservedTaskException += TaskManager_UnobservedTaskException;

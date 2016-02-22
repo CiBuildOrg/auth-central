@@ -26,7 +26,7 @@
                            Selected = scope.Name == Model.ChildList[i]
                        });
 
-                   @Html.DropDownList("allowedScope", list, "", new {id = $"allowedScope_{i}" })
+                   @Html.DropDownList("allowedScope", list, "", new {@id = $"allowedScope_{i}", @class = "form-control" })
                }
            </div>
         </div>

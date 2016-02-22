@@ -34,7 +34,7 @@ namespace Fsw.Enterprise.AuthCentral.Health
         private static async Task CheckHealth(EnvConfig config, ILogger logger, IClientService clientService, UserAccountService<HierarchicalUserAccount> userAccountService)
         {
             // TODO: trace log correctly
-            logger.LogInformation("Checking Health... ");
+            logger.LogInformation("Checking Health... "); 
 
             HealthContext.IdmDbStatus = CheckUserDatabaseStatus(config, userAccountService, logger);
             HealthContext.IdsDbStatus = await CheckIdServerDatabaseStatus(config, clientService, logger);

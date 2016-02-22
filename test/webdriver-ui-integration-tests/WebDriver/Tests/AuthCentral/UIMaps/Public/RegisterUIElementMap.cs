@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.Public
 {
-    class RegisterUIElementMap
+    public class RegisterUIElementMap
     {
         [FindsBy(How = How.Id, Using = "Username")]
         public IWebElement UsernameBox;
@@ -22,7 +22,9 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.Public
         public IWebElement PasswordBox;
         [FindsBy(How = How.Id, Using = "ConfirmPassword")]
         public IWebElement ConfirmPasswordBox;
-        [FindsBy(How = How.XPath, Using = "//button[.='Create Account']")]
+        [FindsBy(How = How.XPath, Using = "//button[.='Create an Account']")]
         public IWebElement CreateAccountButton;
+        [FindsBy(How = How.ClassName, Using = "container body-content")]
+        public IWebElement PageText;
     }
 }

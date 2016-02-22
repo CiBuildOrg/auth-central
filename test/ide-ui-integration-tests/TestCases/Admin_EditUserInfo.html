@@ -12,26 +12,6 @@
 <tr><td rowspan="1" colspan="3">Admin_EditUserInfo</td></tr>
 </thead><tbody>
 <tr>
-	<td>click</td>
-	<td>${Header_Dropdown}</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>${Header_ManageUsers}</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertElementPresent</td>
-	<td>//a[.='${NewUser_FullName}']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>${NewUser_Link}</td>
-	<td></td>
-</tr>
-<tr>
 	<td>type</td>
 	<td>${Account_FirstName}</td>
 	<td>${NewUser_FirstName}${Random}</td>
@@ -50,21 +30,6 @@
 	<td>assertText</td>
 	<td>${Account_ConfirmationMessage}</td>
 	<td>The requested change was processed successfully.</td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>${Header_Dropdown}</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>${Header_ManageUsers}</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertElementPresent</td>
-	<td>link=${NewUser_FirstName}${Random} ${NewUser_LastName}${Random}</td>
-	<td></td>
 </tr>
 </tbody></table>
 </body>

@@ -12,10 +12,10 @@ namespace Fsw.Enterprise.AuthCentral.Health
         public const string Warning = "yellow";
         public const string Good = "green";
 
-        private static string _idsDbStatus = Good;
+        private volatile static string _idsDbStatus = Good;
         private static object _idsDbStatusLock = new object();
 
-        private static string _idmDbStatus = Good;
+        private volatile static string _idmDbStatus = Good;
         private static object _idmDbStatusLock = new object();
 
         public static string CurrentStatus {
@@ -48,7 +48,10 @@ namespace Fsw.Enterprise.AuthCentral.Health
                 {
                     lock (_idmDbStatusLock)
                     {
-                        _idmDbStatus = value;
+                        if (value != _idmDbStatus)
+                        {
+                            _idmDbStatus = value;
+                        }
                     }
                 }
             }
@@ -65,7 +68,10 @@ namespace Fsw.Enterprise.AuthCentral.Health
                 {
                     lock (_idsDbStatusLock)
                     {
-                        _idsDbStatus = value;
+                        if (value != _idsDbStatus)
+                        {
+                            _idsDbStatus = value;
+                        }
                     }
                 }
             }

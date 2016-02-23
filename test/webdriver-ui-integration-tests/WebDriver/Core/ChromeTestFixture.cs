@@ -1,6 +1,4 @@
-﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Firefox;
+﻿using OpenQA.Selenium.Remote;
 using System;
 
 namespace Fsw.Enterprise.AuthCentral.Webdriver.Core
@@ -9,7 +7,12 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.Core
     {
         public ChromeTestFixture()
         {
-            this.Driver = new ChromeDriver(this.GetDriverDir());
+            // use this line instead to run chrome locally
+            // this.Driver = new ChromeDriver();
+            this.Driver = new RemoteWebDriver(
+                new Uri("http://fswstgpssvc01.foodservicewarehouse.com:4444/wd/hub"), 
+                DesiredCapabilities.Chrome()
+            );
         }
     }
 }

@@ -24,7 +24,9 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.Public
         public IWebElement ConfirmPasswordBox;
         [FindsBy(How = How.XPath, Using = "//button[.='Create an Account']")]
         public IWebElement CreateAccountButton;
-        [FindsBy(How = How.ClassName, Using = "container body-content")]
+        [FindsBy(How = How.ClassName, Using = "body-content")]
         public IWebElement PageText;
+        [FindsBy(How = How.XPath, Using = "//div[@class='validation-summary-errors']/ul/li")]
+        public IWebElement ErrorMessage;
     }
 }

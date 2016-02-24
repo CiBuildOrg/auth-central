@@ -31,5 +31,16 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Public
             this._registerUI.CreateAccountButton.Click();
             return new RegisterPage(Driver);
         }
+        public RegisterPage Register(string username, string email, string password, string confirmPassword)
+        {
+            this._registerUI.UsernameBox.SendKeys(username);
+            this._registerUI.EmailBox.SendKeys(email);
+            this._registerUI.FirstNameBox.SendKeys("test");
+            this._registerUI.LastNameBox.SendKeys("user");
+            this._registerUI.PasswordBox.SendKeys(password);
+            this._registerUI.ConfirmPasswordBox.SendKeys(confirmPassword);
+            this._registerUI.CreateAccountButton.Click();
+            return new RegisterPage(Driver);
+        }
     }
 }

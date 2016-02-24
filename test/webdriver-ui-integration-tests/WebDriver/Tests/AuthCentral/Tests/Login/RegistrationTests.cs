@@ -57,5 +57,33 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral
             RegisterPage page = new RegisterPage(_fixture.Driver).Register(username, email, "Test123", "Tset123");
             Assert.Equal("Password confirmation must match password.", page.Map.ErrorMessage.Text);
         }
+        [Fact(DisplayName = "Register fails if username already exists")]
+        public void Register_UsernameAlreadyExists_Fails()
+        {
+            string username = "test" + new Random().Next().ToString();
+            string email = username + "@gmail.com";
+            string url = _fixture.Driver.Url.ToString();
+            Page.Map.CreateAccountLink.Click();
+            RegisterPage page = new RegisterPage(_fixture.Driver).Register(username, email, "Test123");
+            Assert.Contains("Registration Success", page.Map.PageText.Text);
+            _fixture.Driver.Navigate().GoToUrl(url);
+            Page.Map.CreateAccountLink.Click();
+            page.Register(username, "differentEmail@fakemail.com", "Test123");
+            Assert.Equal("Username already in use.", page.Map.ErrorMessage.Text);
+        }
+        [Fact(DisplayName = "Register fails if email already exists")]
+        public void Register_EmailAlreadyExists_Fails()
+        {
+            string username = "test" + new Random().Next().ToString();
+            string email = username + "@gmail.com";
+            string url = _fixture.Driver.Url.ToString();
+            Page.Map.CreateAccountLink.Click();
+            RegisterPage page = new RegisterPage(_fixture.Driver).Register(username, email, "Test123");
+            Assert.Contains("Registration Success", page.Map.PageText.Text);
+            _fixture.Driver.Navigate().GoToUrl(url);
+            Page.Map.CreateAccountLink.Click();
+            page.Register("DifferentUser", email, "Test123");
+            Assert.Equal("Email already in use.", page.Map.ErrorMessage.Text);
+        }
     }
 }

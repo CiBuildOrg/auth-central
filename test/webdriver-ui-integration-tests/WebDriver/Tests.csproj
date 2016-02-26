@@ -130,9 +130,9 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Vars\dev.bat" />
-    <None Include="Vars\prod.bat" />
-    <None Include="Vars\stage.bat" />
+    <None Include="Vars\dev.env" />
+    <None Include="Vars\prod.env.encrypted" />
+    <None Include="Vars\stage.env.encrypted" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tests\AuthCentral\Tests\Admin\" />

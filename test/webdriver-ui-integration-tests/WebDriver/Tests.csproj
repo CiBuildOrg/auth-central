@@ -88,6 +88,7 @@
     <Compile Include="EnvConfig.cs" />
     <Compile Include="Tests\AuthCentral\AuthCentralTestsMain.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Admin\UserListPage.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Public\RegisterPage.cs" />
     <Compile Include="Tests\AuthCentral\Tests\Login\LoginTests.cs" />
     <Compile Include="Core\ChromeTestFixture.cs" />
     <Compile Include="Core\Extensions\IWebDriverExtensions.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Tests\AuthCentral\AuthCentralTestsBootstrap.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Public\LoginPage.cs" />
     <Compile Include="Tests\AuthCentral\Pages\LoggedIn\ProfilePage.cs" />
+    <Compile Include="Tests\AuthCentral\Tests\Login\RegistrationTests.cs" />
     <Compile Include="Tests\AuthCentral\Tests\Profile\ProfileTests.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\Admin\AdminUIElementMap.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\Admin\ClientClaimsUIElementMap.cs" />
@@ -131,6 +133,9 @@
     <None Include="Vars\dev.bat" />
     <None Include="Vars\prod.bat" />
     <None Include="Vars\stage.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tests\AuthCentral\Tests\Admin\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

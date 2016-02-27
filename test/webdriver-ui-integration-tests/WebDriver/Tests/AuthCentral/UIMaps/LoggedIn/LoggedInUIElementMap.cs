@@ -3,7 +3,7 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.LoggedIn
 {
-    abstract class LoggedInUIElementMap
+    class LoggedInUIElementMap
     {
         [FindsBy(How = How.CssSelector, Using = "a.dropdown-toggle")]
         public IWebElement MainMenuLink;

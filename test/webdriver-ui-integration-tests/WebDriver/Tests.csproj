@@ -87,8 +87,14 @@
   <ItemGroup>
     <Compile Include="EnvConfig.cs" />
     <Compile Include="Tests\AuthCentral\AuthCentralTestsMain.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\UserCreatedPage.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\NewUserPage.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\LoggedInAdminPage.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Admin\UserListPage.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\LoggedIn\LoggedInUserPage.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Public\LoggedOutPage.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Public\RegisterPage.cs" />
+    <Compile Include="Tests\AuthCentral\Tests\Admin\AdminUserTests.cs" />
     <Compile Include="Tests\AuthCentral\Tests\Login\LoginTests.cs" />
     <Compile Include="Core\ChromeTestFixture.cs" />
     <Compile Include="Core\Extensions\IWebDriverExtensions.cs" />
@@ -104,6 +110,7 @@
     <Compile Include="Tests\AuthCentral\Tests\Login\RegistrationTests.cs" />
     <Compile Include="Tests\AuthCentral\Tests\Profile\ProfileTests.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\Admin\AdminUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\UIMaps\Admin\UserCreatedUIElementsMap.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\Admin\ClientClaimsUIElementMap.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\Admin\ClientListUIElementMap.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\Admin\ClientSecretsUIElementMap.cs" />
@@ -117,6 +124,7 @@
     <Compile Include="Tests\AuthCentral\UIMaps\Admin\UserUIElementMap.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\LoggedIn\LoggedInUIElementMap.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\LoggedIn\ProfileUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\UIMaps\Public\LoggedOutUIElementMap.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\Public\LoginUIElementMap.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\Public\RegisterUIElementMap.cs" />
     <Compile Include="Tests\GoogleHome\GoogleExampleTestsBootstrap.cs" />

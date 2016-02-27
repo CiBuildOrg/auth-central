@@ -4,7 +4,7 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.LoggedIn
 {
-    class ProfileUIElementMap : UserUIElementMap
+    class ProfileUIElementMap : AdminUIElementMap
     {
         [FindsBy(How = How.XPath, Using = "//div[@id='nameText']/div/div")]
         public IWebElement NameDiv;

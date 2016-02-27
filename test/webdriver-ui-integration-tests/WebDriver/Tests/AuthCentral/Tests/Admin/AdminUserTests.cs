@@ -12,7 +12,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral
 {
     public abstract partial class AuthCentralTestsMain : TestClassBase
     {
-        [Fact(DisplayName = "Create New User as admin")]
+        [Fact(DisplayName = "Create New User as admin - Fail All Validation")]
         public void Admin_CreateNewUser_FailValidation()
         {
             NewUserPage newuserpage = Page.Login(_config.AdminUser, _config.AdminPassword).ClickManageUsersLink().ClickCreateUserButton();

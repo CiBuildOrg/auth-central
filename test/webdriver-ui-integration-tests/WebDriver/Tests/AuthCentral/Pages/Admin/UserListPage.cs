@@ -4,7 +4,7 @@ using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.LoggedIn;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 
-namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn
+namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
 {
     public class UserListPage : PageObjectBase
     {
@@ -27,11 +27,11 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn
 
         //Change these methods to what you need
 
-        //internal ProfilePage ExpandNameForm()
-        //{
-        //    _userListUI.NameEditLink.Click();
-        //    return this;
-        //}
+        internal NewUserPage ClickCreateUserButton()
+        {
+            _userListUI.CreateUserButton.Click();
+            return new NewUserPage(Driver);
+        }
 
         //internal ProfilePage UpdateName(string firstName, string lastName)
         //{

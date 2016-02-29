@@ -5,7 +5,7 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.Admin
 {
-    abstract class AdminUIElementMap : LoggedInUIElementMap
+    class AdminUIElementMap : LoggedInUIElementMap
     {
         [FindsBy(How = How.LinkText, Using = "Manage Users")]
         public IWebElement ManageUsersLink;

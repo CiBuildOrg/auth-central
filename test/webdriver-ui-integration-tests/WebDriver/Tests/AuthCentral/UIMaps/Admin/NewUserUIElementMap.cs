@@ -21,5 +21,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.Admin
         public IWebElement DepartmentBox;
         [FindsBy(How = How.XPath, Using = "//button[.='Create Account']")]
         public IWebElement CreateAccountButton;
+        [FindsBy(How = How.CssSelector, Using = "span.field-validation-error")]
+        public IWebElement ValidationErrors;
     }
 }

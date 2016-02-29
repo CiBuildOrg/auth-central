@@ -19,8 +19,8 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver
         private Dictionary<string, string> _config = new Dictionary<string, string>
         {
             { EnvVars.RootUrl, "https://secure.dev-fsw.com/" },
-            { EnvVars.AdminUsername, "jburbage" },
-            { EnvVars.AdminPassword, "n1c37rY" }
+            { EnvVars.AdminUsername, "AutomationUser" },
+            { EnvVars.AdminPassword, "fs19!t?3h2@" }
         };
 
 

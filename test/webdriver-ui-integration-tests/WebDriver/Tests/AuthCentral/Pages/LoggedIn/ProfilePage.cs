@@ -6,7 +6,7 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn
 {
-    public class ProfilePage : PageObjectBase
+    public class ProfilePage : LoggedInAdminPageObjectBase
     {
         private ProfileUIElementMap _profileUI;
 
@@ -33,24 +33,5 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn
             _profileUI.NameSaveButton.Click();
             return this;
         }
-        internal ProfilePage ExpandMainMenu()
-        {
-            _profileUI.MainMenuLink.Click();
-            return this;
-        }
-        internal UserListPage ClickManageUsersLink()
-        {
-            ExpandMainMenu();
-            _profileUI.ManageUsersLink.Click();
-            return new UserListPage(Driver);
-        }
-
-        //TODO: Create ManageScopesPage
-        //internal ManageScopesPage ManageScopesLink()
-        //{
-        //    _profileUI.ManageScopesLink.Click();
-        //    return new ManageScopesPage(Driver);
-        //}
-
     }
 }

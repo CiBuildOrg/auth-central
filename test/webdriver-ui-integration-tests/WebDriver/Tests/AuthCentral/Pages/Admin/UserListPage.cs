@@ -6,7 +6,7 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
 {
-    public class UserListPage : PageObjectBase
+    public class UserListPage : LoggedInAdminPageObjectBase
     {
         private UserListUIElementMap _userListUI;
 

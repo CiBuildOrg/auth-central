@@ -29,7 +29,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn
             return new ProfilePage(Driver);
         }
 
-        //need to make the page for this to return - dsc
+        //TODO: Add page object file for App Permissions page
         //internal AccountPermissionsPage ClickApplicationsPermissions()
         //{
         //    _loggedinUI.AppPermissionsLink.Click();

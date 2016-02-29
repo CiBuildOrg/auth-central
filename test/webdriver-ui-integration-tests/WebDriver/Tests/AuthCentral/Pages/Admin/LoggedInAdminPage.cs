@@ -36,21 +36,21 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
             return new UserListPage(Driver);
         }
 
-        //Manage Clients
+        //TODO: Create page for Manage Clients
         //internal UserListPage ManageUsersLink()
         //{
         //    _loggedinadminUI.ManageUsersLink.Click();
         //    return new UserListPage(Driver);
         //}
 
-        //Manage Scopes
+        //TODO: Create page for Manage Scopes
         //internal UserListPage ManageUsersLink()
         //{
         //    _loggedinadminUI.ManageUsersLink.Click();
         //    return new UserListPage(Driver);
         //}
 
-        //Discovery Document
+        //TODO: Create page for Discovery Document
         //internal UserListPage ManageUsersLink()
         //{
         //    _loggedinadminUI.ManageUsersLink.Click();

@@ -41,5 +41,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.LoggedIn
 
         [FindsBy(How = How.CssSelector, Using = "div.col-xs-12.text-center > h1")]
         public IWebElement AccountDetailsHeader;
+        [FindsBy(How = How.CssSelector, Using = "a.dropdown-toggle")]
+        public IWebElement MainMenuLink;
     }
 }

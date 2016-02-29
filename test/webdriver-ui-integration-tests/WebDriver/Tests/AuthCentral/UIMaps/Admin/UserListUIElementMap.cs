@@ -14,6 +14,8 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.Admin
         [FindsBy(How = How.XPath, Using = "//a[.='${AdminUser_Email}']/../../td/form/input[@value='Delete']")]
         public IWebElement NewUserDeleteButton;
         [FindsBy(How = How.XPath, Using = "//input[@value='Delete']")]
-        public IWebElement DeleteButtons;
+        public IWebElement DeleteButton;
+        [FindsBy(How = How.CssSelector, Using = "a.dropdown-toggle")]
+        public IWebElement MainMenuLink;
     }
 }

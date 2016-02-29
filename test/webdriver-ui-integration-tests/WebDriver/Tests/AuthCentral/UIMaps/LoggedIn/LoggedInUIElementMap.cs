@@ -3,7 +3,7 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.LoggedIn
 {
-    abstract class LoggedInUIElementMap
+    class LoggedInUIElementMap
     {
         [FindsBy(How = How.CssSelector, Using = "a.dropdown-toggle")]
         public IWebElement MainMenuLink;
@@ -16,5 +16,8 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.LoggedIn
 
         [FindsBy(How = How.LinkText, Using = "Logout")]
         public IWebElement LogoutLink;
+
+        [FindsBy(How = How.LinkText, Using = "Manage Users")]
+        public IWebElement ManageUsersLink;
     }
 }

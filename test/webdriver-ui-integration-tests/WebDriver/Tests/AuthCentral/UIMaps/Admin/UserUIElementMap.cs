@@ -3,7 +3,7 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.Admin
 {
-    abstract class UserUIElementMap
+    class UserUIElementMap
     {
         [FindsBy(How = How.LinkText, Using = "Claims")]
         public IWebElement ClaimsMenuLink;

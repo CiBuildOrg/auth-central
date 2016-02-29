@@ -9,12 +9,19 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn
     public class UserListPage : PageObjectBase
     {
         private UserListUIElementMap _userListUI;
+        private LoggedInUIElementMap _loggedInUI;
+        private UserUIElementMap _userUI;
 
         public UserListPage(IWebDriver driver) : base(driver)
         {
             _userListUI = new UserListUIElementMap();
             PageFactory.InitElements(driver, _userListUI);
+            _loggedInUI = new LoggedInUIElementMap();
+            PageFactory.InitElements(driver, _loggedInUI);
+            _userUI = new UserUIElementMap();
+            PageFactory.InitElements(driver, _userUI);
         }
+
 
         internal UserListUIElementMap Map { get { return _userListUI; } }
 
@@ -35,5 +42,29 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn
         //    _userListUI.NameSaveButton.Click();
         //    return this;
         //}
+        
+        public UserListPage DeleteUserIfExists(string email, string otherEmail)
+        {
+            _userListUI.EmailSearchBox.SendKeys(email);
+            _userListUI.EmailSearchButton.Click();
+            if (!_userUI.ClaimsMenuLink.Displayed)
+            {
+                _userListUI.EmailSearchBox.SendKeys(otherEmail);
+                _userListUI.EmailSearchButton.Click();
+            }
+            if (_userUI.ClaimsMenuLink.Displayed)
+            {
+                _userListUI.DeleteButton.Click();
+            }
+
+            return this;
+        }
+        public UserListPage GotoManageUsers()
+        {
+            _loggedInUI.MainMenuLink.Click();
+            _loggedInUI.ManageUsersLink.Click();
+
+            return this;
+        }        
     }
 }

@@ -8,5 +8,8 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.Admin
 {
     class UserCreatedUIElementsMap
     {
+
+        //TODO: Add elements for this page.
+
     }
 }

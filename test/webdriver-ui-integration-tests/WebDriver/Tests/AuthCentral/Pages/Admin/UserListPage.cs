@@ -16,10 +16,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
             PageFactory.InitElements(driver, _userListUI);
         }
 
-
         internal UserListUIElementMap Map { get { return _userListUI; } }
-
-        //Change these methods to what you need
 
         internal NewUserPage ClickCreateUserButton()
         {
@@ -27,6 +24,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
             return new NewUserPage(Driver);
         }
 
+        //Change these methods to what you need
         //internal ProfilePage UpdateName(string firstName, string lastName)
         //{
         //    _userListUI.FirstNameBox.Clear();

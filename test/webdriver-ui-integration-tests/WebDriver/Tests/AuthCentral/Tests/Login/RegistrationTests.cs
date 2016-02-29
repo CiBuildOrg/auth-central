@@ -17,8 +17,10 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral
         [Fact(DisplayName = "Register as new user")]
         public void Register_CorrectCredentials_Succeeds()
         {
-            string username = "test" + new Random().Next().ToString();
-            string email = username + "@gmail.com";
+            UserListPage userListPage = new UserListPage(_fixture.Driver);
+            userListPage.DeleteUser_IfExists(_config.NewUserEmail, _config.NewUserNewEmail);
+
+            
             Page.Map.CreateAccountLink.Click();
             RegisterPage page = new RegisterPage(_fixture.Driver).Register(username, email, "Test123");
             Assert.Contains("Registration Success", page.Map.PageText.Text);
@@ -86,19 +88,5 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral
             page.Register("DifferentUser", email, "Test123");
             Assert.Equal("Email already in use.", page.Map.ErrorMessage.Text);
         }
-        //[Fact(DisplayName = "Register and confirm email")]
-        //public void RegisterAndConfirmEmail_Succeeds()
-        //{
-        //    string email = "automationuser@fsw.com";
-        //    string otherEmail = "AUser2@fsw.com";
-        //    Page.Login("AutomationUser", "fs19!t?3h2@");
-        //    UserListPage userList = new UserListPage(_fixture.Driver).GotoManageUsers();
-        //    userList.DeleteUserIfExists(email, otherEmail);
-            
-                        
-        //    Page.Map.CreateAccountLink.Click();
-        //    RegisterPage page = new RegisterPage(_fixture.Driver).Register("NewUser", "automationuser@fsw.com", "J3huh@8h$$");
-
-        //}
     }
 }

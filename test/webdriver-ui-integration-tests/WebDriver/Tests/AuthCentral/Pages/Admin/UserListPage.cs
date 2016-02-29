@@ -53,7 +53,8 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
         }
         public UserListPage DeleteUser_IfExists(string email, string otherEmail = null)
         {
-            if(UserExists(email,otherEmail))
+            UserListPage userListPage = new UserListPage(Driver).Log
+            if (UserExists(email,otherEmail))
             {
                 UserProfilePage profilePage = new UserProfilePage(Driver);
                 profilePage.DeleteUser();

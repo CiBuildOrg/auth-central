@@ -11,17 +11,22 @@ using System.Threading.Tasks;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
 {
-    public class LoggedInAdminPageObjectBase : LoggedInUserPageObjectBase
+    public class LoggedInAdminPage : LoggedInUserPage
     {
 
         private AdminUIElementMap _loggedinadminUI;
 
-        public LoggedInAdminPageObjectBase(IWebDriver driver) : base(driver)
+        public LoggedInAdminPage(IWebDriver driver) : base(driver)
         {
             _loggedinadminUI = new AdminUIElementMap();
             PageFactory.InitElements(driver, _loggedinadminUI);
         }
 
+        /// <summary>
+        /// This method clicks the Manager Users link from the main menu.
+        /// Note: This will only work if the user is logged in as an admin.
+        /// </summary>
+        /// <returns>a <see cref="UserListPage"/> object containing the resulting page.</returns>
         public UserListPage ClickManageUsersLink()
         {
             _loggedinadminUI.MainMenuLink.Click();

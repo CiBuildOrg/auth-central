@@ -89,9 +89,9 @@
     <Compile Include="Tests\AuthCentral\AuthCentralTestsMain.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Admin\UserCreatedPage.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Admin\NewUserPage.cs" />
-    <Compile Include="Tests\AuthCentral\Pages\Admin\LoggedInAdminPageObjectBase.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\LoggedInAdminPage.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Admin\UserListPage.cs" />
-    <Compile Include="Tests\AuthCentral\Pages\LoggedIn\LoggedInUserPageObjectBase.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\LoggedIn\LoggedInUserPage.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Public\LoggedOutPage.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Public\RegisterPage.cs" />
     <Compile Include="Tests\AuthCentral\Tests\Admin\AdminUserTests.cs" />

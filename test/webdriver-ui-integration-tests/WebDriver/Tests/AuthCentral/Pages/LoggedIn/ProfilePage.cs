@@ -6,7 +6,7 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn
 {
-    public class ProfilePage : LoggedInAdminPageObjectBase
+    public class ProfilePage : LoggedInAdminPage
     {
         private ProfileUIElementMap _profileUI;
 

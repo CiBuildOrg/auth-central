@@ -1,4 +1,5 @@
 ﻿using Fsw.Enterprise.AuthCentral.Webdriver.Core;
+using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin;
 using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn;
 using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Public;
 using OpenQA.Selenium;
@@ -85,19 +86,19 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral
             page.Register("DifferentUser", email, "Test123");
             Assert.Equal("Email already in use.", page.Map.ErrorMessage.Text);
         }
-        [Fact(DisplayName = "Register and confirm email")]
-        public void RegisterAndConfirmEmail_Succeeds()
-        {
-            string email = "automationuser@fsw.com";
-            string otherEmail = "AUser2@fsw.com";
-            Page.Login("AutomationUser", "fs19!t?3h2@");
-            UserListPage userList = new UserListPage(_fixture.Driver).GotoManageUsers();
-            userList.DeleteUserIfExists(email, otherEmail);
-            ProfilePage profile = new ProfilePage(_fixture.Driver).Logout();
+        //[Fact(DisplayName = "Register and confirm email")]
+        //public void RegisterAndConfirmEmail_Succeeds()
+        //{
+        //    string email = "automationuser@fsw.com";
+        //    string otherEmail = "AUser2@fsw.com";
+        //    Page.Login("AutomationUser", "fs19!t?3h2@");
+        //    UserListPage userList = new UserListPage(_fixture.Driver).GotoManageUsers();
+        //    userList.DeleteUserIfExists(email, otherEmail);
+            
                         
-            Page.Map.CreateAccountLink.Click();
-            RegisterPage page = new RegisterPage(_fixture.Driver).Register("NewUser", "automationuser@fsw.com", "J3huh@8h$$");
+        //    Page.Map.CreateAccountLink.Click();
+        //    RegisterPage page = new RegisterPage(_fixture.Driver).Register("NewUser", "automationuser@fsw.com", "J3huh@8h$$");
 
-        }
+        //}
     }
 }

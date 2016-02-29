@@ -87,6 +87,8 @@
   <ItemGroup>
     <Compile Include="EnvConfig.cs" />
     <Compile Include="Tests\AuthCentral\AuthCentralTestsMain.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\UserClaimsPage.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Admin\UserProfilePage.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Admin\UserCreatedPage.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Admin\NewUserPage.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Admin\LoggedInAdminPage.cs" />
@@ -142,9 +144,7 @@
     <None Include="Vars\prod.env.encrypted" />
     <None Include="Vars\stage.env.encrypted" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tests\AuthCentral\Tests\Admin\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

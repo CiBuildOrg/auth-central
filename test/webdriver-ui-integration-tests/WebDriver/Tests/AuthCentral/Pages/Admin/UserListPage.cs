@@ -9,17 +9,11 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
     public class UserListPage : PageObjectBase
     {
         private UserListUIElementMap _userListUI;
-        private LoggedInUIElementMap _loggedInUI;
-        private UserUIElementMap _userUI;
 
         public UserListPage(IWebDriver driver) : base(driver)
         {
             _userListUI = new UserListUIElementMap();
             PageFactory.InitElements(driver, _userListUI);
-            _loggedInUI = new LoggedInUIElementMap();
-            PageFactory.InitElements(driver, _loggedInUI);
-            _userUI = new UserUIElementMap();
-            PageFactory.InitElements(driver, _userUI);
         }
 
 
@@ -43,28 +37,30 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
         //    return this;
         //}
         
-        public UserListPage DeleteUserIfExists(string email, string otherEmail)
+
+        public bool UserExists(string email, string otherEmail = null)
         {
             _userListUI.EmailSearchBox.SendKeys(email);
             _userListUI.EmailSearchButton.Click();
-            if (!_userUI.ClaimsMenuLink.Displayed)
+            UserProfilePage userProfilePage = new UserProfilePage(Driver);
+            UserClaimsPage userClaimsPage = new UserClaimsPage(Driver);
+            if (!userProfilePage.IsOnUserProfilePage() && !userClaimsPage.IsOnUserClaimsPage() && otherEmail != null)
             {
                 _userListUI.EmailSearchBox.SendKeys(otherEmail);
                 _userListUI.EmailSearchButton.Click();
             }
-            if (_userUI.ClaimsMenuLink.Displayed)
+            if (!userProfilePage.IsOnUserProfilePage() && !userClaimsPage.IsOnUserClaimsPage())
+            { return false; }
+            else { return true; }
+        }
+        public UserListPage DeleteUser_IfExists(string email, string otherEmail = null)
+        {
+            if(UserExists(email,otherEmail))
             {
-                _userListUI.DeleteButton.Click();
+                UserProfilePage profilePage = new UserProfilePage(Driver);
+                profilePage.DeleteUser();
             }
-
             return this;
         }
-        public UserListPage GotoManageUsers()
-        {
-            _loggedInUI.MainMenuLink.Click();
-            _loggedInUI.ManageUsersLink.Click();
-
-            return this;
-        }        
     }
 }

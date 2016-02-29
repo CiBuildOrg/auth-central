@@ -10,14 +10,11 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn
     public class ProfilePage : PageObjectBase
     {
         private ProfileUIElementMap _profileUI;
-        private LoggedInUIElementMap _loggedInUI;
 
         public ProfilePage(IWebDriver driver) : base (driver)
         {
             _profileUI = new ProfileUIElementMap();
             PageFactory.InitElements(driver, _profileUI);
-            _loggedInUI = new LoggedInUIElementMap();
-            PageFactory.InitElements(driver, _loggedInUI);
         }
 
         internal ProfileUIElementMap Map { get { return _profileUI; } }
@@ -48,6 +45,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn
             _profileUI.ManageUsersLink.Click();
             return new UserListPage(Driver);
         }
+
 
         //TODO: Create ManageScopesPage
         //internal ManageScopesPage ManageScopesLink()

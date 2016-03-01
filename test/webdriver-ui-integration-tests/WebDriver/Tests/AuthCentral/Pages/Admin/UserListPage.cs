@@ -23,19 +23,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
         {
             _userListUI.CreateUserButton.Click();
             return new NewUserPage(Driver);
-        }
-
-        //Change these methods to what you need
-        //internal ProfilePage UpdateName(string firstName, string lastName)
-        //{
-        //    _userListUI.FirstNameBox.Clear();
-        //    _userListUI.FirstNameBox.SendKeys(firstName);
-        //    _userListUI.LastNameBox.Clear();
-        //    _userListUI.LastNameBox.SendKeys(lastName);
-        //    _userListUI.NameSaveButton.Click();
-        //    return this;
-        //}
-        
+        }        
 
         public bool UserExists(string email, string otherEmail = null)
         {

@@ -19,6 +19,8 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver
             public static string NewUserNewPassword = "AUTHCENTRAL_NEWUSER_NEWPASSWORD";
             public static string NewUserEmail = "AUTHCENTRAL_NEWUSER_EMAIL";
             public static string NewUserNewEmail = "AUTHCENTRAL_NEWUSER_NEWEMAIL";
+            public static string NewUserEmail_OutlookUsername = "AUTHCENTRAL_NEWUSER_OUTLOOKUSERNAME";
+            public static string NewUserEmail_OutlookPassword = "AUTHCENTRAL_NEWUSER_OUTLOOKPASSWORD";
         }
 
         private Dictionary<string, string> _config = new Dictionary<string, string>

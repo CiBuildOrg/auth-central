@@ -20,26 +20,43 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Public
         }
         public RegisterUIElementMap Map { get { return _registerUI; } }
 
-        public RegisterPage Register(string username, string email, string password)
+        public RegisterPage DeleteAndRegisterNewUser(EnvConfig config)
         {
-            this._registerUI.UsernameBox.SendKeys(username);
-            this._registerUI.EmailBox.SendKeys(email);
-            this._registerUI.FirstNameBox.SendKeys("test");
-            this._registerUI.LastNameBox.SendKeys("user");
-            this._registerUI.PasswordBox.SendKeys(password);
-            this._registerUI.ConfirmPasswordBox.SendKeys(password);
-            this._registerUI.CreateAccountButton.Click();
+            LoginPage page = new LoginPage(Driver).DeleteUser_IfExists(config);
+            page.Map.CreateAccountLink.Click();
+            _registerUI.UsernameBox.SendKeys(config.NewUserUsername);
+            _registerUI.EmailBox.SendKeys(config.NewUserEmail);
+            _registerUI.FirstNameBox.SendKeys("test");
+            _registerUI.LastNameBox.SendKeys("user");
+            _registerUI.PasswordBox.SendKeys(config.NewUserPassword);
+            _registerUI.ConfirmPasswordBox.SendKeys(config.NewUserPassword);
+            _registerUI.CreateAccountButton.Click();
             return new RegisterPage(Driver);
         }
-        public RegisterPage Register(string username, string email, string password, string confirmPassword)
+        public RegisterPage DeleteAndRegisterNewUser(EnvConfig config, string username, string email, string password, string confirmPassword = null)
         {
-            this._registerUI.UsernameBox.SendKeys(username);
-            this._registerUI.EmailBox.SendKeys(email);
-            this._registerUI.FirstNameBox.SendKeys("test");
-            this._registerUI.LastNameBox.SendKeys("user");
-            this._registerUI.PasswordBox.SendKeys(password);
-            this._registerUI.ConfirmPasswordBox.SendKeys(confirmPassword);
-            this._registerUI.CreateAccountButton.Click();
+            LoginPage page = new LoginPage(Driver).DeleteUser_IfExists(config);
+            page.Map.CreateAccountLink.Click();
+            _registerUI.UsernameBox.SendKeys(username);
+            _registerUI.EmailBox.SendKeys(email);
+            _registerUI.FirstNameBox.SendKeys("test");
+            _registerUI.LastNameBox.SendKeys("user");
+            _registerUI.PasswordBox.SendKeys(password);
+            _registerUI.ConfirmPasswordBox.SendKeys(confirmPassword == null ? password : confirmPassword);
+            _registerUI.CreateAccountButton.Click();
+            return new RegisterPage(Driver);
+        }
+        public RegisterPage Register(EnvConfig config, string username, string email, string password, string confirmPassword = null)
+        {
+            LoginPage page = new LoginPage(Driver);
+            page.Map.CreateAccountLink.Click();
+            _registerUI.UsernameBox.SendKeys(username);
+            _registerUI.EmailBox.SendKeys(email);
+            _registerUI.FirstNameBox.SendKeys("test");
+            _registerUI.LastNameBox.SendKeys("user");
+            _registerUI.PasswordBox.SendKeys(password);
+            _registerUI.ConfirmPasswordBox.SendKeys(confirmPassword == null ? password : confirmPassword);
+            _registerUI.CreateAccountButton.Click();
             return new RegisterPage(Driver);
         }
     }

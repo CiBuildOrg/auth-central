@@ -22,7 +22,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral
         public AuthCentralTestsMain(TestFixtureBase fixture)
         {
             this.Fixture = fixture;
-            this.Fixture.SetUp(string.IsNullOrWhiteSpace(_config.RootUrl)? "https://secure.dev-fsw.com/" : _config.RootUrl);
+            this.Fixture.SetUp(string.IsNullOrWhiteSpace(_config.RootUrl)? "https://secure.dev-fsw.com" : _config.RootUrl);
             
             Page = new LoginPage(fixture.Driver);
             Wait = new WebDriverWait(fixture.Driver, GetTimeout());

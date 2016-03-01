@@ -1,8 +1,10 @@
 ﻿using Fsw.Enterprise.AuthCentral.Webdriver.Core;
+using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Public;
 using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.Admin;
 using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.LoggedIn;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
 {
@@ -50,16 +52,6 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
             if (!userProfilePage.IsOnUserProfilePage() && !userClaimsPage.IsOnUserClaimsPage())
             { return false; }
             else { return true; }
-        }
-        public UserListPage DeleteUser_IfExists(string email, string otherEmail = null)
-        {
-            UserListPage userListPage = new UserListPage(Driver).Log
-            if (UserExists(email,otherEmail))
-            {
-                UserProfilePage profilePage = new UserProfilePage(Driver);
-                profilePage.DeleteUser();
-            }
-            return this;
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver
 {
-    class EnvConfig : Dictionary<string,string>
+    public class EnvConfig : Dictionary<string,string>
     {
         private static class EnvVars
         {

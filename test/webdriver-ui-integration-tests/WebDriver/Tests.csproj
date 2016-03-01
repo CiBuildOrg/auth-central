@@ -109,7 +109,7 @@
     <Compile Include="Tests\AuthCentral\AuthCentralTestsBootstrap.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Public\LoginPage.cs" />
     <Compile Include="Tests\AuthCentral\Pages\LoggedIn\ProfilePage.cs" />
-    <Compile Include="Tests\AuthCentral\Tests\Login\RegistrationTests.cs" />
+    <Compile Include="Tests\AuthCentral\Tests\Login\RegisterTests.cs" />
     <Compile Include="Tests\AuthCentral\Tests\Profile\ProfileTests.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\Admin\AdminUIElementMap.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\Admin\UserCreatedUIElementsMap.cs" />
@@ -145,9 +145,7 @@
     <None Include="Vars\stage.env.encrypted" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Tests\AuthCentral\Tests\Admin\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Drivers\chromedriver.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -1,11 +1,12 @@
 ﻿using Fsw.Enterprise.AuthCentral.Webdriver.Core;
+using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin;
 using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.LoggedIn;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn
 {
-    public class ProfilePage : PageObjectBase
+    public class ProfilePage : LoggedInAdminPage
     {
         private ProfileUIElementMap _profileUI;
 

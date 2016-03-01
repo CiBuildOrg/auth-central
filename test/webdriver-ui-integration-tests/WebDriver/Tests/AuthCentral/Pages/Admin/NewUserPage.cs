@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
 {
-    public class NewUserPage : LoggedInAdminPageObjectBase
+    public class NewUserPage : LoggedInAdminPage
     {
 
         private AdminNewUserUIElementMap _newuserUI;

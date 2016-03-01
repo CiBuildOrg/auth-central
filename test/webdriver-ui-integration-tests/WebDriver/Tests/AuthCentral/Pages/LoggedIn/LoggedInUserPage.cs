@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn
 {
-    public class LoggedInUserPageObjectBase : PageObjectBase
+    public class LoggedInUserPage : PageObjectBase
     {
         private LoggedInUIElementMap _loggedinUI;
 
-        public LoggedInUserPageObjectBase(IWebDriver driver) : base(driver)
+        public LoggedInUserPage(IWebDriver driver) : base(driver)
         {
             _loggedinUI = new LoggedInUIElementMap();
             PageFactory.InitElements(driver, _loggedinUI);

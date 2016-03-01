@@ -5,10 +5,9 @@ using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.LoggedIn;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 
-
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
 {
-    public class UserListPage : LoggedInAdminPageObjectBase
+    public class UserListPage : LoggedInAdminPage
     {
         private UserListUIElementMap _userListUI;
 

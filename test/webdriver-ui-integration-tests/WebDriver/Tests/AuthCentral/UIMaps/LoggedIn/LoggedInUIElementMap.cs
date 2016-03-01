@@ -16,8 +16,5 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.LoggedIn
 
         [FindsBy(How = How.LinkText, Using = "Logout")]
         public IWebElement LogoutLink;
-
-        [FindsBy(How = How.LinkText, Using = "Manage Users")]
-        public IWebElement ManageUsersLink;
     }
 }

@@ -88,7 +88,7 @@ namespace Fsw.Enterprise.AuthCentral.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
 
-            return RedirectToAction("Show", "UserClaim", new {
+            return RedirectToAction("Edit", "UserProfile", new {
                 userId = account.ID.ToString()
             });
         }

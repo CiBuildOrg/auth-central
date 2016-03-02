@@ -19,8 +19,8 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver
             public static string NewUserNewPassword = "AUTHCENTRAL_NEWUSER_NEWPASSWORD";
             public static string NewUserEmail = "AUTHCENTRAL_NEWUSER_EMAIL";
             public static string NewUserNewEmail = "AUTHCENTRAL_NEWUSER_NEWEMAIL";
-            public static string NewUserEmail_OutlookUsername = "AUTHCENTRAL_NEWUSER_OUTLOOKUSERNAME";
-            public static string NewUserEmail_OutlookPassword = "AUTHCENTRAL_NEWUSER_OUTLOOKPASSWORD";
+            public static string NewUser_Outlook_Username = "AUTHCENTRAL_NEWUSER_OUTLOOKUSERNAME";
+            public static string NewUser_Outlook_Password = "AUTHCENTRAL_NEWUSER_OUTLOOKPASSWORD";
         }
 
         private Dictionary<string, string> _config = new Dictionary<string, string>
@@ -33,6 +33,8 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver
             { EnvVars.NewUserNewPassword, "ih*GH3h*3" },
             { EnvVars.NewUserEmail, "automationsuser@fsw.com" },
             { EnvVars.NewUserNewEmail, "AUser2@fsw.com" },
+            { EnvVars.NewUser_Outlook_Username, "automationsuser" },
+            { EnvVars.NewUser_Outlook_Password, "R0b0tSw4q!!" }
         };
 
 
@@ -44,6 +46,8 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver
         public string NewUserNewPassword { get { return _config[EnvVars.NewUserNewPassword]; } }
         public string NewUserEmail { get { return _config[EnvVars.NewUserEmail]; } }
         public string NewUserNewEmail { get { return _config[EnvVars.NewUserNewEmail]; } }
+        public string NewUser_Outlook_Username { get { return _config[EnvVars.NewUser_Outlook_Username]; } }
+        public string NewUser_Outlook_Password { get { return _config[EnvVars.NewUser_Outlook_Password]; } }
 
         public EnvConfig()
         {

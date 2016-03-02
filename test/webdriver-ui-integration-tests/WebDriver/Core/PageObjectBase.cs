@@ -1,4 +1,5 @@
-﻿using Fsw.Enterprise.AuthCentral.WebDriver;
+﻿using Fsw.Enterprise.AuthCentral.Webdriver.Core.Extensions;
+using Fsw.Enterprise.AuthCentral.WebDriver;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium.Support.UI;

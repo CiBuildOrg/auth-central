@@ -1,6 +1,7 @@
 ﻿using Fsw.Enterprise.AuthCentral.Webdriver.Core;
 using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin;
 using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn;
+using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Outlook;
 using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Public;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
@@ -60,6 +61,18 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral
             _fixture.Driver.Navigate().GoToUrl(_config.RootUrl);
             page.Register(_config, "ThisUserShouldntExist", _config.NewUserEmail, _config.NewUserPassword);
             Assert.Equal("Email already in use.", page.Map.ErrorMessage.Text);
+        }
+        [Fact(DisplayName = "Register and login")]
+        public void RegisterAndLogin_Succeeds()
+        {
+            RegisterPage registerPage = new RegisterPage(_fixture.Driver).DeleteAndRegisterNewUser(_config);
+            OwaLoggedInPage outlook = new OwaLoginPage(_fixture.Driver).Login(_config.NewUser_Outlook_Username, _config.NewUser_Outlook_Password);
+            string confirmationUrl = outlook.GetAccountCreatedUrl();
+            EmailConfirmationPage confirmationPage = new EmailConfirmationPage(_fixture.Driver).ConfirmEmail(confirmationUrl, _config.NewUserPassword);
+            Assert.Contains("Success", registerPage.Map.PageText.Text);
+            _fixture.Driver.Navigate().GoToUrl(_config.RootUrl);
+            ProfilePage page = Page.Login(_config.NewUserUsername, _config.NewUserPassword);
+            Assert.Equal("Account Details", page.Map.AccountDetailsHeader.Text);
         }
     }
 }

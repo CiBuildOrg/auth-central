@@ -39,9 +39,9 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.Core
         /// </summary>
         /// <param name="url">https://secure.stg-fsw.com</param>
         /// <param name="timeOutInSeconds">5</param>
-        public void SetUp(string url = "https://secure.dev-fsw.com", int timeOutInSeconds = 3)
+        public void SetUp(string url, int timeOutInSeconds = 3)
         {
-            Driver.Navigate().GoToUrl("https://secure.dev-fsw.com/useraccount/logout");
+            Driver.Navigate().GoToUrl($"{url}/useraccount/logout");
             Driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(timeOutInSeconds));
             Driver.Manage().Window.Maximize();
 

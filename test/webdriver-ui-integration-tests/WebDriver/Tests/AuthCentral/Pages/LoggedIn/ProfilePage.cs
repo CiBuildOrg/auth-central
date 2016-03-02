@@ -1,4 +1,5 @@
 ﻿using Fsw.Enterprise.AuthCentral.Webdriver.Core;
+using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Public;
 using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin;
 using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.LoggedIn;
 using OpenQA.Selenium;

@@ -7,27 +7,42 @@ using System.Threading.Tasks;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver
 {
-    class EnvConfig : Dictionary<string,string>
+    public class EnvConfig : Dictionary<string,string>
     {
         private static class EnvVars
         {
             public static string RootUrl = "AUTHCENTRAL_ROOT_URL";
             public static string AdminUsername = "AUTHCENTRAL_ADMIN_USERNAME";
             public static string AdminPassword = "AUTHCENTRAL_ADMIN_PASSWORD";
+            public static string NewUserUsername = "AUTHCENTRAL_NEWUSER_USERNAME";
+            public static string NewUserPassword = "AUTHCENTRAL_NEWUSER_PASSWORD";
+            public static string NewUserNewPassword = "AUTHCENTRAL_NEWUSER_NEWPASSWORD";
+            public static string NewUserEmail = "AUTHCENTRAL_NEWUSER_EMAIL";
+            public static string NewUserNewEmail = "AUTHCENTRAL_NEWUSER_NEWEMAIL";
         }
 
         private Dictionary<string, string> _config = new Dictionary<string, string>
         {
-            { EnvVars.RootUrl, "https://secure.dev-fsw.com/" },
+            { EnvVars.RootUrl, "https://secure.dev-fsw.com" },
             { EnvVars.AdminUsername, "AutomationUser" },
-            { EnvVars.AdminPassword, "fs19!t?3h2@" }
+            { EnvVars.AdminPassword, "fs19!t?3h2@" },
+            { EnvVars.NewUserUsername, "WebdriverNewUser" },
+            { EnvVars.NewUserPassword, "J3huh@8h$$" },
+            { EnvVars.NewUserNewPassword, "ih*GH3h*3" },
+            { EnvVars.NewUserEmail, "automationsuser@fsw.com" },
+            { EnvVars.NewUserNewEmail, "AUser2@fsw.com" },
         };
 
 
         public string RootUrl { get { return _config[EnvVars.RootUrl]; } }
         public string AdminUser { get { return _config[EnvVars.AdminUsername]; } }
         public string AdminPassword { get { return _config[EnvVars.AdminPassword]; } }
-        
+        public string NewUserUsername { get { return _config[EnvVars.NewUserUsername]; } }
+        public string NewUserPassword { get { return _config[EnvVars.NewUserPassword]; } }
+        public string NewUserNewPassword { get { return _config[EnvVars.NewUserNewPassword]; } }
+        public string NewUserEmail { get { return _config[EnvVars.NewUserEmail]; } }
+        public string NewUserNewEmail { get { return _config[EnvVars.NewUserNewEmail]; } }
+
         public EnvConfig()
         {
             MergeEnvironmentVariables();

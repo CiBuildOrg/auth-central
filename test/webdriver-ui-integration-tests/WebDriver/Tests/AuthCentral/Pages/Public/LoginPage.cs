@@ -1,4 +1,5 @@
 ﻿using Fsw.Enterprise.AuthCentral.Webdriver.Core;
+using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin;
 using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn;
 using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.Public;
 using OpenQA.Selenium;
@@ -24,6 +25,17 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Public
             this._loginUI.SignInButton.Click();
             
             return new ProfilePage(Driver);
+        }
+        public LoginPage DeleteUser_IfExists(EnvConfig config)
+        {
+            UserListPage userListPage = Login(config.AdminUser, config.AdminPassword).ClickManageUsersLink();
+            if (userListPage.UserExists(config.NewUserEmail, config.NewUserNewEmail))
+            {
+                UserProfilePage profilePage = new UserProfilePage(Driver);
+                profilePage.DeleteUser();
+            }
+            Driver.Navigate().GoToUrl($"{config.RootUrl}/useraccount/logout"); //this will need to be un-hardcoded
+            return this;
         }
     }
 }

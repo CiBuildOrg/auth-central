@@ -27,6 +27,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Admin
 
         public bool UserExists(string email, string otherEmail = null)
         {
+            _userListUI.EmailSearchBox.Clear();
             _userListUI.EmailSearchBox.SendKeys(email);
             _userListUI.EmailSearchButton.Click();
             UserProfilePage userProfilePage = new UserProfilePage(Driver);

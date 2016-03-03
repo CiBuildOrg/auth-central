@@ -146,7 +146,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Vars\dev.env" />
+    <None Include="Vars\dev.env.encrypted" />
     <None Include="Vars\prod.env.encrypted" />
     <None Include="Vars\stage.env.encrypted" />
   </ItemGroup>

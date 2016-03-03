@@ -34,7 +34,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver
             { EnvVars.NewUserEmail, "automationsuser@fsw.com" },
             { EnvVars.NewUserNewEmail, "AUser2@fsw.com" },
             { EnvVars.NewUser_Outlook_Username, "automationsuser" },
-            { EnvVars.NewUser_Outlook_Password, "R0b0tSw4q!!" }
+            { EnvVars.NewUser_Outlook_Password, "##REPLACE_WITH_REAL_PASSWORD##" }
         };
 
 

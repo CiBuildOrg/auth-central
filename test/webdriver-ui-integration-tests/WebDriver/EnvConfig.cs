@@ -27,7 +27,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver
         {
             { EnvVars.RootUrl, "https://secure.dev-fsw.com" },
             { EnvVars.AdminUsername, "AutomationUser" },
-            { EnvVars.AdminPassword, "fs19!t?3h2@" },
+            { EnvVars.AdminPassword, "##REPLACE_WITH_REAL_PASSWORD##" },
             { EnvVars.NewUserUsername, "WebdriverNewUser" },
             { EnvVars.NewUserPassword, "J3huh@8h$$" },
             { EnvVars.NewUserNewPassword, "ih*GH3h*3" },

@@ -62,7 +62,11 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.Core.Extensions
         {
             return driver.Manage().Cookies.GetCookieNamed(name);
         }
-
+        public static IWebElement TryFindElement(this IWebDriver driver, By by)
+        {
+            try { return driver.FindElement(by); }
+            catch(NoSuchElementException) { return null; }
+        }
 
     }
 }

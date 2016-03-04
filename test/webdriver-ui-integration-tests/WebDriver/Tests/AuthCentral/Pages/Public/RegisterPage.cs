@@ -1,11 +1,13 @@
 ﻿using Fsw.Enterprise.AuthCentral.Webdriver.Core;
 using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.LoggedIn;
+using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Outlook;
 using Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.Public;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Threading;
+using Xunit;
 
 namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Public
 {
@@ -58,6 +60,17 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Public
             _registerUI.ConfirmPasswordBox.SendKeys(confirmPassword == null ? password : confirmPassword);
             _registerUI.CreateAccountButton.Click();
             return new RegisterPage(Driver);
+        }
+        public ProfilePage RegisterAndLogin(EnvConfig config)
+        {
+            RegisterPage registerPage = new RegisterPage(Driver).DeleteAndRegisterNewUser(config);
+            OwaLoggedInPage outlook = new OwaLoginPage(Driver).Login(config.NewUser_Outlook_Username, config.NewUser_Outlook_Password);
+            string confirmationUrl = outlook.GetAccountCreatedUrl();
+            EmailConfirmationPage confirmationPage = new EmailConfirmationPage(Driver).ConfirmEmail(confirmationUrl, config.NewUserPassword);
+            Driver.Navigate().GoToUrl(config.RootUrl);
+            ProfilePage page = new LoginPage(Driver).Login(config.NewUserUsername, config.NewUserPassword);
+
+            return new ProfilePage(Driver);
         }
     }
 }

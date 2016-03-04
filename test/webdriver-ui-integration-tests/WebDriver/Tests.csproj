@@ -94,6 +94,9 @@
     <Compile Include="Tests\AuthCentral\Pages\Admin\LoggedInAdminPage.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Admin\UserListPage.cs" />
     <Compile Include="Tests\AuthCentral\Pages\LoggedIn\LoggedInUserPage.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Outlook\OwaLoggedInPage.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Outlook\OwaLoginPage.cs" />
+    <Compile Include="Tests\AuthCentral\Pages\Public\EmailConfirmationPage.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Public\LoggedOutPage.cs" />
     <Compile Include="Tests\AuthCentral\Pages\Public\RegisterPage.cs" />
     <Compile Include="Tests\AuthCentral\Tests\Admin\AdminUserTests.cs" />
@@ -126,6 +129,9 @@
     <Compile Include="Tests\AuthCentral\UIMaps\Admin\UserUIElementMap.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\LoggedIn\LoggedInUIElementMap.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\LoggedIn\ProfileUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\UIMaps\Outlook\OwaLoggedInUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\UIMaps\Outlook\OwaLoginUIElementMap.cs" />
+    <Compile Include="Tests\AuthCentral\UIMaps\Public\EmailConfirmationUIElementMap.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\Public\LoggedOutUIElementMap.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\Public\LoginUIElementMap.cs" />
     <Compile Include="Tests\AuthCentral\UIMaps\Public\RegisterUIElementMap.cs" />
@@ -140,7 +146,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Vars\dev.env" />
+    <None Include="Vars\dev.env.encrypted" />
     <None Include="Vars\prod.env.encrypted" />
     <None Include="Vars\stage.env.encrypted" />
   </ItemGroup>

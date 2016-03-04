@@ -20,5 +20,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.UIMaps.Public
         public IWebElement SignInButton;
         [FindsBy(How = How.ClassName, Using = "alert-danger")]
         public IWebElement ErrorMessage;
+        [FindsBy(How = How.ClassName, Using = "body-content")]
+        public IWebElement PageText;
     }
 }

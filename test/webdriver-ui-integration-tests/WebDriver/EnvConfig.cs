@@ -19,18 +19,22 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver
             public static string NewUserNewPassword = "AUTHCENTRAL_NEWUSER_NEWPASSWORD";
             public static string NewUserEmail = "AUTHCENTRAL_NEWUSER_EMAIL";
             public static string NewUserNewEmail = "AUTHCENTRAL_NEWUSER_NEWEMAIL";
+            public static string NewUser_Outlook_Username = "AUTHCENTRAL_NEWUSER_OUTLOOKUSERNAME";
+            public static string NewUser_Outlook_Password = "AUTHCENTRAL_NEWUSER_OUTLOOKPASSWORD";
         }
 
         private Dictionary<string, string> _config = new Dictionary<string, string>
         {
             { EnvVars.RootUrl, "https://secure.dev-fsw.com" },
             { EnvVars.AdminUsername, "AutomationUser" },
-            { EnvVars.AdminPassword, "fs19!t?3h2@" },
+            { EnvVars.AdminPassword, "##REPLACE_WITH_REAL_PASSWORD##" },
             { EnvVars.NewUserUsername, "WebdriverNewUser" },
             { EnvVars.NewUserPassword, "J3huh@8h$$" },
             { EnvVars.NewUserNewPassword, "ih*GH3h*3" },
             { EnvVars.NewUserEmail, "automationsuser@fsw.com" },
             { EnvVars.NewUserNewEmail, "AUser2@fsw.com" },
+            { EnvVars.NewUser_Outlook_Username, "automationsuser" },
+            { EnvVars.NewUser_Outlook_Password, "##REPLACE_WITH_REAL_PASSWORD##" }
         };
 
 
@@ -42,6 +46,8 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver
         public string NewUserNewPassword { get { return _config[EnvVars.NewUserNewPassword]; } }
         public string NewUserEmail { get { return _config[EnvVars.NewUserEmail]; } }
         public string NewUserNewEmail { get { return _config[EnvVars.NewUserNewEmail]; } }
+        public string NewUser_Outlook_Username { get { return _config[EnvVars.NewUser_Outlook_Username]; } }
+        public string NewUser_Outlook_Password { get { return _config[EnvVars.NewUser_Outlook_Password]; } }
 
         public EnvConfig()
         {

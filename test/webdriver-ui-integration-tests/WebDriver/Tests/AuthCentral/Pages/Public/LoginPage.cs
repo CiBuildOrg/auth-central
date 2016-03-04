@@ -34,7 +34,7 @@ namespace Fsw.Enterprise.AuthCentral.WebDriver.Tests.AuthCentral.Pages.Public
                 UserProfilePage profilePage = new UserProfilePage(Driver);
                 profilePage.DeleteUser();
             }
-            Driver.Navigate().GoToUrl($"{config.RootUrl}/useraccount/logout"); //this will need to be un-hardcoded
+            Driver.Navigate().GoToUrl(config.RootUrl + "/useraccount/logout"); //this will need to be un-hardcoded
             return this;
         }
     }

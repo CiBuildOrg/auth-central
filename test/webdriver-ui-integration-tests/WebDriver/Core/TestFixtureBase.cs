@@ -41,7 +41,7 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.Core
         /// <param name="timeOutInSeconds">5</param>
         public void SetUp(string url, int timeOutInSeconds = 3)
         {
-            Driver.Navigate().GoToUrl($"{url}/useraccount/logout");
+            Driver.Navigate().GoToUrl(url + "/useraccount/logout");
             Driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(timeOutInSeconds));
             Driver.Manage().Window.Maximize();
 

@@ -57,14 +57,14 @@
 	<td>${NewUser_Password}</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>${CreateAnAccountButton}</td>
+	<td>pause</td>
+	<td>2000</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertText</td>
-	<td>${PageBody}</td>
-	<td>*Registration Success*</td>
+	<td>click</td>
+	<td>${CreateAnAccountButton}</td>
+	<td></td>
 </tr>
 <tr>
 	<td>store</td>
@@ -75,6 +75,16 @@
 	<td>store</td>
 	<td>javascript{var dates = new Date();var minutes = dates.getMinutes() + 1; var hours = dates.getHours();if (minutes &gt; 59){hours = hours + 1;minutes = minutes - 60;} if (minutes &lt; 10){minutes = '0' + minutes;} hours + ':' + minutes;}</td>
 	<td>OneMinuteFromNow</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>${PageBody}</td>
+	<td>*Registration Success*</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>${PageBody}</td>
+	<td>*Registration Success*</td>
 </tr>
 </tbody></table>
 </body>

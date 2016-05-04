@@ -12,18 +12,43 @@
 <tr><td rowspan="1" colspan="3">Client_AddAllowedScope</td></tr>
 </thead><tbody>
 <tr>
-	<td>type</td>
-	<td>${NewInput_Field}</td>
-	<td>${NewClient_Scope}</td>
+	<td>storeXpathCount</td>
+	<td>//select[@name='allowedScope']</td>
+	<td>AllowedScope_Count</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>${AllowedScope_Count}-1</td>
+	<td>lastOfType</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>allowedScope_${lastOfType}</td>
+	<td>id</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//select[@id='${id}']</td>
+	<td>value=phone</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>${NewInput_SaveButton}</td>
+	<td>//select[@id='${id}']/../../following-sibling::div/input[@value='Save']</td>
 	<td></td>
 </tr>
 <tr>
+	<td>storeEval</td>
+	<td>(${AllowedScope_Count}+1)</td>
+	<td>AllowedScope_NewCount</td>
+</tr>
+<tr>
+	<td>assertXpathCount</td>
+	<td>//select[@name='allowedScope']</td>
+	<td>${AllowedScope_NewCount}</td>
+</tr>
+<tr>
 	<td>assertElementPresent</td>
-	<td>${Client_Scope_NewScope_Saved}</td>
+	<td>//select[@name='allowedScope']/option[@value='phone' and @selected='selected']</td>
 	<td></td>
 </tr>
 </tbody></table>

@@ -34,7 +34,7 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.Core.Extensions
         {
             var height = driver.Manage().Window.Size.Height - 15;
             var newYPosition = element.Location.Y > height ? element.Location.Y - -(element.Location.Y - (height + 100)) : 0;
-            var js = $"window.scrollTo({element.Location.X}, {newYPosition})";
+            var js = String.Format("window.scrollTo({0}, {1}", element.Location.X, newYPosition);
             if (newYPosition != 0)
             {
                 IJavaScriptExecutor jsExecutor = driver as IJavaScriptExecutor;
@@ -62,7 +62,11 @@ namespace Fsw.Enterprise.AuthCentral.Webdriver.Core.Extensions
         {
             return driver.Manage().Cookies.GetCookieNamed(name);
         }
-
+        public static IWebElement TryFindElement(this IWebDriver driver, By by)
+        {
+            try { return driver.FindElement(by); }
+            catch(NoSuchElementException) { return null; }
+        }
 
     }
 }
